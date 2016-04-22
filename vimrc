@@ -22,6 +22,7 @@ syntax on
 set background=dark
 colorscheme solarized
 
+set number
 set relativenumber
 set history=1000
 set ruler
@@ -96,7 +97,7 @@ endif
 
 function! NumberToggle()
     if (&relativenumber == 1)
-        set number
+        set norelativenumber
     else
         set relativenumber
     endif
