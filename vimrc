@@ -1,34 +1,42 @@
+" Plugins ---------------------- {{{
 set nocompatible
 filetype off
-
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-sleuth'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
+" Plugin 'Shougo/unite.vim'
+"
+Plugin 'jacoborus/tender'
 
 Plugin 'klen/python-mode'
+
 Bundle 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-endwise'
+Plugin 'janko-m/vim-test'
 
 Plugin 'dahu/VimRegexTutor'
 
 call vundle#end()
 filetype plugin indent on
+" }}}
 
+" Settings ---------------------- {{{
 syntax on
 set background=dark
-colorscheme solarized
-
+" colorscheme solarized
+colorscheme tender
 set number
 set relativenumber
 set history=1000
 set ruler
 set showcmd		" display incomplete commands
 set incsearch
-set autoread
 set backupdir=~/.tmp
 set directory=~/.tmp
 set hlsearch
@@ -41,13 +49,21 @@ set laststatus=2 " vim-airline
 set t_Co=256
 set noeb vb t_vb=
 set completeopt=menu
+set wildignore+=*.sublime-workspace
+set guifont=Menlo\ Regular:h20
+set guicursor+=a:blinkon0 " disable cursor blink
 
 " (Hopefully) removes the delay when hitting esc in insert mode
 set noesckeys
 set ttimeout
 set ttimeoutlen=0
+" }}}
 
+" Auto reload file
+set autoread
+au CursorHold * checktime
 
+" Auto commands ---------------------- {{{
 augroup vimrcEx
     au!
 
@@ -63,38 +79,13 @@ augroup vimrcEx
 
 augroup END
 
-" Vimscript file settings ---------------------- {{{
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
 " }}}
 
-let NERDTreeIgnore = ['\.pyc$', '\.py\~$']
-let NERDTreeHijackNetrw = 0
-
-let g:pymode_folding = 0
-let g:pymode_options_max_line_length = 119
-let g:pymode_options_colorcolumn = 0
-let g:pymode_run = 0
-
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-" let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist|_runner)'
-
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-"autocmd VimEnter * AirlineToggleWhitespace
-
-" this is causing delay when exiting insert mode...
-"if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
-"	inoremap <silent> <C-[>OA <up>
-"	inoremap <silent> <C-[>OB <down>
-"	inoremap <silent> <C-[>OC <right>
-"	inoremap <silent> <C-[>OD <left>
-"endif
-
+" Functions ---------------------- {{{
 function! NumberToggle()
     if (&relativenumber == 1)
         set norelativenumber
@@ -120,20 +111,129 @@ fun! TrimWhitespace()
 endfun
 autocmd BufWritePre * :call TrimWhitespace()
 
-map <F4> :execute "vimgrep /" . expand("<cword>") . "/j *" <Bar> cw<CR>
-map <F3> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
-nnoremap <c-l> <c-l>:noh<cr>
-nnoremap <leader>l :call NumberToggle()<cr>
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>md :!~/programming/wizehive-dev/maya/maya-runner.py sublime-deploy %<CR>
+function! OpenCakePHPTest()
+    let s:current_file_path = expand("%")
+    let s:path_regex = 'app\/plugins\/\(.*\)\/tests\/cases\/\(.*\)'
+    let s:match = matchlist(s:current_file_path, s:path_regex)
+    if s:match == []
+        echom "Not a test file: " . s:current_file_path
+        return 1
+    endif
+    let s:cake_plugin = s:match[1]
+    let s:test_case = s:match[2]
+    let s:url = "http://wizehive.dev/test.php?case=" . s:test_case . "&plugin=" . s:cake_plugin
+    silent exec "!open '" . s:url . "'"
+    redraw!
+    return 0
+endfunction
 
-" In .bashrc:
-" stty -ixon -ixoff
-map <C-s> <esc>:w<CR>
-imap <C-s> <esc>:w<CR>
+"}}}
+
+" Mappings ---------------------- {{{
+nnoremap <leader>ev :tabedit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+nnoremap <leader>c "*Y
+xnoremap <leader>c "*y
+nnoremap <leader>v "*p
+nnoremap <leader>V o<esc>"*p
+xnoremap <leader>v "*p
+
+nnoremap <leader>w <c-w>w
+nnoremap <leader>x :bd<cr>
+
+" :noh (experimenting with <esc> so <c-l> is free to be used with <c-h>)
+" nnoremap <silent> <c-l> <c-l>:noh<cr>
+nnoremap <silent> <esc> <c-l>:noh<cr>
+
+nnoremap <leader>l :call NumberToggle()<cr>
+
+" File handling
+nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
+nnoremap <leader>d :e <C-R>=expand("%:h"). "/" <CR><CR>
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
+
+" Searching
+map <leader>s :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+nnoremap <leader>fr :Qargs <Bar> argdo %s/<C-R><C-W>//gc <Bar> update<C-F>F/<C-C>
+nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>/
+" Easier change and replace word
+nnoremap c* *Ncgn
+nnoremap c# #NcgN
+nnoremap cg* g*Ncgn
+nnoremap cg# g#NcgN
+
+nnoremap <space>f *N
+
+nnoremap <leader>fr ggdG"*P=G
+
+" Save (needs .bashrc: stty -ixon -ixoff)
+nnoremap <C-s> <esc>:w<CR>
+inoremap <C-s> <esc>:w<CR>
+
+" note: probably could experiment with H and L too
+" buffer navigation
+nnoremap <C-k> :tabnext<cr>
+nnoremap <C-j> :tabprev<cr>
+nnoremap <leader>, :tabm -1<cr>
+nnoremap <leader>. :tabm +1<cr>
+inoremap <C-k> <esc>:tabnext<cr>
+inoremap <C-j> <esc>:tabprev<cr>
+
+" window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
 
 " Emacs-like beginning and end of line.
 imap <c-e> <c-o>$
 imap <c-a> <c-o>^
+
+nnoremap <leader>r :!ruby %<cr>
+nnoremap <silent> <leader>T :w<cr>:TestFile --color<cr>
+nnoremap <silent> <leader>t :w<cr>:TestLast<cr>
+nnoremap <leader>md :!~/programming/wizehive-dev/maya/maya-runner.py sublime-deploy %<CR>
+
+nnoremap <leader>ct :call OpenCakePHPTest()<cr>
+
+" this is causing delay when exiting insert mode...
+"if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
+"	inoremap <silent> <C-[>OA <up>
+"	inoremap <silent> <C-[>OB <down>
+"	inoremap <silent> <C-[>OC <right>
+"	inoremap <silent> <C-[>OD <left>
+"endif
+" }}}
+
+" Plugin settings ---------------------- {{{
+let NERDTreeIgnore = ['\.pyc$', '\.py\~$']
+let NERDTreeHijackNetrw = 0
+let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
+
+let g:pymode_folding = 0
+let g:pymode_options_max_line_length = 119
+let g:pymode_options_colorcolumn = 0
+let g:pymode_run = 0
+
+" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+" let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist|_runner)'
+let g:ctrlp_max_files = 0
+let g:ctrlp_max_depth = 40
+let g:ctrlp_working_path_mode = ''
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-t>'],
+    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+    \ }
+let g:ctrlp_by_filename = 1
+
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+" Enable the list of buffers
+" let g:airline#extensions#tabline#enabled = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+"autocmd VimEnter * AirlineToggleWhitespace
+" }}}
+let g:airline_theme = 'tender'
 
