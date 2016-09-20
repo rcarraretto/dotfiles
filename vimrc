@@ -57,11 +57,12 @@ set guicursor+=a:blinkon0 " disable cursor blink
 set noesckeys
 set ttimeout
 set ttimeoutlen=0
-" }}}
 
 " Auto reload file
 set autoread
 au CursorHold * checktime
+
+" }}}
 
 " Auto commands ---------------------- {{{
 augroup vimrcEx
@@ -234,6 +235,6 @@ endif
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
 "autocmd VimEnter * AirlineToggleWhitespace
-" }}}
 let g:airline_theme = 'tender'
 
+" }}}
