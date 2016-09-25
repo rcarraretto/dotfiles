@@ -9,9 +9,10 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sleuth'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdtree'
 " Plugin 'Shougo/unite.vim'
-"
+
 Plugin 'jacoborus/tender'
 
 Plugin 'klen/python-mode'
@@ -61,6 +62,8 @@ set ttimeoutlen=0
 " Auto reload file
 set autoread
 au CursorHold * checktime
+
+:set guitablabel=%t
 
 " }}}
 
@@ -155,7 +158,8 @@ nnoremap <leader>d :e <C-R>=expand("%:h"). "/" <CR><CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
-map <leader>s :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+nnoremap <space>a :Ack ""<left>
+map <leader>fw :execute "grep " . expand("<cword>") . " **" <Bar> cw<CR>
 nnoremap <leader>fr :Qargs <Bar> argdo %s/<C-R><C-W>//gc <Bar> update<C-F>F/<C-C>
 nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>/
 " Easier change and replace word
@@ -206,6 +210,21 @@ nnoremap <leader>ct :call OpenCakePHPTest()<cr>
 " }}}
 
 " Plugin settings ---------------------- {{{
+"
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 let NERDTreeIgnore = ['\.pyc$', '\.py\~$']
 let NERDTreeHijackNetrw = 0
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
@@ -217,6 +236,7 @@ let g:pymode_run = 0
 
 " let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 " let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist|_runner)'
+let g:ctrlp_match_window = 'results:25'
 let g:ctrlp_max_files = 0
 let g:ctrlp_max_depth = 40
 let g:ctrlp_working_path_mode = ''
@@ -231,7 +251,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 " Enable the list of buffers
-" let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
 "autocmd VimEnter * AirlineToggleWhitespace
