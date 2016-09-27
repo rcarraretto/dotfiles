@@ -13,6 +13,7 @@ Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'milkypostman/vim-togglelist'
 " Plugin 'Shougo/unite.vim'
+Plugin 'vim-scripts/BufOnly.vim'
 
 Plugin 'jacoborus/tender'
 
@@ -146,6 +147,7 @@ xnoremap <leader>v "*p
 
 nnoremap <leader>w <c-w>w
 nnoremap <leader>x :bd<cr>
+nnoremap <leader>o :BufOnly<cr>
 
 " :noh (experimenting with <esc> so <c-l> is free to be used with <c-h>)
 " nnoremap <silent> <c-l> <c-l>:noh<cr>
