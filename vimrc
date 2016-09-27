@@ -11,6 +11,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'milkypostman/vim-togglelist'
 " Plugin 'Shougo/unite.vim'
 
 Plugin 'jacoborus/tender'
@@ -200,6 +201,8 @@ nnoremap <leader>md :!~/programming/wizehive-dev/maya/maya-runner.py sublime-dep
 
 nnoremap <leader>ct :call OpenCakePHPTest()<cr>
 
+nnoremap <silent> <leader>q :call ToggleQuickfixList()<CR>
+
 " this is causing delay when exiting insert mode...
 "if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
 "	inoremap <silent> <C-[>OA <up>
@@ -256,5 +259,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 "autocmd VimEnter * AirlineToggleWhitespace
 let g:airline_theme = 'tender'
+
+let g:toggle_list_no_mappings = 1
 
 " }}}
