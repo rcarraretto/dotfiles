@@ -135,7 +135,7 @@ endfunction
 "}}}
 
 " Mappings ---------------------- {{{
-nnoremap <leader>ev :tabedit $MYVIMRC<cr>
+nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 nnoremap <leader>c "*Y
@@ -179,12 +179,12 @@ inoremap <C-s> <esc>:w<CR>
 
 " note: probably could experiment with H and L too
 " buffer navigation
-nnoremap <C-k> :tabnext<cr>
-nnoremap <C-j> :tabprev<cr>
+nnoremap <C-k> :bnext<cr>
+nnoremap <C-j> :bprev<cr>
 nnoremap <leader>, :tabm -1<cr>
 nnoremap <leader>. :tabm +1<cr>
-inoremap <C-k> <esc>:tabnext<cr>
-inoremap <C-j> <esc>:tabprev<cr>
+inoremap <C-k> <esc>:bnext<cr>
+inoremap <C-j> <esc>:bprev<cr>
 
 " window navigation
 nnoremap <C-h> <C-w>h
@@ -243,10 +243,6 @@ let g:ctrlp_match_window = 'results:25'
 let g:ctrlp_max_files = 0
 let g:ctrlp_max_depth = 40
 let g:ctrlp_working_path_mode = ''
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<c-t>'],
-    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
-    \ }
 let g:ctrlp_by_filename = 1
 
 let g:airline_powerline_fonts = 1
