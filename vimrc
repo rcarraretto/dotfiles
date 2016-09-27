@@ -239,7 +239,6 @@ let g:pymode_options_max_line_length = 119
 let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
-" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 " let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist|_runner)'
 let g:ctrlp_match_window = 'results:25'
 let g:ctrlp_max_files = 0
