@@ -200,7 +200,6 @@ nnoremap <C-l> <C-w>l
 imap <c-e> <c-o>$
 imap <c-a> <c-o>^
 
-nnoremap <leader>r :!ruby %<cr>
 nnoremap <silent> <leader>T :w<cr>:TestFile --color<cr>
 nnoremap <silent> <leader>t :w<cr>:TestLast<cr>
 nnoremap <leader>md :!~/programming/wizehive-dev/maya/maya-runner.py sublime-deploy %<CR>
