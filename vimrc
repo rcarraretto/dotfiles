@@ -7,10 +7,14 @@ call vundle#begin()
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sleuth'
-Plugin 'vim-airline/vim-airline'
-Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'tpope/vim-commentary'
+
 Plugin 'mileszs/ack.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
+
+Plugin 'vim-airline/vim-airline'
+
 Plugin 'milkypostman/vim-togglelist'
 " Plugin 'Shougo/unite.vim'
 Plugin 'vim-scripts/BufOnly.vim'
