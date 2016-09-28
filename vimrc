@@ -13,6 +13,9 @@ Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+
 Plugin 'vim-airline/vim-airline'
 
 Plugin 'milkypostman/vim-togglelist'
@@ -143,6 +146,9 @@ endfunction
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+nnoremap <leader>ese :UltiSnipsEdit<cr>
+nnoremap <leader>esp :e ~/.vim/bundle/vim-snippets/UltiSnips/php.snippets<cr>
+
 nnoremap <space>b :CtrlPBuffer<cr>
 nnoremap <leader><leader> <C-^>
 
@@ -215,6 +221,9 @@ nnoremap <leader>ct :call OpenCakePHPTest()<cr>
 
 nnoremap <silent> <leader>q :call ToggleQuickfixList()<CR>
 
+" add method
+nnoremap <leader>am ]mOf<tab>
+
 " this is causing delay when exiting insert mode...
 "if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
 "	inoremap <silent> <C-[>OA <up>
@@ -265,5 +274,10 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_theme = 'tender'
 
 let g:toggle_list_no_mappings = 1
+
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 
 " }}}
