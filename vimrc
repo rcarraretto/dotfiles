@@ -143,6 +143,9 @@ endfunction
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+nnoremap <space>b :CtrlPBuffer<cr>
+nnoremap <leader><leader> <C-^>
+
 nnoremap <leader>c "*Y
 xnoremap <leader>c "*y
 nnoremap <leader>v "*p
@@ -161,14 +164,18 @@ nnoremap <leader>l :call NumberToggle()<cr>
 
 " File handling
 nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
-nnoremap <leader>d :e <C-R>=expand("%:h"). "/" <CR><CR>
+nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
+nnoremap <leader>df :NERDTreeFind<cr>
+nnoremap <leader>dt :NERDTreeToggle<cr>
+nnoremap <space>m :Gmove <C-R>=expand("%:h"). "/" <CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
 nnoremap <space>a :Ack ""<left>
-map <leader>fw :execute "grep " . expand("<cword>") . " **" <Bar> cw<CR>
+nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
+nnoremap <leader>rw :%s/<C-R>///gc<left><left><left>
 nnoremap <leader>fr :Qargs <Bar> argdo %s/<C-R><C-W>//gc <Bar> update<C-F>F/<C-C>
-nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>/
+nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<left><left>
 " Easier change and replace word
 nnoremap c* *Ncgn
 nnoremap c# #NcgN
@@ -177,7 +184,7 @@ nnoremap cg# g#NcgN
 
 nnoremap <space>f *N
 
-nnoremap <leader>fr ggdG"*P=G
+nnoremap <leader>rr ggdG"*P=G
 
 " Save (needs .bashrc: stty -ixon -ixoff)
 nnoremap <C-s> <esc>:w<CR>
@@ -185,14 +192,14 @@ inoremap <C-s> <esc>:w<CR>
 
 " note: probably could experiment with H and L too
 " buffer navigation
-nnoremap <C-k> :bnext<cr>
-nnoremap <C-j> :bprev<cr>
 nnoremap <leader>, :tabm -1<cr>
 nnoremap <leader>. :tabm +1<cr>
-inoremap <C-k> <esc>:bnext<cr>
-inoremap <C-j> <esc>:bprev<cr>
 
 " window navigation
+nnoremap <C-k> <C-w>k
+inoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+inoremap <C-j> <C-w>j
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
