@@ -159,7 +159,8 @@ nnoremap <leader>V o<esc>"*p
 xnoremap <leader>v "*p
 
 nnoremap <leader>w <c-w>w
-nnoremap <leader>x :bd<cr>
+nnoremap <leader>x :bp\|bd #<cr>
+nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
 
 " :noh (experimenting with <esc> so <c-l> is free to be used with <c-h>)
