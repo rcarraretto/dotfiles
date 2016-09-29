@@ -166,8 +166,6 @@ nnoremap <leader>o :BufOnly<cr>
 " nnoremap <silent> <c-l> <c-l>:noh<cr>
 nnoremap <silent> <esc> <c-l>:noh<cr>
 
-nnoremap <leader>l :call NumberToggle()<cr>
-
 " File handling
 nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
@@ -219,7 +217,8 @@ nnoremap <leader>md :!~/programming/wizehive-dev/maya/maya-runner.py sublime-dep
 
 nnoremap <leader>ct :call OpenCakePHPTest()<cr>
 
-nnoremap <silent> <leader>q :call ToggleQuickfixList()<CR>
+nnoremap con :call NumberToggle()<cr>
+nnoremap <silent> coq :call ToggleQuickfixList()<CR>
 
 " add method
 nnoremap <leader>am ]mOf<tab>
