@@ -233,7 +233,7 @@ nnoremap con :call NumberToggle()<cr>
 nnoremap <silent> coq :call ToggleQuickfixList()<CR>
 
 " add method
-nnoremap <leader>am ]mOf<tab>
+nmap <leader>am ]mOf<tab>
 
 " this is causing delay when exiting insert mode...
 "if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
