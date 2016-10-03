@@ -278,10 +278,19 @@ let g:pymode_run = 0
 let g:ctrlp_working_path_mode = ''
 " let g:ctrlp_by_filename = 1
 
+let g:airline#extensions#default#layout = [
+  \ [ 'a', 'c' ],
+  \ [ 'z', 'error', 'warning' ]
+  \ ]
+let g:airline_section_z = '%3p%% %4l%#__restore__#%#__restore__#:%3v'
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
+" Disable wordcount extension (runs for help filetype and etc.)
+let g:airline#extensions#wordcount#enabled = 0
+" Disable branch extension
+let g:airline#extensions#branch#enabled = 0
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
