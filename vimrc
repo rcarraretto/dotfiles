@@ -250,10 +250,10 @@ nmap <leader>am ]mOf<tab>
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l -U --nocolor -g ""'
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l -U --nocolor -g ""'
   let g:ctrlp_use_caching = 1
 endif
 
@@ -268,11 +268,11 @@ let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
 " let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist|_runner)'
-let g:ctrlp_match_window = 'results:25'
-let g:ctrlp_max_files = 0
-let g:ctrlp_max_depth = 40
+" let g:ctrlp_match_window = 'results:25'
+" let g:ctrlp_max_files = 0
+" let g:ctrlp_max_depth = 40
 let g:ctrlp_working_path_mode = ''
-let g:ctrlp_by_filename = 1
+" let g:ctrlp_by_filename = 1
 
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
