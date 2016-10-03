@@ -21,8 +21,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'vim-airline/vim-airline'
 
 Plugin 'milkypostman/vim-togglelist'
-" Plugin 'Shougo/unite.vim'
 Plugin 'vim-scripts/BufOnly.vim'
+Plugin 'vim-scripts/Rename'
 
 Plugin 'jacoborus/tender'
 
@@ -183,7 +183,7 @@ nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
 nnoremap <leader>df :NERDTreeFind<cr>
 nnoremap <leader>dt :NERDTreeToggle<cr>
-nnoremap <space>m :Gmove <C-R>=expand("%:h"). "/" <CR>
+nnoremap <space>m :Rename <C-R>=expand("%:h"). "/" <CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
