@@ -176,9 +176,7 @@ nnoremap <leader>x :bp\|bd #<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
 
-" :noh (experimenting with <esc> so <c-l> is free to be used with <c-h>)
-" nnoremap <silent> <c-l> <c-l>:noh<cr>
-nnoremap <silent> <esc> <c-l>:noh<cr>
+nnoremap <silent> <esc> :noh<cr>
 
 " File handling
 nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
