@@ -161,9 +161,12 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 
 nnoremap <leader>ese :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/.vim/bundle/vim-snippets/UltiSnips/php.snippets<cr>
+nnoremap <leader>eag :e ./.agignore<cr>
+nnoremap <leader>egit :e ~/.gitignore_global<cr>
 
 nnoremap <space>b :CtrlPBuffer<cr>
 nnoremap <leader><leader> <C-^>
+nnoremap <leader>vs :vs <bar> bp<cr>
 
 nnoremap <leader>c "*Y
 xnoremap <leader>c "*y
@@ -171,7 +174,6 @@ nnoremap <leader>v "*p
 nnoremap <leader>V o<esc>"*p
 xnoremap <leader>v "*p
 
-nnoremap <leader>w <c-w>w
 nnoremap <leader>x :bp\|bd #<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
@@ -188,7 +190,9 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
 nnoremap <space>a :Ack ""<left>
+nnoremap <leader>ft :Ack "<C-R>=expand("<cword>")<cr>"<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
+nnoremap <leader>fv /\$[A-Za-z_]*<cr>
 nnoremap <leader>rw :%s/<C-R>///gc<left><left><left>
 nnoremap <leader>fr :Qargs <Bar> argdo %s/<C-R><C-W>//gc <Bar> update<C-F>F/<C-C>
 nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<left><left>
