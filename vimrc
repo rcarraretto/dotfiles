@@ -109,6 +109,11 @@ augroup CursorLine
     au WinLeave * setlocal nocursorline
 augroup END
 
+augroup ColorColumn
+    autocmd BufEnter,FocusGained,VimEnter,WinEnter * if ShouldColorColumn() | let &l:colorcolumn='0' | endif
+    autocmd FocusLost,WinLeave * if ShouldColorColumn() | let &l:colorcolumn=join(range(1, 255), ',') | endif
+augroup END
+
 " }}}
 
 " Functions ---------------------- {{{
@@ -119,6 +124,11 @@ function! NumberToggle()
         set relativenumber
     endif
 endfunc
+
+function! ShouldColorColumn() abort
+    let g:RcColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
+    return index(g:RcColorColumnBlacklist, &filetype) == -1
+endfunction
 
 command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
 function! QuickfixFilenames()
