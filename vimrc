@@ -196,7 +196,7 @@ nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
 nnoremap <leader>df :NERDTreeFind<cr>
 nnoremap <leader>dt :NERDTreeToggle<cr>
-nnoremap <space>m :Rename <C-R>=expand("%:h"). "/" <CR>
+nnoremap <leader>mv :Rename <C-R>=expand("%:h"). "/" <CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
