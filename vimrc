@@ -123,6 +123,7 @@ function! NumberToggle()
     else
         set relativenumber
     endif
+    set number
 endfunc
 
 function! ShouldColorColumn() abort
