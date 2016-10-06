@@ -208,7 +208,8 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 nnoremap <space>a :Ack ""<left>
 nnoremap <leader>ft :Ack "<C-R>=expand("<cword>")<cr>"<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
-nnoremap <leader>fv /\$[A-Za-z_]*<cr>
+nnoremap <leader>f$ /\v\$[A-Za-z]*<cr>
+nnoremap <leader>fv /\v\$<C-R><C-W>\ze[ [-]?<cr>N
 nnoremap <leader>rw :%s/<C-R>///gc<left><left><left>
 nnoremap <leader>fr :Qargs <Bar> argdo %s/<C-R><C-W>//gc <Bar> update<C-F>F/<C-C>
 nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<left><left>
