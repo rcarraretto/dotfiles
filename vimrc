@@ -74,7 +74,6 @@ set ttimeoutlen=0
 
 " Auto reload file
 set autoread
-au CursorHold * checktime
 
 :set guitablabel=%t
 
@@ -82,7 +81,7 @@ au CursorHold * checktime
 
 " Auto commands ---------------------- {{{
 augroup vimrcEx
-    au!
+    autocmd!
 
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
@@ -102,16 +101,22 @@ augroup filetype_vim
 augroup END
 
 augroup CursorLine
-    au!
-    au VimEnter * setlocal cursorline
-    au WinEnter * setlocal cursorline
-    au BufWinEnter * setlocal cursorline
-    au WinLeave * setlocal nocursorline
+    autocmd!
+    autocmd VimEnter * setlocal cursorline
+    autocmd WinEnter * setlocal cursorline
+    autocmd BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
 augroup END
 
 augroup ColorColumn
+    autocmd!
     autocmd BufEnter,FocusGained,VimEnter,WinEnter * if ShouldColorColumn() | let &l:colorcolumn='0' | endif
     autocmd FocusLost,WinLeave * if ShouldColorColumn() | let &l:colorcolumn=join(range(1, 255), ',') | endif
+augroup END
+
+augroup AutoReloadFile
+    autocmd!
+    autocmd CursorHold * checktime
 augroup END
 
 " }}}
