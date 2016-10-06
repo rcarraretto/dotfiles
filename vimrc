@@ -192,7 +192,7 @@ nnoremap <leader>v "*p
 nnoremap <leader>V o<esc>"*p
 xnoremap <leader>v "*p
 
-nnoremap <leader>x :bp\|bd #<cr>
+nnoremap <leader>x <C-^>:bd #<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
 
