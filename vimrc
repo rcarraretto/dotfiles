@@ -195,6 +195,9 @@ nnoremap <leader>x :bp\|bd #<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
 
+nnoremap <silent> [g :tabprevious<CR>
+nnoremap <silent> ]g :tabnext<CR>
+
 nnoremap <silent> <esc> :noh<cr>
 
 " File handling
