@@ -181,6 +181,7 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 
 nnoremap <leader>ese :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/.vim/bundle/vim-snippets/UltiSnips/php.snippets<cr>
+nnoremap <leader>esh :e ~/.vim/bundle/vim-snippets/snippets/php.snippets<cr>
 nnoremap <leader>eag :e ./.agignore<cr>
 nnoremap <leader>egit :e ~/.gitignore_global<cr>
 
