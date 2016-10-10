@@ -205,6 +205,9 @@ nnoremap <silent> ]g :tabnext<CR>
 nnoremap <leader>tn :tabnew<CR>
 nnoremap <leader>tc :tabclose<CR>
 
+nnoremap ]h $]mztF(B
+nnoremap [h [mztF(B
+
 nnoremap <silent> <esc> :noh<cr>
 
 " File handling
