@@ -63,6 +63,7 @@ set t_Co=256
 set noeb vb t_vb=
 set completeopt=menu
 set wildignore+=*.sublime-workspace
+set wildmenu
 set splitright
 set splitbelow
 set guifont=Menlo\ Regular:h20
