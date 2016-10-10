@@ -202,6 +202,8 @@ nnoremap <leader>o :BufOnly<cr>
 
 nnoremap <silent> [g :tabprevious<CR>
 nnoremap <silent> ]g :tabnext<CR>
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tc :tabclose<CR>
 
 nnoremap <silent> <esc> :noh<cr>
 
