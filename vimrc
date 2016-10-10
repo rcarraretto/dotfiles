@@ -19,6 +19,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
+Plugin 'jiangmiao/auto-pairs'
+
 Plugin 'vim-airline/vim-airline'
 
 Plugin 'milkypostman/vim-togglelist'
