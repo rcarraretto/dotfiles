@@ -301,7 +301,7 @@ let g:ctrlp_working_path_mode = ''
 " let g:ctrlp_by_filename = 1
 
 let g:airline#extensions#default#layout = [
-  \ [ 'a', 'c' ],
+  \ [ 'a', 'b', 'c' ],
   \ [ 'z', 'error', 'warning' ]
   \ ]
 let g:airline_section_z = '%3p%% %4l%#__restore__#%#__restore__#:%3v'
