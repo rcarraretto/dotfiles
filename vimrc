@@ -194,7 +194,7 @@ nnoremap <leader>sp :sp <bar> bp<cr>
 
 nnoremap <leader>c "*Y
 xnoremap <leader>c "*y
-nnoremap <leader>v "*p
+nnoremap <leader>vv "*p
 nnoremap <leader>V o<esc>"*p
 xnoremap <leader>v "*p
 
