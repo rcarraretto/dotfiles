@@ -219,8 +219,8 @@ nnoremap <leader>mv :Rename <C-R>=expand("%:h"). "/" <CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
-nnoremap <space>a :Ack! ""<left>
-nnoremap <leader>ft :Ack! "<C-R>=expand("<cWORD>")<cr>"<left>
+nnoremap <space>a :Ack! ''<left>
+nnoremap <leader>ft :Ack! '<C-R>=expand("<cWORD>")<cr>'<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
 nnoremap <leader>f$ /\v\$[A-Za-z]*<cr>
 nnoremap <leader>fv /\v\$<C-R><C-W>\ze[ [-]?<cr>N
