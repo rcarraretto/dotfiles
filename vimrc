@@ -178,6 +178,7 @@ endfunction
 " Mappings ---------------------- {{{
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ss :w <bar> :source %<cr>
 
 nnoremap <leader>ese :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/.vim/bundle/vim-snippets/UltiSnips/php.snippets<cr>
