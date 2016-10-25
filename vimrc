@@ -81,6 +81,8 @@ set ttimeoutlen=0
 " Auto reload file
 set autoread
 
+" Load aliases for executing shell commands within vim
+let $BASH_ENV = "~/.bash_aliases"
 
 " }}}
 
@@ -263,7 +265,7 @@ imap <c-a> <c-o>^
 
 nnoremap <silent> <leader>T :w<cr>:TestFile --color<cr>
 nnoremap <silent> <leader>tt :w<cr>:TestLast<cr>
-nnoremap <leader>md :!~/programming/wizehive-dev/maya/maya-runner.py sublime-deploy %<CR>
+nnoremap <leader>md :!maya sublime-deploy %<CR>
 
 nnoremap <leader>ct :call OpenCakePHPTest()<cr>
 
