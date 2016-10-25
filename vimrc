@@ -68,8 +68,10 @@ set wildignore+=*.sublime-workspace
 set wildmenu
 set splitright
 set splitbelow
+
 set guifont=Menlo\ Regular:h20
 set guicursor+=a:blinkon0 " disable cursor blink
+set guitablabel=%t
 
 " (Hopefully) removes the delay when hitting esc in insert mode
 set noesckeys
@@ -79,7 +81,6 @@ set ttimeoutlen=0
 " Auto reload file
 set autoread
 
-:set guitablabel=%t
 
 " }}}
 
