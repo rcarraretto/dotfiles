@@ -254,6 +254,9 @@ nnoremap <space>f *N
 
 nnoremap <leader>rr ggdG"*P=G
 
+" Split
+nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
+
 " Save (needs .bashrc: stty -ixon -ixoff)
 nnoremap <C-s> <esc>:w<CR>
 inoremap <C-s> <esc>:w<CR>
