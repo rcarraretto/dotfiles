@@ -183,6 +183,13 @@ endfunction
 "}}}
 
 " Mappings ---------------------- {{{
+nnoremap ' `
+nnoremap ` '
+vnoremap ' `
+vnoremap ` '
+onoremap ' `
+onoremap ` '
+
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
