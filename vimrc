@@ -121,6 +121,11 @@ augroup ColorColumn
     autocmd FocusLost,WinLeave * if ShouldColorColumn() | let &l:colorcolumn=join(range(1, 255), ',') | endif
 augroup END
 
+augroup TrimWhitespace
+    autocmd!
+    autocmd BufWritePre * :call TrimWhitespace()
+augroup END
+
 augroup AutoReloadFile
     autocmd!
     autocmd CursorHold * checktime
@@ -158,7 +163,6 @@ fun! TrimWhitespace()
     %s/\s\+$//e
     call setpos('.', l:save_cursor)
 endfun
-autocmd BufWritePre * :call TrimWhitespace()
 
 function! OpenCakePHPTest()
     let s:current_file_path = expand("%")
