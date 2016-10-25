@@ -202,6 +202,7 @@ nnoremap <leader>egit :e ~/.gitignore_global<cr>
 nnoremap <leader>en :e ~/Dropbox/notes/vim-todo.txt<cr>
 
 nnoremap <space>b :CtrlPBuffer<cr>
+nnoremap <space>m :CtrlPMRUFiles<cr>
 nnoremap <leader><leader> <C-^>
 nnoremap <leader>vs :vs <bar> bp<cr>
 nnoremap <leader>sp :sp <bar> bp<cr>
