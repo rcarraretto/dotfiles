@@ -128,7 +128,7 @@ augroup END
 
 augroup AutoReloadFile
     autocmd!
-    autocmd CursorHold * checktime
+    autocmd CursorHold * if expand('%') !=# '[Command Line]' | checktime | endif
 augroup END
 
 " }}}
