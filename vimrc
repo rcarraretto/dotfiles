@@ -198,8 +198,8 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
 nnoremap <leader>ess :UltiSnipsEdit<cr>
-nnoremap <leader>esp :e ~/.vim/bundle/vim-snippets/UltiSnips/php.snippets<cr>
-nnoremap <leader>esh :e ~/.vim/bundle/vim-snippets/snippets/php.snippets<cr>
+nnoremap <leader>es1 :e ~/.vim/bundle/vim-snippets/UltiSnips<cr>
+nnoremap <leader>es2 :e ~/.vim/bundle/vim-snippets/snippets<cr>
 nnoremap <leader>eag :e ./.agignore<cr>
 nnoremap <leader>egit :e ~/.gitignore_global<cr>
 nnoremap <leader>en :e ~/Dropbox/notes/vim-todo.txt<cr>
