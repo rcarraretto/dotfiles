@@ -22,12 +22,13 @@ Plugin 'honza/vim-snippets'
 Plugin 'jiangmiao/auto-pairs'
 
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'milkypostman/vim-togglelist'
 Plugin 'vim-scripts/BufOnly.vim'
 Plugin 'vim-scripts/Rename'
 
-Plugin 'jacoborus/tender'
+Plugin 'chriskempson/base16-vim'
 
 Plugin 'klen/python-mode'
 
@@ -43,9 +44,11 @@ filetype plugin indent on
 
 " Settings ---------------------- {{{
 syntax on
+
+let base16colorspace=256  " Access colors present in 256 colorspace"
 set background=dark
-" colorscheme solarized
-colorscheme tender
+colorscheme base16-default-dark
+
 set number
 set relativenumber
 set history=1000
@@ -346,8 +349,7 @@ let g:airline#extensions#branch#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
-"autocmd VimEnter * AirlineToggleWhitespace
-let g:airline_theme = 'tender'
+let g:airline_theme = 'base16'
 
 let g:toggle_list_no_mappings = 1
 
