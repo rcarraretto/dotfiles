@@ -220,8 +220,8 @@ nnoremap <leader>x :bnext <bar> :bd #<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
 
-nnoremap <silent> [g :tabprevious<CR>
-nnoremap <silent> ]g :tabnext<CR>
+nnoremap <silent> [r :tabprevious<CR>
+nnoremap <silent> ]r :tabnext<CR>
 nnoremap <leader>tn :tabnew<CR>
 nnoremap <leader>tc :tabclose<CR>
 
