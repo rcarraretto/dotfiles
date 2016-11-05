@@ -72,6 +72,8 @@ set wildmenu
 set splitright
 set splitbelow
 
+set shortmess+=A " no warning for existing swap file
+
 set guifont=Menlo\ Regular:h20
 set guicursor+=a:blinkon0 " disable cursor blink
 set guitablabel=%t
