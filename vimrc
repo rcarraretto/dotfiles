@@ -239,7 +239,7 @@ nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
-nnoremap <space>a :Ack! ''<left>
+nnoremap <space>a :Ack! -Q ''<left>
 nnoremap <leader>ft :Ack! '<C-R>=expand("<cword>")<cr>'<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
 nnoremap <leader>f$ /\v\$[A-Za-z_]*<cr>
