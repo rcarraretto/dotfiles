@@ -91,6 +91,13 @@ set autoread
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
+" Change for base16-default-dark colorscheme
+" colorcolumn + search highlighting doesn't work well
+" because base16 Search changes the fgcolor of search
+" to be the same as colorcolumn
+" making search invisible in colorcolumn
+highlight Search ctermbg=none ctermfg=none cterm=underline,bold
+
 " }}}
 
 " Auto commands ---------------------- {{{
