@@ -97,6 +97,10 @@ let $BASH_ENV = "~/.bash_aliases"
 " to be the same as colorcolumn
 " making search invisible in colorcolumn
 highlight Search ctermbg=none ctermfg=none cterm=underline,bold
+" Distinguish Folded bg from CursorLine bg
+highlight Folded ctermbg=00
+" php: Don't color $variable differently
+highlight phpIdentifier ctermfg=07
 
 " }}}
 
