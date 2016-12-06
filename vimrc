@@ -249,13 +249,11 @@ nnoremap <leader>es1 :e ~/.vim/bundle/vim-snippets/UltiSnips<cr>
 nnoremap <leader>es2 :e ~/.vim/bundle/vim-snippets/snippets<cr>
 nnoremap <leader>eag :e ./.agignore<cr>
 nnoremap <leader>egit :e ~/.gitignore_global<cr>
-nnoremap <leader>en :e ~/Dropbox/notes/vim-todo.txt<cr>
+nnoremap <leader>en :e ~/Dropbox/notes<cr>
 
 nnoremap <space>b :CtrlPBuffer<cr>
 nnoremap <space>m :CtrlPMRUFiles<cr>
 nnoremap <leader><leader> <C-^>
-nnoremap <leader>vs :vs <bar> bp<cr>
-nnoremap <leader>sp :sp <bar> bp<cr>
 
 nnoremap <leader>c "*Y
 xnoremap <leader>c "*y
@@ -279,9 +277,12 @@ nnoremap <silent> <esc> :noh<cr>
 
 " File handling
 nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
+nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
+nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
 nnoremap <leader>df :NERDTreeFind<cr>
 nnoremap <leader>dt :NERDTreeToggle<cr>
+nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
@@ -291,7 +292,7 @@ nnoremap <leader>ft :Ack! '<C-R>=expand("<cword>")<cr>'<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
 nnoremap <leader>f$ /\v\$[A-Za-z_]*<cr>
 nnoremap <leader>fv /\v\$<C-R><C-W>\ze[ [-]?<cr>N
-nnoremap <leader>rw :%s/<C-R>///gc<left><left><left>
+nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///gc <Bar> update<C-F>F/<C-C>
 nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<left><left>
 " Easier change and replace word
@@ -363,6 +364,7 @@ if executable('ag')
   let g:ctrlp_use_caching = 1
 endif
 
+" NERDTree
 let NERDTreeIgnore = ['\.pyc$', '\.py\~$']
 let NERDTreeHijackNetrw = 0
 let g:NERDTreeWinSize = 50
