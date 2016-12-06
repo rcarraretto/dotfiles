@@ -330,7 +330,7 @@ imap <c-e> <c-o>$
 imap <c-a> <c-o>^
 
 nnoremap <silent> <leader>T :w<cr>:TestFile --color<cr>
-nnoremap <silent> <leader>tt :w<cr>:TestLast<cr>
+nnoremap <silent> <space><space> :w<cr>:TestLast<cr>
 nnoremap <leader>md :!maya sublime-deploy %<CR>
 
 nnoremap <leader>ct :call OpenCakePHPTest()<cr>
