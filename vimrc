@@ -64,6 +64,7 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 set nowrap
+set scrolloff=3
 set hidden
 set laststatus=2 " vim-airline
 set t_Co=256
