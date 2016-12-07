@@ -212,6 +212,21 @@ function! s:ExecuteCleanCommand(command)
 endfunction
 
 " Taken from abolish.vim
+function! s:camelcase(word)
+  let word = substitute(a:word, '-', '_', 'g')
+  if word !~# '_' && word =~# '\l'
+    return substitute(word,'^.','\l&','')
+  else
+    return substitute(word,'\C\(_\)\=\(.\)','\=submatch(1)==""?tolower(submatch(2)) : toupper(submatch(2))','g')
+  endif
+endfunction
+
+" Taken from abolish.vim
+function! s:mixedcase(word)
+  return substitute(s:camelcase(a:word),'^.','\u&','')
+endfunction
+
+" Taken from abolish.vim
 function! s:snakecase(word)
     let word = substitute(a:word,'::','/','g')
     let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
@@ -221,7 +236,11 @@ function! s:snakecase(word)
     return word
 endfunction
 
-function! RenameClass(class_name)
+function! GuessClassName()
+    return s:mixedcase(expand('%:t:r'))
+endfunction
+
+function! s:RenameClass(class_name)
   let s:new_filename = s:snakecase(a:class_name)
   let s:new_path = expand('%:h') . '/' . s:new_filename . '.' . expand('%:e')
   silent execute 'Rename ' . s:new_path
@@ -229,6 +248,8 @@ function! RenameClass(class_name)
   call s:ExecuteCleanCommand(s:change_class_name)
   write
 endfunction
+
+command! -nargs=1 RenameClass call s:RenameClass(<f-args>)
 
 "}}}
 
@@ -304,7 +325,7 @@ nnoremap cg# g#NcgN
 nnoremap <space>f *N
 
 nnoremap <leader>rp ggdG"*P=G
-nnoremap <leader>rc :call RenameClass('')<left><left>
+nnoremap <leader>cc :RenameClass <C-R>=GuessClassName()<cr>
 
 " Split
 nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
