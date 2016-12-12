@@ -347,7 +347,8 @@ nnoremap <C-l> <C-w>l
 imap <c-e> <c-o>$
 imap <c-a> <c-o>^
 
-nnoremap <silent> <leader>T :w<cr>:TestFile --color<cr>
+nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
+nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space><space> :w<cr>:TestLast<cr>
 nnoremap <leader>md :!maya sublime-deploy %<CR>
 
