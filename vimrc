@@ -11,6 +11,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sleuth'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-eunuch'
+Plugin 'tpope/vim-endwise'
 
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -31,7 +32,6 @@ Plugin 'chriskempson/base16-vim'
 Plugin 'klen/python-mode'
 
 Bundle 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-endwise'
 Plugin 'janko-m/vim-test'
 
 Plugin 'dahu/VimRegexTutor'
