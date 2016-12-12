@@ -283,6 +283,8 @@ nnoremap <silent> [r :tabprevious<CR>
 nnoremap <silent> ]r :tabnext<CR>
 nnoremap <leader>tn :tabnew<CR>
 nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>th :tabm -1<CR>
+nnoremap <leader>tl :tabm +1<CR>
 
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
