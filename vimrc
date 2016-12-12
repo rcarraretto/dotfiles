@@ -307,6 +307,7 @@ nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
 nnoremap <leader>f$ /\v\$[A-Za-z_]*<cr>
 nnoremap <leader>fv /\v\$<C-R><C-W>\ze[ [-]?<cr>N
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
+nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///gc <Bar> update<C-F>F/<C-C>
 nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<left><left>
 " Easier change and replace word
