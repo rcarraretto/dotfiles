@@ -288,6 +288,9 @@ nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
 
 nnoremap <silent> <esc> :noh<cr>
+nnoremap <silent> gh :noh<cr>
+inoremap jk <esc>
+inoremap <esc> <nop>
 
 " File handling
 nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
@@ -334,12 +337,10 @@ nnoremap <leader>, :tabm -1<cr>
 nnoremap <leader>. :tabm +1<cr>
 
 " window navigation
-nnoremap <C-k> <C-w>k
-inoremap <C-k> <C-w>k
-nnoremap <C-j> <C-w>j
-inoremap <C-j> <C-w>j
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
+nnoremap <space>k <C-w>k
+nnoremap <space>j <C-w>j
+nnoremap <space>h <C-w>h
+nnoremap <space>l <C-w>l
 
 " Emacs-like beginning and end of line.
 imap <c-e> <c-o>$
@@ -397,6 +398,7 @@ let g:pymode_run = 0
 " let g:ctrlp_max_depth = 40
 let g:ctrlp_working_path_mode = ''
 " let g:ctrlp_by_filename = 1
+let g:ctrlp_map = '<space>p'
 
 let g:toggle_list_no_mappings = 1
 
