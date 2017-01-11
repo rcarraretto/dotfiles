@@ -267,7 +267,7 @@ nnoremap <space>b :CtrlPBuffer<cr>
 nnoremap <space>m :CtrlPMRUFiles<cr>
 nnoremap <leader><leader> <C-^>
 
-nnoremap <leader>c "*Y
+nnoremap <leader>c "*y
 xnoremap <leader>c "*y
 nnoremap <leader>vv "*p
 nnoremap <leader>V o<esc>"*p
