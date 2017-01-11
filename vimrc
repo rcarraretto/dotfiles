@@ -331,11 +331,6 @@ nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
 nnoremap <C-s> <esc>:w<CR>
 inoremap <C-s> <esc>:w<CR>
 
-" note: probably could experiment with H and L too
-" buffer navigation
-nnoremap <leader>, :tabm -1<cr>
-nnoremap <leader>. :tabm +1<cr>
-
 " window navigation
 nnoremap <space>k <C-w>k
 nnoremap <space>j <C-w>j
