@@ -10,6 +10,9 @@ BASE16_SHELL=~/programming/dotfiles/base16-shell/
 # Ctrl+S in vim
 stty -ixon -ixoff
 
+# PHP
+export PATH=/usr/local/php5/bin:$PATH
+
 # Go language
 export GOPATH=~/tmp/.go
 export PATH=$PATH:$GOPATH/bin
