@@ -284,6 +284,8 @@ nnoremap <leader>tc :tabclose<CR>
 nnoremap <leader>th :tabm -1<CR>
 nnoremap <leader>tl :tabm +1<CR>
 
+nnoremap <leader>gb :Gblame<CR>
+
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
 
