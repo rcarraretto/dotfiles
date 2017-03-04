@@ -392,13 +392,9 @@ let g:pymode_options_max_line_length = 119
 let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
-" let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist|_runner)'
-" let g:ctrlp_match_window = 'results:25'
-" let g:ctrlp_max_files = 0
-" let g:ctrlp_max_depth = 40
 let g:ctrlp_working_path_mode = ''
-" let g:ctrlp_by_filename = 1
 let g:ctrlp_map = '<space>p'
+let g:ctrlp_switch_buffer = 0
 
 let g:toggle_list_no_mappings = 1
 
