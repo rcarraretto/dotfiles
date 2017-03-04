@@ -292,7 +292,6 @@ nnoremap [h [mzzF(B
 nnoremap <silent> <esc> :noh<cr>
 nnoremap <silent> gh :noh<cr>
 inoremap jk <esc>
-inoremap <esc> <nop>
 
 " File handling
 nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
