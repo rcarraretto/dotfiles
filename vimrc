@@ -72,6 +72,7 @@ set wildignore+=*.sublime-workspace
 set wildmenu
 set splitright
 set splitbelow
+set formatoptions-=cro
 
 set shortmess+=A " no warning for existing swap file
 
