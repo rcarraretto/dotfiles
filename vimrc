@@ -333,10 +333,6 @@ nnoremap <space>j <C-w>j
 nnoremap <space>h <C-w>h
 nnoremap <space>l <C-w>l
 
-" Emacs-like beginning and end of line.
-imap <c-e> <c-o>$
-imap <c-a> <c-o>^
-
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space>t :w<cr>:TestLast<cr>
@@ -350,13 +346,6 @@ nnoremap <silent> coq :call ToggleQuickfixList()<CR>
 " add method
 nmap <leader>am ]mOf<tab>
 
-" this is causing delay when exiting insert mode...
-"if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
-"	inoremap <silent> <C-[>OA <up>
-"	inoremap <silent> <C-[>OB <down>
-"	inoremap <silent> <C-[>OC <right>
-"	inoremap <silent> <C-[>OD <left>
-"endif
 " }}}
 
 " Plugin settings ---------------------- {{{
@@ -367,25 +356,28 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  " Use ag in CtrlP for listing files
   let g:ctrlp_user_command = 'ag %s -l -U --nocolor -g ""'
   let g:ctrlp_use_caching = 1
 endif
+
+" ctrlp
+let g:ctrlp_working_path_mode = ''
+let g:ctrlp_map = '<space>p'
+let g:ctrlp_switch_buffer = 0
 
 " netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 " Allow netrw to remove non-empty local directories
 let g:netrw_localrmdir='rm -r'
 
+" pymode
 let g:pymode_folding = 0
 let g:pymode_options_max_line_length = 119
 let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
-let g:ctrlp_working_path_mode = ''
-let g:ctrlp_map = '<space>p'
-let g:ctrlp_switch_buffer = 0
-
+" Toggle Quickfix List
 let g:toggle_list_no_mappings = 1
 
 let g:UltiSnipsExpandTrigger="<tab>"
