@@ -15,7 +15,6 @@ Plugin 'tpope/vim-endwise'
 
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'scrooloose/nerdtree'
 
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -300,8 +299,6 @@ nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
-nnoremap <leader>df :NERDTreeFind<cr>
-nnoremap <leader>dt :NERDTreeToggle<cr>
 nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
@@ -379,10 +376,7 @@ if executable('ag')
   let g:ctrlp_use_caching = 1
 endif
 
-" NERDTree
-let NERDTreeIgnore = ['\.pyc$', '\.py\~$']
-let NERDTreeHijackNetrw = 0
-let g:NERDTreeWinSize = 50
+" netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 " Allow netrw to remove non-empty local directories
 let g:netrw_localrmdir='rm -r'
