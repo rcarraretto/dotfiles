@@ -21,6 +21,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'vim-scripts/ReplaceWithRegister'
 
 Plugin 'milkypostman/vim-togglelist'
 Plugin 'vim-scripts/BufOnly.vim'
