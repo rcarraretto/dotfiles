@@ -19,10 +19,22 @@ protected function ${1:name}(${2}) {
 $0
 endsnippet
 
+snippet class
+<?php
+
+class ${1} {
+	${2}
+}
+endsnippet
+
 snippet __c "__construct()" b
 public function __construct(${1:$dependencies}) {${1/\$(\w+)(, )*/\n\t\t$this->$1 = $$1;/g}
 }
 $0
+endsnippet
+
+snippet t- "this->" i
+this->
 endsnippet
 
 snippet t. "$this->" i
@@ -31,6 +43,17 @@ endsnippet
 
 snippet ti "this identity" b
 $this->${1} = $$1;
+endsnippet
+
+snippet get "getter" b
+public function ${1}() {
+	return $this->${2};
+}
+$0
+endsnippet
+
+snippet ret
+return ${1};
 endsnippet
 
 snippet apri
@@ -50,7 +73,11 @@ dump($${1});
 endsnippet
 
 snippet dt "Dump Trace" b
-dumpTrace();
+dumpTrace(${0});
+endsnippet
+
+snippet todo "// TODO: " b
+// TODO: $0
 endsnippet
 
 snippet group "test group"
@@ -61,6 +88,10 @@ endsnippet
 
 snippet ae "Assert equal"
 $this->assertEqual(${1}, ${2});
+endsnippet
+
+snippet ee "Expect exception"
+$this->expectException(${1:$expected});
 endsnippet
 
 snippet th "throw Exception"
