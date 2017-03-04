@@ -344,7 +344,7 @@ imap <c-a> <c-o>^
 
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
-nnoremap <silent> <space><space> :w<cr>:TestLast<cr>
+nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 nnoremap <leader>md :!maya sublime-deploy %<CR>
 
 nnoremap <leader>ct :call OpenCakePHPTest()<cr>
