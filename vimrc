@@ -27,14 +27,11 @@ Plugin 'vim-scripts/BufOnly.vim'
 Plugin 'vim-scripts/Rename'
 
 Plugin 'chriskempson/base16-vim'
-" Plugin 'jacoborus/tender'
 
 Plugin 'klen/python-mode'
 
 Bundle 'vim-ruby/vim-ruby'
 Plugin 'janko-m/vim-test'
-
-Plugin 'dahu/VimRegexTutor'
 
 call vundle#end()
 filetype plugin indent on
@@ -46,7 +43,6 @@ syntax on
 let base16colorspace=256  " Access colors present in 256 colorspace"
 set background=dark
 colorscheme base16-default-dark
-" colorscheme tender
 
 set number
 set relativenumber
