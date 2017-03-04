@@ -382,6 +382,8 @@ let NERDTreeIgnore = ['\.pyc$', '\.py\~$']
 let NERDTreeHijackNetrw = 0
 let g:NERDTreeWinSize = 50
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
+" Allow netrw to remove non-empty local directories
+let g:netrw_localrmdir='rm -r'
 
 let g:pymode_folding = 0
 let g:pymode_options_max_line_length = 119
