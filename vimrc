@@ -53,6 +53,8 @@ set incsearch
 set backupdir=~/.tmp
 set directory=~/.tmp
 set hlsearch
+set smartcase
+set ignorecase
 set autoindent
 set tabstop=4
 set shiftwidth=4
