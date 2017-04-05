@@ -116,6 +116,11 @@ augroup filetype_vim
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
+augroup filetype_crontab
+    autocmd!
+    autocmd FileType crontab setlocal backupcopy=yes
+augroup END
+
 augroup CursorLine
     autocmd!
     autocmd VimEnter * setlocal cursorline
