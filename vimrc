@@ -256,6 +256,8 @@ vnoremap ` '
 onoremap ' `
 onoremap ` '
 
+nnoremap K :!<cr>
+
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
