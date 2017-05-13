@@ -55,6 +55,7 @@ local decVolumeSoft = function()
   changeVolume(-deltaVol / 2)
 end
 
+hs.hotkey.bind(hyper, 'k', hs.spotify.playpause)
 hs.hotkey.bind(hyper, ']', incVolume)
 hs.hotkey.bind(hyper, '[', decVolume)
 hs.hotkey.bind(shift_hyper, ']', incVolumeSoft)
