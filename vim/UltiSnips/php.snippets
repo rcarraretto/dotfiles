@@ -5,8 +5,22 @@ public function ${1:name}(${2}) {
 $0
 endsnippet
 
+snippet pubs "Public static function" b
+public static function ${1:name}(${2}) {
+	${3}
+}
+$0
+endsnippet
+
 snippet pri "Private function" b
 private function ${1:name}(${2}) {
+	${3}
+}
+$0
+endsnippet
+
+snippet pris "Private static function" b
+private static function ${1:name}(${2}) {
 	${3}
 }
 $0
@@ -45,6 +59,15 @@ snippet ti "this identity" b
 $this->${1} = $$1;
 endsnippet
 
+snippet A: "A::method()"
+A::${1}(
+	${2},
+	function(${3}) {
+		return ${4};
+	}
+);
+endsnippet
+
 snippet get "getter" b
 public function ${1}() {
 	return $this->${2};
@@ -76,8 +99,12 @@ snippet dt "Dump Trace" b
 dumpTrace(${0});
 endsnippet
 
-snippet todo "// TODO: " b
+snippet todo "// TODO " b
 // TODO: $0
+endsnippet
+
+snippet fixme "// FIXME " b
+// FIXME$0
 endsnippet
 
 snippet group "test group"
@@ -96,4 +123,8 @@ endsnippet
 
 snippet th "throw Exception"
 throw new ${0:Exception}();
+endsnippet
+
+snippet echo "<?php echo ?>" i
+<?php echo ${0} ?>
 endsnippet
