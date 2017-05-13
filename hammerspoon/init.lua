@@ -8,8 +8,15 @@ local shift_hyper = {'cmd', 'alt', 'ctrl', 'shift'}
 -- Global variable for Hyper Mode
 k = hs.hotkey.modal.new({}, 'F17')
 
--- Hyper+key setup in Alfred
-hyperBindings = {'1', '2', '3', '6', 'k', 't', 'y', '[', ']'}
+-- Hyper+key setup
+-- Some keys are handled here,
+-- other keys are handled by programs like Alfred and Spectacle
+hyperBindings = {
+  '1', '2', '3', '6',
+  'c', 'k', 'm', 't', 'y',
+  '[', ']',
+  'up', 'down', 'left', 'right'
+}
 
 for i,key in ipairs(hyperBindings) do
   k:bind({}, key, nil, function()
