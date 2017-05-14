@@ -13,7 +13,7 @@ k = hs.hotkey.modal.new({}, 'F17')
 -- other keys are handled by programs like Alfred and Spectacle
 hyperBindings = {
   '1', '2', '3', '6',
-  'c', 'k', 'm', 't', 'y',
+  'c', 'k', 'i', 'm', 't', 'y',
   '[', ']',
   'up', 'down', 'left', 'right'
 }
