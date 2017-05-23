@@ -41,10 +41,14 @@ end
 hs.hotkey.bind({}, 'F18', pressedF18, releasedF18)
 
 local changeVolume = function(delta)
-  hs.audiodevice.defaultOutputDevice():setVolume(hs.audiodevice.current().volume + delta)
+  local new_volume = hs.audiodevice.current().volume + delta
+  hs.audiodevice.defaultOutputDevice():setVolume(new_volume)
+  local actual_volume = hs.audiodevice.current().volume
+  hs.alert.closeAll()
+  hs.alert.show(string.format("%.0f", actual_volume))
 end
 
-local deltaVol = 5
+local deltaVol = 6
 
 local incVolume = function()
   changeVolume(deltaVol)
