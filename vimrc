@@ -31,6 +31,7 @@ Plugin 'chriskempson/base16-vim'
 Plugin 'klen/python-mode'
 
 Bundle 'vim-ruby/vim-ruby'
+Plugin 'elixir-lang/vim-elixir'
 Plugin 'janko-m/vim-test'
 
 call vundle#end()
