@@ -334,13 +334,13 @@ nnoremap <leader>cc :RenameClass <C-R>=GuessClassName()<cr>
 nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
 
 " $hash['key'] => $key
-nmap <leader>kk4 f[bdwds]ds'
+nmap <leader>k4 Bldt[ds]ds'
 " $hash['key'] => A::value($hash, 'key')
 nmap <leader>kav F$f[ds]i, jkF$ys2f')iA::valuejkf)
 " $key => $['key']
-nmap <leader>k4k ysiw]ysi]'hi
+nmap <leader>4k ysiw]ysi]'hi
 " $obj->method() => $obj['method']
-nmap <leader>kmk F-df>yst(`ysa']f(2x2F'w
+nmap <leader>mk F-df>yst(`ysa']f(2x2F'w
 " $obj->getSomething() => $obj['something']
 nmap <leader>kgk F-df>yst(`ysa']f(2x2F'w3x~
 
