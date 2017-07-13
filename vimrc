@@ -196,6 +196,12 @@ function! OpenCakePHPTest()
     return 0
 endfunction
 
+function! RefreshChrome()
+  silent exec "!osascript /Users/rcarraretto/programming/dotfiles/applescript/refresh-chrome.applescript"
+  redraw!
+  return 0
+endfunction
+
 function! s:ExecuteCleanCommand(command)
     " Preparation: save last search, and cursor position.
     let _s=@/
@@ -360,6 +366,7 @@ nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 nnoremap <leader>md :!maya sublime-deploy %<CR>
 
 nnoremap <leader>ct :call OpenCakePHPTest()<cr>
+nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 nnoremap con :call NumberToggle()<cr>
 nnoremap <silent> coq :call ToggleQuickfixList()<CR>
