@@ -12,6 +12,7 @@ Plugin 'tpope/vim-sleuth'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-scriptease'
 
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -29,6 +30,7 @@ Plugin 'vim-scripts/Rename'
 
 Plugin 'chriskempson/base16-vim'
 
+Plugin 'StanAngeloff/php.vim'
 Plugin 'klen/python-mode'
 
 Bundle 'vim-ruby/vim-ruby'
