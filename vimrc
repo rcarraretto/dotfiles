@@ -23,6 +23,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'vim-scripts/ReplaceWithRegister'
+Plugin 'junegunn/vim-easy-align'
 
 Plugin 'milkypostman/vim-togglelist'
 Plugin 'vim-scripts/BufOnly.vim'
@@ -376,6 +377,15 @@ nnoremap <silent> coq :call ToggleQuickfixList()<CR>
 " add method
 nmap <leader>am ]mOf<tab>
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" Go align Elixir paragraph
+nmap gae gaipe
+
 " }}}
 
 " Plugin settings ---------------------- {{{
@@ -416,5 +426,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 
 let g:ycm_key_list_select_completion = ['<Enter>']
+
+" e: elixir
+let g:easy_align_delimiters = {
+\ 'e': { 'pattern': '->\|do:' }
+\ }
 
 " }}}
