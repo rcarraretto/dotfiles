@@ -289,6 +289,9 @@ xnoremap <leader>c "*y
 nnoremap <leader>vv "*p
 nnoremap <leader>V o<esc>"*p
 xnoremap <leader>v "*p
+nmap <space>v "*gr
+
+nnoremap <leader>79 :wqa<cr>
 
 nnoremap <leader>x :bnext <bar> :bd #<cr>
 nnoremap <leader>q :q<cr>
@@ -344,6 +347,9 @@ nnoremap <leader>cc :RenameClass <C-R>=GuessClassName()<cr>
 " Split
 nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
 
+" move function arg to the right
+nnoremap <leader>sl "adt,dwep"ap
+
 " $hash['key'] => $key
 nmap <leader>k4 Bldt[ds]ds'
 " $hash['key'] => A::value($hash, 'key')
@@ -356,8 +362,10 @@ nmap <leader>mk F-df>yst(`ysa']f(2x2F'w
 nmap <leader>kgk F-df>yst(`ysa']f(2x2F'w3x~
 
 " Save (needs .bashrc: stty -ixon -ixoff)
-nnoremap <C-s> <esc>:w<CR>
-inoremap <C-s> <esc>:w<CR>
+" nnoremap <C-s> <esc>:w<CR>
+" inoremap <C-s> <esc>:w<CR>
+nnoremap <C-l> <esc>:w<CR>
+inoremap <C-l> <esc>:w<CR>
 
 " window navigation
 nnoremap <space>k <C-w>k
