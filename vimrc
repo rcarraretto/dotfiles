@@ -328,6 +328,8 @@ nnoremap <leader>fv /\v\$<C-R><C-W>\ze[ [-]?<cr>N
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
+nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
+
 " Easier change and replace word
 nnoremap c* *Ncgn
 nnoremap c# #NcgN
