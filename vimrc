@@ -200,7 +200,7 @@ function! OpenCakePHPTest()
 endfunction
 
 function! RefreshChrome()
-  silent exec "!osascript /Users/rcarraretto/programming/dotfiles/applescript/refresh-chrome.applescript"
+  silent exec "!osascript $HOME/programming/dotfiles/applescript/refresh-chrome.applescript"
   redraw!
   return 0
 endfunction
