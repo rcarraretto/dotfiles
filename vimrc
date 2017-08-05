@@ -183,22 +183,6 @@ fun! TrimWhitespace()
     call setpos('.', l:save_cursor)
 endfun
 
-function! OpenCakePHPTest()
-    let s:current_file_path = expand("%")
-    let s:path_regex = 'app\/plugins\/\(.*\)\/tests\/cases\/\(.*\)'
-    let s:match = matchlist(s:current_file_path, s:path_regex)
-    if s:match == []
-        echom "Not a test file: " . s:current_file_path
-        return 1
-    endif
-    let s:cake_plugin = s:match[1]
-    let s:test_case = s:match[2]
-    let s:url = "http://wizehive.dev/test.php?case=" . s:test_case . "&plugin=" . s:cake_plugin
-    silent exec "!open '" . s:url . "'"
-    redraw!
-    return 0
-endfunction
-
 function! RefreshChrome()
   silent exec "!osascript $HOME/programming/dotfiles/applescript/refresh-chrome.applescript"
   redraw!
@@ -378,7 +362,6 @@ nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 nnoremap <leader>md :!maya sublime-deploy %<CR>
 
-nnoremap <leader>ct :call OpenCakePHPTest()<cr>
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 nnoremap con :call NumberToggle()<cr>
