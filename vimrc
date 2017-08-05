@@ -426,3 +426,12 @@ let g:easy_align_delimiters = {
 \ }
 
 " }}}
+
+" vimrc override ---------------------- {{{
+
+let s:vimrc_local = $HOME . '/.vim/vimrc.local'
+if filereadable(s:vimrc_local)
+  execute 'source ' . s:vimrc_local
+endif
+
+" }}}
