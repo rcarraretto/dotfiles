@@ -263,6 +263,7 @@ nnoremap <leader>es2 :e ~/.vim/bundle/vim-snippets/snippets<cr>
 nnoremap <leader>eag :e ./.agignore<cr>
 nnoremap <leader>egit :e ~/.gitignore_global<cr>
 nnoremap <leader>en :e ~/Dropbox/notes<cr>
+nnoremap <leader>et :tabedit ~/Dropbox/notes/tmp.txt<cr>
 
 nnoremap <space>b :CtrlPBuffer<cr>
 nnoremap <space>m :CtrlPMRUFiles<cr>
