@@ -1,5 +1,5 @@
-nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
-vnoremap <leader>g :<c-u>call GrepOperator(visualmode())<cr>
+nnoremap <space>g :set operatorfunc=GrepOperator<cr>g@
+vnoremap <space>g :<c-u>call GrepOperator(visualmode())<cr>
 
 function! GrepOperator(type)
     if a:type ==# 'v'
