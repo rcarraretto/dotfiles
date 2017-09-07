@@ -269,11 +269,17 @@ nnoremap <space>b :CtrlPBuffer<cr>
 nnoremap <space>m :CtrlPMRUFiles<cr>
 nnoremap <leader><leader> <C-^>
 
-nnoremap <leader>c "*y
-xnoremap <leader>c "*y
 nnoremap <leader>vv "*p
 nnoremap <leader>V o<esc>"*p
-xnoremap <leader>v "*p
+
+" Copy and paste visual
+xnoremap <space>c "*y
+xnoremap <space>v "*p
+
+" Copy to clipboard 'operator'
+nnoremap <space>c "*y
+" Replace with clipboard 'operator'
+" take advantage of ReplaceWithRegister plugin ('gr' mapping)
 nmap <space>v "*gr
 
 nnoremap <leader>79 :wqa<cr>
