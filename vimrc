@@ -332,6 +332,9 @@ nnoremap <leader>cc :RenameClass <C-R>=GuessClassName()<cr>
 " Split
 nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
 
+" Format paragraph
+nnoremap <space>\ gqip
+
 " move function arg to the right
 nnoremap <leader>sl "adt,dwep"ap
 
