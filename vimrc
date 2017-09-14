@@ -429,6 +429,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 
 let g:ycm_key_list_select_completion = ['<Enter>']
+let g:ycm_filetype_specific_completion_to_disable = {
+\ 'c': 1,
+\ 'cpp': 1
+\ }
 
 " e: elixir
 let g:easy_align_delimiters = {
