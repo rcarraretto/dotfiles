@@ -184,7 +184,7 @@ fun! TrimWhitespace()
 endfun
 
 function! RefreshChrome()
-  silent exec "!osascript $HOME/programming/dotfiles/applescript/refresh-chrome.applescript"
+  silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
   redraw!
   return 0
 endfunction
