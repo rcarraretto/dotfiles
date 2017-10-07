@@ -14,6 +14,8 @@ Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-scriptease'
 
+Plugin 'wincent/terminus'
+
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 
@@ -78,14 +80,6 @@ set formatoptions-=cro
 
 set shortmess+=A " no warning for existing swap file
 
-" (Hopefully) removes the delay when hitting esc in insert mode
-set noesckeys
-set ttimeout
-set ttimeoutlen=0
-
-" Auto reload file
-set autoread
-
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
@@ -143,11 +137,6 @@ augroup END
 augroup TrimWhitespace
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
-augroup END
-
-augroup AutoReloadFile
-    autocmd!
-    autocmd CursorHold * if expand('%') !=# '[Command Line]' | checktime | endif
 augroup END
 
 " }}}
@@ -300,7 +289,6 @@ nnoremap <leader>gb :Gblame<CR>
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
 
-nnoremap <silent> <esc> :noh<cr>
 nnoremap <silent> gh :noh<cr>
 inoremap jk <esc>
 
@@ -413,6 +401,9 @@ let g:ctrlp_switch_buffer = 0
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 " Allow netrw to remove non-empty local directories
 let g:netrw_localrmdir='rm -r'
+
+" terminus
+let g:TerminusCursorShape = 0
 
 " pymode
 let g:pymode_folding = 0
