@@ -96,80 +96,78 @@ highlight Folded ctermbg=00
 
 " Auto commands ---------------------- {{{
 augroup vimrcEx
-    autocmd!
-
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it when the position is invalid or when inside an event handler
-    " (happens when dropping a file on gvim).
-    " Also don't do it when the mark is in the first line, that is the default
-    " position when opening a file.
-    autocmd BufReadPost *
-                \ if line("'\"") > 1 && line("'\"") <= line("$") |
-                \   exe "normal! g`\"" |
-                \ endif
-
+  autocmd!
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+        \ if line("'\"") > 1 && line("'\"") <= line("$") |
+        \   exe "normal! g`\"" |
+        \ endif
 augroup END
 
 augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
+  autocmd!
+  autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
 augroup filetype_crontab
-    autocmd!
-    autocmd FileType crontab setlocal backupcopy=yes
+  autocmd!
+  autocmd FileType crontab setlocal backupcopy=yes
 augroup END
 
 augroup CursorLine
-    autocmd!
-    autocmd VimEnter * setlocal cursorline
-    autocmd WinEnter * setlocal cursorline
-    autocmd BufWinEnter * setlocal cursorline
-    autocmd WinLeave * setlocal nocursorline
+  autocmd!
+  autocmd VimEnter * setlocal cursorline
+  autocmd WinEnter * setlocal cursorline
+  autocmd BufWinEnter * setlocal cursorline
+  autocmd WinLeave * setlocal nocursorline
 augroup END
 
 augroup ColorColumn
-    autocmd!
-    autocmd BufEnter,FocusGained,VimEnter,WinEnter * if ShouldColorColumn() | let &l:colorcolumn='0' | endif
-    autocmd FocusLost,WinLeave * if ShouldColorColumn() | let &l:colorcolumn=join(range(1, 255), ',') | endif
+  autocmd!
+  autocmd BufEnter,FocusGained,VimEnter,WinEnter * if ShouldColorColumn() | let &l:colorcolumn='0' | endif
+  autocmd FocusLost,WinLeave * if ShouldColorColumn() | let &l:colorcolumn=join(range(1, 255), ',') | endif
 augroup END
 
 augroup TrimWhitespace
-    autocmd!
-    autocmd BufWritePre * :call TrimWhitespace()
+  autocmd!
+  autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
 " }}}
 
 " Functions ---------------------- {{{
 function! NumberToggle()
-    if (&relativenumber == 1)
-        set norelativenumber
-    else
-        set relativenumber
-    endif
-    set number
+  if (&relativenumber == 1)
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+  set number
 endfunc
 
 function! ShouldColorColumn() abort
-    let g:RcColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
-    return index(g:RcColorColumnBlacklist, &filetype) == -1
+  let g:RcColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
+  return index(g:RcColorColumnBlacklist, &filetype) == -1
 endfunction
 
 command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
 function! QuickfixFilenames()
-    " Building a hash ensures we get each buffer only once
-    let buffer_numbers = {}
-    for quickfix_item in getqflist()
-        let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
-    endfor
-    return join(values(buffer_numbers))
+  " Building a hash ensures we get each buffer only once
+  let buffer_numbers = {}
+  for quickfix_item in getqflist()
+    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+  endfor
+  return join(values(buffer_numbers))
 endfunction
 
 fun! TrimWhitespace()
-    let l:save_cursor = getpos('.')
-    %s/\s\+$//e
-    call setpos('.', l:save_cursor)
+  let l:save_cursor = getpos('.')
+  %s/\s\+$//e
+  call setpos('.', l:save_cursor)
 endfun
 
 function! RefreshChrome()
@@ -179,15 +177,15 @@ function! RefreshChrome()
 endfunction
 
 function! s:ExecuteCleanCommand(command)
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    silent execute a:command
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  silent execute a:command
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
 endfunction
 
 " Taken from abolish.vim
@@ -207,16 +205,16 @@ endfunction
 
 " Taken from abolish.vim
 function! s:snakecase(word)
-    let word = substitute(a:word,'::','/','g')
-    let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
-    let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
-    let word = substitute(word,'[.-]','_','g')
-    let word = tolower(word)
-    return word
+  let word = substitute(a:word,'::','/','g')
+  let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
+  let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
+  let word = substitute(word,'[.-]','_','g')
+  let word = tolower(word)
+  return word
 endfunction
 
 function! GuessClassName()
-    return s:mixedcase(expand('%:t:r'))
+  return s:mixedcase(expand('%:t:r'))
 endfunction
 
 function! s:RenameClass(class_name)
