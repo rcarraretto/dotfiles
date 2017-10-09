@@ -80,6 +80,9 @@ set formatoptions-=cro
 
 set shortmess+=A " no warning for existing swap file
 
+" remove delay when hitting esc in ex mode or search
+set ttimeoutlen=0
+
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
