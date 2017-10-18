@@ -48,6 +48,14 @@ class ${1} {
 }
 endsnippet
 
+snippet aclass
+<?php
+
+abstract class ${1} {
+	${2}
+}
+endsnippet
+
 snippet __c "__construct()" b
 public function __construct(${1:$dependencies}) {${1/\$(\w+)(, )*/\n\t\t$this->$1 = $$1;/g}
 }
