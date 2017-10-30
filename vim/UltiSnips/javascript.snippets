@@ -1,7 +1,15 @@
+snippet todo "// TODO " b
+// TODO: $0
+endsnippet
+
 snippet vf "var function"
 var ${1:function_name} = function(${2}) {
 	${VISUAL}$0
 };
+endsnippet
+
+snippet ret
+return $0;
 endsnippet
 
 snippet r_ "require lodash"
