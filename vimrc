@@ -316,6 +316,9 @@ nnoremap c# #NcgN
 nnoremap cg* g*Ncgn
 nnoremap cg# g#NcgN
 
+" Count number of matches for current search
+nnoremap <leader>co :%s///gn<CR>
+
 nnoremap <space>f *N
 
 nnoremap <leader>rp ggdG"*P=G
