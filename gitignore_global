@@ -1,7 +1,20 @@
-*~
+# macOS
 .DS_Store
+
+# vim backups
+*~
+
+# ag
+.agignore
+
+# sublime
 *.sublime-project
 *.sublime-workspace
+
+# python
+*.pyc
+__pycache__/
 .ropeproject
-.agignore
+.cache/
+
 profile.log
