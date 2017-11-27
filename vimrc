@@ -238,6 +238,7 @@ vnoremap ` '
 onoremap ' `
 onoremap ` '
 
+" Show output of last command
 nnoremap K :!<cr>
 
 nnoremap <leader>ev :e $MYVIMRC<cr>
