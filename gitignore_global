@@ -17,4 +17,7 @@ __pycache__/
 .ropeproject
 .cache/
 
+# personal todo notes
+.todo
+
 profile.log
