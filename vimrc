@@ -241,6 +241,10 @@ onoremap ` '
 " Show output of last command
 nnoremap K :!<cr>
 
+" easier command-line mode
+nnoremap <cr> :
+nnoremap <space>; :
+
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
