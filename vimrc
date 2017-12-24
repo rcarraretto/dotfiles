@@ -137,6 +137,10 @@ augroup TrimWhitespace
   autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
+augroup VimCommentary
+  autocmd!
+  autocmd FileType matlab setlocal commentstring=%\ %s
+augroup END
 " }}}
 
 " Functions ---------------------- {{{
