@@ -190,6 +190,14 @@ function! RefreshChrome()
   return 0
 endfunction
 
+function! ToggleGStatus()
+  if buflisted(bufname('.git/index'))
+    bd .git/index
+  else
+    Gstatus
+  endif
+endfunction
+
 function! s:ExecuteCleanCommand(command)
   " Preparation: save last search, and cursor position.
   let _s=@/
@@ -301,7 +309,9 @@ nnoremap <leader>tc :tabclose<CR>
 nnoremap <leader>th :tabm -1<CR>
 nnoremap <leader>tl :tabm +1<CR>
 
+nnoremap <space>u :call ToggleGStatus()<CR>
 nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gd :Gdiff<CR>
 
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
