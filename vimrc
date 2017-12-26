@@ -142,6 +142,15 @@ augroup VimCommentary
   autocmd!
   autocmd FileType matlab setlocal commentstring=%\ %s
 augroup END
+
+augroup CmdlineWinMapping
+  autocmd!
+  " Because I remapped <cr> in normal mode (nnoremap <cr> :),
+  " <cr> in cmdline window no longer executes the cmd under cursor.
+  " put this behavior back
+  autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
+augroup END
+
 " }}}
 
 " Functions ---------------------- {{{
