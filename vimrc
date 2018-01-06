@@ -151,6 +151,11 @@ augroup CmdlineWinMapping
   autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
 augroup END
 
+augroup SetFiletype
+  autocmd!
+  autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
+augroup END
+
 " }}}
 
 " Functions ---------------------- {{{
