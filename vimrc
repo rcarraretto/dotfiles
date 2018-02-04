@@ -304,7 +304,6 @@ nmap <space>v "*gr
 
 nnoremap <leader>79 :wqa<cr>
 
-nnoremap <leader>x :bnext <bar> :bd #<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>o :BufOnly<cr>
 
@@ -395,7 +394,6 @@ nnoremap <space>l <C-w>l
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space>t :w<cr>:TestLast<cr>
-nnoremap <leader>md :!maya sublime-deploy %<CR>
 
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
