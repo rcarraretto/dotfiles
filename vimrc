@@ -13,6 +13,7 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-scriptease'
+Plugin 'tpope/vim-abolish'
 
 Plugin 'wincent/terminus'
 
