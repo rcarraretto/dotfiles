@@ -317,6 +317,7 @@ nnoremap <leader>tl :tabm +1<CR>
 nnoremap <space>u :call ToggleGStatus()<CR>
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>go :Gcommit<CR>
 
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
