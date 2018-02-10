@@ -254,6 +254,18 @@ function! s:RenameClass(class_name)
   write
 endfunction
 
+function! s:GrepOperator(type)
+  if a:type ==# 'v'
+    execute "normal! `<v`>y"
+  elseif a:type ==# 'char'
+    execute "normal! `[v`]y"
+  else
+    return
+  endif
+  silent execute "Ack! -Q " . shellescape(@@)
+endfunction
+endfunction
+
 command! -nargs=1 RenameClass call s:RenameClass(<f-args>)
 
 "}}}
@@ -335,6 +347,8 @@ nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
+nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
+vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! -Q ''<left>
 nnoremap <leader>ft :Ack! '<C-R>=expand("<cword>")<cr>'<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
