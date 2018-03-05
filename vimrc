@@ -292,7 +292,7 @@ nnoremap <leader>ss :w <bar> :source %<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>es1 :e ~/.vim/bundle/vim-snippets/UltiSnips<cr>
 nnoremap <leader>es2 :e ~/.vim/bundle/vim-snippets/snippets<cr>
-nnoremap <leader>eag :e ./.agignore<cr>
+nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :tabedit ./.todo<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
 nnoremap <leader>et :tabedit ~/Dropbox/notes/tmp.txt<cr>
