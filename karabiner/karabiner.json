@@ -199,6 +199,31 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "right option to hyper",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "right_option",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "right_command",
+                                        "modifiers": [
+                                            "right_control",
+                                            "right_option"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             },
