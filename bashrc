@@ -18,8 +18,12 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:~/Library/Python/2.7/bin
 
 # Python and Ruby envs
-eval "$(rbenv init -)"
-eval "$(pyenv init -)"
+if command -v rbenv 1>/dev/null 2>&1; then
+    eval "$(rbenv init -)"
+fi
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
 # eval "$(docker-machine env default)"
 
 # Nvm
