@@ -67,6 +67,7 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 set nowrap
+set linebreak
 set scrolloff=3
 set hidden
 set laststatus=2 " always display status line
