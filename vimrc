@@ -439,7 +439,7 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
   " Use ag in CtrlP for listing files
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
   let g:ctrlp_use_caching = 1
 endif
 
