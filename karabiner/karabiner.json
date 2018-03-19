@@ -277,6 +277,14 @@
                             "to": {
                                 "key_code": "equal_sign"
                             }
+                        },
+                        {
+                            "from": {
+                                "key_code": "equal_sign"
+                            },
+                            "to": {
+                                "key_code": "right_option"
+                            }
                         }
                     ]
                 }
