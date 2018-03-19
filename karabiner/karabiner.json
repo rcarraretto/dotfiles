@@ -201,11 +201,11 @@
                         ]
                     },
                     {
-                        "description": "right option to hyper",
+                        "description": "f19 to hyper",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "right_option",
+                                    "key_code": "f19",
                                     "modifiers": {
                                         "optional": [
                                             "any"
@@ -272,18 +272,18 @@
                     "simple_modifications": [
                         {
                             "from": {
-                                "key_code": "grave_accent_and_tilde"
+                                "key_code": "equal_sign"
                             },
                             "to": {
-                                "key_code": "equal_sign"
+                                "key_code": "f19"
                             }
                         },
                         {
                             "from": {
-                                "key_code": "equal_sign"
+                                "key_code": "grave_accent_and_tilde"
                             },
                             "to": {
-                                "key_code": "right_option"
+                                "key_code": "equal_sign"
                             }
                         }
                     ]
@@ -389,7 +389,16 @@
             ],
             "name": "macbook",
             "selected": true,
-            "simple_modifications": [],
+            "simple_modifications": [
+                {
+                    "from": {
+                        "key_code": "right_option"
+                    },
+                    "to": {
+                        "key_code": "f19"
+                    }
+                }
+            ],
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
                 "keyboard_type": "iso"
