@@ -16,6 +16,15 @@ local bind_hotkey = function(app)
 end
 fnutils.each(apps, bind_hotkey)
 
+-- Toggle iTerm and Chrome
+hs.hotkey.bind(hyper, "t", function()
+  if hs.application.frontmostApplication():title() == "iTerm2" then
+    hs.application.launchOrFocus("Google Chrome")
+  else
+    hs.application.launchOrFocus("iTerm")
+  end
+end)
+
 -- Reload config when any lua file in config directory changes
 function reloadConfig(files)
     doReload = false
