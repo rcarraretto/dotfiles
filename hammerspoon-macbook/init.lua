@@ -8,6 +8,7 @@ local apps = {
   {key = "2", name = "Google Chrome"},
   {key = "3", name = "SourceTree"},
   {key = "4", name = "Slack"},
+  {key = "5", name = "Calendar"},
 }
 local bind_hotkey = function(app)
   hs.hotkey.bind(hyper, app.key, function()
