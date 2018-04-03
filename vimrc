@@ -317,8 +317,7 @@ nmap <space>v "*gr
 
 nnoremap <leader>79 :wqa<cr>
 
-nnoremap <leader>q :q<cr>
-nnoremap <leader>o :BufOnly<cr>
+nnoremap <space>q :q<cr>
 
 nnoremap <silent> [r :tabprevious<CR>
 nnoremap <silent> ]r :tabnext<CR>
@@ -339,7 +338,7 @@ nnoremap <silent> gh :noh<cr>
 inoremap jk <esc>
 
 " File handling
-nnoremap <leader>n :e <C-R>=expand("%:h"). "/" <CR>
+nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
@@ -414,7 +413,7 @@ nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 nnoremap con :call NumberToggle()<cr>
-nnoremap <silent> coq :call ToggleQuickfixList()<CR>
+nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
 
 " add method
 nmap <leader>am ]mOf<tab>
