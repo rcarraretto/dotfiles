@@ -2,6 +2,7 @@
 set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
 call vundle#begin()
 
 Plugin 'tpope/vim-unimpaired'
@@ -19,6 +20,7 @@ Plugin 'wincent/terminus'
 
 Plugin 'mileszs/ack.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'junegunn/fzf.vim'
 
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -359,6 +361,8 @@ nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
+
+nnoremap <space>o :Files<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
