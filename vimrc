@@ -273,7 +273,7 @@ function! s:GrepOperator(type)
   else
     return
   endif
-  silent execute "Ack! -Q " . shellescape(@@)
+  silent execute "Ack! -Q --hidden " . shellescape(@@)
 endfunction
 
 command! -nargs=1 RenameClass call s:RenameClass(<f-args>)
