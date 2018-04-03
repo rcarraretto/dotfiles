@@ -38,6 +38,7 @@ Plugin 'chriskempson/base16-vim'
 
 Plugin 'StanAngeloff/php.vim'
 Plugin 'klen/python-mode'
+Plugin 'mustache/vim-mustache-handlebars'
 
 Bundle 'vim-ruby/vim-ruby'
 Plugin 'elixir-lang/vim-elixir'
