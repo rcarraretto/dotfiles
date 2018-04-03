@@ -156,6 +156,13 @@ augroup CmdlineWinMapping
   autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
 augroup END
 
+augroup QuickfixMapping
+  autocmd!
+  " Because I remapped <cr> in normal mode (nnoremap <cr> :),
+  " On quickfix, make 'o' open the target line
+  autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
+augroup END
+
 augroup SetFiletype
   autocmd!
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
