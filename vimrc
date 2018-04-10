@@ -16,6 +16,7 @@ Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-scriptease'
 Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-dispatch'
 
 Plugin 'wincent/terminus'
 
