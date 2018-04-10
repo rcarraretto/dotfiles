@@ -20,7 +20,6 @@ Plugin 'tpope/vim-abolish'
 Plugin 'wincent/terminus'
 
 Plugin 'mileszs/ack.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'junegunn/fzf.vim'
 
 Plugin 'SirVer/ultisnips'
@@ -309,8 +308,7 @@ nnoremap <leader>eo :tabedit ./.todo<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
 nnoremap <leader>et :tabedit ~/Dropbox/notes/tmp.txt<cr>
 
-nnoremap <space>b :CtrlPBuffer<cr>
-nnoremap <space>m :CtrlPMRUFiles<cr>
+nnoremap <space>m :History<cr>
 nnoremap <leader><leader> <C-^>
 
 nnoremap <leader>vv "*p
@@ -450,15 +448,7 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
-  " Use ag in CtrlP for listing files
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-  let g:ctrlp_use_caching = 1
 endif
-
-" ctrlp
-let g:ctrlp_working_path_mode = ''
-let g:ctrlp_map = '<space>p'
-let g:ctrlp_switch_buffer = 0
 
 " netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
