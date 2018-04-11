@@ -31,7 +31,6 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'junegunn/vim-easy-align'
 
-Plugin 'milkypostman/vim-togglelist'
 Plugin 'vim-scripts/BufOnly.vim'
 Plugin 'vim-scripts/Rename'
 
