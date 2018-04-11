@@ -464,9 +464,6 @@ let g:pymode_options_max_line_length = 119
 let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
-" Toggle Quickfix List
-let g:toggle_list_no_mappings = 1
-
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
