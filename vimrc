@@ -146,7 +146,7 @@ augroup END
 
 augroup VimCommentary
   autocmd!
-  autocmd FileType matlab setlocal commentstring=%\ %s
+  autocmd filetype matlab setlocal commentstring=%\ %s
 augroup END
 
 augroup CmdlineWinMapping
