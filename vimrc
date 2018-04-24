@@ -164,6 +164,11 @@ augroup QuickfixMapping
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
 augroup END
 
+augroup NetrwMapping
+  autocmd!
+  autocmd filetype netrw call NetrwMappings()
+augroup END
+
 augroup SetFiletype
   autocmd!
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
@@ -172,6 +177,17 @@ augroup END
 " }}}
 
 " Functions ---------------------- {{{
+
+function! NetrwMappings()
+  " Cancel netrw default <cr> mapping that will open the file in a new window
+  " so <cr> is still : (nnoremap <cr> :)
+  nunmap <buffer> <cr>
+  " map 'o' to what <cr> is in netrw (open file in a new window)
+  nnoremap <buffer> <silent> o :<c-u>call netrw#LocalBrowseCheck(<SNR>63_NetrwBrowseChgDir(1,<SNR>63_NetrwGetWord()))<cr>
+  " map 'x' to what 'o' is in netrw (open file in a horizontal split)
+  nnoremap <buffer> <silent> x :call <SNR>63_NetrwSplit(3)<cr>
+endfunction
+
 function! NumberToggle()
   if (&relativenumber == 1)
     set norelativenumber
@@ -452,6 +468,9 @@ endif
 
 " netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
+let g:netrw_banner = 0
+" Tree style listing
+let g:netrw_liststyle = 3
 " Allow netrw to remove non-empty local directories
 let g:netrw_localrmdir='rm -r'
 
