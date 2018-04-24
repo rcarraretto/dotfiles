@@ -17,6 +17,11 @@ local bind_hotkey = function(app)
 end
 fnutils.each(apps, bind_hotkey)
 
+-- Display sleep (hyper + l)
+hs.hotkey.bind(hyper, "l", function()
+  hs.execute('pmset displaysleepnow')
+end)
+
 -- Toggle iTerm and Chrome
 hs.hotkey.bind(hyper, "t", function()
   if hs.application.frontmostApplication():title() == "iTerm2" then
