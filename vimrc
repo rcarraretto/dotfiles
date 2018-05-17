@@ -468,13 +468,7 @@ if executable('ag')
 endif
 
 " Ack.vim
-let g:ack_mappings = {
-\ "t": "<C-W><CR><C-W>T",
-\ "o": "<CR>",
-\ "go": "<CR><C-W>j",
-\ "x": "<C-W><CR><C-W>K",
-\ "s": "<C-W><CR><C-W>H<C-W>b<C-W>J<C-W>t",
-\ }
+let g:ack_apply_qmappings = 0
 
 " netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'

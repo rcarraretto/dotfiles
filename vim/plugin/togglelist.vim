@@ -1,6 +1,26 @@
 " Toggle List plugin
 " Adapted from https://github.com/milkypostman/vim-togglelist
 
+function! s:OpenVs()
+  execute "normal \<c-w>\<cr>\<c-w>L"
+  cclose
+  botright copen
+  execute "normal \<c-w>\p"
+endfunction
+
+function! s:RegisterMappings()
+  nnoremap <buffer> <silent> t <C-W><CR><C-W>T
+  nnoremap <buffer> <silent> o <cr>
+  nnoremap <buffer> <silent> go <CR><C-W>j
+  nnoremap <buffer> <silent> x <C-W><CR><C-W>K
+  nnoremap <buffer> <silent> s :call <sid>OpenVs()<cr>
+endfunction
+
+augroup QfMappings
+  autocmd!
+  autocmd FileType qf call s:RegisterMappings()
+augroup END
+
 function! s:GetBufferList()
   redir =>buflist
   silent! ls
