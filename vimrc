@@ -311,9 +311,8 @@ nnoremap K :!<cr>
 
 " easier command-line mode
 nnoremap <cr> :
-nnoremap <space>; :
 
-nnoremap <leader>ev :e $MYVIMRC<cr>
+nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
@@ -370,6 +369,7 @@ nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
 nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
+nnoremap <leader>cp :let @" = expand("%")<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
@@ -387,6 +387,7 @@ nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
 nnoremap <space>o :Files<cr>
+imap <c-x><c-x> <plug>(fzf-complete-line)
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -433,6 +434,7 @@ nnoremap <space>k <C-w>k
 nnoremap <space>j <C-w>j
 nnoremap <space>h <C-w>h
 nnoremap <space>l <C-w>l
+nnoremap <space>; <C-w>p
 
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
