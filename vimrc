@@ -36,13 +36,10 @@ Plugin 'vim-scripts/Rename'
 
 Plugin 'chriskempson/base16-vim'
 
-Plugin 'StanAngeloff/php.vim'
-Plugin 'klen/python-mode'
-Plugin 'mustache/vim-mustache-handlebars'
-
-Bundle 'vim-ruby/vim-ruby'
-Plugin 'elixir-lang/vim-elixir'
 Plugin 'janko-m/vim-test'
+Plugin 'klen/python-mode'
+Plugin 'elixir-lang/vim-elixir'
+Plugin 'mustache/vim-mustache-handlebars'
 
 call vundle#end()
 filetype plugin indent on
