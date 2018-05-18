@@ -32,7 +32,6 @@ Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'AndrewRadev/splitjoin.vim'
 
-Plugin 'vim-scripts/BufOnly.vim'
 Plugin 'vim-scripts/Rename'
 
 Plugin 'chriskempson/base16-vim'
@@ -295,6 +294,40 @@ function! s:GrepOperator(type)
 endfunction
 
 command! -nargs=1 RenameClass call s:RenameClass(<f-args>)
+
+" Adapted from:
+" https://github.com/vim-scripts/BufOnly.vim
+function! s:BufOnly()
+  let buf_nr = bufnr('%')
+  let last_buf_nr = bufnr('$')
+
+  let delete_count = 0
+  let n = 1
+  while n <= last_buf_nr
+    if n != buf_nr && buflisted(n)
+      if getbufvar(n, '&modified')
+        echohl ErrorMsg
+        echomsg 'No write since last change for buffer'
+              \ n '(add ! to override)'
+        echohl None
+      else
+        silent exe 'bdel ' . n
+        if !buflisted(n)
+          let delete_count = delete_count + 1
+        endif
+      endif
+    endif
+    let n = n + 1
+  endwhile
+
+  if delete_count == 1
+    echomsg delete_count "buffer deleted"
+  elseif delete_count > 1
+    echomsg delete_count "buffers deleted"
+  endif
+endfunction
+
+command! BufOnly :call s:BufOnly()
 
 "}}}
 
