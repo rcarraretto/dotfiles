@@ -166,7 +166,10 @@ augroup END
 
 augroup NetrwMapping
   autocmd!
-  autocmd filetype netrw call NetrwMappings()
+  " note:
+  " 'echom' might not work within this function
+  " https://vi.stackexchange.com/a/8380
+  autocmd filetype netrw call s:NetrwMappings()
 augroup END
 
 augroup SetFiletype
@@ -178,14 +181,18 @@ augroup END
 
 " Functions ---------------------- {{{
 
-function! NetrwMappings()
+function! s:NetrwMappings()
   " Cancel netrw default <cr> mapping that will open the file in a new window
   " so <cr> is still : (nnoremap <cr> :)
+  if !exists('s:mapping_netrw_cr')
+    let s:mapping_netrw_cr = maparg("<cr>", "n")
+    let s:mapping_netrw_o = maparg("o", "n")
+  endif
   nunmap <buffer> <cr>
   " map 'o' to what <cr> is in netrw (open file in a new window)
-  nnoremap <buffer> <silent> o :<c-u>call netrw#LocalBrowseCheck(<SNR>62_NetrwBrowseChgDir(1,<SNR>62_NetrwGetWord()))<cr>
+  execute "nnoremap <buffer> <silent> o " . s:mapping_netrw_cr
   " map 'x' to what 'o' is in netrw (open file in a horizontal split)
-  nnoremap <buffer> <silent> x :call <SNR>63_NetrwSplit(3)<cr>
+  execute "nnoremap <buffer> <silent> x " . s:mapping_netrw_o
 endfunction
 
 function! NumberToggle()
