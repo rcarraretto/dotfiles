@@ -9,6 +9,9 @@ local apps = {
   {key = "3", name = "SourceTree"},
   {key = "4", name = "Slack"},
   {key = "5", name = "Calendar"},
+  {key = "F1", name = "Spotify"},
+  {key = "F2", name = "Postman"},
+  {key = "F3", name = "Studio 3T"},
 }
 local bind_hotkey = function(app)
   hs.hotkey.bind(hyper, app.key, function()
