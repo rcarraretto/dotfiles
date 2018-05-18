@@ -182,15 +182,22 @@ augroup END
 " Functions ---------------------- {{{
 
 function! s:NetrwMappings()
-  " Cancel netrw default <cr> mapping that will open the file in a new window
-  " so <cr> is still : (nnoremap <cr> :)
+  " store original netrw mappings
   if !exists('s:mapping_netrw_cr')
     let s:mapping_netrw_cr = maparg("<cr>", "n")
     let s:mapping_netrw_o = maparg("o", "n")
   endif
-  nunmap <buffer> <cr>
+
+  " Cancel netrw default <cr> mapping that will open the file in a new window
+  " so <cr> is still : (nnoremap <cr> :)
+  let s:mapping_current_cr = maparg("<cr>", "n", 0, 1)
+  if !empty(s:mapping_current_cr) && s:mapping_current_cr['buffer']
+    nunmap <buffer> <cr>
+  endif
+
   " map 'o' to what <cr> is in netrw (open file in a new window)
   execute "nnoremap <buffer> <silent> o " . s:mapping_netrw_cr
+
   " map 'x' to what 'o' is in netrw (open file in a horizontal split)
   execute "nnoremap <buffer> <silent> x " . s:mapping_netrw_o
 endfunction
