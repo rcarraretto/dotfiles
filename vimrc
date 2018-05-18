@@ -205,7 +205,7 @@ function! NumberToggle()
     set relativenumber
   endif
   set number
-endfunc
+endfunction
 
 function! ShouldColorColumn() abort
   let g:RcColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
@@ -226,7 +226,7 @@ fun! TrimWhitespace()
   let l:save_cursor = getpos('.')
   %s/\s\+$//e
   call setpos('.', l:save_cursor)
-endfun
+endfunction
 
 function! RefreshChrome()
   silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
