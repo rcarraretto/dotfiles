@@ -246,56 +246,6 @@ function! ToggleGStatus()
   endif
 endfunction
 
-function! s:ExecuteCleanCommand(command)
-  " Preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
-  " Do the business:
-  silent execute a:command
-  " Clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
-endfunction
-
-" Taken from abolish.vim
-function! s:camelcase(word)
-  let word = substitute(a:word, '-', '_', 'g')
-  if word !~# '_' && word =~# '\l'
-    return substitute(word,'^.','\l&','')
-  else
-    return substitute(word,'\C\(_\)\=\(.\)','\=submatch(1)==""?tolower(submatch(2)) : toupper(submatch(2))','g')
-  endif
-endfunction
-
-" Taken from abolish.vim
-function! s:mixedcase(word)
-  return substitute(s:camelcase(a:word),'^.','\u&','')
-endfunction
-
-" Taken from abolish.vim
-function! s:snakecase(word)
-  let word = substitute(a:word,'::','/','g')
-  let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
-  let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
-  let word = substitute(word,'[.-]','_','g')
-  let word = tolower(word)
-  return word
-endfunction
-
-function! GuessClassName()
-  return s:mixedcase(expand('%:t:r'))
-endfunction
-
-function! s:RenameClass(class_name)
-  let s:new_filename = s:snakecase(a:class_name)
-  let s:new_path = expand('%:h') . '/' . s:new_filename . '.' . expand('%:e')
-  silent execute 'Rename ' . s:new_path
-  let s:change_class_name = "normal! ?\\<class\\>\<cr>wcw" . a:class_name
-  call s:ExecuteCleanCommand(s:change_class_name)
-  write
-endfunction
-
 function! s:GrepOperator(type)
   if a:type ==# 'v'
     execute "normal! `<v`>y"
@@ -306,8 +256,6 @@ function! s:GrepOperator(type)
   endif
   silent execute "Ack! -Q --hidden " . shellescape(@@)
 endfunction
-
-command! -nargs=1 RenameClass call s:RenameClass(<f-args>)
 
 " Adapted from:
 " https://github.com/vim-scripts/BufOnly.vim
@@ -359,6 +307,21 @@ endfunction
 "}}}
 
 " Mappings ---------------------- {{{
+
+inoremap jk <esc>
+
+" easier command-line mode
+nnoremap <cr> :
+
+nnoremap <silent> gh :noh<cr>
+
+" Save (needs .bashrc: stty -ixon -ixoff)
+nnoremap <C-l> <esc>:w<CR>
+inoremap <C-l> <esc>:w<CR>
+
+" Show output of last command
+nnoremap K :!<cr>
+
 nnoremap ' `
 nnoremap ` '
 vnoremap ' `
@@ -366,11 +329,29 @@ vnoremap ` '
 onoremap ' `
 onoremap ` '
 
-" Show output of last command
-nnoremap K :!<cr>
+nnoremap <leader><leader> <C-^>
 
-" easier command-line mode
-nnoremap <cr> :
+" window navigation
+nnoremap <space>k <C-w>k
+nnoremap <space>j <C-w>j
+nnoremap <space>h <C-w>h
+nnoremap <space>l <C-w>l
+nnoremap <space>; <C-w>p
+
+" tab navigation
+nnoremap <silent> [r :tabprevious<CR>
+nnoremap <silent> ]r :tabnext<CR>
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>th :tabm -1<CR>
+nnoremap <leader>tl :tabm +1<CR>
+
+nnoremap <space>o :Files<cr>
+nnoremap <space>m :History<cr>
+nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
+nnoremap <space>q :q<cr>
+
+nnoremap con :call NumberToggle()<cr>
 
 nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -384,8 +365,11 @@ nnoremap <leader>eo :call ViewFile("./.todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
 nnoremap <leader>et :call ViewFile("~/Dropbox/notes/tmp.txt")<cr>
 
-nnoremap <space>m :History<cr>
-nnoremap <leader><leader> <C-^>
+" Easier change and replace word
+nnoremap c* *Ncgn
+nnoremap c# #NcgN
+nnoremap cg* g*Ncgn
+nnoremap cg# g#NcgN
 
 nnoremap <leader>vv "*p
 nnoremap <leader>V o<esc>"*p
@@ -400,33 +384,15 @@ nnoremap <space>c "*y
 " take advantage of ReplaceWithRegister plugin ('gr' mapping)
 nmap <space>v "*gr
 
-nnoremap <leader>79 :wqa<cr>
-
-nnoremap <space>q :q<cr>
-
-nnoremap <silent> [r :tabprevious<CR>
-nnoremap <silent> ]r :tabnext<CR>
-nnoremap <leader>tn :tabnew<CR>
-nnoremap <leader>tc :tabclose<CR>
-nnoremap <leader>th :tabm -1<CR>
-nnoremap <leader>tl :tabm +1<CR>
-
 nnoremap <space>u :call ToggleGStatus()<CR>
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>go :Gcommit<CR>
 
-nnoremap ]h $]mzzF(B
-nnoremap [h [mzzF(B
-
-nnoremap <silent> gh :noh<cr>
-inoremap jk <esc>
-
 " File handling
 nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
-nnoremap <leader>dl :e <C-R>=expand("%:h"). "/" <CR><CR>
 nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
 nnoremap <leader>cp :let @" = expand("%")<cr>
@@ -438,63 +404,19 @@ vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! -Q ''<left>
 nnoremap <leader>ft :Ack! '<C-R>=expand("<cword>")<cr>'<left>
 nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
-nnoremap <leader>f$ /\v\$[A-Za-z_]*<cr>
-nnoremap <leader>fv /\v\$<C-R><C-W>\ze[ [-]?<cr>N
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
-nnoremap <space>o :Files<cr>
-imap <c-x><c-x> <plug>(fzf-complete-line)
-
-" Easier change and replace word
-nnoremap c* *Ncgn
-nnoremap c# #NcgN
-nnoremap cg* g*Ncgn
-nnoremap cg# g#NcgN
+" Format paragraph
+nnoremap <space>\ gqip
 
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<CR>
 
-nnoremap <space>f *N
-
 nnoremap <leader>rp ggdG"*P=G
-nnoremap <leader>cc :RenameClass <C-R>=GuessClassName()<cr>
-
-" Split
-nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
-
-" Format paragraph
-nnoremap <space>\ gqip
-
-" move function arg to the right
-nnoremap <leader>sl "adt,dwep"ap
-
-" $hash['key'] => $key
-nmap <leader>k4 Bldt[ds]ds'
-" $hash['key'] => A::value($hash, 'key')
-nmap <leader>kav F$f[ds]i, jkF$ys2f')iA::valuejkf)
-" $key => $['key']
-nmap <leader>4k ysiw]ysi]'hi
-" $obj->method() => $obj['method']
-nmap <leader>mk F-df>yst(`ysa']f(2x2F'w
-" $obj->getSomething() => $obj['something']
-nmap <leader>kgk F-df>yst(`ysa']f(2x2F'w3x~
-
-" Save (needs .bashrc: stty -ixon -ixoff)
-" nnoremap <C-s> <esc>:w<CR>
-" inoremap <C-s> <esc>:w<CR>
-nnoremap <C-l> <esc>:w<CR>
-inoremap <C-l> <esc>:w<CR>
-
-" window navigation
-nnoremap <space>k <C-w>k
-nnoremap <space>j <C-w>j
-nnoremap <space>h <C-w>h
-nnoremap <space>l <C-w>l
-nnoremap <space>; <C-w>p
 
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
@@ -502,11 +424,7 @@ nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
-nnoremap con :call NumberToggle()<cr>
-nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
-
-" add method
-nmap <leader>am ]mOf<tab>
+imap <c-x><c-x> <plug>(fzf-complete-line)
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -516,6 +434,15 @@ nmap ga <Plug>(EasyAlign)
 
 " Go align Elixir paragraph
 nmap gae gaipe
+
+nnoremap ]h $]mzzF(B
+nnoremap [h [mzzF(B
+
+" Split
+nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
+
+" move function arg to the right
+nnoremap <leader>sl "adt,dwep"ap
 
 " }}}
 
