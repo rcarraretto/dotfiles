@@ -380,11 +380,6 @@ nnoremap <space>c "*y
 " take advantage of ReplaceWithRegister plugin ('gr' mapping)
 nmap <space>v "*gr
 
-nnoremap <space>u :call ToggleGStatus()<CR>
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>go :Gcommit<CR>
-
 " File handling
 nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
@@ -405,6 +400,12 @@ nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
+
+" Git
+nnoremap <space>u :call ToggleGStatus()<CR>
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>go :Gcommit<CR>
 
 " Format paragraph
 nnoremap <space>\ gqip
