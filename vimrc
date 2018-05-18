@@ -183,7 +183,7 @@ function! NetrwMappings()
   " so <cr> is still : (nnoremap <cr> :)
   nunmap <buffer> <cr>
   " map 'o' to what <cr> is in netrw (open file in a new window)
-  nnoremap <buffer> <silent> o :<c-u>call netrw#LocalBrowseCheck(<SNR>63_NetrwBrowseChgDir(1,<SNR>63_NetrwGetWord()))<cr>
+  nnoremap <buffer> <silent> o :<c-u>call netrw#LocalBrowseCheck(<SNR>62_NetrwBrowseChgDir(1,<SNR>62_NetrwGetWord()))<cr>
   " map 'x' to what 'o' is in netrw (open file in a horizontal split)
   nnoremap <buffer> <silent> x :call <SNR>63_NetrwSplit(3)<cr>
 endfunction
