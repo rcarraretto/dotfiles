@@ -336,6 +336,19 @@ endfunction
 
 command! BufOnly :call s:BufOnly()
 
+function! ViewFile(path)
+  if bufnr(a:path) == -1
+    execute "tabnew " . a:path
+  else
+    let wins = getbufinfo(a:path)[0]['windows']
+    if empty(wins)
+      execute "tabnew " . a:path
+    else
+      call win_gotoid(wins[0])
+    endif
+  endif
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -352,7 +365,7 @@ nnoremap K :!<cr>
 " easier command-line mode
 nnoremap <cr> :
 
-nnoremap <leader>ev :tabnew $MYVIMRC<cr>
+nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
@@ -360,9 +373,9 @@ nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>es1 :e ~/.vim/bundle/vim-snippets/UltiSnips<cr>
 nnoremap <leader>es2 :e ~/.vim/bundle/vim-snippets/snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
-nnoremap <leader>eo :tabedit ./.todo<cr>
+nnoremap <leader>eo :call ViewFile("./.todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
-nnoremap <leader>et :tabedit ~/Dropbox/notes/tmp.txt<cr>
+nnoremap <leader>et :call ViewFile("~/Dropbox/notes/tmp.txt")<cr>
 
 nnoremap <space>m :History<cr>
 nnoremap <leader><leader> <C-^>
