@@ -105,7 +105,7 @@ augroup vimrcEx
   " position when opening a file.
   autocmd BufReadPost *
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
-        \   exe "normal! g`\"" |
+        \   execute "normal! g`\"" |
         \ endif
 augroup END
 
@@ -267,7 +267,7 @@ function! s:BufOnly()
               \ n '(add ! to override)'
         echohl None
       else
-        silent exe 'bdel ' . n
+        silent execute 'bdel ' . n
         if !buflisted(n)
           let delete_count = delete_count + 1
         endif
@@ -315,7 +315,7 @@ function! s:RenameFile(name)
   let l:lastbufnr = bufnr('$')
 
   if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
-    silent exe l:lastbufnr . 'bwipe!'
+    silent execute l:lastbufnr . 'bwipe!'
   else
     echohl ErrorMsg
     echomsg 'Could not wipe out the old buffer for some reason.'
