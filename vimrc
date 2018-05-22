@@ -287,60 +287,49 @@ command! BufOnly :call s:BufOnly()
 
 " Adapted from:
 " https://github.com/vim-scripts/Rename
-function! RenameFile(name, bang)
-	let l:name    = a:name
-	let l:oldfile = expand('%:p')
+function! s:RenameFile(name)
+  let l:oldfile = expand('%:p')
 
-	if bufexists(fnamemodify(l:name, ':p'))
-		if (a:bang ==# '!')
-			silent exe bufnr(fnamemodify(l:name, ':p')) . 'bwipe!'
-		else
-			echohl ErrorMsg
-			echomsg 'A buffer with that name already exists (use ! to override).'
-			echohl None
-			return 0
-		endif
-	endif
+  if bufexists(fnamemodify(a:name, ':p'))
+    echohl ErrorMsg
+    echomsg 'A buffer with that name already exists.'
+    echohl None
+    return
+  endif
 
-	let l:status = 1
+  let v:errmsg = ''
+  silent! execute 'saveas ' . a:name
 
-	let v:errmsg = ''
-	silent! exe 'saveas' . a:bang . ' ' . l:name
+  if v:errmsg !~# '^$\|^E329'
+    echoerr v:errmsg
+    return
+  endif
 
-	if v:errmsg =~# '^$\|^E329'
-		let l:lastbufnr = bufnr('$')
+  if expand('%:p') ==# l:oldfile || !filewritable(expand('%:p'))
+    echohl ErrorMsg
+    echomsg 'Rename failed for some reason.'
+    echohl None
+    return
+  endif
 
-		if expand('%:p') !=# l:oldfile && filewritable(expand('%:p'))
-			if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
-				silent exe l:lastbufnr . 'bwipe!'
-			else
-				echohl ErrorMsg
-				echomsg 'Could not wipe out the old buffer for some reason.'
-				echohl None
-				let l:status = 0
-			endif
+  let l:lastbufnr = bufnr('$')
 
-			if delete(l:oldfile) != 0
-				echohl ErrorMsg
-				echomsg 'Could not delete the old file: ' . l:oldfile
-				echohl None
-				let l:status = 0
-			endif
-		else
-			echohl ErrorMsg
-			echomsg 'Rename failed for some reason.'
-			echohl None
-			let l:status = 0
-		endif
-	else
-		echoerr v:errmsg
-		let l:status = 0
-	endif
+  if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
+    silent exe l:lastbufnr . 'bwipe!'
+  else
+    echohl ErrorMsg
+    echomsg 'Could not wipe out the old buffer for some reason.'
+    echohl None
+  endif
 
-	return l:status
+  if delete(l:oldfile) != 0
+    echohl ErrorMsg
+    echomsg 'Could not delete the old file: ' . l:oldfile
+    echohl None
+  endif
 endfunction
 
-command! -nargs=* -complete=file -bang RenameFile call RenameFile(<q-args>, '<bang>')
+command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
 function! ViewFile(path)
   if bufnr(a:path) == -1
