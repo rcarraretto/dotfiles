@@ -32,8 +32,6 @@ Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'AndrewRadev/splitjoin.vim'
 
-Plugin 'vim-scripts/Rename'
-
 Plugin 'chriskempson/base16-vim'
 
 Plugin 'janko-m/vim-test'
@@ -287,6 +285,63 @@ endfunction
 
 command! BufOnly :call s:BufOnly()
 
+" Adapted from:
+" https://github.com/vim-scripts/Rename
+function! RenameFile(name, bang)
+	let l:name    = a:name
+	let l:oldfile = expand('%:p')
+
+	if bufexists(fnamemodify(l:name, ':p'))
+		if (a:bang ==# '!')
+			silent exe bufnr(fnamemodify(l:name, ':p')) . 'bwipe!'
+		else
+			echohl ErrorMsg
+			echomsg 'A buffer with that name already exists (use ! to override).'
+			echohl None
+			return 0
+		endif
+	endif
+
+	let l:status = 1
+
+	let v:errmsg = ''
+	silent! exe 'saveas' . a:bang . ' ' . l:name
+
+	if v:errmsg =~# '^$\|^E329'
+		let l:lastbufnr = bufnr('$')
+
+		if expand('%:p') !=# l:oldfile && filewritable(expand('%:p'))
+			if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
+				silent exe l:lastbufnr . 'bwipe!'
+			else
+				echohl ErrorMsg
+				echomsg 'Could not wipe out the old buffer for some reason.'
+				echohl None
+				let l:status = 0
+			endif
+
+			if delete(l:oldfile) != 0
+				echohl ErrorMsg
+				echomsg 'Could not delete the old file: ' . l:oldfile
+				echohl None
+				let l:status = 0
+			endif
+		else
+			echohl ErrorMsg
+			echomsg 'Rename failed for some reason.'
+			echohl None
+			let l:status = 0
+		endif
+	else
+		echoerr v:errmsg
+		let l:status = 0
+	endif
+
+	return l:status
+endfunction
+
+command! -nargs=* -complete=file -bang RenameFile call RenameFile(<q-args>, '<bang>')
+
 function! ViewFile(path)
   if bufnr(a:path) == -1
     execute "tabnew " . a:path
@@ -385,7 +440,7 @@ nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
-nnoremap <leader>mv :Rename <C-R>=expand("%:p")<CR>
+nnoremap <leader>mv :RenameFile <C-R>=expand("%:p")<CR>
 nnoremap <leader>cp :let @" = expand("%")<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
