@@ -404,6 +404,7 @@ nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call ViewFile("./.todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
 nnoremap <leader>et :call ViewFile("~/Dropbox/notes/tmp.txt")<cr>
+nnoremap <leader>ei :call ViewFile("~/Dropbox/notes/vim.txt")<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
