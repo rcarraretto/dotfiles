@@ -3,22 +3,22 @@ local fnutils = require("hs.fnutils")
 local hyper = {'cmd', 'alt', 'ctrl'}
 
 --- App hotkeys
-local apps = {
-  {key = "1", name = "iTerm"},
-  {key = "2", name = "Google Chrome"},
-  {key = "3", name = "SourceTree"},
-  {key = "4", name = "Slack"},
-  {key = "5", name = "Calendar"},
-  {key = "F1", name = "Spotify"},
-  {key = "F2", name = "Postman"},
-  {key = "F3", name = "Studio 3T"},
+local app_hotkeys = {
+  {key = "1", app = "iTerm"},
+  {key = "2", app = "Google Chrome"},
+  {key = "3", app = "SourceTree"},
+  {key = "4", app = "Slack"},
+  {key = "5", app = "Calendar"},
+  {key = "F1", app = "Spotify"},
+  {key = "F2", app = "Postman"},
+  {key = "F3", app = "Studio 3T"},
 }
-local bind_hotkey = function(app)
-  hs.hotkey.bind(hyper, app.key, function()
-    hs.application.launchOrFocus(app.name)
+local bind_app_hotkey = function(hotkey)
+  hs.hotkey.bind(hyper, hotkey.key, function()
+    hs.application.launchOrFocus(hotkey.app)
   end)
 end
-fnutils.each(apps, bind_hotkey)
+fnutils.each(app_hotkeys, bind_app_hotkey)
 
 -- Display sleep (hyper + l)
 hs.hotkey.bind(hyper, "l", function()
@@ -33,6 +33,27 @@ hs.hotkey.bind(hyper, "t", function()
     hs.application.launchOrFocus("iTerm")
   end
 end)
+
+-- Window management
+hs.grid.setGrid('12x12')
+hs.grid.MARGINX = 0
+hs.grid.MARGINY = 0
+hs.window.animationDuration = 0.0
+
+local window_hotkeys = {
+  {key = "m", cell = '0,0 12x12'},
+  {key = "right", cell = '6,0 6x12'},
+  {key = "left", cell = '0,0 6x12'},
+  {key = "up", cell = '0,0 12x6'},
+  {key = "down", cell = '0,6 12x6'},
+}
+local bind_window_hotkey = function(hotkey)
+  hs.hotkey.bind(hyper, hotkey.key, function ()
+    local win = hs.window.frontmostWindow()
+    hs.grid.set(win, hotkey.cell)
+  end)
+end
+fnutils.each(window_hotkeys, bind_window_hotkey)
 
 -- Reload config when any lua file in config directory changes
 function reloadConfig(files)
