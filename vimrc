@@ -362,11 +362,12 @@ inoremap <C-l> <esc>:w<CR>
 " Show output of last command
 nnoremap K :!<cr>
 
+" Swap single quote and backtick
 nnoremap ' `
-nnoremap ` '
 vnoremap ' `
-vnoremap ` '
 onoremap ' `
+nnoremap ` '
+vnoremap ` '
 onoremap ` '
 
 nnoremap <leader><leader> <C-^>
@@ -408,11 +409,7 @@ nnoremap <leader>ei :call ViewFile("~/Dropbox/notes/vim.txt")<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
-nnoremap c# #NcgN
-nnoremap cg* g*Ncgn
-nnoremap cg# g#NcgN
 
-nnoremap <leader>vv "*p
 nnoremap <leader>V o<esc>"*p
 
 " Copy and paste visual
@@ -438,8 +435,6 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! -Q ''<left>
-nnoremap <leader>ft :Ack! '<C-R>=expand("<cword>")<cr>'<left>
-nnoremap <leader>fw :execute "Ack " . expand("<cword>") . " **" <Bar> cw<CR>
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
@@ -480,8 +475,8 @@ nmap gae gaipe
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
 
-" Split
-nnoremap <silent> gS [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
+" Split func args in multiple lines
+nnoremap <silent> <leader>gs [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
 
 " move function arg to the right
 nnoremap <leader>sl "adt,dwep"ap
