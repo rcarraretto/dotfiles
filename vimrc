@@ -409,6 +409,7 @@ nnoremap <leader>ei :call ViewFile("~/Dropbox/notes/vim.txt")<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
+nnoremap c# #NcgN
 
 nnoremap <leader>V o<esc>"*p
 
