@@ -438,6 +438,7 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! -Q ''<left>
+nnoremap <leader>aa :AckFromSearch<cr>
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
