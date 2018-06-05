@@ -1,6 +1,25 @@
 local fnutils = require("hs.fnutils")
 local hyper = {'cmd', 'alt', 'ctrl'}
 
+
+-- Utility functions
+-- print table
+function p(t)
+  for k, v in pairs(t) do
+    print(k, v)
+  end
+end
+
+function get_key_for_value(t, value)
+  for k, v in pairs(t) do
+    if v == value then
+      return k
+    end
+  end
+  return nil
+end
+
+
 -- Window management
 hs.grid.setGrid('12x12')
 hs.grid.MARGINX = 0
@@ -39,6 +58,25 @@ hs.hotkey.bind(hyper, "l", function()
 end)
 
 
+-- Toggle input source (hyper + `)
+hs.hotkey.bind(hyper, "`", function()
+  source_ids = hs.keycodes.layouts(true)
+  source_id = hs.keycodes.currentSourceID()
+  key = get_key_for_value(source_ids, source_id)
+  if (key == #source_ids) then
+    next_key = 1
+  else
+    next_key = key + 1
+  end
+  next_source_id = source_ids[next_key]
+  ret = hs.keycodes.currentSourceID(next_source_id)
+  if ret then
+    hs.alert.closeAll()
+    hs.alert.show(hs.keycodes.currentLayout())
+  end
+end)
+
+
 -- Reload config when any lua file in config directory changes
 function reloadConfig(files)
     doReload = false
@@ -55,6 +93,7 @@ hs.pathwatcher.new(os.getenv('HOME') .. '/.hammerspoon/', reloadConfig):start()
 hs.alert.show('Hammerspoon config loaded')
 
 
+-- Machine-specific config
 if string.match(hs.host.localizedName(), 'rc-') then
   require("init_macbook")
 else
