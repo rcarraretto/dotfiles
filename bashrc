@@ -1,6 +1,10 @@
 # Vim
 export EDITOR='vim'
 
+# history size
+export HISTFILESIZE=1000
+export HISTSIZE=1000
+
 source ~/.bash_aliases
 
 # Base 16
