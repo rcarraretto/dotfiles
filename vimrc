@@ -393,6 +393,8 @@ nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
 nnoremap <space>q :q<cr>
 
 nnoremap con :call NumberToggle()<cr>
+nnoremap [g :colder<cr>
+nnoremap ]g :cnewer<cr>
 
 nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
