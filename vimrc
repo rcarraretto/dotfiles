@@ -3,6 +3,11 @@ set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf
+
+if $CUSTOM_NETRW
+  set rtp+=$HOME/work/netrw
+endif
+
 call vundle#begin()
 
 Plugin 'tpope/vim-unimpaired'
@@ -107,6 +112,12 @@ augroup vimrcEx
         \   execute "normal! g`\"" |
         \ endif
 augroup END
+
+if $CUSTOM_NETRW
+  augroup CancelNetrw
+    autocmd VimEnter * silent! autocmd! FileExplorer
+  augroup END
+endif
 
 augroup filetype_vim
   autocmd!
