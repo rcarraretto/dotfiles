@@ -10,7 +10,6 @@ endif
 
 call vundle#begin()
 
-Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-fugitive'
