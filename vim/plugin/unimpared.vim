@@ -35,11 +35,7 @@ function! s:MapNextFamily(map,cmd) abort
   endif
 endfunction
 
-call s:MapNextFamily('a','')
-call s:MapNextFamily('b','b')
-call s:MapNextFamily('l','l')
 call s:MapNextFamily('q','c')
-call s:MapNextFamily('t','t')
 
 function! s:entries(path)
   let path = substitute(a:path,'[\\/]$','','')
@@ -99,11 +95,6 @@ nnoremap <silent> <Plug>unimpairedDirectoryNext     :<C-U>edit <C-R>=<SID>fnamee
 nnoremap <silent> <Plug>unimpairedDirectoryPrevious :<C-U>edit <C-R>=<SID>fnameescape(fnamemodify(<SID>FileByOffset(-v:count1), ':.'))<CR><CR>
 call s:map('n', ']f', '<Plug>unimpairedDirectoryNext')
 call s:map('n', '[f', '<Plug>unimpairedDirectoryPrevious')
-
-nmap <silent> <Plug>unimpairedONext     <Plug>unimpairedDirectoryNext:echohl WarningMSG<Bar>echo "]o is deprecated. Use ]f"<Bar>echohl NONE<CR>
-nmap <silent> <Plug>unimpairedOPrevious <Plug>unimpairedDirectoryPrevious:echohl WarningMSG<Bar>echo "[o is deprecated. Use [f"<Bar>echohl NONE<CR>
-call s:map('n', ']o', '<Plug>unimpairedONext')
-call s:map('n', '[o', '<Plug>unimpairedOPrevious')
 
 " }}}1
 " Line operations {{{1
@@ -187,27 +178,7 @@ function! s:option_map(letter, option, mode) abort
   call s:map('n', '=o'.a:letter, ':'.a:mode.' <C-R>=<SID>toggle("'.a:option.'")<CR><CR>')
 endfunction
 
-call s:map('n', '[ob', ':set background=light<CR>')
-call s:map('n', ']ob', ':set background=dark<CR>')
-call s:map('n', '=ob', ':set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>')
-call s:option_map('c', 'cursorline', 'setlocal')
-call s:option_map('u', 'cursorcolumn', 'setlocal')
-call s:map('n', '[od', ':diffthis<CR>')
-call s:map('n', ']od', ':diffoff<CR>')
-call s:map('n', '=od', ':<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>')
-call s:option_map('h', 'hlsearch', 'set')
-call s:option_map('i', 'ignorecase', 'set')
-call s:option_map('l', 'list', 'setlocal')
-call s:option_map('n', 'number', 'setlocal')
-call s:option_map('r', 'relativenumber', 'setlocal')
-call s:option_map('s', 'spell', 'setlocal')
 call s:option_map('w', 'wrap', 'setlocal')
-call s:map('n', '[ov', ':set virtualedit+=all<CR>')
-call s:map('n', ']ov', ':set virtualedit-=all<CR>')
-call s:map('n', '=ov', ':set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>')
-call s:map('n', '[ox', ':set cursorline cursorcolumn<CR>')
-call s:map('n', ']ox', ':set nocursorline nocursorcolumn<CR>')
-call s:map('n', '=ox', ':set <C-R>=<SID>cursor_options()<CR><CR>')
 if empty(maparg('co', 'n'))
   nmap co =o
 endif
