@@ -35,6 +35,9 @@ Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'AndrewRadev/splitjoin.vim'
 
+Plugin 'kana/vim-textobj-user'
+Plugin 'kana/vim-textobj-indent'
+
 Plugin 'chriskempson/base16-vim'
 
 Plugin 'janko-m/vim-test'
