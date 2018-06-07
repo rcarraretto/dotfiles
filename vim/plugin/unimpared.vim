@@ -1,7 +1,5 @@
 " unimpaired.vim - Pairs of handy bracket mappings
-" Maintainer:   Tim Pope <http://tpo.pe/>
-" Version:      1.2
-" GetLatestVimScripts: 1590 1 :AutoInstall: unimpaired.vim
+" Adapted from https://github.com/tpope/vim-unimpaired
 
 if exists("g:loaded_unimpaired") || &cp || v:version < 700
   finish
@@ -232,5 +230,3 @@ call s:map('n', '=P', ":call <SID>putline('[p', 'Above')<CR>=']", '<silent>')
 call s:map('n', '=p', ":call <SID>putline(']p', 'Below')<CR>=']", '<silent>')
 
 " }}}1
-
-" vim:set sw=2 sts=2:
