@@ -24,7 +24,6 @@ Plugin 'mileszs/ack.vim'
 Plugin 'junegunn/fzf.vim'
 
 Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
 
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'jiangmiao/auto-pairs'
@@ -401,8 +400,6 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
 nnoremap <leader>ess :UltiSnipsEdit<cr>
-nnoremap <leader>es1 :e ~/.vim/bundle/vim-snippets/UltiSnips<cr>
-nnoremap <leader>es2 :e ~/.vim/bundle/vim-snippets/snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call ViewFile("./.todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
