@@ -364,6 +364,7 @@ inoremap jk <esc>
 
 " easier command-line mode
 nnoremap <cr> :
+xnoremap <cr> :
 
 nnoremap <silent> gh :noh<cr>
 
