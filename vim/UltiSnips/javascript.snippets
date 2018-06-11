@@ -4,6 +4,18 @@ if (${1:true}) {
 }
 endsnippet
 
+snippet des "describe"
+describe('$1', function() {
+	$2
+});
+endsnippet
+
+snippet it "it"
+it('$1', function*() {
+	$2
+});
+endsnippet
+
 snippet exp "expect equal" b
 expect($1).to.equal($2);
 endsnippet
