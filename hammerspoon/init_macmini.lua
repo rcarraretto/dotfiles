@@ -4,7 +4,6 @@
 local fnutils = require("hs.fnutils")
 
 local hyper = {'cmd', 'alt', 'ctrl'}
-local shift_hyper = {'cmd', 'alt', 'ctrl', 'shift'}
 
 --- App hotkeys
 local app_hotkeys = {
@@ -19,38 +18,3 @@ local bind_hotkey = function(app)
   end)
 end
 fnutils.each(app_hotkeys, bind_hotkey)
-
-
-
---- Volume Control
-local changeVolume = function(delta)
-  local new_volume = hs.audiodevice.current().volume + delta
-  hs.audiodevice.defaultOutputDevice():setVolume(new_volume)
-  local actual_volume = hs.audiodevice.current().volume
-  hs.alert.closeAll()
-  hs.alert.show(string.format("%.0f", actual_volume))
-end
-
-local deltaVol = 6
-
-local incVolume = function()
-  changeVolume(deltaVol)
-end
-
-local incVolumeSoft = function()
-  changeVolume(deltaVol / 2)
-end
-
-local decVolume = function()
-  changeVolume(-deltaVol)
-end
-
-local decVolumeSoft = function()
-  changeVolume(-deltaVol / 2)
-end
-
-hs.hotkey.bind(hyper, 'k', hs.spotify.playpause)
-hs.hotkey.bind(hyper, ']', incVolume)
-hs.hotkey.bind(hyper, '[', decVolume)
-hs.hotkey.bind(shift_hyper, ']', incVolumeSoft)
-hs.hotkey.bind(shift_hyper, '[', decVolumeSoft)
