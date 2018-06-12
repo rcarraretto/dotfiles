@@ -1,11 +1,18 @@
-" Toggle List plugin
-" Adapted from https://github.com/milkypostman/vim-togglelist
-
 function! s:OpenVs()
   execute "normal \<c-w>\<cr>\<c-w>L"
   cclose
   botright copen
   execute "normal \<c-w>\p"
+endfunction
+
+" Adapted from https://stackoverflow.com/a/48817071/2277505
+function! s:RemoveQFItem()
+  let curqfidx = line('.') - 1
+  let qfall = getqflist()
+  call remove(qfall, curqfidx)
+  call setqflist(qfall, 'r')
+  execute curqfidx + 1 . "cfirst"
+  wincmd p
 endfunction
 
 function! s:RegisterMappings()
@@ -14,6 +21,7 @@ function! s:RegisterMappings()
   nnoremap <buffer> <silent> go <CR><C-W>j
   nnoremap <buffer> <silent> x <C-W><CR><C-W>K
   nnoremap <buffer> <silent> s :call <sid>OpenVs()<cr>
+  nnoremap <buffer> <silent> dd :call <sid>RemoveQFItem()<cr>
 endfunction
 
 augroup QfMappings
@@ -21,6 +29,8 @@ augroup QfMappings
   autocmd FileType qf call s:RegisterMappings()
 augroup END
 
+" Toggle List plugin {{{
+" Adapted from https://github.com/milkypostman/vim-togglelist
 function! s:GetBufferList()
   redir =>buflist
   silent! ls
@@ -81,3 +91,4 @@ function! ToggleQuickfixList()
     wincmd p
   endif
 endfunction
+" }}}
