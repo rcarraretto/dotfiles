@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Based on https://mths.be/macos
+
+# Close any open System Preferences panes, to prevent them from overriding
+# settings we're about to change
+osascript -e 'tell application "System Preferences" to quit'
+
+# Frequency of software update check, in days
+defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 14
+
+# Download newly available updates in background
+defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
