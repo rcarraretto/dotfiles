@@ -121,14 +121,22 @@ if $CUSTOM_NETRW
   augroup END
 endif
 
-augroup filetype_vim
+augroup FTOptions
   autocmd!
-  autocmd FileType vim setlocal foldmethod=marker
+  autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker
+  autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=1
+  autocmd FileType lua setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType ruby setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType crontab setlocal backupcopy=yes
+  autocmd FileType haskell setlocal expandtab
+  autocmd FileType matlab setlocal commentstring=%\ %s
+  autocmd FileType netrw call s:NetrwMappings()
 augroup END
 
-augroup filetype_crontab
+augroup SetFiletype
   autocmd!
-  autocmd FileType crontab setlocal backupcopy=yes
+  autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
 augroup END
 
 augroup CursorLine
@@ -150,11 +158,6 @@ augroup TrimWhitespace
   autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
-augroup VimCommentary
-  autocmd!
-  autocmd filetype matlab setlocal commentstring=%\ %s
-augroup END
-
 augroup CmdlineWinMapping
   autocmd!
   " Because I remapped <cr> in normal mode (nnoremap <cr> :),
@@ -170,24 +173,15 @@ augroup QuickfixMapping
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
 augroup END
 
-augroup NetrwMapping
-  autocmd!
-  " note:
-  " 'echom' might not work within this function
-  " https://vi.stackexchange.com/a/8380
-  autocmd filetype netrw call s:NetrwMappings()
-augroup END
-
-augroup SetFiletype
-  autocmd!
-  autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
-augroup END
-
 " }}}
 
 " Functions ---------------------- {{{
 
 function! s:NetrwMappings()
+  " note:
+  " 'echom' might not work within this function
+  " https://vi.stackexchange.com/a/8380
+
   " store original netrw mappings
   if !exists('s:mapping_netrw_cr')
     let s:mapping_netrw_cr = maparg("<cr>", "n")
