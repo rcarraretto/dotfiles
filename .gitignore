@@ -1,3 +1,4 @@
 vim/.netrwhist
 vim/bundle
 vim/vimrc.local
+vim/compiler/absence.vim
