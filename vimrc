@@ -436,7 +436,7 @@ nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :RenameFile <C-R>=expand("%:p")<CR>
-nnoremap <leader>cp :let @" = expand("%")<cr>
+nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
