@@ -37,6 +37,7 @@ Plugin 'AndrewRadev/splitjoin.vim'
 
 Plugin 'kana/vim-textobj-user'
 Plugin 'kana/vim-textobj-indent'
+Plugin 'beloglazov/vim-textobj-quotes'
 
 Plugin 'chriskempson/base16-vim'
 
@@ -429,6 +430,9 @@ nnoremap <space>c "*y
 " Replace with clipboard 'operator'
 " take advantage of ReplaceWithRegister plugin ('gr' mapping)
 nmap <space>v "*gr
+
+" Quotes textobj
+omap q iq
 
 " File handling
 nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
