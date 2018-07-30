@@ -56,6 +56,7 @@ end)
 -- Display sleep (hyper + l)
 hs.hotkey.bind(hyper, "l", function()
   hs.execute('pmset displaysleepnow')
+  hs.spotify.pause()
 end)
 
 
