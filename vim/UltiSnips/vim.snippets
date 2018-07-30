@@ -1,6 +1,6 @@
 snippet f "function"
-function! ${1}()
-  ${2}
+function! ${1}(${2})
+  ${3}
 endfunction
 endsnippet
 
@@ -8,4 +8,10 @@ snippet if "if statement"
 if ${1}
   ${0:${VISUAL}}
 endif
+endsnippet
+
+snippet wh "while loop"
+while ${1}
+  ${0:${VISUAL}}
+endwhile
 endsnippet
