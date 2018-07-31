@@ -88,6 +88,15 @@ set backspace=indent,eol,start
 
 set shortmess+=A " no warning for existing swap file
 
+set statusline=%f\  " filename
+set statusline+=%m  " modified flag
+set statusline+=%r  " read only flag
+set statusline+=%=  " left/right separator
+set statusline+=%1.4l/%1.4L\  " line number / number of lines
+set statusline+=\ \|\  " separator
+set statusline+=col\ %-3.3v  " column number
+set statusline+=\  " separator
+
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
