@@ -438,6 +438,7 @@ omap q iq
 nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
+nnoremap <leader>te :tabedit <C-R>=expand("%:h"). "/" <CR>
 nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :RenameFile <C-R>=expand("%:p")<CR>
 nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
