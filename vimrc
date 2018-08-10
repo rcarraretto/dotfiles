@@ -97,6 +97,22 @@ set statusline+=\ \|\  " separator
 set statusline+=col\ %-3.3v  " column number
 set statusline+=\  " separator
 
+function! Qftitle()
+  return getqflist({'title': 1}).title
+endfunction
+
+function! s:setStatusline()
+  setlocal statusline=%f\  " filename
+  if &ft == 'qf'
+    setlocal statusline+=%{Qftitle()}
+  endif
+  setlocal statusline+=%=  " left/right separator
+  setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
+  setlocal statusline+=\ \|\  " separator
+  setlocal statusline+=col\ %-3.3v  " column number
+  setlocal statusline+=\  " separator
+endfunction
+
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
@@ -142,6 +158,8 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
+  autocmd FileType qf call s:setStatusline()
+  autocmd FileType help call s:setStatusline()
 augroup END
 
 augroup SetFiletype
