@@ -1,58 +1,54 @@
 " Plugins ---------------------- {{{
 set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
+
 set rtp+=/usr/local/opt/fzf
 
 if $CUSTOM_NETRW
   set rtp+=$HOME/work/netrw
 endif
 
-call vundle#begin()
+call plug#begin('~/.vim/bundle')
 
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rhubarb'
-Plugin 'tpope/vim-sleuth'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-eunuch'
-Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-scriptease'
-Plugin 'tpope/vim-abolish'
-Plugin 'tpope/vim-dispatch'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-dispatch'
 
-Plugin 'wincent/terminus'
+Plug 'wincent/terminus'
 
-Plugin 'mileszs/ack.vim'
-Plugin 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
+Plug 'junegunn/fzf.vim'
 
-Plugin 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'rcarraretto/auto-pairs'
-Plugin 'vim-scripts/ReplaceWithRegister'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'AndrewRadev/splitjoin.vim'
+Plug 'Valloric/YouCompleteMe'
+Plug 'rcarraretto/auto-pairs'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'junegunn/vim-easy-align'
+Plug 'AndrewRadev/splitjoin.vim'
 
-Plugin 'kana/vim-textobj-user'
-Plugin 'kana/vim-textobj-indent'
-Plugin 'beloglazov/vim-textobj-quotes'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-indent'
+Plug 'beloglazov/vim-textobj-quotes'
 
-Plugin 'chriskempson/base16-vim'
+Plug 'chriskempson/base16-vim'
 
-Plugin 'janko-m/vim-test'
-Plugin 'klen/python-mode'
-Plugin 'elixir-lang/vim-elixir'
-Plugin 'mustache/vim-mustache-handlebars'
+Plug 'janko-m/vim-test'
+Plug 'klen/python-mode'
+Plug 'elixir-lang/vim-elixir'
+Plug 'mustache/vim-mustache-handlebars'
 
-call vundle#end()
-filetype plugin indent on
+call plug#end()
 " }}}
 
 " Settings ---------------------- {{{
-syntax on
-
 let base16colorspace=256  " Access colors present in 256 colorspace"
 set background=dark
 colorscheme base16-default-dark
