@@ -83,7 +83,7 @@ set wildmenu
 set splitright
 set splitbelow
 set formatoptions-=cro
-set synmaxcol=150
+set synmaxcol=200
 set backspace=indent,eol,start
 
 set shortmess+=A " no warning for existing swap file
