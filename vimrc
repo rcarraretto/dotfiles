@@ -30,7 +30,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'SirVer/ultisnips'
 
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'jiangmiao/auto-pairs'
+Plugin 'rcarraretto/auto-pairs'
 Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'AndrewRadev/splitjoin.vim'
