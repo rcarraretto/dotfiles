@@ -9,6 +9,8 @@ endif
 
 call plug#begin('~/.vim/bundle')
 
+Plug 'junegunn/vim-plug'
+
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
