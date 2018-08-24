@@ -181,7 +181,7 @@ augroup END
 
 augroup TrimWhitespace
   autocmd!
-  autocmd BufWritePre * :call TrimWhitespace()
+  autocmd BufWritePre * :call s:TrimWhitespace()
 augroup END
 
 augroup CmdlineWinMapping
@@ -252,10 +252,10 @@ function! QuickfixFilenames()
   return join(values(buffer_numbers))
 endfunction
 
-fun! TrimWhitespace()
-  let l:save_cursor = getpos('.')
+function! s:TrimWhitespace()
+  let save_cursor = getpos('.')
   %s/\s\+$//e
-  call setpos('.', l:save_cursor)
+  call setpos('.', save_cursor)
 endfunction
 
 function! RefreshChrome()
