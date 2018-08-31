@@ -376,6 +376,14 @@ function! ViewFile(path)
   endif
 endfunction
 
+function! SubstituteInParagraph(word)
+  let l:save = winsaveview()
+  normal vip
+  execute "normal :s//" . a:word . "\<cr>"
+  call setreg('/', a:word)
+  call winrestview(l:save)
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -476,6 +484,7 @@ nnoremap <space>a :Ack! -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
+nnoremap <leader>re :call SubstituteInParagraph('<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>')<c-f>2ge
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
@@ -492,7 +501,7 @@ nnoremap <space>\ gqip
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<CR>
 
-nnoremap <leader>rp ggdG"*P=G
+nnoremap <leader>rf ggdG"*P=G
 
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
