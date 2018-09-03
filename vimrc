@@ -376,14 +376,6 @@ function! ViewFile(path)
   endif
 endfunction
 
-function! SubstituteInParagraph(word)
-  let l:save = winsaveview()
-  normal vip
-  execute "normal :s//" . a:word . "\<cr>"
-  call setreg('/', a:word)
-  call winrestview(l:save)
-endfunction
-
 "}}}
 
 " Mappings ---------------------- {{{
@@ -484,7 +476,7 @@ nnoremap <space>a :Ack! -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
 nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
-nnoremap <leader>re :call SubstituteInParagraph('<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>')<c-f>2ge
+nnoremap <leader>re :'{,'}s//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
