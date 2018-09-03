@@ -474,8 +474,8 @@ nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
-nnoremap <leader>rw :%s/<C-R>//<C-R>//gc<left><left><left>
-nnoremap <leader>rn :%s/<C-R>//<C-R>//g<left><left>
+nnoremap <leader>rw :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
+nnoremap <leader>rn :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
 nnoremap <leader>re :'{,'}s//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
 nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
