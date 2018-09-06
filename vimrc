@@ -376,6 +376,14 @@ function! ViewFile(path)
   endif
 endfunction
 
+function! FormatJson()
+  if &ft !=# 'json'
+    echo 'Not a json file'
+    return
+  endif
+  :%!python -m json.tool
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
