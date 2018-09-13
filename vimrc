@@ -433,6 +433,10 @@ nnoremap <space>m :History<cr>
 nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
 nnoremap <space>q :q<cr>
 
+" tags
+nnoremap <space>[ :Tags <c-r><c-w><cr>
+nnoremap <space>] :Tags<cr>
+
 nnoremap con :call NumberToggle()<cr>
 nnoremap [g :colder<cr>
 nnoremap ]g :cnewer<cr>

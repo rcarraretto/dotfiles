@@ -8,6 +8,10 @@
 .agignore
 .ignore
 
+# ctags
+.ctags
+tags
+
 # sublime
 *.sublime-project
 *.sublime-workspace
