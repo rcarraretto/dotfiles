@@ -431,6 +431,7 @@ nnoremap <leader>tl :tabm +1<CR>
 nnoremap <space>o :Files<cr>
 nnoremap <space>m :History<cr>
 nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
+nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<CR>
 nnoremap <space>q :q<cr>
 
 " tags
