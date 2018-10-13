@@ -46,6 +46,7 @@ Plug 'janko-m/vim-test'
 Plug 'klen/python-mode'
 Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
+Plug 'leafgarland/typescript-vim'
 
 call plug#end()
 " }}}
