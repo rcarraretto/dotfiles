@@ -96,6 +96,22 @@ set statusline+=\ \|\  " separator
 set statusline+=col\ %-3.3v  " column number
 set statusline+=\  " separator
 
+" Fix for language
+"
+" Maybe because I'm using macOS in German
+" the output of :language would be:
+" Current language: "de_DE/UTF-8/de_DE/de_DE/de_DE/de_DE"
+"
+" Then this command would fail:
+" :echo 2.0 * 2
+"
+" E806: using Float as a String
+" E15: Invalid expression: 2.0 * 2
+"
+" Which would break plugin code.
+" To fix this, force language to be english:
+language en_US
+
 function! Qftitle()
   return getqflist({'title': 1}).title
 endfunction
