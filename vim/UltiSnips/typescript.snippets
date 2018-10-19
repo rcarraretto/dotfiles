@@ -1,0 +1,21 @@
+snippet if "if (condition) { ... }"
+if ($1) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet cl "console.log"
+console.log(${0});
+endsnippet
+
+snippet co "console.log json"
+console.log(JSON.stringify($0, null, 4));
+endsnippet
+
+snippet todo "// TODO " b
+// TODO: $0
+endsnippet
+
+snippet ret
+return $0;
+endsnippet
