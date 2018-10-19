@@ -4,6 +4,22 @@ if ($1) {
 }
 endsnippet
 
+snippet cl "console.log"
+console.log(${0});
+endsnippet
+
+snippet co "console.log json"
+console.log(JSON.stringify($0, null, 4));
+endsnippet
+
+snippet todo "// TODO " b
+// TODO: $0
+endsnippet
+
+snippet ret
+return $0;
+endsnippet
+
 snippet des "describe"
 describe('$1', function() {
 	$2
@@ -18,14 +34,6 @@ endsnippet
 
 snippet exp "expect equal" b
 expect($1).to.equal($2);
-endsnippet
-
-snippet co "console.log json"
-console.log(JSON.stringify($0, null, 4));
-endsnippet
-
-snippet todo "// TODO " b
-// TODO: $0
 endsnippet
 
 snippet vf "var function"
@@ -52,18 +60,6 @@ const $1 = Promise.coroutine(function*($2) {
 });
 endsnippet
 
-snippet ret
-return $0;
-endsnippet
-
-snippet cl "console.log"
-console.log(${0});
-endsnippet
-
 snippet r_ "require lodash"
 const _ = require('lodash');
-endsnippet
-
-snippet log "log"
-console.log(JSON.stringify($0, null, 4));
 endsnippet
