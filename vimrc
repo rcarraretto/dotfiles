@@ -569,8 +569,6 @@ let g:ack_apply_qmappings = 0
 " netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 let g:netrw_banner = 0
-" Tree style listing
-let g:netrw_liststyle = 3
 " Allow netrw to remove non-empty local directories
 let g:netrw_localrmdir = 'rm -r'
 
