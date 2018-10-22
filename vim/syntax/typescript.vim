@@ -12,7 +12,7 @@ hi def link typescriptLabel Keyword
 hi def link typescriptExceptions Keyword
 
 " return
-hi def link typescriptStatement Statement
+hi def link typescriptStatement Keyword
 
 " this
 hi def link typescriptIdentifier Function

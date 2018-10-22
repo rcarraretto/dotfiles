@@ -6,8 +6,8 @@ syntax keyword typescriptBranch break continue yield
 syn clear typescriptLabel
 syntax keyword typescriptLabel case default readonly
 
-syntax keyword typescriptAA async await
+syntax keyword typescriptF async await constructor
 
 hi def link typescriptBranch Conditional
 hi def link typescriptLabel Label
-hi def link typescriptAA Function
+hi def link typescriptF Function
