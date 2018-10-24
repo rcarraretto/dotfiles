@@ -1,3 +1,4 @@
-*.class
-*.lock
 .git/
+*.class
+package-lock.json
+yarn.lock
