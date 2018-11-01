@@ -3,6 +3,25 @@ local hyper = {'cmd', 'alt', 'ctrl'}
 local shift_hyper = {'cmd', 'alt', 'ctrl', 'shift'}
 
 
+--- App hotkeys
+local app_hotkeys = {
+  {key = "1", app = "iTerm"},
+  {key = "2", app = "Google Chrome"},
+  {key = "3", app = "SourceTree"},
+  {key = "4", app = "Slack"},
+  {key = "5", app = "Calendar"},
+  {key = "F1", app = "Spotify"},
+  {key = "F2", app = "Postman"},
+  {key = "F3", app = "Studio 3T"},
+}
+local bind_app_hotkey = function(hotkey)
+  hs.hotkey.bind(hyper, hotkey.key, function()
+    hs.application.launchOrFocus(hotkey.app)
+  end)
+end
+fnutils.each(app_hotkeys, bind_app_hotkey)
+
+
 -- Utility functions
 -- print table
 function p(t)
@@ -129,11 +148,3 @@ function reloadConfig(files)
 end
 hs.pathwatcher.new(os.getenv('HOME') .. '/.hammerspoon/', reloadConfig):start()
 hs.alert.show('Hammerspoon config loaded')
-
-
--- Machine-specific config
-if string.match(hs.host.localizedName(), 'rc-') then
-  require("init_macbook")
-else
-  require("init_macmini")
-end
