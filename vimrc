@@ -455,6 +455,7 @@ nnoremap <space>q :q<cr>
 " tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
+nnoremap <space>e :YcmCompleter GoToDefinition<cr>
 
 nnoremap con :call NumberToggle()<cr>
 nnoremap [g :colder<cr>
