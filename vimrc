@@ -504,7 +504,7 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 " Searching
 nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
-nnoremap <space>a :Ack! -Q ''<left>
+nnoremap <space>a :Ack! --hidden -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
 nnoremap <leader>rw :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
