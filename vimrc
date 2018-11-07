@@ -465,6 +465,7 @@ nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
+nnoremap <leader>el :call ViewFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call ViewFile("./.todo")<cr>
