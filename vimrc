@@ -48,6 +48,10 @@ Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
 
+Plug 'Quramy/tsuquyomi'
+let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_disable_default_mappings = 1
+
 call plug#end()
 " }}}
 
