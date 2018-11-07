@@ -1,6 +1,9 @@
 # Vim
 export EDITOR='vim'
 
+# Set Bash 4 language to English
+export LC_ALL=C
+
 # history size
 export HISTFILESIZE=1000
 export HISTSIZE=1000
