@@ -487,14 +487,14 @@ nnoremap c# #NcgN
 nnoremap <leader>V o<esc>"*p
 
 " Copy and paste visual
-xnoremap <space>c "*y
-xnoremap <space>v "*p
+xnoremap <space>y "*y
+xnoremap <space>p "*p
 
 " Copy to clipboard 'operator'
-nnoremap <space>c "*y
+nnoremap <space>y "*y
 " Replace with clipboard 'operator'
 " take advantage of ReplaceWithRegister plugin ('gr' mapping)
-nmap <space>v "*gr
+nmap <space>p "*gr
 
 " Quotes textobj
 omap q iq
