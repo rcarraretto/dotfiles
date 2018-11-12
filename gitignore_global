@@ -25,4 +25,7 @@ __pycache__/
 # personal todo notes
 .todo
 
+# vim-projectionist plugin
+.projections.json
+
 profile.log

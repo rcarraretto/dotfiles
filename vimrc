@@ -22,6 +22,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-projectionist'
 
 Plug 'wincent/terminus'
 
@@ -478,6 +479,8 @@ nnoremap <leader>et :call ViewFile("~/Dropbox/notes/tmp.txt")<cr>
 nnoremap <leader>ei :call ViewFile("~/Dropbox/notes/vim.txt")<cr>
 nnoremap <leader>em :call ViewFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call ViewFile("~/.bashrc.local")<cr>
+
+nnoremap <leader>av :AV<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
