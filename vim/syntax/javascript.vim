@@ -4,5 +4,8 @@ syntax region javaScriptTemplateString start=+`+  skip=+\\\(`\|$\)+  end=+`+ kee
 
 hi def link javaScriptTemplateString String
 
+" return
+hi def link javaScriptStatement Keyword
+
 syntax keyword asyncAwait async await
 hi def link asyncAwait Function
