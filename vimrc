@@ -89,6 +89,7 @@ set splitbelow
 set formatoptions-=cro
 set synmaxcol=1000
 set backspace=indent,eol,start
+set encoding=utf-8
 
 set shortmess+=A " no warning for existing swap file
 
