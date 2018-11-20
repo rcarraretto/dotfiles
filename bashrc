@@ -1,8 +1,11 @@
 # Vim
 export EDITOR='vim'
 
-# Set Bash 4 language to English
-export LC_ALL=C
+# - Set Bash 4 language to English
+# - Also properly sets :language on vim
+# - Makes emoji work properly inside tmux
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # history size
 export HISTFILESIZE=1000
