@@ -1,8 +1,8 @@
 # Vim
 export EDITOR='vim'
 
-# - Set Bash 4 language to English
-# - Also properly sets :language on vim
+# - Sets Bash 4 language to English
+# - Sets :language on vim (fixes "echo 2.0 * 2")
 # - Makes emoji work properly inside tmux
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
