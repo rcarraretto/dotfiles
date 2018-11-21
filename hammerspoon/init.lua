@@ -1,3 +1,7 @@
+-- For the 'hs' command line tool
+-- https://www.hammerspoon.org/docs/hs.ipc.html
+require("hs.ipc")
+
 local fnutils = require("hs.fnutils")
 local hyper = {'cmd', 'alt', 'ctrl'}
 local shift_hyper = {'cmd', 'alt', 'ctrl', 'shift'}
