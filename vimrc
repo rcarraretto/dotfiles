@@ -588,6 +588,7 @@ let g:ycm_filetype_specific_completion_to_disable = {
 \ 'c': 1,
 \ 'cpp': 1
 \ }
+let g:ycm_always_populate_location_list = 1
 
 " e: elixir
 let g:easy_align_delimiters = {
