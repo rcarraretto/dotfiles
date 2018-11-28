@@ -161,6 +161,9 @@ augroup FTOptions
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType lua setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType ruby setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType c setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType cpp setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType crontab setlocal backupcopy=yes
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
