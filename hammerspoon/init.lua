@@ -114,13 +114,14 @@ local changeVolume = function(delta)
 end
 
 local deltaVol = 6
+local deltaVolSoft = 1
 
 local incVolume = function()
   changeVolume(deltaVol)
 end
 
 local incVolumeSoft = function()
-  changeVolume(deltaVol / 2)
+  changeVolume(deltaVolSoft)
 end
 
 local decVolume = function()
@@ -128,7 +129,7 @@ local decVolume = function()
 end
 
 local decVolumeSoft = function()
-  changeVolume(-deltaVol / 2)
+  changeVolume(-deltaVolSoft)
 end
 
 hs.hotkey.bind(hyper, 'k', hs.spotify.playpause)
