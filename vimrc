@@ -22,6 +22,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-dispatch'
+let g:dispatch_tmux_height = 3
 Plug 'tpope/vim-projectionist'
 
 Plug 'wincent/terminus'
