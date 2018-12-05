@@ -76,12 +76,21 @@ hs.hotkey.bind(hyper, "t", function()
 end)
 
 
--- Display sleep (hyper + l)
-hs.hotkey.bind(hyper, "l", function()
+-- Display sleep
+local display_sleep = function()
   hs.execute('pmset displaysleepnow')
   if hs.spotify.isRunning() then
     hs.spotify.pause()
   end
+end
+
+-- Display sleep (hyper + l)
+hs.hotkey.bind(hyper, "l", display_sleep)
+
+-- Display sleep + clock out (hyper + L)
+hs.hotkey.bind(shift_hyper, "l", function()
+  display_sleep()
+  hs.execute('timer -o', true)
 end)
 
 
