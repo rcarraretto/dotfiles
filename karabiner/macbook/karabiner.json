@@ -339,7 +339,7 @@
             "simple_modifications": [
                 {
                     "from": {
-                        "key_code": "right_option"
+                        "key_code": "left_control"
                     },
                     "to": {
                         "key_code": "f19"
