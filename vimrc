@@ -54,6 +54,12 @@ Plug 'Quramy/tsuquyomi'
 let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_disable_default_mappings = 1
 let g:tsuquyomi_single_quote_import = 1
+" Properly import from frameworks, like typeorm.
+"
+" import { Repository } from 'typeorm/repository/Repository';
+" =>
+" import { Repository } from 'typeorm';
+let g:tsuquyomi_shortest_import_path = 1
 
 call plug#end()
 " }}}
