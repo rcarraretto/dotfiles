@@ -84,6 +84,12 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 set nowrap
+
+" when the last line is too large (may happen when using 'wrap'),
+" show as much as possible, instead of showing @'s
+" https://vi.stackexchange.com/a/103
+set display+=lastline
+
 set linebreak
 set scrolloff=3
 set hidden
