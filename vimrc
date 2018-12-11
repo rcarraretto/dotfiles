@@ -415,6 +415,12 @@ endfunction
 
 inoremap jk <esc>
 
+" j + k: move through 'display lines'
+" <c-j> + <c-k>: move through 'lines'
+nnoremap j gj
+nnoremap k gk
+nnoremap <c-k> k
+
 " easier command-line mode
 nnoremap <cr> :
 xnoremap <cr> :
