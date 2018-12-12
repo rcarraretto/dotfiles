@@ -314,6 +314,15 @@ function! s:GrepOperator(type)
   silent execute "Ack! -Q --hidden " . shellescape(@@)
 endfunction
 
+" Make * and # work on visual mode.
+" From https://github.com/nelstrom/vim-visual-star-search
+function! s:VisualStar(cmdtype)
+  let temp = @s
+  normal! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+
 " Adapted from:
 " https://github.com/vim-scripts/BufOnly.vim
 function! s:BufOnly()
@@ -530,6 +539,10 @@ nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! --hidden -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
+xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
+xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
+
+" Multi-line replace/edit
 nnoremap <leader>rw :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
 nnoremap <leader>rn :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
 nnoremap <leader>re :'{,'}s//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
