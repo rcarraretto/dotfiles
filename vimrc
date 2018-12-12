@@ -224,6 +224,12 @@ augroup QuickfixMapping
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
 augroup END
 
+augroup KarabinerEOL
+  autocmd!
+  " Apparently Karabiner likes to save this file without an EOL
+  autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
+augroup END
+
 " }}}
 
 " Functions ---------------------- {{{
