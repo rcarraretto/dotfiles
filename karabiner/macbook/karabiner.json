@@ -112,25 +112,7 @@
                         "vendor_id": 1452
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": true,
-                    "simple_modifications": [
-                        {
-                            "from": {
-                                "key_code": "grave_accent_and_tilde"
-                            },
-                            "to": {
-                                "key_code": "non_us_backslash"
-                            }
-                        },
-                        {
-                            "from": {
-                                "key_code": "non_us_backslash"
-                            },
-                            "to": {
-                                "key_code": "equal_sign"
-                            }
-                        }
-                    ]
+                    "manipulate_caps_lock_led": true
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -142,25 +124,7 @@
                         "vendor_id": 76
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": true,
-                    "simple_modifications": [
-                        {
-                            "from": {
-                                "key_code": "grave_accent_and_tilde"
-                            },
-                            "to": {
-                                "key_code": "non_us_backslash"
-                            }
-                        },
-                        {
-                            "from": {
-                                "key_code": "non_us_backslash"
-                            },
-                            "to": {
-                                "key_code": "equal_sign"
-                            }
-                        }
-                    ]
+                    "manipulate_caps_lock_led": true
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -172,25 +136,7 @@
                         "vendor_id": 1452
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": true,
-                    "simple_modifications": [
-                        {
-                            "from": {
-                                "key_code": "equal_sign"
-                            },
-                            "to": {
-                                "key_code": "f19"
-                            }
-                        },
-                        {
-                            "from": {
-                                "key_code": "grave_accent_and_tilde"
-                            },
-                            "to": {
-                                "key_code": "equal_sign"
-                            }
-                        }
-                    ]
+                    "manipulate_caps_lock_led": true
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -202,25 +148,7 @@
                         "vendor_id": 76
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": true,
-                    "simple_modifications": [
-                        {
-                            "from": {
-                                "key_code": "equal_sign"
-                            },
-                            "to": {
-                                "key_code": "f19"
-                            }
-                        },
-                        {
-                            "from": {
-                                "key_code": "grave_accent_and_tilde"
-                            },
-                            "to": {
-                                "key_code": "equal_sign"
-                            }
-                        }
-                    ]
+                    "manipulate_caps_lock_led": true
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -343,6 +271,30 @@
                     },
                     "to": {
                         "key_code": "f19"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "equal_sign"
+                    },
+                    "to": {
+                        "key_code": "f19"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "grave_accent_and_tilde"
+                    },
+                    "to": {
+                        "key_code": "non_us_backslash"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "non_us_backslash"
+                    },
+                    "to": {
+                        "key_code": "equal_sign"
                     }
                 }
             ],
