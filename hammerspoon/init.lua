@@ -1,5 +1,8 @@
 -- For the 'hs' command line tool
 -- https://www.hammerspoon.org/docs/hs.ipc.html
+if hs.ipc.cliStatus() == false then
+  hs.ipc.cliInstall()
+end
 require("hs.ipc")
 
 local fnutils = require("hs.fnutils")
