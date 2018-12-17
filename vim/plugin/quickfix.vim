@@ -24,9 +24,14 @@ function! s:RegisterMappings()
   nnoremap <buffer> <silent> dd :call <sid>RemoveQFItem()<cr>
 endfunction
 
-augroup QfMappings
+" From http://vim.wikia.com/wiki/Automatically_fitting_a_quickfix_window_height
+function! s:AdjustWinHeight(minheight, maxheight)
+  execute max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
+
+augroup Qf
   autocmd!
-  autocmd FileType qf call s:RegisterMappings()
+  autocmd FileType qf call s:RegisterMappings() | call s:AdjustWinHeight(3, 10)
 augroup END
 
 " Toggle List plugin {{{
