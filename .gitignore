@@ -2,6 +2,3 @@ vim/.netrwhist
 vim/autoload/plug.vim
 vim/bundle
 vim/vimrc.local
-vim/compiler/absence.vim
-vim/compiler/absence_lint.vim
-vim/compiler/plant.vim

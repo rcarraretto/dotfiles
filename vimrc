@@ -2,6 +2,7 @@
 set nocompatible
 
 set rtp+=/usr/local/opt/fzf
+set rtp+=$HOME/work/dotfiles-private/vim
 
 if $CUSTOM_NETRW
   set rtp+=$HOME/work/netrw
