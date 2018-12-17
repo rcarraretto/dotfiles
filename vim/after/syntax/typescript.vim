@@ -1,9 +1,9 @@
 " Remove 'await' from branch
-syn clear typescriptBranch
+syntax clear typescriptBranch
 syntax keyword typescriptBranch break continue yield
 
 " Remove 'async' from label
-syn clear typescriptLabel
+syntax clear typescriptLabel
 syntax keyword typescriptLabel case default readonly
 
 syntax keyword typescriptF async await constructor
