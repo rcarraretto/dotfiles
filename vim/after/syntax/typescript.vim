@@ -6,6 +6,10 @@ syntax keyword typescriptBranch break continue yield
 syntax clear typescriptLabel
 syntax keyword typescriptLabel case default readonly
 
+" Remove 'parent' from global
+syntax clear typescriptGlobal
+syntax keyword typescriptGlobal self top
+
 syntax keyword typescriptF async await constructor
 
 hi def link typescriptBranch Conditional
