@@ -494,6 +494,7 @@ nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
+" Quickly edit some files and folders
 nnoremap <leader>el :call ViewFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
@@ -503,6 +504,9 @@ nnoremap <leader>et :call ViewFile("~/Dropbox/notes/tmp.txt")<cr>
 nnoremap <leader>ei :call ViewFile("~/Dropbox/notes/vim.txt")<cr>
 nnoremap <leader>em :call ViewFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call ViewFile("~/.bashrc.local")<cr>
+nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
+nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
+nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 
 nnoremap <leader>av :AV<cr>
 
