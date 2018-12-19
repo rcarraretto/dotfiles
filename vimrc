@@ -291,12 +291,6 @@ function! s:TrimWhitespace()
   call setpos('.', save_cursor)
 endfunction
 
-function! RefreshChrome()
-  silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
-  redraw!
-  return 0
-endfunction
-
 function! ToggleGStatus()
   if buflisted(bufname('.git/index'))
     bd .git/index
@@ -575,7 +569,6 @@ nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 
 nnoremap <leader>da :AbortDispatch<cr>
-nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 imap <c-x><c-x> <plug>(fzf-complete-line)
 
