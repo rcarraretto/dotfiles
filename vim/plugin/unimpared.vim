@@ -33,6 +33,7 @@ function! s:MapNextFamily(map,cmd) abort
   endif
 endfunction
 
+call s:MapNextFamily('a','')
 call s:MapNextFamily('q','c')
 call s:MapNextFamily('c','l')
 
