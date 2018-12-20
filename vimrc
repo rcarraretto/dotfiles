@@ -476,6 +476,12 @@ nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
 nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<CR>
 nnoremap <space>q :q<cr>
 
+" Command-line history
+cnoremap <c-p> <up>
+cnoremap <c-n> <down>
+cnoremap <c-h> <c-p>
+cnoremap <c-l> <c-n>
+
 " tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
