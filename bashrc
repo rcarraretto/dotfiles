@@ -20,10 +20,6 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 # Ctrl+S in vim
 stty -ixon -ixoff
 
-# Go language
-export GOPATH=~/tmp/.go
-export PATH=$PATH:$GOPATH/bin
-
 # Python bins from 'pip install --user'
 export PATH=$PATH:~/Library/Python/2.7/bin
 
