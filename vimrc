@@ -98,6 +98,7 @@ set hidden
 set laststatus=2 " always display status line
 set t_Co=256
 set noeb vb t_vb=
+set completeopt=menu
 set wildmenu
 set splitright
 set splitbelow
