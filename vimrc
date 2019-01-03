@@ -513,6 +513,7 @@ nnoremap <leader>ss :w <bar> :source %<cr>
 " Quickly edit some files and folders
 nnoremap <leader>el :call ViewFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
+nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call ViewFile("./.todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
