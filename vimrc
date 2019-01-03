@@ -452,6 +452,13 @@ inoremap <C-l> <esc>:w<CR>
 " Show output of last command
 nnoremap K :!<cr>
 
+" Use <tab> to toggle folding.
+" On Karabiner Elements, <c-i> will send <f6>
+" to avoid collision between <tab> and <c-i>.
+" Taken from https://github.com/wincent/wincent
+nmap <tab> za
+nmap <f6> <c-i>
+
 " Swap single quote and backtick
 nnoremap ' `
 vnoremap ' `
