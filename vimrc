@@ -231,6 +231,7 @@ augroup KarabinerEOL
   autocmd!
   " Apparently Karabiner likes to save this file without an EOL
   autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
+  autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
 augroup END
 
 " }}}
