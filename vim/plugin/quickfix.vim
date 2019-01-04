@@ -6,7 +6,10 @@ function! s:OpenNewLeftSplit()
 endfunction
 
 function! s:OpenOnLeftSplit()
-  execute "1wincmd c"
+  let num_wins = len(gettabinfo(tabpagenr())[0]['windows'])
+  if num_wins > 2
+    execute "1wincmd c"
+  endif
   call s:OpenNewLeftSplit()
 endfunction
 
