@@ -1,4 +1,4 @@
-function! s:OpenLeftVs()
+function! s:OpenNewLeftSplit()
   execute "normal \<c-w>\<cr>\<c-w>H"
   cclose
   botright copen
@@ -7,7 +7,7 @@ endfunction
 
 function! s:OpenOnLeftSplit()
   execute "1wincmd c"
-  call s:OpenLeftVs()
+  call s:OpenNewLeftSplit()
 endfunction
 
 " Adapted from https://stackoverflow.com/a/48817071/2277505
@@ -24,7 +24,7 @@ function! s:RegisterMappings()
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
   nnoremap <buffer> <silent> s :call <sid>OpenOnLeftSplit()<cr>
-  nnoremap <buffer> <silent> S :call <sid>OpenLeftVs()<cr>
+  nnoremap <buffer> <silent> S :call <sid>OpenNewLeftSplit()<cr>
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> dd :call <sid>RemoveQFItem()<cr>
