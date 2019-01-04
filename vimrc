@@ -457,8 +457,8 @@ nnoremap K :!<cr>
 " On Karabiner Elements, <c-i> will send <f6>
 " to avoid collision between <tab> and <c-i>.
 " Taken from https://github.com/wincent/wincent
-nmap <tab> za
-nmap <f6> <c-i>
+nnoremap <tab> za
+nnoremap <f6> <c-i>
 
 " Swap single quote and backtick
 nnoremap ' `
