@@ -63,6 +63,8 @@ let g:tsuquyomi_single_quote_import = 1
 " import { Repository } from 'typeorm';
 let g:tsuquyomi_shortest_import_path = 1
 
+Plug 'jparise/vim-graphql'
+
 call plug#end()
 " }}}
 
@@ -180,6 +182,7 @@ augroup FTOptions
   autocmd FileType c setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType cpp setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
+  autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab
   autocmd FileType crontab setlocal backupcopy=yes
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
