@@ -1,8 +1,13 @@
-function! s:OpenVs()
-  execute "normal \<c-w>\<cr>\<c-w>L"
+function! s:OpenLeftVs()
+  execute "normal \<c-w>\<cr>\<c-w>H"
   cclose
   botright copen
   execute "normal \<c-w>\p"
+endfunction
+
+function! s:OpenOnLeftSplit()
+  execute "1wincmd c"
+  call s:OpenLeftVs()
 endfunction
 
 " Adapted from https://stackoverflow.com/a/48817071/2277505
@@ -18,9 +23,10 @@ endfunction
 function! s:RegisterMappings()
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
+  nnoremap <buffer> <silent> s :call <sid>OpenOnLeftSplit()<cr>
+  nnoremap <buffer> <silent> S :call <sid>OpenLeftVs()<cr>
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
-  nnoremap <buffer> <silent> s :call <sid>OpenVs()<cr>
   nnoremap <buffer> <silent> dd :call <sid>RemoveQFItem()<cr>
 endfunction
 
