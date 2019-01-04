@@ -16,10 +16,10 @@ function! s:RemoveQFItem()
 endfunction
 
 function! s:RegisterMappings()
-  nnoremap <buffer> <silent> t <C-W><CR><C-W>T
+  nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
-  nnoremap <buffer> <silent> go <CR><C-W>j
-  nnoremap <buffer> <silent> x <C-W><CR><C-W>K
+  nnoremap <buffer> <silent> go <cr><c-w>j
+  nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> s :call <sid>OpenVs()<cr>
   nnoremap <buffer> <silent> dd :call <sid>RemoveQFItem()<cr>
 endfunction
