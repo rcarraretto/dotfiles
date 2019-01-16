@@ -580,6 +580,8 @@ nnoremap <space>u :call ToggleGStatus()<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>go :Gcommit<cr>
+nnoremap <leader>gh :<c-r>=line('.')<cr>Gbrowse<cr>
+vnoremap <leader>gh :Gbrowse<cr>
 
 " Format paragraph
 nnoremap <space>\ gqip
