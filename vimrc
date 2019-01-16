@@ -450,8 +450,8 @@ xnoremap <cr> :
 nnoremap <silent> gh :noh<cr>
 
 " Save (needs .bashrc: stty -ixon -ixoff)
-nnoremap <C-l> <esc>:w<CR>
-inoremap <C-l> <esc>:w<CR>
+nnoremap <c-l> <esc>:w<cr>
+inoremap <c-l> <esc>:w<cr>
 
 " Show output of last command
 nnoremap K :!<cr>
@@ -471,27 +471,27 @@ nnoremap ` '
 vnoremap ` '
 onoremap ` '
 
-nnoremap <leader><leader> <C-^>
+nnoremap <leader><leader> <c-^>
 
 " window navigation
-nnoremap <space>k <C-w>k
-nnoremap <space>j <C-w>j
-nnoremap <space>h <C-w>h
-nnoremap <space>l <C-w>l
-nnoremap <space>; <C-w>p
+nnoremap <space>k <c-w>k
+nnoremap <space>j <c-w>j
+nnoremap <space>h <c-w>h
+nnoremap <space>l <c-w>l
+nnoremap <space>; <c-w>p
 
 " tab navigation
-nnoremap <silent> [r :tabprevious<CR>
-nnoremap <silent> ]r :tabnext<CR>
-nnoremap <leader>tn :tabnew<CR>
-nnoremap <leader>tc :tabclose<CR>
-nnoremap <leader>th :tabm -1<CR>
-nnoremap <leader>tl :tabm +1<CR>
+nnoremap <silent> [r :tabprevious<cr>
+nnoremap <silent> ]r :tabnext<cr>
+nnoremap <leader>tn :tabnew<cr>
+nnoremap <leader>tc :tabclose<cr>
+nnoremap <leader>th :tabm -1<cr>
+nnoremap <leader>tl :tabm +1<cr>
 
 nnoremap <space>o :Files<cr>
 nnoremap <space>m :History<cr>
-nnoremap <silent> <space>i :call ToggleQuickfixList()<CR>
-nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<CR>
+nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
+nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<cr>
 nnoremap <space>q :q<cr>
 
 " Command-line history
@@ -550,42 +550,42 @@ nmap <space>p "*gr
 omap q iq
 
 " File handling
-nnoremap <space>n :e <C-R>=expand("%:h"). "/" <CR>
-nnoremap <leader>vs :vs <C-R>=expand("%:h"). "/" <CR>
-nnoremap <leader>sp :sp <C-R>=expand("%:h"). "/" <CR>
-nnoremap <leader>te :tabedit <C-R>=expand("%:h"). "/" <CR>
-nnoremap <leader>dk :e <C-R>=expand('%:h')<cr><cr>
-nnoremap <leader>mv :RenameFile <C-R>=expand("%:p")<CR>
+nnoremap <space>n :e <c-r>=expand("%:h"). "/" <cr>
+nnoremap <leader>vs :vs <c-r>=expand("%:h"). "/" <cr>
+nnoremap <leader>sp :sp <c-r>=expand("%:h"). "/" <cr>
+nnoremap <leader>te :tabedit <c-r>=expand("%:h"). "/" <cr>
+nnoremap <leader>dk :e <c-r>=expand('%:h')<cr><cr>
+nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
-nnoremap <space>g :set operatorfunc=<SID>GrepOperator<cr>g@
-vnoremap <space>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
+nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
+vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
 nnoremap <space>a :Ack! --hidden -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
 xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
 xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 
 " Multi-line replace/edit
-nnoremap <leader>rw :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
-nnoremap <leader>rn :%s/<C-R>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
+nnoremap <leader>rw :%s/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
+nnoremap <leader>rn :%s/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
 nnoremap <leader>re :'{,'}s//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
-nnoremap <leader>rr :Qargs <Bar> argdo %s/<C-R>///g <Bar> update<C-F>F/<C-C>
-nnoremap <leader>rq :cdo s/<C-R>///g <Bar> update<C-F>F/<C-C>
+nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>///g <Bar> update<c-f>F/<c-c>
+nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
 " Git
-nnoremap <space>u :call ToggleGStatus()<CR>
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>go :Gcommit<CR>
+nnoremap <space>u :call ToggleGStatus()<cr>
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>go :Gcommit<cr>
 
 " Format paragraph
 nnoremap <space>\ gqip
 
 " Count number of matches for current search
-nnoremap <leader>co :%s///gn<CR>
+nnoremap <leader>co :%s///gn<cr>
 
 nnoremap <leader>rf ggdG"*P=G
 
