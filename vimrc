@@ -39,6 +39,7 @@ Plug 'rcarraretto/auto-pairs'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'justinmk/vim-sneak'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
@@ -229,6 +230,16 @@ augroup QuickfixMapping
   " On quickfix, make 'o' open the target line
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
 augroup END
+
+function! s:SneakColor()
+  " ctermbg=17 also looks good
+  hi Sneak ctermfg=00 ctermbg=magenta
+endfunction
+augroup Sneak
+  autocmd!
+  autocmd! ColorScheme * call s:SneakColor()
+augroup END
+call s:SneakColor()
 
 augroup KarabinerEOL
   autocmd!
