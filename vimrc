@@ -296,6 +296,16 @@ function! s:TrimWhitespace()
   call setpos('.', save_cursor)
 endfunction
 
+function! s:ToggleFolding()
+  if foldclosed(line('.')) >= 0
+    " Open folds recursively
+    normal zA
+  else
+    " Close one level
+    normal za
+  endif
+endfunction
+
 function! RefreshChrome()
   silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
   redraw!
@@ -460,7 +470,7 @@ nnoremap K :!<cr>
 " On Karabiner Elements, <c-i> will send <f6>
 " to avoid collision between <tab> and <c-i>.
 " Taken from https://github.com/wincent/wincent
-nnoremap <tab> za
+nnoremap <silent> <tab> :call <sid>ToggleFolding()<cr>
 nnoremap <f6> <c-i>
 
 " Swap single quote and backtick
