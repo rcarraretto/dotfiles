@@ -308,12 +308,20 @@ function! s:TrimWhitespace()
 endfunction
 
 function! s:ToggleFolding()
-  if foldclosed(line('.')) >= 0
-    " Open folds recursively
-    normal zA
-  else
+  if foldclosed(line('.')) == -1
+    " Fold is open.
     " Close one level
     normal za
+    if foldclosed(line('.')) == -1
+      " Fold is still open.
+      " This seems to happen when the line is the only line
+      " with that fold level.
+      normal za
+    endif
+  else
+    " Fold is closed.
+    " Open folds recursively
+    normal zA
   endif
 endfunction
 
