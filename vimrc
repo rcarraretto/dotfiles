@@ -149,6 +149,15 @@ highlight Search ctermbg=none ctermfg=none cterm=underline,bold
 " Distinguish Folded bg from CursorLine bg
 highlight Folded ctermbg=00
 
+" Change error style.
+" The default has a black font in red background.
+" That looks ok when it is not the current line.
+" However, when the line is the current line, it's very hard to read
+" with 'cursorline' on.
+" Apparently, 'cterm=reverse' fixes this.
+" :h attr-list
+highlight Error ctermfg=red ctermbg=00 cterm=reverse
+
 " }}}
 
 " Auto commands ---------------------- {{{
