@@ -241,8 +241,8 @@ augroup QuickfixMapping
 augroup END
 
 function! s:SneakColor()
-  " ctermbg=17 also looks good
-  hi Sneak ctermfg=00 ctermbg=magenta
+  " ctermbg=magenta, ctermbg=16, ctermbg=17 look good
+  hi Sneak ctermfg=00 ctermbg=17
 endfunction
 augroup Sneak
   autocmd!
@@ -490,7 +490,8 @@ nnoremap <c-k> k
 nnoremap <cr> :
 xnoremap <cr> :
 
-nnoremap <silent> gh :noh<cr>
+" stop highlighting
+nnoremap <silent> gh :noh <bar> call sneak#cancel()<cr>
 
 " Save (needs .bashrc: stty -ixon -ixoff)
 nnoremap <c-l> <esc>:w<cr>
