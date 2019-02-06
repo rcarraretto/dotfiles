@@ -32,18 +32,16 @@ Plug 'AndrewRadev/splitjoin.vim'
 
 " >>> Support <<<
 Plug 'tpope/vim-dispatch'
-let g:dispatch_no_maps = 1
-let g:dispatch_tmux_height = 3
-" Focus reporting
+" focus reporting
 Plug 'wincent/terminus'
-" File system commands
+" file system commands
 Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
-" Git
+" git
 Plug 'tpope/vim-fugitive', { 'tag': 'v2.5' }
-" GitHub
+" github
 Plug 'tpope/vim-rhubarb'
-" Debugging Vim / Vimscript
+" debugging vim / vimscript
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
 Plug 'tpope/vim-projectionist'
 
@@ -64,15 +62,6 @@ Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
-let g:tsuquyomi_disable_quickfix = 1
-let g:tsuquyomi_disable_default_mappings = 1
-let g:tsuquyomi_single_quote_import = 1
-" Properly import from frameworks, like typeorm.
-"
-" import { Repository } from 'typeorm/repository/Repository';
-" =>
-" import { Repository } from 'typeorm';
-let g:tsuquyomi_shortest_import_path = 1
 Plug 'jparise/vim-graphql'
 
 call plug#end()
@@ -674,7 +663,7 @@ nnoremap <leader>sl "adt,dwep"ap
 " }}}
 
 " Plugin settings ---------------------- {{{
-"
+
 " The Silver Searcher
 if executable('ag')
   " Use ag over grep
@@ -686,26 +675,32 @@ endif
 " Ack.vim
 let g:ack_apply_qmappings = 0
 
-" netrw
+" Netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 let g:netrw_banner = 0
-" Allow netrw to remove non-empty local directories
+" allow netrw to remove non-empty local directories
 let g:netrw_localrmdir = 'rm -r'
 
-" terminus
+" Dispatch
+let g:dispatch_no_maps = 1
+let g:dispatch_tmux_height = 3
+
+" Terminus
 let g:TerminusCursorShape = 0
 
-" pymode
+" Pymode
 let g:pymode_folding = 0
 let g:pymode_options_max_line_length = 119
 let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
+" UltiSnips
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<c-b>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-z>"
 let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 
+" YouCompleteMe
 let g:ycm_key_list_select_completion = ['<Enter>']
 let g:ycm_filetype_specific_completion_to_disable = {
 \ 'c': 1,
@@ -713,10 +708,22 @@ let g:ycm_filetype_specific_completion_to_disable = {
 \ }
 let g:ycm_always_populate_location_list = 1
 
+" EasyAlign
 " e: elixir
 let g:easy_align_delimiters = {
 \ 'e': { 'pattern': '->\|do:' }
 \ }
+
+" Tsuquyomi
+let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_disable_default_mappings = 1
+let g:tsuquyomi_single_quote_import = 1
+" properly import from frameworks, like typeorm.
+"
+" import { Repository } from 'typeorm/repository/Repository';
+" =>
+" import { Repository } from 'typeorm';
+let g:tsuquyomi_shortest_import_path = 1
 
 " }}}
 
