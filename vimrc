@@ -53,7 +53,6 @@ Plug 'beloglazov/vim-textobj-quotes'
 Plug 'tpope/vim-sleuth'
 " change word casing, case-sensitive substitute
 Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-endwise'
 Plug 'junegunn/vim-easy-align'
 
 " >>> Language specific <<<
