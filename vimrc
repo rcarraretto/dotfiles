@@ -30,7 +30,7 @@ Plug 'SirVer/ultisnips'
 Plug 'Valloric/YouCompleteMe'
 Plug 'AndrewRadev/splitjoin.vim'
 
-" >>> Terminal / Command-line <<<
+" >>> Support <<<
 Plug 'tpope/vim-dispatch'
 let g:dispatch_no_maps = 1
 let g:dispatch_tmux_height = 3
@@ -41,7 +41,11 @@ Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
 " Git
 Plug 'tpope/vim-fugitive', { 'tag': 'v2.5' }
+" GitHub
 Plug 'tpope/vim-rhubarb'
+" Debugging Vim / Vimscript
+Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
+Plug 'tpope/vim-projectionist'
 
 " >>> Text editing (Part 2) <<<
 Plug 'kana/vim-textobj-user'
@@ -53,10 +57,6 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-endwise'
 Plug 'junegunn/vim-easy-align'
-
-" >>> Misc <<<
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-projectionist'
 
 " >>> Language specific <<<
 Plug 'klen/python-mode'
