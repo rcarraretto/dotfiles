@@ -484,14 +484,14 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <c-k> k
 
-" easier command-line mode
+" Easier command-line mode
 nnoremap <cr> :
 xnoremap <cr> :
 
-" stop highlighting
+" Stop highlighting
 nnoremap <silent> gh :noh <bar> call sneak#cancel()<cr>
 
-" Save (needs .bashrc: stty -ixon -ixoff)
+" Save
 nnoremap <c-l> <esc>:w<cr>
 inoremap <c-l> <esc>:w<cr>
 
@@ -515,14 +515,14 @@ onoremap ` '
 
 nnoremap <leader><leader> <c-^>
 
-" window navigation
+" Window navigation
 nnoremap <space>k <c-w>k
 nnoremap <space>j <c-w>j
 nnoremap <space>h <c-w>h
 nnoremap <space>l <c-w>l
 nnoremap <space>; <c-w>p
 
-" tab navigation
+" Tab navigation
 nnoremap <silent> [r :tabprevious<cr>
 nnoremap <silent> ]r :tabnext<cr>
 nnoremap <leader>tn :tabnew<cr>
@@ -542,7 +542,7 @@ cnoremap <c-n> <down>
 cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
 
-" tags
+" Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
 nnoremap <space>e :YcmCompleter GoToDefinition<cr>
@@ -657,7 +657,7 @@ nnoremap [h [mzzF(B
 " Split func args in multiple lines
 nnoremap <silent> <leader>gs [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
 
-" move function arg to the right
+" Move function arg to the right
 nnoremap <leader>sl "adt,dwep"ap
 
 " }}}
