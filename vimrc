@@ -12,47 +12,57 @@ call plug#begin('~/.vim/bundle')
 
 Plug 'junegunn/vim-plug'
 
+" >>> Color scheme <<<
+Plug 'chriskempson/base16-vim'
+
+" >>> Search <<<
+Plug 'mileszs/ack.vim'
+Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-sneak'
+
+" >>> Text editing (Part 1) <<<
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'rcarraretto/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-fugitive', { 'tag': 'v2.5' }
-Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-abolish'
+Plug 'SirVer/ultisnips'
+Plug 'Valloric/YouCompleteMe'
+Plug 'AndrewRadev/splitjoin.vim'
+
+" >>> Terminal / Command-line <<<
 Plug 'tpope/vim-dispatch'
 let g:dispatch_no_maps = 1
 let g:dispatch_tmux_height = 3
-Plug 'tpope/vim-projectionist'
-
+" Focus reporting
 Plug 'wincent/terminus'
+" File system commands
+Plug 'tpope/vim-eunuch'
+Plug 'janko-m/vim-test'
+" Git
+Plug 'tpope/vim-fugitive', { 'tag': 'v2.5' }
+Plug 'tpope/vim-rhubarb'
 
-Plug 'mileszs/ack.vim'
-Plug 'junegunn/fzf.vim'
-
-Plug 'SirVer/ultisnips'
-
-Plug 'Valloric/YouCompleteMe'
-Plug 'rcarraretto/auto-pairs'
-Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'junegunn/vim-easy-align'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'justinmk/vim-sneak'
-
+" >>> Text editing (Part 2) <<<
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'beloglazov/vim-textobj-quotes'
+" indentation
+Plug 'tpope/vim-sleuth'
+" change word casing, case-sensitive substitute
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-endwise'
+Plug 'junegunn/vim-easy-align'
 
-Plug 'chriskempson/base16-vim'
+" >>> Misc <<<
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-projectionist'
 
-Plug 'janko-m/vim-test'
+" >>> Language specific <<<
 Plug 'klen/python-mode'
 Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
-
 Plug 'Quramy/tsuquyomi'
 let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_disable_default_mappings = 1
@@ -63,7 +73,6 @@ let g:tsuquyomi_single_quote_import = 1
 " =>
 " import { Repository } from 'typeorm';
 let g:tsuquyomi_shortest_import_path = 1
-
 Plug 'jparise/vim-graphql'
 
 call plug#end()
