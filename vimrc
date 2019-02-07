@@ -122,16 +122,22 @@ function! Qftitle()
   return getqflist({'title': 1}).title
 endfunction
 
-function! s:setStatusline()
+function! s:SetStatusline(...)
+  let isLeaving = get(a:, 1, 0)
   setlocal statusline=%f\  " filename
   if &ft == 'qf'
     setlocal statusline+=%{Qftitle()}
   endif
   setlocal statusline+=%=  " left/right separator
-  setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
-  setlocal statusline+=\ \|\  " separator
-  setlocal statusline+=col\ %-3.3v  " column number
-  setlocal statusline+=\  " separator
+  if isLeaving
+    setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
+    setlocal statusline+=\ \ \  " separator
+  else
+    setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
+    setlocal statusline+=\ \|\  " separator
+    setlocal statusline+=col\ %-3.3v  " column number
+    setlocal statusline+=\  " separator
+  endif
 endfunction
 
 " Load aliases for executing shell commands within vim
@@ -194,8 +200,8 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
-  autocmd FileType qf call s:setStatusline()
-  autocmd FileType help call s:setStatusline()
+  autocmd FileType qf call s:SetStatusline()
+  autocmd FileType help call s:SetStatusline()
 augroup END
 
 augroup SetFiletype
@@ -213,8 +219,8 @@ augroup END
 
 augroup ColorColumn
   autocmd!
-  autocmd BufEnter,FocusGained,VimEnter,WinEnter * if ShouldColorColumn() | let &l:colorcolumn='0' | endif
-  autocmd FocusLost,WinLeave * if ShouldColorColumn() | let &l:colorcolumn=join(range(1, 255), ',') | endif
+  autocmd BufEnter,FocusGained,VimEnter,WinEnter * call s:OnWinEnter()
+  autocmd FocusLost,WinLeave * call s:OnWinLeave()
 augroup END
 
 augroup TrimWhitespace
@@ -295,6 +301,20 @@ endfunction
 function! ShouldColorColumn() abort
   let g:RcColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
   return index(g:RcColorColumnBlacklist, &filetype) == -1
+endfunction
+
+function! s:OnWinEnter()
+  if ShouldColorColumn()
+    let &l:colorcolumn='0'
+    call s:SetStatusline()
+  endif
+endfunction
+
+function! s:OnWinLeave()
+  if ShouldColorColumn()
+    let &l:colorcolumn=join(range(1, 255), ',')
+    call s:SetStatusline(1)
+  endif
 endfunction
 
 command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
