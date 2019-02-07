@@ -124,7 +124,12 @@ endfunction
 
 function! s:SetStatusline(...)
   let isLeaving = get(a:, 1, 0)
+  let showFlags = index(['qf', 'help', 'diff', 'undotree'], &filetype) == -1
   setlocal statusline=%f\  " filename
+  if showFlags
+    setlocal statusline+=%m  " modified flag
+    setlocal statusline+=%r  " read only flag
+  endif
   if &ft == 'qf'
     setlocal statusline+=%{Qftitle()}
   endif
@@ -298,20 +303,19 @@ function! NumberToggle()
   set number
 endfunction
 
-function! ShouldColorColumn() abort
-  let g:RcColorColumnBlacklist = ['diff', 'undotree', 'nerdtree', 'qf']
-  return index(g:RcColorColumnBlacklist, &filetype) == -1
+function! s:ShouldColorColumn()
+  return index(['qf', 'diff', 'undotree'], &filetype) == -1
 endfunction
 
 function! s:OnWinEnter()
-  if ShouldColorColumn()
+  if s:ShouldColorColumn()
     let &l:colorcolumn='0'
     call s:SetStatusline()
   endif
 endfunction
 
 function! s:OnWinLeave()
-  if ShouldColorColumn()
+  if s:ShouldColorColumn()
     let &l:colorcolumn=join(range(1, 255), ',')
     call s:SetStatusline(1)
   endif
