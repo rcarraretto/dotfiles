@@ -83,8 +83,6 @@ set hlsearch
 set smartcase
 set ignorecase
 set autoindent
-set tabstop=4
-set shiftwidth=4
 set nowrap
 
 " when the last line is too large (may happen when using 'wrap'),
