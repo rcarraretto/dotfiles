@@ -540,6 +540,7 @@ nnoremap <space>j <c-w>j
 nnoremap <space>h <c-w>h
 nnoremap <space>l <c-w>l
 nnoremap <space>; <c-w>p
+nnoremap <space>w <c-w><c-w>
 
 " Tab navigation
 nnoremap <silent> [r :tabprevious<cr>
