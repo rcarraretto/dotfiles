@@ -674,9 +674,6 @@ nmap gae gaipe
 nnoremap ]h $]mzzF(B
 nnoremap [h [mzzF(B
 
-" Split func args in multiple lines
-nnoremap <silent> <leader>gs [(a<cr><esc>])i<cr><esc>[(+:s/, /,\r/g<esc>`.=]):noh<cr>
-
 " Move function arg to the right
 nnoremap <leader>sl "adt,dwep"ap
 
