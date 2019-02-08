@@ -493,6 +493,22 @@ function! FormatJson()
   :%!python -m json.tool
 endfunction
 
+function! s:CycleWinLeft()
+  if winnr() == 1
+    execute "normal! \<c-w>W"
+  else
+    execute "normal! \<c-w>h"
+  endif
+endfunction
+
+function! s:CycleWinRight()
+  if winnr() == winnr('$')
+    execute "normal! \<c-w>w"
+  else
+    execute "normal! \<c-w>l"
+  endif
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -539,8 +555,8 @@ nnoremap <leader><leader> <c-^>
 " Window navigation
 nnoremap <space>k <c-w>k
 nnoremap <space>j <c-w>j
-nnoremap <space>h <c-w>h
-nnoremap <space>l <c-w>l
+nnoremap <silent> <space>h :call <sid>CycleWinLeft()<cr>
+nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
 nnoremap <space>w <c-w><c-w>
 
