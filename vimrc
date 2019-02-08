@@ -291,8 +291,8 @@ function! s:NetrwMappings()
   execute "nnoremap <buffer> <silent> x " . s:mapping_netrw_o
 endfunction
 
-function! NumberToggle()
-  if (&relativenumber == 1)
+function! s:ToggleRelativeNumber()
+  if &relativenumber == 1
     set norelativenumber
   else
     set relativenumber
@@ -512,6 +512,7 @@ endfunction
 
 " Mappings ---------------------- {{{
 
+" Exit insert mode
 inoremap jk <esc>
 
 " j + k: move through 'display lines'
@@ -549,7 +550,11 @@ nnoremap ` '
 vnoremap ` '
 onoremap ` '
 
+" Edit the alternate file
 nnoremap <leader><leader> <c-^>
+
+" Toggle relative number
+nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
 
 " Window navigation
 nnoremap <space>j <c-w>j
@@ -558,6 +563,14 @@ nnoremap <silent> <space>h :call <sid>CycleWinLeft()<cr>
 nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
 nnoremap <space>w <c-w><c-w>
+nnoremap <space>q :q<cr>
+
+" Quickfix
+nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
+nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<cr>
+nnoremap [g :colder<cr>
+nnoremap ]g :cnewer<cr>
+nnoremap <leader>da :AbortDispatch<cr>
 
 " Tab navigation
 nnoremap <silent> [r :tabprevious<cr>
@@ -567,32 +580,20 @@ nnoremap <leader>tc :tabclose<cr>
 nnoremap <leader>th :tabm -1<cr>
 nnoremap <leader>tl :tabm +1<cr>
 
-nnoremap <space>o :Files<cr>
-nnoremap <space>m :History<cr>
-nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
-nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<cr>
-nnoremap <space>q :q<cr>
-
 " Command-line history
 cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
 
-" Tags
-nnoremap <space>[ :Tags <c-r><c-w><cr>
-nnoremap <space>] :Tags<cr>
-nnoremap <space>e :YcmCompleter GoToDefinition<cr>
-
-nnoremap con :call NumberToggle()<cr>
-nnoremap [g :colder<cr>
-nnoremap ]g :cnewer<cr>
-
+" vimrc, vimscript
 nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
 " Quickly edit some files and folders
+nnoremap <space>o :Files<cr>
+nnoremap <space>m :History<cr>
 nnoremap <leader>el :call ViewFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
@@ -607,6 +608,11 @@ nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".v
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
+
+" Tags
+nnoremap <space>[ :Tags <c-r><c-w><cr>
+nnoremap <space>] :Tags<cr>
+nnoremap <space>e :YcmCompleter GoToDefinition<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -673,17 +679,14 @@ nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space>t :w<cr>:TestLast<cr>
 
-nnoremap <leader>da :AbortDispatch<cr>
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 imap <c-x><c-x> <plug>(fzf-complete-line)
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
 " Go align Elixir paragraph
 nmap gae gaipe
 
