@@ -43,7 +43,6 @@ Plug 'tpope/vim-fugitive', { 'tag': 'v2.5' }
 Plug 'tpope/vim-rhubarb'
 " debugging vim / vimscript
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
-Plug 'tpope/vim-projectionist'
 
 " >>> Text editing (Part 2) <<<
 Plug 'kana/vim-textobj-user'
@@ -608,8 +607,6 @@ nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".v
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
-
-nnoremap <leader>av :AV<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
