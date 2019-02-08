@@ -209,6 +209,7 @@ augroup END
 augroup SetFiletype
   autocmd!
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
+  autocmd BufNewFile,BufRead .ignore set filetype=conf
 augroup END
 
 augroup CursorLine
