@@ -553,8 +553,8 @@ onoremap ` '
 nnoremap <leader><leader> <c-^>
 
 " Window navigation
-nnoremap <space>k <c-w>k
 nnoremap <space>j <c-w>j
+nnoremap <space>k <c-w>k
 nnoremap <silent> <space>h :call <sid>CycleWinLeft()<cr>
 nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
