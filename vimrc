@@ -641,7 +641,6 @@ nnoremap <leader>te :tabedit <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>dk :e <c-r>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 
 " Searching
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
