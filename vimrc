@@ -50,7 +50,7 @@ Plug 'kana/vim-textobj-indent'
 Plug 'beloglazov/vim-textobj-quotes'
 " indentation
 Plug 'tpope/vim-sleuth'
-" change word casing, case-sensitive substitute
+" change word casing, case-aware substitute
 Plug 'tpope/vim-abolish'
 Plug 'junegunn/vim-easy-align'
 
@@ -652,10 +652,20 @@ nnoremap <leader>aa :AckFromSearch<cr>
 xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
 xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 
-" Multi-line replace/edit
-nnoremap <leader>rw :%s/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
-nnoremap <leader>rn :%s/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
-nnoremap <leader>re :'{,'}s//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
+" Find and Replace / Find and Bulk Change
+"
+" replace current search term
+" (uses abolish.vim so it handles multiple casing)
+" :h :Subvert
+"
+" - replace within file (with confirmation)
+nnoremap <leader>rw :%S/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
+" - replace within file (no confirmation)
+nnoremap <leader>rn :%S/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
+" - replace within line
+nnoremap <leader>rl :S/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
+"
+nnoremap <leader>re :'{,'}S//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>///g <Bar> update<c-f>F/<c-c>
 nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
