@@ -509,6 +509,10 @@ function! s:CycleWinRight()
   endif
 endfunction
 
+function! GetSearchTerm()
+  return matchstr(@/, '\<\(.*\)\>')
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -659,13 +663,13 @@ xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 " :h :Subvert
 "
 " - replace within file (with confirmation)
-nnoremap <leader>rw :%S/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/gc<left><left><left>
+nnoremap <leader>rw :%S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/gc<left><left><left>
 " - replace within file (no confirmation)
-nnoremap <leader>rn :%S/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
+nnoremap <leader>rn :%S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
 " - replace within line
-nnoremap <leader>rl :S/<c-r>//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/g<left><left>
-"
-nnoremap <leader>re :'{,'}S//<c-r>=matchstr('<c-r>/', '\<\(.*\)\>')<cr>/<left><left><c-f>
+nnoremap <leader>rl :S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+" - replace within paragraph
+nnoremap <leader>re :'{,'}S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>///g <Bar> update<c-f>F/<c-c>
 nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
