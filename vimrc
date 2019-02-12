@@ -524,11 +524,17 @@ endfunction
 " By using this wrap, this can be avoided.
 function! s:SubvertWrap(line1, line2, count, args)
   let save_cursor = getpos('.')
-  if a:count == 0
-    execute "Subvert" . a:args
-  else
-    execute a:line1 . "," . a:line2 . "Subvert" . a:args
-  endif
+  try
+    if a:count == 0
+      execute "Subvert" . a:args
+    else
+      execute a:line1 . "," . a:line2 . "Subvert" . a:args
+    endif
+  catch
+    echohl ErrorMsg
+    echo v:errmsg
+    echohl NONE
+  endtry
   call setpos('.', save_cursor)
   return ""
 endfunction
