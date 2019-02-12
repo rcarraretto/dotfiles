@@ -513,6 +513,20 @@ function! GetSearchTerm()
   return matchstr(@/, '\<\(.*\)\>')
 endfunction
 
+" :SW command.
+" (Wrapper for :Subvert from abolish.vim)
+" :Subvert changes the search register when called directly.
+" By using this wrap, this can be avoided.
+function! s:SubvertWrap(line1, line2, count, args)
+  if a:count == 0
+    execute "Subvert" . a:args
+  else
+    execute a:line1 . "," . a:line2 . "Subvert" . a:args
+  endif
+  return ""
+endfunction
+command! -nargs=1 -bar -range=0 SW execute s:SubvertWrap(<line1>, <line2>, <count>, <q-args>)
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -660,16 +674,17 @@ xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 "
 " replace current search term
 " (uses abolish.vim so it handles multiple casing)
+" See s:SubvertWrap
 " :h :Subvert
 "
 " - replace within file (with confirmation)
-nnoremap <leader>rw :%S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/gc<left><left><left>
+nnoremap <leader>rw :%SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/gc<left><left><left>
 " - replace within file (no confirmation)
-nnoremap <leader>rn :%S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+nnoremap <leader>rn :%SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
 " - replace within line
-nnoremap <leader>rl :S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+nnoremap <leader>rl :SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
 " - replace within paragraph
-nnoremap <leader>re :'{,'}S/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+nnoremap <leader>re :'{,'}SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>///g <Bar> update<c-f>F/<c-c>
 nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
