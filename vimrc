@@ -509,8 +509,13 @@ function! s:CycleWinRight()
   endif
 endfunction
 
-function! GetSearchTerm()
-  return matchstr(@/, '\<\(.*\)\>')
+function! GetSubstituteTerm()
+  " Remove the word boundary atoms
+  " that will be present when searching with * and #.
+  let str = matchstr(@/, '\<\(.*\)\>')
+  " Make first char lower case,
+  " so that the :Subvert replace is always case-aware.
+  return tolower(str[0]) . str[1:]
 endfunction
 
 " :SW command.
@@ -678,13 +683,13 @@ xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 " :h :Subvert
 "
 " - replace within file (with confirmation)
-nnoremap <leader>rw :%SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/gc<left><left><left>
+nnoremap <leader>rw :%SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/gc<left><left><left>
 " - replace within file (no confirmation)
-nnoremap <leader>rn :%SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+nnoremap <leader>rn :%SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
 " - replace within line
-nnoremap <leader>rl :SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+nnoremap <leader>rl :SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
 " - replace within paragraph
-nnoremap <leader>re :'{,'}SW/<c-r>=GetSearchTerm()<cr>/<c-r>=GetSearchTerm()<cr>/g<left><left>
+nnoremap <leader>re :'{,'}SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
 nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>///g <Bar> update<c-f>F/<c-c>
 nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
