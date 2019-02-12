@@ -523,11 +523,13 @@ endfunction
 " :Subvert changes the search register when called directly.
 " By using this wrap, this can be avoided.
 function! s:SubvertWrap(line1, line2, count, args)
+  let save_cursor = getpos('.')
   if a:count == 0
     execute "Subvert" . a:args
   else
     execute a:line1 . "," . a:line2 . "Subvert" . a:args
   endif
+  call setpos('.', save_cursor)
   return ""
 endfunction
 command! -nargs=1 -bar -range=0 SW execute s:SubvertWrap(<line1>, <line2>, <count>, <q-args>)
