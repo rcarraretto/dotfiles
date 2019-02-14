@@ -493,9 +493,14 @@ function! FormatJson()
   :%!python -m json.tool
 endfunction
 
+function! s:HighestWinnr()
+  let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
+  return wins[-1]['winnr']
+endfunction
+
 function! s:CycleWinLeft()
   if winnr() == 1
-    execute "normal! \<c-w>W"
+    execute s:HighestWinnr() . "wincmd w"
   else
     let prev_winnr = winnr()
     execute "normal! \<c-w>h"
@@ -506,8 +511,8 @@ function! s:CycleWinLeft()
 endfunction
 
 function! s:CycleWinRight()
-  if winnr() == winnr('$')
-    execute "normal! \<c-w>w"
+  if winnr() == s:HighestWinnr()
+    1 wincmd w
   else
     let prev_winnr = winnr()
     execute "normal! \<c-w>l"
