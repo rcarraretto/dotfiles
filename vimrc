@@ -497,7 +497,11 @@ function! s:CycleWinLeft()
   if winnr() == 1
     execute "normal! \<c-w>W"
   else
+    let prev_winnr = winnr()
     execute "normal! \<c-w>h"
+    if winnr() == prev_winnr
+      execute "normal! \<c-w>w"
+    endif
   endif
 endfunction
 
@@ -505,7 +509,11 @@ function! s:CycleWinRight()
   if winnr() == winnr('$')
     execute "normal! \<c-w>w"
   else
+    let prev_winnr = winnr()
     execute "normal! \<c-w>l"
+    if winnr() == prev_winnr
+      execute "normal! \<c-w>W"
+    endif
   endif
 endfunction
 
