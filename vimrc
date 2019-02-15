@@ -120,8 +120,11 @@ function! Qftitle()
 endfunction
 
 function! s:SetStatusline(...)
+  if index(['diff', 'undotree'], &filetype) >= 0
+    return
+  endif
   let isLeaving = get(a:, 1, 0)
-  let showFlags = index(['qf', 'help', 'diff', 'undotree'], &filetype) == -1
+  let showFlags = index(['qf', 'help'], &filetype) == -1
   setlocal statusline=%f\  " filename
   if showFlags
     setlocal statusline+=%m  " modified flag
@@ -132,6 +135,10 @@ function! s:SetStatusline(...)
   endif
   setlocal statusline+=%=  " left/right separator
   if isLeaving
+    if &ft == 'qf'
+      setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
+      setlocal statusline+=\ \|\  " separator
+    endif
     setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
     setlocal statusline+=\ \ \  " separator
   else
@@ -202,8 +209,6 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
-  autocmd FileType qf call s:SetStatusline()
-  autocmd FileType help call s:SetStatusline()
 augroup END
 
 augroup SetFiletype
@@ -306,16 +311,16 @@ function! s:ShouldColorColumn()
 endfunction
 
 function! s:OnWinEnter()
+  call s:SetStatusline()
   if s:ShouldColorColumn()
     let &l:colorcolumn='0'
-    call s:SetStatusline()
   endif
 endfunction
 
 function! s:OnWinLeave()
+  call s:SetStatusline(1)
   if s:ShouldColorColumn()
     let &l:colorcolumn=join(range(1, 255), ',')
-    call s:SetStatusline(1)
   endif
 endfunction
 
