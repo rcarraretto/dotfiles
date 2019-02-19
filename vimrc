@@ -692,6 +692,9 @@ nnoremap <leader>sp :sp <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>te :tabedit <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>dk :e <c-r>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
+" clone file
+nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr>
+" copy path to clipboard
 nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
 
 " Searching
