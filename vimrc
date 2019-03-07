@@ -197,7 +197,7 @@ augroup FTOptions
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker | setlocal textwidth=0
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=1 | setlocal formatoptions-=cro
-  autocmd FileType typescript setlocal foldmethod=indent | setlocal foldlevel=1 | setlocal formatoptions-=cro
+  autocmd FileType typescript setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType lua setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType ruby setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
