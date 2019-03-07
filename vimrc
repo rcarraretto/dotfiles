@@ -48,6 +48,7 @@ Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'beloglazov/vim-textobj-quotes'
+Plug 'Julian/vim-textobj-variable-segment'
 " indentation
 Plug 'tpope/vim-sleuth'
 " change word casing, case-aware substitute
