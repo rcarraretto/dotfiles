@@ -21,9 +21,25 @@ local app_hotkeys = {
   {key = "F2", app = "Postman"},
   {key = "F3", app = "Studio 3T"},
 }
+hs.application.enableSpotlightForNameSearches(true)
 local bind_app_hotkey = function(hotkey)
   hs.hotkey.bind(hyper, hotkey.key, function()
-    hs.application.launchOrFocus(hotkey.app)
+    local app = hs.application.find(hotkey.app)
+    if not app then
+      print('app not found: ', hotkey.app)
+      return
+    end
+    if app:isFrontmost() then
+      -- If already focused on the app, go to the previous one
+      -- (trying to be equivalent to alt+tab)
+      -- Based on https://github.com/AWildDevAppears/hammerspoon-config/blob/master/alttab.lua
+      local windows = hs.window.orderedWindows()
+      if #windows >= 2 then
+        windows[2]:focus()
+      end
+    else
+      hs.application.launchOrFocus(hotkey.app)
+    end
   end)
 end
 fnutils.each(app_hotkeys, bind_app_hotkey)
