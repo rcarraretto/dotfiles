@@ -62,7 +62,7 @@ Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'jparise/vim-graphql'
-Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'ianks/vim-tsx'
 
 call plug#end()
 " }}}
