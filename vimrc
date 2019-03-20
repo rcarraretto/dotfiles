@@ -78,8 +78,8 @@ set history=1000
 set ruler
 set showcmd		" display incomplete commands
 set incsearch
-set backupdir=~/.tmp
-set directory=~/.tmp
+set backupdir=~/.tmp-vim
+set directory=~/.tmp-vim
 set hlsearch
 set smartcase
 set ignorecase
