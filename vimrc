@@ -569,8 +569,9 @@ inoremap jk <esc>
 
 " j + k: move through 'display lines'
 " <c-j> + <c-k>: move through 'lines'
-nnoremap j gj
-nnoremap k gk
+" Store relative line number jumps in the jumplist if they exceed a threshold.
+nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'gj'
+nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'gk'
 nnoremap <c-k> k
 
 " Easier command-line mode
