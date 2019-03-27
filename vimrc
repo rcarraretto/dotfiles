@@ -13,7 +13,7 @@ call plug#begin('~/.vim/bundle')
 Plug 'junegunn/vim-plug'
 
 " >>> Color scheme <<<
-Plug 'chriskempson/base16-vim'
+Plug 'danielwe/base16-vim'
 
 " >>> Search <<<
 Plug 'mileszs/ack.vim'
