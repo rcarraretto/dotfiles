@@ -15,7 +15,7 @@ local app_hotkeys = {
   {key = "1", app = "iTerm"},
   {key = "2", app = "Google Chrome"},
   {key = "3", app = "SourceTree"},
-  {key = "4", app = "Calendar", app_alt = "Kalender"},
+  {key = "4", app = "com.apple.iCal"},
   {key = "5", app = "Slack"},
   {key = "6", app = "Spotify"},
   {key = "F2", app = "Postman"},
@@ -30,9 +30,7 @@ local bind_app_hotkey = function(hotkey)
       return
     end
     local fm = hs.application.frontmostApplication();
-    local isFrontmost = app:isFrontmost() or
-      fm:name() == hotkey.app_alt
-    if isFrontmost then
+    if app:isFrontmost() then
       -- If already focused on the app, go to the previous one
       -- (trying to be equivalent to alt+tab)
       -- Based on https://github.com/AWildDevAppears/hammerspoon-config/blob/master/alttab.lua
@@ -45,7 +43,7 @@ local bind_app_hotkey = function(hotkey)
         end
       end
     else
-      hs.application.launchOrFocus(hotkey.app)
+      hs.application.launchOrFocusByBundleID(app:bundleID())
     end
   end)
 end
