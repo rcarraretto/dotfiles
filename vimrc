@@ -13,7 +13,7 @@ call plug#begin('~/.vim/bundle')
 Plug 'junegunn/vim-plug'
 
 " >>> Color scheme <<<
-Plug 'danielwe/base16-vim'
+Plug 'chriskempson/base16-vim', { 'commit': 'a808330d8855335dc79094a668574500bee9ccb0' }
 
 " >>> Search <<<
 Plug 'mileszs/ack.vim'
@@ -70,7 +70,10 @@ call plug#end()
 " Settings ---------------------- {{{
 let base16colorspace=256  " Access colors present in 256 colorspace"
 set background=dark
-colorscheme base16-default-dark
+try
+  colorscheme base16-default-dark
+catch /^Vim\%((\a\+)\)\=:E185/
+endtry
 
 set number
 set relativenumber
