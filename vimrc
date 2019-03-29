@@ -26,7 +26,7 @@ Plug 'rcarraretto/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
 Plug 'Valloric/YouCompleteMe'
 Plug 'AndrewRadev/splitjoin.vim'
 
