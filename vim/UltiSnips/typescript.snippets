@@ -24,13 +24,19 @@ snippet exp "expect equal" b
 expect($1).to.equal($2);
 endsnippet
 
+snippet des "describe"
+describe('$1', function() {
+	$2
+});
+endsnippet
+
 snippet it "it"
 it('$1', async () => {
 	$2
 });
 endsnippet
 
-snippet i_ "it"
+snippet i_ "import lodash"
 import * as _ from 'lodash';
 endsnippet
 
