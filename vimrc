@@ -482,17 +482,26 @@ endfunction
 
 command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
-function! ViewFile(path)
+function! s:EditFile(path)
   if bufnr(a:path) == -1
-    execute "tabnew " . a:path
+    execute 'tabnew ' . a:path
   else
     let wins = getbufinfo(a:path)[0]['windows']
     if empty(wins)
-      execute "tabnew " . a:path
+      execute 'tabnew ' . a:path
     else
       call win_gotoid(wins[0])
     endif
   endif
+endfunction
+
+function! s:EditFileUpwards(filename)
+  let path = findfile(a:filename, '.;' . $HOME)
+  if len(path) == 0
+    echo 'File not found: ' . a:filename
+    return
+  endif
+  call s:EditFile(path)
 endfunction
 
 function! FormatJson()
@@ -643,23 +652,23 @@ cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
 
 " vimrc, vimscript
-nnoremap <leader>ev :call ViewFile($MYVIMRC)<cr>
+nnoremap <leader>ev :call <sid>EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
 " Quickly edit some files and folders
 nnoremap <space>o :Files<cr>
 nnoremap <space>m :History<cr>
-nnoremap <leader>el :call ViewFile('~/.vim/vimrc.local')<cr>
+nnoremap <leader>el :call <sid>EditFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
-nnoremap <leader>eo :call ViewFile("./.todo")<cr>
+nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
-nnoremap <leader>et :call ViewFile("~/Dropbox/notes/tmp.txt")<cr>
-nnoremap <leader>ei :call ViewFile("~/Dropbox/notes/vim.txt")<cr>
-nnoremap <leader>em :call ViewFile("~/work/dotfiles-private/README.md")<cr>
-nnoremap <leader>eb :call ViewFile("~/.bashrc.local")<cr>
+nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/tmp.txt")<cr>
+nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/vim.txt")<cr>
+nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
+nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
 nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
