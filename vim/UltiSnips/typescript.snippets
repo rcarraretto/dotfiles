@@ -68,8 +68,22 @@ public async ${1}(${2}): Promise<any> {
 }
 endsnippet
 
+snippet pri "private"
+private ${1}(${2}): any {
+	$3
+}
+endsnippet
+
 snippet pria "private async"
 private async ${1}(${2}): Promise<any> {
 	$3
+}
+endsnippet
+
+snippet try "try / catch"
+try {
+	$1
+} catch (e) {
+	$2
 }
 endsnippet
