@@ -603,6 +603,10 @@ nnoremap K :!<cr>
 " Use <tab> to toggle folding.
 " On Karabiner Elements, <c-i> will send <f6>
 " to avoid collision between <tab> and <c-i>.
+"
+" Requires macOS keyboard setting:
+" 'Use F1, F2, etc. keys as standard function keys'
+"
 " Taken from https://github.com/wincent/wincent
 nnoremap <silent> <tab> :call <sid>ToggleFolding()<cr>
 nnoremap <f6> <c-i>
