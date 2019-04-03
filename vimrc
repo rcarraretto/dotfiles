@@ -504,6 +504,19 @@ function! s:EditFileUpwards(filename)
   call s:EditFile(path)
 endfunction
 
+function! s:SysOpen(filename)
+  let ext = fnamemodify(a:filename, ':e')
+  if index(['sh'], ext) != -1
+    echo 'SysOpen: unsupported extension: ' . ext
+    return
+  endif
+  let output = system('open ' . a:filename)
+  if v:shell_error
+    echo 'Error: ' . substitute(output, '\n', ' ', 'g')
+    return
+  endif
+endfunction
+
 function! FormatJson()
   if &ft !=# 'json'
     echo 'Not a json file'
@@ -679,6 +692,7 @@ nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
 nnoremap <leader>ad :Ack! --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
+nnoremap <leader>oS :call <sid>SysOpen('<c-r>%')<cr>
 
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
