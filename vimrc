@@ -63,6 +63,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'jparise/vim-graphql'
 Plug 'ianks/vim-tsx'
+Plug 'udalov/kotlin-vim'
 
 call plug#end()
 " }}}
