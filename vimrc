@@ -257,6 +257,12 @@ augroup QuickfixMapping
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
 augroup END
 
+augroup AutoSaveFolds
+  autocmd!
+  autocmd BufUnload * call s:MaybeMkview()
+  autocmd BufWinEnter * call s:MaybeLoadview()
+augroup END
+
 function! s:SneakColor()
   " ctermbg=magenta, ctermbg=16, ctermbg=17 look good
   hi Sneak ctermfg=00 ctermbg=17
@@ -344,6 +350,26 @@ function! s:TrimWhitespace()
   let save_cursor = getpos('.')
   %s/\s\+$//e
   call setpos('.', save_cursor)
+endfunction
+
+" Whitelist of filetypes that will have folding saved/restored.
+"
+" Using a whitelist because there will be exceptions like
+" quickfix, netrw and help buffers. And also special buffers
+" used by plugins like plug, fzf, fugitive, etc.
+"
+let s:ft_save_fold = ['typescript']
+
+function! s:MaybeMkview()
+  if index(s:ft_save_fold, &ft) >= 0
+    mkview
+  endif
+endfunction
+
+function! s:MaybeLoadview()
+  if index(s:ft_save_fold, &ft) >= 0
+    silent loadview
+  endif
 endfunction
 
 function! s:ToggleFolding()
