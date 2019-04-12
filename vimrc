@@ -258,9 +258,29 @@ augroup QuickfixMapping
 augroup END
 
 augroup AutoSaveFolds
+  " Whitelist of filetypes that will have folding saved/restored.
+  "
+  " Using a whitelist because there will be exceptions like
+  " quickfix, netrw and help buffers. And also special buffers
+  " used by plugins like plug, fzf, fugitive, etc.
+  let s:ft_save_fold = ['typescript']
   autocmd!
-  autocmd BufUnload * call s:MaybeMkview()
-  autocmd BufWinEnter * call s:MaybeLoadview()
+  " Mkview
+  autocmd BufUnload * if index(s:ft_save_fold, &ft) >= 0 | mkview | endif
+  " Loadview
+  "
+  " hack 1: Not using BufWinEnter here because it seems that it doesn't work
+  " for the following case:
+  " - use Dispatch.vim to call an external tool to change the code (e.g. prettier)
+  " - then the buffer will be refreshed by vim
+  "   (because of :checktime and &autoread set by terminus plugin)
+  " - then it seems like none of the events are being triggered,
+  "     BufWinEnter or BufRead or ShellCmdPost or FileChangedShellPost
+  "
+  " hack 2: after loading view, it seems that the cursor bugs, when going up and down.
+  " Going right and left after loadview seems to fix it.
+  "
+  autocmd FileType typescript loadview | call feedkeys('lh')
 augroup END
 
 function! s:SneakColor()
@@ -350,26 +370,6 @@ function! s:TrimWhitespace()
   let save_cursor = getpos('.')
   %s/\s\+$//e
   call setpos('.', save_cursor)
-endfunction
-
-" Whitelist of filetypes that will have folding saved/restored.
-"
-" Using a whitelist because there will be exceptions like
-" quickfix, netrw and help buffers. And also special buffers
-" used by plugins like plug, fzf, fugitive, etc.
-"
-let s:ft_save_fold = ['typescript']
-
-function! s:MaybeMkview()
-  if index(s:ft_save_fold, &ft) >= 0
-    mkview
-  endif
-endfunction
-
-function! s:MaybeLoadview()
-  if index(s:ft_save_fold, &ft) >= 0
-    silent loadview
-  endif
 endfunction
 
 function! s:ToggleFolding()
