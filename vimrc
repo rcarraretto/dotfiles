@@ -40,7 +40,7 @@ Plug 'wincent/terminus'
 Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
 " git
-Plug 'tpope/vim-fugitive', { 'tag': 'v2.5' }
+Plug 'tpope/vim-fugitive', { 'commit': '60eac8c97457af5a96eb06ad4b564e4c813d806e' }
 " github
 Plug 'tpope/vim-rhubarb'
 " debugging vim / vimscript
