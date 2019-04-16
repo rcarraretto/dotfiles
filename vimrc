@@ -217,6 +217,7 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
+  autocmd FileType fugitive call s:FugitiveMappings()
 augroup END
 
 augroup SetFiletype
@@ -329,6 +330,16 @@ function! s:NetrwMappings()
 
   " map 'x' to what 'o' is in netrw (open file in a horizontal split)
   execute "nnoremap <buffer> <silent> x " . s:mapping_netrw_o
+endfunction
+
+function! s:FugitiveMappings()
+  " map 'o' to what <cr> is in fugitive (open file in existing window)
+  execute "nnoremap <buffer> <silent> o " . maparg("<cr>", "n")
+
+  " unmap <cr> for fugitive buffer,
+  " which will make <cr> fallback to global behavior, i.e.,
+  " nnoremap <cr> :
+  nunmap <buffer> <cr>
 endfunction
 
 function! s:ToggleRelativeNumber()
