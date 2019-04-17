@@ -38,5 +38,10 @@ export NVM_DIR="$HOME/.nvm"
 
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 
+# git completion
+if [ -f ~/.git-completion.bash ]; then
+  source ~/.git-completion.bash
+fi
+
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC
