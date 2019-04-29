@@ -597,10 +597,23 @@ endfunction
 function! GetSubstituteTerm()
   " Remove the word boundary atoms
   " that will be present when searching with * and #.
-  let str = matchstr(@/, '\<\(.*\)\>')
+  if match(@/, '\<\(.*\)\>')
+    let str = matchstr(@/, '\<\(.*\)\>')
+  else
+    let str = @/
+  endif
   " Make first char lower case,
   " so that the :Subvert replace is always case-aware.
   return tolower(str[0]) . str[1:]
+endfunction
+
+function! GetSubstituteTerm2()
+  " Remove the word boundary atoms
+  " that will be present when searching with * and #.
+  if match(@/, '\<\(.*\)\>')
+    return matchstr(@/, '\<\(.*\)\>')
+  endif
+  return @/
 endfunction
 
 " :SW command.
@@ -790,6 +803,7 @@ nnoremap <leader>rw :%SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()
 " - replace within file (no confirmation)
 nnoremap <leader>rn :%SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
 vnoremap <leader>rn :SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
+nnoremap <leader>rN :%s/<c-r>=GetSubstituteTerm2()<cr>/<c-r>=GetSubstituteTerm2()<cr>/g<left><left>
 " - replace within line
 nnoremap <leader>rl :SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
 " - replace within paragraph
