@@ -283,7 +283,7 @@ augroup AutoSaveFolds
   " hack 2: after loading view, it seems that the cursor bugs, when going up and down.
   " Going right and left after loadview seems to fix it.
   "
-  autocmd FileType typescript loadview | call feedkeys('lh')
+  autocmd FileType typescript silent! loadview | call feedkeys('lh')
 augroup END
 
 function! s:SneakColor()
