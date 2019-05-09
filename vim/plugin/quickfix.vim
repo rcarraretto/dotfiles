@@ -1,4 +1,5 @@
 function! s:OpenNewLeftSplit()
+  " :h CTRL-W_<CR>
   execute "normal \<c-w>\<cr>\<c-w>H"
   cclose
   botright copen
