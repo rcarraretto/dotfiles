@@ -556,6 +556,7 @@ function! s:SysOpen(filename)
     return
   endif
 endfunction
+command! -nargs=1 -complete=file SysOpen call s:SysOpen(<q-args>)
 
 function! FormatJson()
   if &ft !=# 'json'
@@ -863,6 +864,15 @@ endif
 
 " Ack.vim
 let g:ack_apply_qmappings = 0
+
+" fzf
+" extend actions with mapping to open in system editor
+let g:fzf_action = {
+\ 'ctrl-t': 'tab split',
+\ 'ctrl-x': 'split',
+\ 'ctrl-v': 'vsplit',
+\ 'ctrl-s': 'SysOpen'
+\ }
 
 " Netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
