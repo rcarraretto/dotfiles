@@ -5,6 +5,7 @@ set nocompatible
 
 set rtp+=/usr/local/opt/fzf
 set rtp+=$HOME/work/dotfiles-private/vim
+set rtp+=$HOME/work/tsuquyomi
 
 if $CUSTOM_NETRW
   set rtp+=$HOME/work/netrw
@@ -62,7 +63,7 @@ Plug 'klen/python-mode'
 Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
-Plug 'Quramy/tsuquyomi'
+" Plug 'Quramy/tsuquyomi'
 Plug 'jparise/vim-graphql'
 Plug 'ianks/vim-tsx'
 Plug 'udalov/kotlin-vim'
