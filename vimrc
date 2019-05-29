@@ -220,7 +220,6 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
-  autocmd FileType fugitive call s:FugitiveMappings()
 augroup END
 
 augroup SetFiletype
@@ -261,6 +260,10 @@ augroup QuickfixMapping
   " Because I remapped <cr> in normal mode (nnoremap <cr> :),
   " On quickfix, make 'o' open the target line
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
+augroup END
+
+augroup FugitiveMapping
+  autocmd BufEnter * call s:FugitiveMappings()
 augroup END
 
 augroup AutoSaveFolds
@@ -336,9 +339,18 @@ function! s:NetrwMappings()
 endfunction
 
 function! s:FugitiveMappings()
+  if !exists('b:fugitive_type')
+    return
+  endif
+  if exists('b:mapping_fugitive_cr')
+    return
+  endif
+  let b:mapping_fugitive_cr = maparg("<cr>", "n")
+  if empty(b:mapping_fugitive_cr)
+    return
+  endif
   " map 'o' to what <cr> is in fugitive (open file in existing window)
-  execute "nnoremap <buffer> <silent> o " . maparg("<cr>", "n")
-
+  execute "nnoremap <buffer> <silent> o " . b:mapping_fugitive_cr
   " unmap <cr> for fugitive buffer,
   " which will make <cr> fallback to global behavior, i.e.,
   " nnoremap <cr> :
