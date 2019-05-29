@@ -56,6 +56,8 @@ Plug 'Julian/vim-textobj-variable-segment'
 Plug 'tpope/vim-sleuth'
 " change word casing, case-aware substitute
 Plug 'tpope/vim-abolish'
+" readline style for command line mode and insert mode
+Plug 'tpope/vim-rsi'
 Plug 'junegunn/vim-easy-align'
 
 " >>> Language specific <<<
