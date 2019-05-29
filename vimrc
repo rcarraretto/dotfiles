@@ -400,6 +400,15 @@ function! s:TrimWhitespace()
   call setpos('.', save_cursor)
 endfunction
 
+function! RemoveViews()
+  let output = system('rm -rf ~/.vim/view/*')
+  if v:shell_error
+    echom 'RemoveViews: Error: ' . output
+  else
+    echom 'Views removed'
+  endif
+endfunction
+
 function! s:ToggleFolding()
   if foldclosed(line('.')) == -1
     " Fold is open.
