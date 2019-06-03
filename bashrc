@@ -13,6 +13,9 @@ export HISTSIZE=1000
 
 source ~/.bash_aliases
 
+# Dotfiles bin
+export PATH="$HOME/work/dotfiles/bin:$PATH"
+
 # Base 16
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1"  ] && [ -s $BASE16_SHELL/profile_helper.sh  ] && eval "$($BASE16_SHELL/profile_helper.sh)"
@@ -42,6 +45,10 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
 fi
+
+# After each command, refresh tmux status bar,
+# since the current git branch is being displayed on it.
+PROMPT_COMMAND="tmux refresh-client -S &> /dev/null; $PROMPT_COMMAND"
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+pane_current_path="$(tmux display-message -p -F "#{pane_current_path}")"
+branch=$(cd $pane_current_path; git rev-parse --abbrev-ref HEAD 2> /dev/null)
+tmux_status="#[fg=colour20] $(timer)"
+if [ "$branch" ]; then
+  tmux_status="#[fg=colour13] ⎇ $branch #[fg=colour20]|$tmux_status"
+fi
+echo $tmux_status
