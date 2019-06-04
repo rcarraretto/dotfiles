@@ -69,6 +69,8 @@ Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 Plug 'ianks/vim-tsx'
 Plug 'udalov/kotlin-vim'
+" View colored output of shell commands
+Plug 'chrisbra/Colorizer'
 
 call plug#end()
 " }}}
