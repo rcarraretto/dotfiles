@@ -364,7 +364,8 @@ function! s:FugitiveMappings()
   if empty(mapping) || !mapping['buffer']
     return
   endif
-  let b:mapping_fugitive_cr = maparg("<cr>", "n")
+  " e.g. ':<C-U>exe <SID>BlameCommit("exe ''norm q''<Bar>edit")<CR>
+  let b:mapping_fugitive_cr = substitute(maparg("<cr>", "n"), "|", "<bar>", 'g')
   " map 'o' to what <cr> is in fugitive (open file in existing window)
   execute "nnoremap <buffer> <silent> o " . b:mapping_fugitive_cr
   " unmap <cr> for fugitive buffer,
