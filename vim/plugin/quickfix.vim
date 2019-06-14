@@ -44,6 +44,11 @@ augroup Qf
   autocmd FileType qf call s:RegisterMappings() | call s:AdjustWinHeight(3, 10)
 augroup END
 
+function! s:FilterBySearchPattern()
+  call setqflist(filter(getqflist(), "v:val['text'] =~ '" . @/ . "'"))
+endfunction
+command! Qfilter call s:FilterBySearchPattern()
+
 " Toggle List plugin {{{
 " Adapted from https://github.com/milkypostman/vim-togglelist
 function! s:GetBufferList()
