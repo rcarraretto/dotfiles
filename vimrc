@@ -322,7 +322,7 @@ augroup DisableE211
   " So just do a hack to disable this behavior.
   " https://stackoverflow.com/a/52781365/2277505
   autocmd!
-  autocmd FileChangedShell * execute
+  autocmd FileChangedShell * call s:FileChangedShell(expand("<afile>:p"))
 augroup END
 
 function! s:SneakColor()
@@ -601,6 +601,43 @@ function! s:EditFileUpwards(filename)
     return
   endif
   call s:EditFile(path)
+endfunction
+
+" Adapted from:
+" https://vim.fandom.com/wiki/File_no_longer_available_-_mark_buffer_modified
+function s:FileChangedShell(name)
+  let msg = 'File "'.a:name.'"'
+  let v:fcs_choice = ''
+  if v:fcs_reason == "deleted"
+    " Set the buffer as 'readonly', instead of displaying E211.
+    " By doing this, we can prevent the file from being accidentally saved in vim
+    " and thus inadvertently put back into the file system.
+    call setbufvar(expand(a:name), '&readonly', '1')
+    " Set the buffer as 'modified', so if we quit vim,
+    " we're aware that changes will be lost, if we don't save it.
+    call setbufvar(expand(a:name), '&modified', '1')
+  elseif v:fcs_reason == "time"
+    let msg .= " timestamp changed"
+  elseif v:fcs_reason == "mode"
+    let msg .= " permissions changed"
+  elseif v:fcs_reason == "changed"
+    let msg .= " contents changed"
+    let v:fcs_choice = "ask"
+  elseif v:fcs_reason == "conflict"
+    let msg .= " CONFLICT --"
+    let msg .= " is modified, but"
+    let msg .= " was changed outside Vim"
+    let v:fcs_choice = "ask"
+    echohl ErrorMsg
+  else  " unknown values (future Vim versions?)
+    let msg .= " FileChangedShell reason="
+    let msg .= v:fcs_reason
+    let v:fcs_choice = "ask"
+    echohl ErrorMsg
+  endif
+  redraw!
+  echomsg msg
+  echohl None
 endfunction
 
 function! s:SysOpen(filename)
