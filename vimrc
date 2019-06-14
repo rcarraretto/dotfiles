@@ -268,6 +268,12 @@ augroup FugitiveMapping
   autocmd BufEnter * call s:FugitiveMappings()
 augroup END
 
+augroup RevertPluginSideEffects
+  autocmd!
+  " unmap what rsi.vim did
+  autocmd VimEnter * cunmap <c-f>
+augroup END
+
 augroup AutoSaveFolds
   " Whitelist of filetypes that will have folding saved/restored.
   "
