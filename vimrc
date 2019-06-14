@@ -306,7 +306,7 @@ augroup TmuxGitStatus
   " Refresh tmux status bar, since it shows git branch information.
   " Each buffers has its own current working directory.
   autocmd!
-  autocmd BufEnter,DirChanged * silent !tmux refresh-client -S
+  autocmd BufEnter,DirChanged * silent call system('tmux refresh-client -S')
 augroup END
 
 function! s:SneakColor()
