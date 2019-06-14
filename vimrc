@@ -360,10 +360,11 @@ function! s:FugitiveMappings()
   if exists('b:mapping_fugitive_cr')
     return
   endif
-  let b:mapping_fugitive_cr = maparg("<cr>", "n")
-  if empty(b:mapping_fugitive_cr)
+  let mapping = maparg("<cr>", "n", 0, 1)
+  if empty(mapping) || !mapping['buffer']
     return
   endif
+  let b:mapping_fugitive_cr = maparg("<cr>", "n")
   " map 'o' to what <cr> is in fugitive (open file in existing window)
   execute "nnoremap <buffer> <silent> o " . b:mapping_fugitive_cr
   " unmap <cr> for fugitive buffer,
