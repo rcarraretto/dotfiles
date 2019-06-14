@@ -309,6 +309,22 @@ augroup TmuxGitStatus
   autocmd BufEnter,DirChanged * silent call system('tmux refresh-client -S')
 augroup END
 
+augroup DisableE211
+  " Vim sends a warning when a file was initially opened, but then deleted outside of vim.
+  "
+  " This happpens to me every once in a while
+  " when switching git branches while having many buffers open.
+  "
+  " I find this a bit disrupting when I'm moving back and forth from vim
+  " and I have to see this warning every time I come back to it.
+  " At the end, I'm forced to break my flow and close the buffers.
+  "
+  " So just do a hack to disable this behavior.
+  " https://stackoverflow.com/a/52781365/2277505
+  autocmd!
+  autocmd FileChangedShell * execute
+augroup END
+
 function! s:SneakColor()
   " ctermbg=magenta, ctermbg=16, ctermbg=17 look good
   hi Sneak ctermfg=00 ctermbg=17
