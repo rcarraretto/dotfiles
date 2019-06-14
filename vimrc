@@ -918,6 +918,8 @@ let g:fzf_action = {
 " Netrw
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 let g:netrw_banner = 0
+" when previewing files with 'p', split vertically
+let g:netrw_preview = 1
 " allow netrw to remove non-empty local directories
 let g:netrw_localrmdir = 'rm -r'
 
