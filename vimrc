@@ -222,6 +222,8 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
+  " when calling setqflist(), the status line is reset
+  autocmd FileType qf call s:SetStatusline()
 augroup END
 
 augroup SetFiletype
