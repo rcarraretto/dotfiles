@@ -834,6 +834,7 @@ nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
 nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/tmp.txt")<cr>
 nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/vim.txt")<cr>
+nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
 nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
