@@ -166,6 +166,11 @@ function! s:SetStatusline(...)
     setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
     setlocal statusline+=\ \ \  " separator
   else
+    let showFt = index(['qf', ''], &filetype) == -1
+    if showFt
+      setlocal statusline+=\ \|\ %{&ft}\ \|
+      setlocal statusline+=\ \  " separator
+    endif
     setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
     setlocal statusline+=\ \|\  " separator
     setlocal statusline+=col\ %-3.3v  " column number
