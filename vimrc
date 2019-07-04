@@ -21,7 +21,6 @@ Plug 'danielwe/base16-vim', { 'commit': '4533d1ccab2483deabc743e51321d29a259a819
 " >>> Search <<<
 Plug 'mileszs/ack.vim'
 Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-sneak'
 
 " >>> Text editing (Part 1) <<<
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -325,16 +324,6 @@ augroup DisableE211
   autocmd!
   autocmd FileChangedShell * call s:FileChangedShell(expand("<afile>:p"))
 augroup END
-
-function! s:SneakColor()
-  " ctermbg=magenta, ctermbg=16, ctermbg=17 look good
-  hi Sneak ctermfg=00 ctermbg=17
-endfunction
-augroup Sneak
-  autocmd!
-  autocmd! ColorScheme * call s:SneakColor()
-augroup END
-call s:SneakColor()
 
 augroup KarabinerEOL
   autocmd!
@@ -755,7 +744,7 @@ nnoremap <cr> :
 xnoremap <cr> :
 
 " Stop highlighting
-nnoremap <silent> gh :noh <bar> call sneak#cancel()<cr>
+nnoremap <silent> gh :noh<cr>
 
 " Save
 nnoremap <c-l> <esc>:w<cr>
