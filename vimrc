@@ -419,7 +419,8 @@ function! s:DirvishRm()
   echohl Statement
   let ok = input('Remove ' . path . '? ')
   echohl NONE
-  redraw " clear input
+  " clear input
+  normal! :<esc>
   if ok !=# 'y'
     echo 'skipped'
     return
