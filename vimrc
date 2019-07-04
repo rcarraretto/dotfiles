@@ -149,6 +149,14 @@ function! s:SetStatusline(...)
   if &ft == 'qf'
     setlocal statusline+=%{Qftitle()}
   endif
+  let showSymLink = index(['help', 'fugitive', 'git'], &filetype) == -1
+  if showSymLink
+    " /path/to/something/ => /path/to/something
+    let path = substitute(expand('%'), '\(.*\)/$', '\1', '')
+    if path !=# resolve(expand('%'))
+      setlocal statusline+=[%{resolve(expand('%'))}]
+    endif
+  endif
   setlocal statusline+=%=  " left/right separator
   if isLeaving
     if &ft == 'qf'
