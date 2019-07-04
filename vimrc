@@ -386,16 +386,19 @@ function! s:DirvishMappings()
   " map 's' to what 'o' is in dirvish (open file in a horizontal split)
   nnoremap <buffer> <silent> s :<c-u>call dirvish#open("split", 1)<cr>
   " rename
-  nnoremap <buffer> <silent> R :<c-u>call <sid>DirvishRename(getline('.'))<cr>
+  nnoremap <buffer> <silent> R :<c-u>call <sid>DirvishRename()<cr>
   " mkdir
   " - add <nowait> because of 'ds' (Dsurround from surround.vim)
   " - https://vi.stackexchange.com/a/2774
   nnoremap <buffer> <silent> <nowait> d :<c-u>call <sid>DirvishMkdir()<cr>
+  " rm
+  nnoremap <buffer> <silent> <nowait> D :<c-u>call <sid>DirvishRm()<cr>
 endfunction
 
-function! s:DirvishRename(path)
-  let new_path = input('Moving ' . a:path . ' to: ', a:path, 'file')
-  call rename(a:path, new_path)
+function! s:DirvishRename()
+  let path = getline('.')
+  let new_path = input('Moving ' . path . ' to: ', path, 'file')
+  call rename(path, new_path)
   silent edit
   execute "normal! g`\""
 endfunction
@@ -407,6 +410,35 @@ function! s:DirvishMkdir()
   endif
   let new_path = @% . dirname
   call mkdir(new_path)
+  silent edit
+  execute "normal! g`\""
+endfunction
+
+function! s:DirvishRm()
+  let path = getline('.')
+  echohl Statement
+  let ok = input('Remove ' . path . '? ')
+  echohl NONE
+  redraw " clear input
+  if ok !=# 'Y'
+    echo 'skipped'
+    return
+  endif
+  if isdirectory(path)
+    let output = system('rm -r ' . path)
+    if v:shell_error
+      echohl Error
+      echom 'DirvishRm: Error: ' . output
+      echohl NONE
+    endif
+  elseif filereadable(path)
+    call delete(path)
+  else
+    echohl Error
+    echom 'File does not exist'
+    echohl NONE
+    return
+  endif
   silent edit
   execute "normal! g`\""
 endfunction
