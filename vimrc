@@ -7,7 +7,7 @@ set rtp+=/usr/local/opt/fzf
 set rtp+=$HOME/work/dotfiles-private/vim
 set rtp+=$HOME/work/tsuquyomi
 
-if $CUSTOM_NETRW
+if $USE_NETRW
   set rtp+=$HOME/work/netrw
 endif
 
@@ -45,6 +45,10 @@ Plug 'tpope/vim-fugitive', { 'commit': '60eac8c97457af5a96eb06ad4b564e4c813d806e
 Plug 'tpope/vim-rhubarb'
 " debugging vim / vimscript
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
+" directory viewer (replaces netrw)
+if !$USE_NETRW
+  Plug 'justinmk/vim-dirvish'
+endif
 
 " >>> Text editing (Part 2) <<<
 Plug 'kana/vim-textobj-user'
@@ -198,7 +202,7 @@ augroup vimrcEx
         \ endif
 augroup END
 
-if $CUSTOM_NETRW
+if $USE_NETRW
   augroup CancelNetrw
     autocmd VimEnter * silent! autocmd! FileExplorer
   augroup END
@@ -222,6 +226,7 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
+  autocmd FileType dirvish call s:DirvishConfig()
   " when calling setqflist(), the status line is reset
   autocmd FileType qf call s:SetStatusline()
 augroup END
@@ -360,6 +365,66 @@ function! s:NetrwMappings()
   " map 'x' to what 'o' is in netrw (open file in a horizontal split)
   execute "nnoremap <buffer> <silent> x " . s:mapping_netrw_o
 endfunction
+
+function! s:DirvishConfig()
+  setlocal nonumber
+  setlocal norelativenumber
+  call s:DirvishMappings()
+endfunction
+
+function! s:DirvishMappings()
+  let mapping = maparg("<cr>", "n", 0, 1)
+  if empty(mapping) || !mapping['buffer']
+    " if there is no nmap <buffer> <cr>,
+    " then this function was already executed
+    return
+  endif
+  " keep <cr> as it normally is (nnoremap <cr> :)
+  nunmap <buffer> <cr>
+  " map 'o' to what <cr> is in dirvish (open file)
+  nnoremap <buffer> <silent> o :<c-u>call dirvish#open("edit", 0)<cr>
+  " map 's' to what 'o' is in dirvish (open file in a horizontal split)
+  nnoremap <buffer> <silent> s :<c-u>call dirvish#open("split", 1)<cr>
+  " rename
+  nnoremap <buffer> <silent> R :<c-u>call <sid>DirvishRename(getline('.'))<cr>
+  " mkdir
+  " - add <nowait> because of 'ds' (Dsurround from surround.vim)
+  " - https://vi.stackexchange.com/a/2774
+  nnoremap <buffer> <silent> <nowait> d :<c-u>call <sid>DirvishMkdir()<cr>
+endfunction
+
+function! s:DirvishRename(path)
+  let new_path = input('Moving ' . a:path . ' to: ', a:path, 'file')
+  call rename(a:path, new_path)
+  silent edit
+  execute "normal! g`\""
+endfunction
+
+function! s:DirvishMkdir()
+  let dirname = input('Mkdir: ')
+  if !len(dirname)
+    return
+  endif
+  let new_path = @% . dirname
+  call mkdir(new_path)
+  silent edit
+  execute "normal! g`\""
+endfunction
+
+if !$USE_NETRW
+  " Replacement for netrw 'gx',
+  " but just for urls
+  function! s:OpenUrl()
+    let url = expand('<cfile>')
+    if url !~ 'http\(s\)\?:\/\/'
+      echo 'Not a url: ' . url
+      return
+    endif
+    silent exec "!open '" . url . "'"
+    redraw!
+  endfunction
+  nnoremap gx :call <sid>OpenUrl()<cr>
+endif
 
 function! s:FugitiveMappings()
   if !exists('b:fugitive_type')
@@ -962,10 +1027,18 @@ let g:fzf_action = {
 \ }
 
 " Netrw
+" cancel netrw altogether
+if !$USE_NETRW
+  let g:loaded_netrwPlugin = 1
+endif
 let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
 let g:netrw_banner = 0
 " when previewing files with 'p', split vertically
 let g:netrw_preview = 1
+
+" Dirvish
+" sort: folders first
+let g:dirvish_mode = ':sort ,^.*[\/],'
 
 " Dispatch
 let g:dispatch_no_maps = 1
