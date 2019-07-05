@@ -127,7 +127,7 @@ set statusline=%f\  " filename
 set statusline+=%m  " modified flag
 set statusline+=%r  " read only flag
 set statusline+=%=  " left/right separator
-set statusline+=%1.4l/%1.4L\  " line number / number of lines
+set statusline+=%4.4l/%-4.4L  " line number / number of lines
 set statusline+=\ \|\  " separator
 set statusline+=col\ %-3.3v  " column number
 set statusline+=\  " separator
@@ -161,7 +161,7 @@ function! s:SetStatusline(...)
   setlocal statusline+=%=  " left/right separator
   if isLeaving
     if &ft == 'qf'
-      setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
+      setlocal statusline+=%4.4l/%-4.4L  " line number / number of lines
       setlocal statusline+=\ \|\  " separator
     endif
     setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
@@ -170,9 +170,9 @@ function! s:SetStatusline(...)
     let showFt = index(['qf', ''], &filetype) == -1
     if showFt
       setlocal statusline+=\ \|\ %{&ft}\ \|
-      setlocal statusline+=\ \  " separator
+      setlocal statusline+=\  " separator
     endif
-    setlocal statusline+=%1.4l/%1.4L\  " line number / number of lines
+    setlocal statusline+=%4.4l/%-4.4L " line number / number of lines
     setlocal statusline+=\ \|\  " separator
     setlocal statusline+=col\ %-3.3v  " column number
     setlocal statusline+=\  " separator
