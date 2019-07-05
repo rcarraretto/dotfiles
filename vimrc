@@ -43,6 +43,7 @@ Plug 'janko-m/vim-test'
 Plug 'tpope/vim-fugitive', { 'commit': '60eac8c97457af5a96eb06ad4b564e4c813d806e' }
 " github
 Plug 'tpope/vim-rhubarb'
+Plug 'cohama/agit.vim'
 " debugging vim / vimscript
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
 " directory viewer (replaces netrw)
@@ -199,6 +200,9 @@ highlight vimError ctermfg=red ctermbg=NONE cterm=underline
 " e.g., typescript syntax error
 highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
+highlight agitDiffAdd ctermfg=black ctermbg=darkgreen cterm=none
+highlight agitDiffRemove ctermfg=red ctermbg=lightred cterm=none
+
 " }}}
 
 " Auto commands ---------------------- {{{
@@ -240,6 +244,7 @@ augroup FTOptions
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType netrw call s:NetrwMappings()
   autocmd FileType dirvish call s:DirvishConfig()
+  autocmd FileType agit call s:AgitConfig()
   " when calling setqflist(), the status line is reset
   autocmd FileType qf call s:SetStatusline()
 augroup END
@@ -250,15 +255,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead .ignore set filetype=conf
 augroup END
 
-augroup CursorLine
-  autocmd!
-  autocmd VimEnter * setlocal cursorline
-  autocmd WinEnter * setlocal cursorline
-  autocmd BufWinEnter * setlocal cursorline
-  autocmd WinLeave * setlocal nocursorline
-augroup END
-
-augroup ColorColumn
+augroup WinConfig
   autocmd!
   autocmd BufEnter,FocusGained,VimEnter,WinEnter * call s:OnWinEnter()
   autocmd FocusLost,WinLeave * call s:OnWinLeave()
@@ -472,6 +469,19 @@ if !$USE_NETRW
   nnoremap gx :call <sid>OpenUrl()<cr>
 endif
 
+function! s:AgitConfig()
+  let mapping = maparg("<cr>", "n", 0, 1)
+  if empty(mapping) || !mapping['buffer']
+    " if there is no nmap <buffer> <cr>,
+    " then this function was already executed
+    return
+  endif
+  " keep <cr> as it normally is (nnoremap <cr> :)
+  nunmap <buffer> <cr>
+  " map 'o' to what <cr> is in Agit (open commit)
+  nnoremap <buffer> o <Plug>(agit-show-commit)
+endfunction
+
 function! s:FugitiveMappings()
   if !exists('b:fugitive_type')
     return
@@ -503,10 +513,17 @@ function! s:ToggleRelativeNumber()
 endfunction
 
 function! s:ShouldColorColumn()
-  return index(['qf', 'diff', 'undotree'], &filetype) == -1
+  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff'], &filetype) == -1
+endfunction
+
+function! s:ShouldCursorLine()
+  return index(['agit_diff'], &filetype) == -1
 endfunction
 
 function! s:OnWinEnter()
+  if s:ShouldCursorLine()
+    setlocal cursorline
+  endif
   call s:SetStatusline()
   if s:ShouldColorColumn()
     let &l:colorcolumn='0'
@@ -514,6 +531,7 @@ function! s:OnWinEnter()
 endfunction
 
 function! s:OnWinLeave()
+  setlocal nocursorline
   call s:SetStatusline(1)
   if s:ShouldColorColumn()
     let &l:colorcolumn=join(range(1, 255), ',')
@@ -1018,6 +1036,7 @@ nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>go :Gcommit<cr>
 nnoremap <leader>gh :<c-r>=line('.')<cr>Gbrowse<cr>
 vnoremap <leader>gh :Gbrowse<cr>
+nnoremap <leader>gg :Agit<cr>
 
 " Format paragraph
 nnoremap <space>\ gqip
