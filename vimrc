@@ -999,6 +999,7 @@ nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr><c-f>F/l
 " copy path to clipboard
 nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
+nnoremap <leader>cP :let @" = expand("%:p") \| let @* = expand("%:p")<cr>
 
 " Searching
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
