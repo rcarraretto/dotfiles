@@ -257,7 +257,7 @@ augroup END
 
 augroup WinConfig
   autocmd!
-  autocmd BufEnter,FocusGained,VimEnter,WinEnter * call s:OnWinEnter()
+  autocmd BufEnter,FocusGained,WinEnter * call s:OnWinEnter()
   autocmd FocusLost,WinLeave * call s:OnWinLeave()
 augroup END
 
