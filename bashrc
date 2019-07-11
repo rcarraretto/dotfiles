@@ -39,7 +39,9 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh"  ] && \. "$NVM_DIR/nvm.sh"
 
+# fzf
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # git completion
 if [ -f ~/.git-completion.bash ]; then
