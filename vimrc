@@ -285,10 +285,9 @@ augroup FugitiveMapping
   autocmd BufEnter * call s:FugitiveMappings()
 augroup END
 
-augroup RevertPluginSideEffects
+augroup VimEnterCustom
   autocmd!
-  " unmap what rsi.vim did
-  autocmd VimEnter * cunmap <c-f>
+  autocmd VimEnter * call s:VimEnter()
 augroup END
 
 augroup AutoSaveFolds
@@ -350,6 +349,14 @@ augroup END
 " }}}
 
 " Functions ---------------------- {{{
+
+function! s:VimEnter()
+  " Revert plugin side effects
+  " rsi.vim
+  cunmap <c-f>
+  " dirvish.vim
+  unmap -
+endfunction
 
 function! s:NetrwMappings()
   " note:
