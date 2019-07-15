@@ -556,6 +556,9 @@ function! QuickfixFilenames()
 endfunction
 
 function! s:TrimWhitespace()
+  if &modifiable == 0
+    return
+  endif
   let save_cursor = getpos('.')
   %s/\s\+$//e
   call setpos('.', save_cursor)
