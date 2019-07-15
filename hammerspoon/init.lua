@@ -165,11 +165,28 @@ local decVolumeSoft = function()
   changeVolume(-deltaVolSoft)
 end
 
-hs.hotkey.bind(hyper, 'k', hs.spotify.playpause)
 hs.hotkey.bind(hyper, ']', incVolume)
 hs.hotkey.bind(hyper, '[', decVolume)
 hs.hotkey.bind(shift_hyper, ']', incVolumeSoft)
 hs.hotkey.bind(shift_hyper, '[', decVolumeSoft)
+
+
+-- Spotify track control
+local showTrack = function()
+  hs.alert.closeAll()
+  hs.alert.show(hs.spotify.getCurrentTrack())
+end
+
+hs.hotkey.bind(hyper, 'k', hs.spotify.playpause)
+
+hs.hotkey.bind(hyper, ',', function()
+  hs.spotify.previous()
+  showTrack()
+end)
+hs.hotkey.bind(hyper, '.', function()
+  hs.spotify.next()
+  showTrack()
+end)
 
 
 -- Reconnect wifi
