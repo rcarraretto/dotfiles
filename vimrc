@@ -725,6 +725,13 @@ function! s:EditFile(path)
 endfunction
 
 function! s:EditFileUpwards(filename)
+  if filereadable(a:filename)
+    " When exploring the root folder with Dirvish and
+    " the file is at the root.
+    " findfile() does not seem to work with Dirvish in that case.
+    call s:EditFile(a:filename)
+    return
+  endif
   let path = findfile(a:filename, '.;' . $HOME)
   if len(path) == 0
     echo 'File not found: ' . a:filename
