@@ -356,7 +356,11 @@ function! s:VimEnter()
   " rsi.vim
   cunmap <c-f>
   " dirvish.vim
-  unmap -
+  try
+    unmap -
+  catch /E31/
+    " dirvish not running
+  endtry
 endfunction
 
 function! s:NetrwMappings()
