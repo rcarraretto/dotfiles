@@ -200,6 +200,7 @@ highlight vimError ctermfg=red ctermbg=NONE cterm=underline
 " e.g., typescript syntax error
 highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
+highlight agitDiff ctermfg=black ctermbg=white cterm=none
 highlight agitDiffAdd ctermfg=black ctermbg=151 cterm=none
 highlight agitDiffRemove ctermfg=red ctermbg=lightred cterm=none
 
