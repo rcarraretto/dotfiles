@@ -417,6 +417,8 @@ function! s:DirvishMappings()
   nnoremap <buffer> <silent> <nowait> D :<c-u>call <sid>DirvishRm()<cr>
   " implode
   nnoremap <buffer> <silent> I :<c-u>call <sid>DirvishImplode()<cr>
+  " mv
+  nnoremap <buffer> <silent> mv :<c-u>call <sid>DirvishMv()<cr>
 endfunction
 
 function! s:DirvishRename()
@@ -497,6 +499,43 @@ function s:DirvishImplode()
   silent edit
   execute "normal! g`\""
 endfunction
+
+function! s:DirvishMv()
+  let dirpath = getline('.')
+  if !isdirectory(dirpath)
+    echohl Statement
+    echom 'DirvishMv: target is not a directory: ' . dirpath
+    echohl NONE
+    return
+  endif
+  if argc() < 2
+    echohl Statement
+    echom "DirvishMv: no file has been selected (use 'x' to select a file)"
+    echohl NONE
+    return
+  endif
+  let filepath = argv(1)
+  let filename = fnamemodify(filepath, ':t')
+  let dirname = fnamemodify(dirpath[:-2], ':t')
+  echohl Statement
+  let ok = input("Move '" . filename . "' to directory '" . dirname . "'? ")
+  echohl NONE
+  " clear input
+  normal! :<esc>
+  if ok !=# 'y'
+    echo 'skipped'
+    return
+  endif
+  let cmd = 'mv ' . filepath . ' ' . dirpath
+  let output = system(cmd)
+  if v:shell_error
+    echohl Error
+    echom 'DirvishMv: Error: ' . output
+    echohl NONE
+  endif
+  execute "edit! " . dirpath
+endfunction
+
 
 if !$USE_NETRW
   " Replacement for netrw 'gx',
