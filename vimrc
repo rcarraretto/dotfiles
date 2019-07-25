@@ -415,6 +415,8 @@ function! s:DirvishMappings()
   nnoremap <buffer> <silent> <nowait> d :<c-u>call <sid>DirvishMkdir()<cr>
   " rm
   nnoremap <buffer> <silent> <nowait> D :<c-u>call <sid>DirvishRm()<cr>
+  " implode
+  nnoremap <buffer> <silent> I :<c-u>call <sid>DirvishImplode()<cr>
 endfunction
 
 function! s:DirvishRename()
@@ -461,6 +463,36 @@ function! s:DirvishRm()
     echom 'File does not exist'
     echohl NONE
     return
+  endif
+  silent edit
+  execute "normal! g`\""
+endfunction
+
+" Move contents of folder to parent folder
+function s:DirvishImplode()
+  let path = getline('.')
+  if !isdirectory(path)
+    echohl Statement
+    echom 'DirvishImplode: not a directory: ' . path
+    echohl NONE
+    return
+  endif
+  let dirname = fnamemodify(path[:-2], ':t')
+  echohl Statement
+  let ok = input("Implode directory '" . dirname . "'? ")
+  echohl NONE
+  " clear input
+  normal! :<esc>
+  if ok !=# 'y'
+    echo 'skipped'
+    return
+  endif
+  let cmd = 'mv ' . path . '* ' . @% . ' && rmdir ' . path
+  let output = system(cmd)
+  if v:shell_error
+    echohl Error
+    echom 'DirvishImplode: Error: ' . output
+    echohl NONE
   endif
   silent edit
   execute "normal! g`\""
