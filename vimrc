@@ -500,25 +500,38 @@ function s:DirvishImplode()
   execute "normal! g`\""
 endfunction
 
+function! ArgList()
+  let i = 0
+  let l = []
+  while i < argc()
+    call add(l, argv(i))
+    let i = i + 1
+  endwhile
+  return l
+endfunction
+
 function! s:DirvishMv()
   let dirpath = getline('.')
   if !isdirectory(dirpath)
-    echohl Statement
-    echom 'DirvishMv: target is not a directory: ' . dirpath
-    echohl NONE
-    return
+    let dirpath = fnamemodify(dirpath, ':h') . '/'
+    if !isdirectory(dirpath)
+      echohl Statement
+      echom 'DirvishMv: target is not a directory: ' . dirpath
+      echohl NONE
+      return
+    endif
   endif
-  if argc() < 2
+  let filepaths = filter(ArgList(), 'filereadable(v:val) && !isdirectory(v:val)')
+  if len(filepaths) < 1
     echohl Statement
     echom "DirvishMv: no file has been selected (use 'x' to select a file)"
     echohl NONE
     return
   endif
-  let filepath = argv(1)
-  let filename = fnamemodify(filepath, ':t')
+  let filenames = map(copy(filepaths), "\"'\" . fnamemodify(v:val, ':t') . \"'\"")
   let dirname = fnamemodify(dirpath[:-2], ':t')
   echohl Statement
-  let ok = input("Move '" . filename . "' to directory '" . dirname . "'? ")
+  let ok = input("Move " . join(filenames, ', ') . " to directory '" . dirname . "'? ")
   echohl NONE
   " clear input
   normal! :<esc>
@@ -526,13 +539,14 @@ function! s:DirvishMv()
     echo 'skipped'
     return
   endif
-  let cmd = 'mv ' . filepath . ' ' . dirpath
+  let cmd = 'mv ' . join(filepaths, ' ') . ' ' . dirpath
   let output = system(cmd)
   if v:shell_error
     echohl Error
     echom 'DirvishMv: Error: ' . output
     echohl NONE
   endif
+  argdelete *
   execute "edit! " . dirpath
 endfunction
 
