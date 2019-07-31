@@ -65,7 +65,7 @@ Plug 'tpope/vim-rsi'
 Plug 'junegunn/vim-easy-align'
 
 " >>> Language specific <<<
-Plug 'klen/python-mode'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
