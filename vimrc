@@ -554,7 +554,7 @@ function! s:DirvishMv()
     echohl NONE
   endif
   argdelete *
-  execute "edit! " . dirpath
+  execute "Dirvish " . dirpath
 endfunction
 
 
