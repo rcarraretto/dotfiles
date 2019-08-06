@@ -521,17 +521,24 @@ function! s:DirvishMv()
       return
     endif
   endif
-  let filepaths = filter(ArgList(), 'filereadable(v:val) && !isdirectory(v:val)')
+  let cwd = getcwd() . '/'
+  let filepaths = filter(ArgList(), 'filereadable(v:val) || (isdirectory(v:val) && v:val != cwd)')
   if len(filepaths) < 1
     echohl Statement
     echom "DirvishMv: no file has been selected (use 'x' to select a file)"
     echohl NONE
     return
   endif
-  let filenames = map(copy(filepaths), "\"'\" . fnamemodify(v:val, ':t') . \"'\"")
-  let dirname = fnamemodify(dirpath[:-2], ':t')
+  function! s:shortname(path)
+    if isdirectory(a:path)
+      return "'" . fnamemodify(a:path[:-2], ':t') . "'"
+    endif
+    return "'" . fnamemodify(a:path, ':t') . "'"
+  endfunction
+  let filenames = map(copy(filepaths), 's:shortname(v:val)')
+  let dirname = s:shortname(dirpath)
   echohl Statement
-  let ok = input("Move " . join(filenames, ', ') . " to directory '" . dirname . "'? ")
+  let ok = input("Move " . join(filenames, ', ') . " to directory " . dirname . "? ")
   echohl NONE
   " clear input
   normal! :<esc>
