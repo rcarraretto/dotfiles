@@ -355,12 +355,6 @@ function! s:VimEnter()
   " Revert plugin side effects
   " rsi.vim
   cunmap <c-f>
-  " dirvish.vim
-  try
-    unmap -
-  catch /E31/
-    " dirvish not running
-  endtry
 endfunction
 
 function! s:NetrwMappings()
@@ -1107,7 +1101,6 @@ nnoremap <space>n :e <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>vs :vs <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>sp :sp <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>te :tabedit <c-r>=expand("%:h"). "/" <cr>
-nnoremap <leader>dk :e <c-r>=expand('%:h')<cr><cr>
 nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 " clone file
 nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr><c-f>F/l
