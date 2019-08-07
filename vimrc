@@ -123,15 +123,6 @@ set encoding=utf-8
 
 set shortmess+=A " no warning for existing swap file
 
-set statusline=%f\  " filename
-set statusline+=%m  " modified flag
-set statusline+=%r  " read only flag
-set statusline+=%=  " left/right separator
-set statusline+=%4.4l/%-4.4L  " line number / number of lines
-set statusline+=\ \|\  " separator
-set statusline+=col\ %-3.3v  " column number
-set statusline+=\  " separator
-
 function! Qftitle()
   return getqflist({'title': 1}).title
 endfunction
@@ -142,7 +133,20 @@ function! s:SetStatusline(...)
   endif
   let isLeaving = get(a:, 1, 0)
   let showFlags = index(['qf', 'help'], &filetype) == -1
-  setlocal statusline=%f\  " filename
+  let showRelativeFilename = index(['qf', 'help', 'dirvish'], &filetype) == -1
+  if showRelativeFilename
+    " Apparently %f doesn't always show the relative filename
+    " https://stackoverflow.com/a/45244610/2277505
+    " :h filename-modifiers
+    " :~ => Reduce file name to be relative to the home directory
+    " :. => Reduce file name to be relative to current directory
+    " expand('%:~:.') =>
+    " - expands the name of the current file, but prevents the expansion of the tilde (:~)
+    " - makes the path relative to the current working directory (:.)
+    setlocal statusline=%{expand('%:~:.')}\  " filename
+  else
+    setlocal statusline=%f\  " filename
+  endif
   if showFlags
     setlocal statusline+=%m  " modified flag
     setlocal statusline+=%r  " read only flag
