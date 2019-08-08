@@ -42,8 +42,18 @@ beforeEach(async () => {
 });
 endsnippet
 
+snippet imp "import from"
+import { ${1} } from '${2}';
+endsnippet
+
 snippet i_ "import lodash"
 import * as _ from 'lodash';
+endsnippet
+
+snippet func "function"
+function ${1}(${2}) {
+	${VISUAL}$0
+}
 endsnippet
 
 snippet cf "const function"
