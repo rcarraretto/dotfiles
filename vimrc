@@ -885,13 +885,14 @@ function! s:SysOpen(filename)
 endfunction
 command! -nargs=1 -complete=file SysOpen call s:SysOpen(<q-args>)
 
-function! FormatJson()
+function! s:JsonFormat()
   if &ft !=# 'json'
     echo 'Not a json file'
     return
   endif
   :%!python -m json.tool
 endfunction
+command! JsonFormat call s:JsonFormat()
 
 function! s:HighestWinnr()
   let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
