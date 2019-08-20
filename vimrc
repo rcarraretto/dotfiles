@@ -55,7 +55,10 @@ endif
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'beloglazov/vim-textobj-quotes'
+" text obj: e.g. seg_seg_seg, SegSegSeg
 Plug 'Julian/vim-textobj-variable-segment'
+" text obj: function arguments
+Plug 'vim-scripts/argtextobj.vim'
 " indentation
 Plug 'tpope/vim-sleuth'
 " change word casing, case-aware substitute
