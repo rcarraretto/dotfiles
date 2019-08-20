@@ -1034,7 +1034,6 @@ nnoremap <space>q :q<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
-nnoremap <silent> <space>. :call ToggleQuickfixList({'split': 'v'})<cr>
 nnoremap [g :colder<cr>
 nnoremap ]g :cnewer<cr>
 nnoremap <leader>da :AbortDispatch<cr>

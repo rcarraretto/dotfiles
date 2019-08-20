@@ -52,7 +52,7 @@ command! Qfilter call s:FilterBySearchPattern()
 " Adapted from
 " https://github.com/milkypostman/vim-togglelist
 " https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
-function! ToggleQuickfixList(...)
+function! ToggleQuickfixList()
   for bufnum in map(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'), 'v:val.bufnr')
     if bufwinnr(bufnum) != -1
       cclose
@@ -60,11 +60,7 @@ function! ToggleQuickfixList(...)
     endif
   endfor
   let winnr = winnr()
-  if a:0 ==# 1 && a:1['split'] ==# 'v'
-    exec "normal :copen\<cr>\<c-w>L"
-  else
-    botright copen
-  endif
+  botright copen
   if winnr() != winnr
     wincmd p
   endif
