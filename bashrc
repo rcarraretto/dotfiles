@@ -50,7 +50,9 @@ fi
 
 # After each command, refresh tmux status bar,
 # since the current git branch is being displayed on it.
-PROMPT_COMMAND="tmux refresh-client -S &> /dev/null; $PROMPT_COMMAND"
+if ! [[ "$PROMPT_COMMAND" =~ "tmux refresh-client" ]]; then
+  PROMPT_COMMAND="tmux refresh-client -S &> /dev/null; $PROMPT_COMMAND"
+fi
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC
