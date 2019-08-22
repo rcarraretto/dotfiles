@@ -238,6 +238,7 @@ augroup FTOptions
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType text setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal noexpandtab
+  autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker
   autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
@@ -262,7 +263,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
   autocmd BufNewFile,BufRead .ignore set filetype=conf
   " my own personal notes format
-  autocmd BufNewFile,BufRead *.ntx set filetype=ntx
+  autocmd BufNewFile,BufRead *.ntx,.todo set filetype=ntx
 augroup END
 
 augroup WinConfig
