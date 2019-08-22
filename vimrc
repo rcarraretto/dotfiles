@@ -236,7 +236,7 @@ endif
 augroup FTOptions
   autocmd!
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0
-  autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType text setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal noexpandtab
   autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript setlocal foldmethod=indent | setlocal foldlevel=20
