@@ -1060,9 +1060,8 @@ nnoremap <leader>ev :call <sid>EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :w <bar> :source %<cr>
 
-" Quickly edit some files and folders
-nnoremap <space>o :Files<cr>
-nnoremap <space>m :History<cr>
+" Browse files & search
+" quickly edit some files and folders
 nnoremap <leader>el :call <sid>EditFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
@@ -1074,15 +1073,30 @@ nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev.ntx")<cr>
 nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
+" edit syntax for the current filetype
 nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
+" browse files
+nnoremap <space>o :Files<cr>
+" browse history
+nnoremap <space>m :History<cr>
+" browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
+" search dotfiles
 nnoremap <leader>ad :Ack! --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
+" browse source code of vim plugins
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
 " browse Downloads, most recent first
 nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<cr>
-nnoremap <leader>oS :call <sid>SysOpen('<c-r>%')<cr>
+" search in project
+nnoremap <space>a :Ack! --hidden -Q ''<left>
+nnoremap <leader>aa :AckFromSearch<cr>
+nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
+vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
+" search in file (from visual mode)
+xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
+xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
@@ -1119,14 +1133,8 @@ nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr><c-f>F/l
 " copy path to clipboard
 nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
 nnoremap <leader>cP :let @" = expand("%:p") \| let @* = expand("%:p")<cr>
-
-" Searching
-nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
-vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
-nnoremap <space>a :Ack! --hidden -Q ''<left>
-nnoremap <leader>aa :AckFromSearch<cr>
-xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
-xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
+" open file in system view (e.g., pdf, image, csv)
+nnoremap <leader>oS :call <sid>SysOpen('<c-r>%')<cr>
 
 " Find and Replace / Find and Bulk Change
 "
