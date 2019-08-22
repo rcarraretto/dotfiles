@@ -261,6 +261,8 @@ augroup SetFiletype
   autocmd!
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
   autocmd BufNewFile,BufRead .ignore set filetype=conf
+  " my own personal notes format
+  autocmd BufNewFile,BufRead *.ntx set filetype=ntx
 augroup END
 
 augroup WinConfig
@@ -1067,7 +1069,7 @@ nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
 nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/tmp.txt")<cr>
-nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/vim.txt")<cr>
+nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev.ntx")<cr>
 nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
