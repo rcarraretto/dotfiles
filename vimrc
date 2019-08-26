@@ -192,7 +192,7 @@ function! s:SetStatusline(...)
     endif
     call s:SetStatuslineLineNums()  " line number / number of lines
     setlocal statusline+=\ \|\  " separator
-    setlocal statusline+=col\ %-3.3v  " column number
+    setlocal statusline+=col\ %-3.v  " column number
     setlocal statusline+=\  " separator
   endif
 endfunction
