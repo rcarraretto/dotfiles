@@ -130,6 +130,17 @@ function! Qftitle()
   return getqflist({'title': 1}).title
 endfunction
 
+function! s:SetStatuslineLineNums()
+  let length = len(string(line('$')))
+  if length < 4
+    let length = 4
+  endif
+  let line_min_max = length . "." . length
+  " line number / number of lines
+  " e.g. %4.4l/%-4.4L
+  execute "setlocal statusline+=%" . line_min_max . "l/%-" . line_min_max . "L"
+endfunction
+
 function! s:SetStatusline(...)
   if index(['diff', 'undotree'], &filetype) >= 0
     return
@@ -168,7 +179,7 @@ function! s:SetStatusline(...)
   setlocal statusline+=%=  " left/right separator
   if isLeaving
     if &ft == 'qf'
-      setlocal statusline+=%4.4l/%-4.4L  " line number / number of lines
+      call s:SetStatuslineLineNums()  " line number / number of lines
       setlocal statusline+=\ \|\  " separator
     endif
     setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
@@ -179,7 +190,7 @@ function! s:SetStatusline(...)
       setlocal statusline+=\ \|\ %{&ft}\ \|
       setlocal statusline+=\  " separator
     endif
-    setlocal statusline+=%4.4l/%-4.4L " line number / number of lines
+    call s:SetStatuslineLineNums()  " line number / number of lines
     setlocal statusline+=\ \|\  " separator
     setlocal statusline+=col\ %-3.3v  " column number
     setlocal statusline+=\  " separator
