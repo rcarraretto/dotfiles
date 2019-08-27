@@ -1002,6 +1002,57 @@ function! s:WrapCommand(cmd)
 endfunction
 command! -nargs=1 -complete=command WrapCommand call s:WrapCommand(<q-args>)
 
+" Access script-scope function
+" https://stackoverflow.com/a/39216373/2277505
+function! s:GetScriptFunc(scriptpath, funcname)
+  let scriptnames = split(execute('scriptnames'), "\n")
+  let scriptnames_line = matchstr(scriptnames, '.*' . a:scriptpath)
+  if empty(scriptnames_line)
+    echom "Script not found: " . a:scriptpath
+    return
+  endif
+  let snr = matchlist(scriptnames_line, '^\s*\(\d\+\)')[1]
+  if empty(snr)
+    echom "Script number not found: " . scriptnames_line
+    return
+  endif
+  return function('<SNR>' . snr . '_' . a:funcname)
+endfunction
+
+" Adapt :History from fzf.vim,
+" to cope with dirvish.vim
+"
+" Expected Behavior of --header-lines
+" - when editing a file, the current file will be a header
+" - else (e.g., quickfix, dirvish), there will be no header
+"
+" To achieve this, the original implementation sets --header-lines 1,
+" when there is a buffer-name.
+"
+" However, dirvish sets the buffer-name.
+" As a consequence, :History gains a header when called from dirvish buffer.
+"
+function! s:FzfHistory(...)
+  " To make this supposedly simpler, we copy the body of the fzf#vim#history.
+  " Then we use a hack to access script-scope functions from fzf.vim.
+  " 1) Call any function to trigger the sourcing fzf.vim autoload.
+  call fzf#vim#_uniq([])
+  " 2) Use a hack to get the script-scope functions
+  let Fzf = s:GetScriptFunc('autoload/fzf/vim.vim', 'fzf')
+  let All_files = s:GetScriptFunc('autoload/fzf/vim.vim', 'all_files')
+  if empty(Fzf) || empty(All_files)
+    return
+  endif
+  " 3) Adapt
+  " if buffer-name is set and it's not a directory, then put a header
+  let header = !empty(expand('%')) && !isdirectory(expand('%'))
+  return Fzf('history-files', {
+  \ 'source':  All_files(),
+  \ 'options': ['-m', '--header-lines', header, '--prompt', 'Hist> ']
+  \}, a:000)
+endfunction
+command! -bang -nargs=* FzfHistory call s:FzfHistory(<bang>0)
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1109,7 +1160,7 @@ nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 " browse files
 nnoremap <space>o :WrapCommand Files<cr>
 " browse history
-nnoremap <space>m :WrapCommand History<cr>
+nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
 " search dotfiles
