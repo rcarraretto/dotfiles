@@ -285,7 +285,7 @@ augroup END
 
 augroup DisableSyntaxForLargeFiles
   autocmd!
-  autocmd BufWinEnter * if line("$") > 10000 | syntax clear | endif
+  autocmd BufWinEnter * call s:DisableSyntaxForLargeFiles()
 augroup END
 
 augroup TrimWhitespace
@@ -659,6 +659,15 @@ function! s:OnWinLeave()
   call s:SetStatusline(1)
   if s:ShouldColorColumn()
     let &l:colorcolumn=join(range(1, 255), ',')
+  endif
+endfunction
+
+function! s:DisableSyntaxForLargeFiles()
+  if index(['help'], &filetype) >= 0
+    return
+  endif
+  if line("$") > 10000
+    syntax clear
   endif
 endfunction
 
