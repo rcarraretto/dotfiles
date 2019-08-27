@@ -283,6 +283,11 @@ augroup WinConfig
   autocmd FocusLost,WinLeave * call s:OnWinLeave()
 augroup END
 
+augroup DisableSyntaxForLargeFiles
+  autocmd!
+  autocmd BufWinEnter * if line("$") > 10000 | syntax clear | endif
+augroup END
+
 augroup TrimWhitespace
   autocmd!
   autocmd BufWritePre * :call s:TrimWhitespace()
@@ -984,6 +989,19 @@ function! s:SubvertWrap(line1, line2, count, args)
 endfunction
 command! -nargs=1 -bar -range=0 SW execute s:SubvertWrap(<line1>, <line2>, <count>, <q-args>)
 
+function! s:WrapCommand(cmd)
+  try
+    execute a:cmd
+  catch /E363/
+    " if the command edits a file (e.g. fzf :Files), the file may be too large.
+    " E363 will be displayed along with a trace.
+    " Also, the status line will not be rendered properly.
+    " Ignore E363 and redraw the status line.
+    call s:SetStatusline()
+  endtry
+endfunction
+command! -nargs=1 -complete=command WrapCommand call s:WrapCommand(<q-args>)
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1089,9 +1107,9 @@ nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".v
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 " browse files
-nnoremap <space>o :Files<cr>
+nnoremap <space>o :WrapCommand Files<cr>
 " browse history
-nnoremap <space>m :History<cr>
+nnoremap <space>m :WrapCommand History<cr>
 " browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
 " search dotfiles
