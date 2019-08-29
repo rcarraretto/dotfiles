@@ -1,8 +1,6 @@
 "# vim: set foldmethod=marker:
 
 " Plugins ---------------------- {{{
-set nocompatible
-
 set rtp+=/usr/local/opt/fzf
 set rtp+=$HOME/work/dotfiles-private/vim
 set rtp+=$HOME/work/tsuquyomi
