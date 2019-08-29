@@ -13,8 +13,30 @@ export HISTSIZE=1000
 
 source ~/.bash_aliases
 
+# Prevent re-adding the same path to $PATH,
+# when sourcing the bashrc multiple times.
+#
+# https://unix.stackexchange.com/a/217629
+#
+# To check if everything works, one could count the entries in $PATH,
+# before and after re-sourcing the bashrc:
+# echo "$PATH" | tr : \\n | wc -l
+#
+path-contains() {
+  echo "$PATH" | grep -Eq "(^|:)$1($|:)"
+}
+add-to-path() {
+  if ! path-contains "$1"; then
+    if [ "$2" = "after" ] ; then
+      PATH="$PATH:$1"
+    else
+      PATH="$1:$PATH"
+    fi
+  fi
+}
+
 # Dotfiles bin
-export PATH="$HOME/work/dotfiles/bin:$PATH"
+add-to-path "$HOME/work/dotfiles/bin"
 
 # Base 16
 BASE16_SHELL=$HOME/.config/base16-shell/
@@ -24,20 +46,20 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 stty -ixon -ixoff
 
 # Python bins from 'pip install --user'
-export PATH=$PATH:~/Library/Python/2.7/bin
+add-to-path ~/Library/Python/2.7/bin after
 
 # Ruby env
 if command -v rbenv 1>/dev/null 2>&1; then
-  eval "$(rbenv init -)"
+  ! path-contains "$HOME/.rbenv/shims" && eval "$(rbenv init -)"
 fi
 # Python env
 if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
+  ! path-contains "$HOME/.pyenv/shims" && eval "$(pyenv init -)"
 fi
 
 # Nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh"  ] && \. "$NVM_DIR/nvm.sh"
+[[ -z "$NVM_BIN" ]] && [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 
 # fzf
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
