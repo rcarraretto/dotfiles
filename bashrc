@@ -26,12 +26,13 @@ path-contains() {
   echo "$PATH" | grep -Eq "(^|:)$1($|:)"
 }
 add-to-path() {
-  if ! path-contains "$1"; then
-    if [ "$2" = "after" ] ; then
-      PATH="$PATH:$1"
-    else
-      PATH="$1:$PATH"
-    fi
+  if path-contains "$1"; then
+    return
+  fi
+  if [ "$2" = "after" ]; then
+    PATH="$PATH:$1"
+  else
+    PATH="$1:$PATH"
   fi
 }
 
