@@ -626,12 +626,22 @@ function! s:FugitiveMappings()
 endfunction
 
 function! s:ToggleRelativeNumber()
-  if &relativenumber == 1
+  if &relativenumber
     set norelativenumber
   else
     set relativenumber
   endif
   set number
+endfunction
+
+function! s:ToggleListChars()
+  if &list
+    setlocal nolist
+    setlocal listchars=
+  else
+    setlocal list
+    setlocal listchars=tab:>·,space:␣,trail:~
+  endif
 endfunction
 
 function! s:ShouldColorColumn()
@@ -1112,6 +1122,8 @@ nnoremap <leader><leader> <c-^>
 
 " Toggle relative number
 nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
+" Toggle showing whitespace
+nnoremap <silent> col :call <sid>ToggleListChars()<cr>
 
 " Window navigation
 nnoremap <space>j <c-w>j
