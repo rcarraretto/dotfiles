@@ -1083,6 +1083,10 @@ inoremap jk <esc>
 nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'gj'
 nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'gk'
 nnoremap <c-k> k
+vnoremap j gj
+vnoremap k gk
+vnoremap <c-j> j
+vnoremap <c-k> k
 
 " Easier command-line mode
 nnoremap <cr> :
