@@ -46,8 +46,24 @@ snippet imp "import from"
 import { ${1} } from '${2}';
 endsnippet
 
+snippet i* "import plain js lib"
+import * as ${1} from '$1';
+endsnippet
+
 snippet i_ "import lodash"
 import * as _ from 'lodash';
+endsnippet
+
+snippet chain "lodash chain"
+_.chain(${1})
+	${2}
+	.value();
+endsnippet
+
+snippet sf "short function" i
+(${1}) => {
+	${2}
+}
 endsnippet
 
 snippet f "function"
