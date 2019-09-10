@@ -12,6 +12,10 @@ snippet co "console.log json"
 console.log(JSON.stringify($0, null, 4));
 endsnippet
 
+snippet ce "console.error"
+console.error(${0});
+endsnippet
+
 snippet todo "// TODO " b
 // TODO: $0
 endsnippet
@@ -42,6 +46,12 @@ beforeEach(async () => {
 });
 endsnippet
 
+snippet inter "interface"
+interface $1 {
+	${2}
+}
+endsnippet
+
 snippet imp "import from"
 import { ${1} } from '${2}';
 endsnippet
@@ -60,10 +70,14 @@ _.chain(${1})
 	.value();
 endsnippet
 
-snippet sf "short function" i
+snippet af "arrow function" i
 (${1}) => {
 	${2}
 }
+endsnippet
+
+snippet sf "short arrow function" i
+(${1}) => ${2}
 endsnippet
 
 snippet f "function"
