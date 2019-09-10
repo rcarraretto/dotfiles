@@ -873,6 +873,11 @@ function! s:EditFileUpwards(filename)
   call s:EditFile(path)
 endfunction
 
+function! s:EditSketchBuffer()
+  call s:EditFile('/var/tmp/sketch.ts')
+  nnoremap <buffer> <space>t :update <bar> Dispatch ts-node %<cr>
+endfunction
+
 " Adapted from:
 " https://vim.fandom.com/wiki/File_no_longer_available_-_mark_buffer_modified
 function s:FileChangedShell(name)
@@ -1176,6 +1181,7 @@ nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev.ntx")<cr>
 nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
+nnoremap <leader>ek :call <sid>EditSketchBuffer()<cr>
 " edit syntax for the current filetype
 nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
