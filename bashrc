@@ -36,6 +36,10 @@ add-to-path() {
   fi
 }
 
+command-exists() {
+  command -v "$1" 1>/dev/null 2>&1
+}
+
 # Dotfiles bin
 add-to-path "$HOME/work/dotfiles/bin"
 
@@ -50,17 +54,19 @@ stty -ixon -ixoff
 add-to-path ~/Library/Python/2.7/bin after
 
 # Ruby env
-if command -v rbenv 1>/dev/null 2>&1; then
-  ! path-contains "$HOME/.rbenv/shims" && eval "$(rbenv init -)"
+if command-exists rbenv && [ -z $RBENV_SET ]; then
+  eval "$(rbenv init -)" && RBENV_SET=1 # && echo "rbenv set!"
 fi
 # Python env
-if command -v pyenv 1>/dev/null 2>&1; then
-  ! path-contains "$HOME/.pyenv/shims" && eval "$(pyenv init -)"
+if command-exists pyenv && [ -z $PYENV_SET ]; then
+  eval "$(pyenv init -)" && PYENV_SET=1 # && echo "pyenv set!"
 fi
 
 # Nvm
 export NVM_DIR="$HOME/.nvm"
-[[ -z "$NVM_BIN" ]] && [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+if [ -s "$NVM_DIR/nvm.sh" ] && ! command-exists nvm; then
+  source "$NVM_DIR/nvm.sh" # && echo "nvm set!"
+fi
 
 # fzf
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
