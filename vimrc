@@ -1310,6 +1310,7 @@ nnoremap <space>\ gqip
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<cr>
 
+" Replace entire content of file with clipboard
 nnoremap <leader>rf ggdG"*P=G
 
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
