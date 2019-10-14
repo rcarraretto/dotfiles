@@ -1227,6 +1227,8 @@ nnoremap <leader>ad :Ack! --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-privat
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
 " browse Downloads, most recent first
 nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<cr>
+" browse command-line history
+nnoremap <space>: :History:<cr>
 " search in project
 nnoremap <space>a :Ack! --hidden -Q ''<left>
 nnoremap <leader>aa :AckFromSearch<cr>
