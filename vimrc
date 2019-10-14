@@ -379,6 +379,10 @@ function! s:VimEnter()
   " Revert plugin side effects
   " rsi.vim
   cunmap <c-f>
+  " rsi.vim
+  " ä ('a' umlaut)
+  " https://github.com/tpope/vim-rsi/issues/14
+  iunmap <M-d>
 endfunction
 
 function! s:NetrwMappings()
