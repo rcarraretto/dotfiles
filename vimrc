@@ -1001,24 +1001,34 @@ function! s:CycleWinRight()
 endfunction
 
 function! GetSubstituteTerm()
-  " Remove the word boundary atoms
-  " that will be present when searching with * and #.
-  if match(@/, '\<\(.*\)\>')
-    let str = matchstr(@/, '\<\(.*\)\>')
-  else
-    let str = @/
-  endif
+  let str = GetSubstituteTerm2()
   " Make first char lower case,
   " so that the :Subvert replace is always case-aware.
   return tolower(str[0]) . str[1:]
 endfunction
 
 function! GetSubstituteTerm2()
+  " Handle VisualStar.
+  "
+  " "\Vbatata" => "batata"
+  "
+  " Note: \V has a special meaning in vim regex,
+  " therefore we need to write \\V to match "\V".
+  if match(@/, '^\\V\(.*\)') != -1
+    return matchlist(@/, '^\\V\(.*\)')[1]
+  endif
+
   " Remove the word boundary atoms
   " that will be present when searching with * and #.
-  if match(@/, '\<\(.*\)\>')
-    return matchstr(@/, '\<\(.*\)\>')
+  "
+  " "\<batata\>" => "batata"
+  "
+  " Note: \< and \> have a special meaning in vim regex (word boundary),
+  " therefore we need to write \\< and \\> to match "\<" and "\>".
+  if match(@/, '^\\<\(.*\)\\>$') != -1
+    return matchlist(@/, '^\\<\(.*\)\\>$')[1]
   endif
+
   return @/
 endfunction
 
