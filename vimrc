@@ -702,7 +702,29 @@ function! s:TrimWhitespace()
   call setpos('.', save_cursor)
 endfunction
 
-function! RemoveViews()
+function! s:Prompt(msg)
+  echohl Statement
+  let ok = input(a:msg . ' ')
+  echohl NONE
+  " clear input
+  normal! :<esc>
+  if ok !=# 'y'
+    echo 'skipped'
+    return 0
+  endif
+  return 1
+endfunction
+
+" Remove views.
+" Usually call this because folding is buggy.
+function! s:RemoveViews()
+  if !s:Prompt('Delete all buffers and remove views?')
+    return
+  endif
+  " Delete all buffers first.
+  " Else buffers with buggy views will save their buggy info once they unload.
+  " (see AutoSaveFolds augroup)
+  %bd
   let output = system('rm -rf ~/.vim/view/*')
   if v:shell_error
     echom 'RemoveViews: Error: ' . output
@@ -710,6 +732,7 @@ function! RemoveViews()
     echom 'Views removed'
   endif
 endfunction
+command! RemoveViews :call s:RemoveViews()
 
 function! s:ToggleFolding()
   if foldclosed(line('.')) == -1
