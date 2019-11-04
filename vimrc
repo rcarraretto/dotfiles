@@ -100,6 +100,8 @@ set smartcase
 set ignorecase
 set autoindent
 set nowrap
+" Use system clipboard as vim's default clipboard
+set clipboard=unnamed
 
 " when the last line is too large (may happen when using 'wrap'),
 " show as much as possible, instead of showing @'s
@@ -1290,12 +1292,6 @@ nnoremap <leader>V o<esc>"*p
 " Copy and paste visual
 xnoremap <space>y "*y
 xnoremap <space>p "*p
-
-" Copy to clipboard 'operator'
-nnoremap <space>y "*y
-" Replace with clipboard 'operator'
-" take advantage of ReplaceWithRegister plugin ('gr' mapping)
-nmap <space>p "*gr
 
 " Quotes textobj
 omap q iq
