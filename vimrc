@@ -943,6 +943,11 @@ function s:FileChangedShell(name)
   echohl None
 endfunction
 
+function! s:ExploreProject(path)
+  execute "tabedit " . a:path . " | lcd " . a:path
+endfunction
+command! -nargs=1 -complete=file ExploreProject call s:ExploreProject(<q-args>)
+
 function! s:SysOpen(filename)
   let ext = fnamemodify(a:filename, ':e')
   if index(['sh'], ext) != -1
