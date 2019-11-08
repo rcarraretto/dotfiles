@@ -875,11 +875,11 @@ command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
 function! s:EditFile(path)
   if bufnr(a:path) == -1
-    execute 'tabnew ' . a:path
+    silent execute 'tabnew ' . a:path
   else
     let wins = getbufinfo(a:path)[0]['windows']
     if empty(wins)
-      execute 'tabnew ' . a:path
+      silent execute 'tabnew ' . a:path
     else
       call win_gotoid(wins[0])
     endif
@@ -1174,8 +1174,8 @@ xnoremap <cr> :
 nnoremap <silent> gh :noh<cr>
 
 " Save
-nnoremap <c-l> <esc>:w<cr>
-inoremap <c-l> <esc>:w<cr>
+nnoremap <c-l> <esc>:silent write<cr>
+inoremap <c-l> <esc>:silent write<cr>
 
 " Show output of last command
 nnoremap K :!<cr>
@@ -1239,7 +1239,7 @@ cnoremap <c-l> <c-n>
 " vimrc, vimscript
 nnoremap <leader>ev :call <sid>EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ss :w <bar> :source %<cr>
+nnoremap <leader>ss :silent write <bar> :source %<cr>
 
 " Browse files & search
 " quickly edit some files and folders
