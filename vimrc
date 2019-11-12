@@ -944,10 +944,33 @@ function s:FileChangedShell(name)
   echohl None
 endfunction
 
-function! s:ExploreProject(path)
-  execute "tabedit " . a:path . " | lcd " . a:path
+function! s:ExploreProject(path, opencmd)
+  execute a:opencmd . a:path . " | lcd " . a:path
 endfunction
-command! -nargs=1 -complete=file ExploreProject call s:ExploreProject(<q-args>)
+command! -nargs=1 -complete=file ExploreProject call s:ExploreProject(<q-args>, 'tabedit')
+command! -nargs=1 -complete=file VExploreProject call s:ExploreProject(<q-args>, 'vs')
+command! -nargs=1 -complete=file HExploreProject call s:ExploreProject(<q-args>, 'sp')
+
+function! s:FzfExploreProject()
+  let opts = {'source': 'find ~/work -mindepth 1 -maxdepth 1 -type d', 'down': '~40%' }
+  " Put custom actions, instead of using g:fzf_action.
+  " This is based on fzf#wrap().
+  let opts._action = {
+        \ 'ctrl-t': 'ExploreProject',
+        \ 'ctrl-x': 'HExploreProject',
+        \ 'ctrl-v': 'VExploreProject',
+        \ }
+  let opts.options = ' --expect='.join(keys(opts._action), ',')
+  let CommonSink = s:GetScriptFunc('/usr/local/Cellar/fzf/.*/plugin/fzf.vim', 'common_sink')
+  function! opts.sink(lines) abort closure
+    " Example of a:lines
+    " [] (when ctrl-c was pressed)
+    " ['ctrl-t', '~/work/some-project']
+    return CommonSink(self._action, a:lines)
+  endfunction
+  let opts['sink*'] = remove(opts, 'sink')
+  call fzf#run(opts)
+endfunction
 
 function! s:SysOpen(filename)
   let ext = fnamemodify(a:filename, ':e')
@@ -1103,15 +1126,20 @@ function! s:GetScriptFunc(scriptpath, funcname)
   let scriptnames = split(execute('scriptnames'), "\n")
   let scriptnames_line = matchstr(scriptnames, '.*' . a:scriptpath)
   if empty(scriptnames_line)
-    echom "Script not found: " . a:scriptpath
+    echom "GetScriptFunc: Script not found: " . a:scriptpath
     return
   endif
   let snr = matchlist(scriptnames_line, '^\s*\(\d\+\)')[1]
   if empty(snr)
-    echom "Script number not found: " . scriptnames_line
+    echom "GetScriptFunc: Script number not found: " . scriptnames_line
     return
   endif
-  return function('<SNR>' . snr . '_' . a:funcname)
+  let full_funcname = '<SNR>' . snr . '_' . a:funcname
+  try
+    return function(full_funcname)
+  catch /E700/
+    echom "GetScriptFunc: Function not found: " . full_funcname
+  endtry
 endfunction
 
 " Adapt :History from fzf.vim,
@@ -1255,6 +1283,7 @@ nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
 nnoremap <leader>ek :call <sid>EditSketchBuffer()<cr>
+nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " edit syntax for the current filetype
 nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
