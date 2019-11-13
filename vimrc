@@ -428,9 +428,9 @@ function! s:DirvishMappings()
   " keep <cr> as it normally is (nnoremap <cr> :)
   nunmap <buffer> <cr>
   " map 'o' to what <cr> is in dirvish (open file)
-  nnoremap <buffer> <silent> o :<c-u>call dirvish#open("edit", 0)<cr>
+  nnoremap <buffer> <silent> o :<c-u>silent call dirvish#open("edit", 0)<cr>
   " map 's' to what 'o' is in dirvish (open file in a horizontal split)
-  nnoremap <buffer> <silent> s :<c-u>call dirvish#open("split", 1)<cr>
+  nnoremap <buffer> <silent> s :<c-u>silent call dirvish#open("split", 1)<cr>
   " rename
   nnoremap <buffer> <silent> R :<c-u>call <sid>DirvishRename()<cr>
   " mkdir
@@ -1428,9 +1428,10 @@ let g:ack_apply_qmappings = 0
 " fzf
 " extend actions with mapping to open in system editor
 let g:fzf_action = {
-\ 'ctrl-t': 'tab split',
-\ 'ctrl-x': 'split',
-\ 'ctrl-v': 'vsplit',
+\ '': 'silent edit ',
+\ 'ctrl-t': 'silent tab split',
+\ 'ctrl-x': 'silent split',
+\ 'ctrl-v': 'silent vsplit',
 \ 'ctrl-s': 'SysOpen'
 \ }
 
