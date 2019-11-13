@@ -1384,6 +1384,11 @@ nnoremap <leader>co :%s///gn<cr>
 " Replace entire content of file with clipboard
 nnoremap <leader>rf ggdG"*P=G
 
+" Insert the current filename with <c-g>f
+" (and the built-in <c-r>% is used to insert the current relative path)
+inoremap <c-g>f <c-r>=expand('%:t')<cr>
+cnoremap <c-g>f <c-r>=expand('%:t')<cr>
+
 nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
 nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
 nnoremap <silent> <space>t :w<cr>:TestLast<cr>
