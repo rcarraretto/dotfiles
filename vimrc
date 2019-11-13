@@ -946,8 +946,12 @@ endfunction
 
 function! s:ExploreProject(path, opencmd)
   execute a:opencmd . a:path . " | lcd " . a:path
+  " Somehow the statusline doesn't get properly rendered,
+  " when calling this from FzfExploreProject().
+  call s:SetStatusline()
 endfunction
-command! -nargs=1 -complete=file ExploreProject call s:ExploreProject(<q-args>, 'tabedit')
+command! -nargs=1 -complete=file ExploreProject call s:ExploreProject(<q-args>, 'edit')
+command! -nargs=1 -complete=file TExploreProject call s:ExploreProject(<q-args>, 'tabedit')
 command! -nargs=1 -complete=file VExploreProject call s:ExploreProject(<q-args>, 'vs')
 command! -nargs=1 -complete=file HExploreProject call s:ExploreProject(<q-args>, 'sp')
 
@@ -956,7 +960,8 @@ function! s:FzfExploreProject()
   " Put custom actions, instead of using g:fzf_action.
   " This is based on fzf#wrap().
   let opts._action = {
-        \ 'ctrl-t': 'ExploreProject',
+        \ '': 'ExploreProject',
+        \ 'ctrl-t': 'TExploreProject',
         \ 'ctrl-x': 'HExploreProject',
         \ 'ctrl-v': 'VExploreProject',
         \ }
