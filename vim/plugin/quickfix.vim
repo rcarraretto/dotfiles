@@ -65,3 +65,41 @@ function! ToggleQuickfixList()
     wincmd p
   endif
 endfunction
+
+" Adapted from
+" https://github.com/milkypostman/vim-togglelist
+function! ToggleLocationList()
+  let curbufnr = winbufnr(0)
+  for bufnum in map(filter(getwininfo(), 'v:val.quickfix && v:val.loclist'), 'v:val.bufnr')
+    if curbufnr == bufnum
+      lclose
+      return
+    endif
+  endfor
+
+  let winnr = winnr()
+  let prevwinnr = winnr("#")
+
+  let nextbufnr = winbufnr(winnr + 1)
+  try
+    lopen
+  catch /E776/
+    echohl ErrorMsg
+    echo "Location List is Empty."
+    echohl None
+    return
+  endtry
+  if winbufnr(0) == nextbufnr
+    lclose
+    if prevwinnr > winnr
+      let prevwinnr-=1
+    endif
+  else
+    if prevwinnr > winnr
+      let prevwinnr+=1
+    endif
+  endif
+  " restore previous window
+  exec prevwinnr . "wincmd w"
+  exec winnr . "wincmd w"
+endfunction

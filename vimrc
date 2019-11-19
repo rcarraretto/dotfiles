@@ -1251,6 +1251,7 @@ nnoremap <space>q :q<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
+nnoremap <silent> <space>I :call ToggleLocationList()<cr>
 nnoremap [g :colder<cr>
 nnoremap ]g :cnewer<cr>
 nnoremap <leader>da :AbortDispatch<cr>
