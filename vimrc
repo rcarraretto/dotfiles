@@ -985,6 +985,11 @@ function! s:FzfExploreProject()
   call fzf#run(opts)
 endfunction
 
+function! s:SearchNotes(input) abort
+  execute 'Ack! --hidden -Q "' . a:input . '" -G "\.ntx$|\.txt$" ~/Dropbox/notes/'
+endfunction
+command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
+
 function! s:SysOpen(filename)
   let ext = fnamemodify(a:filename, ':e')
   if index(['sh'], ext) != -1
@@ -1310,6 +1315,8 @@ nnoremap <space>m :WrapCommand FzfHistory<cr>
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
 " search dotfiles
 nnoremap <leader>ad :Ack! --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
+" search notes
+nnoremap <leader>an :SearchNotes<space>
 " browse source code of vim plugins
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
 " browse Downloads, most recent first
