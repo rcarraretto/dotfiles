@@ -1290,9 +1290,9 @@ nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :tabedit ~/Dropbox/notes<cr>
+nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes -type f \( -name "*.txt" -or -name "*.ntx" \)'}))<cr>
 nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/misc.ntx")<cr>
-nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev.ntx")<cr>
+nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev/dev.ntx")<cr>
 nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
