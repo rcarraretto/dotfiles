@@ -249,7 +249,7 @@ augroup FTOptions
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType text setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal noexpandtab
-  autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker
+  autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker | setlocal commentstring=#\ %s
   autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
