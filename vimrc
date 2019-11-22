@@ -717,6 +717,47 @@ function! s:Prompt(msg)
   return 1
 endfunction
 
+function! s:GetGitRoot()
+  " dir of current file (resolves symbolic links)
+  let buf_dir = fnamemodify(resolve(expand('%:p')), ':h')
+  if len(buf_dir) == 0
+    " e.g. netrw
+    return 0
+  endif
+  let output = system('cd ' .  buf_dir . ' && git rev-parse --show-toplevel')
+  if v:shell_error
+    return 0
+  endif
+  " Remove null character (^@) from output
+  " echom split(output, '\zs')
+  " :h expr-[:]
+  return output[:-2]
+endfunction
+
+function! s:CdToGitRoot(cd_cmd)
+  let output = s:GetGitRoot()
+  if empty(output)
+    echohl ErrorMsg
+    echom "CdToGitRoot: couldn't find git root"
+    echohl NONE
+    return
+  endif
+  execute a:cd_cmd . ' ' . output
+  pwd
+endfunction
+
+function! s:OpenInSourceTree()
+  let output = s:GetGitRoot()
+  if empty(output)
+    echohl ErrorMsg
+    echom "OpenInSourceTree: couldn't find git root"
+    echohl NONE
+    return
+  endif
+  echo 'open -a SourceTree ' . output
+  call system('open -a SourceTree ' . output)
+endfunction
+
 " Remove views.
 " Usually call this because folding is buggy.
 function! s:RemoveViews()
@@ -1309,6 +1350,8 @@ nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
 nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
 " browse files
 nnoremap <space>o :WrapCommand Files<cr>
+" browse files under version control
+nnoremap <space>O :GFiles<cr>
 " browse history
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
@@ -1328,12 +1371,17 @@ nnoremap <space>c :Commands<cr>
 nnoremap <space>: :History:<cr>
 " search in project
 nnoremap <space>a :Ack! --hidden -Q ''<left>
+" search in git root
+nnoremap <space>A :Ack! --hidden -Q '' <c-r>=<sid>GetGitRoot()<cr><c-f>F'<c-c>
 nnoremap <leader>aa :AckFromSearch<cr>
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
 " search in file (from visual mode)
 xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
 xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
+" change directory
+nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
+nnoremap <silent> <leader>tg :call <sid>CdToGitRoot('tcd')<cr>
 
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
@@ -1396,6 +1444,8 @@ nnoremap <leader>go :Gcommit<cr>
 nnoremap <leader>gh :<c-r>=line('.')<cr>Gbrowse<cr>
 vnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gg :Agit<cr>
+" open repo in SourceTree
+nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
 
 " Format paragraph
 nnoremap <space>\ gqip
