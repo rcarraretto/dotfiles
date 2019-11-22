@@ -41,3 +41,10 @@ endsnippet
 snippet cmd "command"
 command! ${1} :call <sid>$1(<q-args>)
 endsnippet
+
+snippet errormsg "echohl ErrorMsg"
+echohl ErrorMsg
+echom '${1}'
+echohl NONE
+return
+endsnippet
