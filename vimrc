@@ -685,8 +685,7 @@ function! s:DisableSyntaxForLargeFiles()
   endif
 endfunction
 
-command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
-function! QuickfixFilenames()
+function! s:QuickfixFilenames()
   " Building a hash ensures we get each buffer only once
   let buffer_numbers = {}
   for quickfix_item in getqflist()
@@ -694,6 +693,7 @@ function! QuickfixFilenames()
   endfor
   return join(values(buffer_numbers))
 endfunction
+command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 
 function! s:TrimWhitespace()
   if &modifiable == 0
