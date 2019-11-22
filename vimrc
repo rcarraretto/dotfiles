@@ -141,6 +141,25 @@ function! s:SetStatuslineLineNums()
   execute "setlocal statusline+=%" . line_min_max . "l/%-" . line_min_max . "L"
 endfunction
 
+function! s:GetCwdContext() abort
+  " %:p => /Users/roberto/work/some-project/backend/src/feature.spec.ts
+  " cwd => /Users/roberto/work/some-project/backend
+  let idx = stridx(expand('%:p'), getcwd())
+  if idx == -1
+    return 0
+  endif
+  " backend
+  let last_path_component = strpart(getcwd(), strridx(getcwd(), '/') + 1, strlen(getcwd()))
+  return '[' . last_path_component . ']'
+endfunction
+
+function! s:SetStatuslineCwdContext() abort
+  let cwd_context = s:GetCwdContext()
+  if !empty(cwd_context)
+    execute "setlocal statusline+=" . cwd_context . '\ '
+  endif
+endfunction
+
 function! s:SetStatusline(...)
   if index(['diff', 'undotree'], &filetype) >= 0
     return
@@ -148,7 +167,9 @@ function! s:SetStatusline(...)
   let isLeaving = get(a:, 1, 0)
   let showFlags = index(['qf', 'help'], &filetype) == -1
   let showRelativeFilename = index(['qf', 'help', 'dirvish'], &filetype) == -1
+  setlocal statusline=
   if showRelativeFilename
+    call s:SetStatuslineCwdContext()
     " Apparently %f doesn't always show the relative filename
     " https://stackoverflow.com/a/45244610/2277505
     " :h filename-modifiers
@@ -157,9 +178,12 @@ function! s:SetStatusline(...)
     " expand('%:~:.') =>
     " - expands the name of the current file, but prevents the expansion of the tilde (:~)
     " - makes the path relative to the current working directory (:.)
-    setlocal statusline=%{expand('%:~:.')}\  " filename
+    setlocal statusline+=%{expand('%:~:.')}\  " filename
   else
-    setlocal statusline=%f\  " filename
+    if &filetype == 'dirvish'
+      call s:SetStatuslineCwdContext()
+    endif
+    setlocal statusline+=%f\  " filename
   endif
   if showFlags
     setlocal statusline+=%m  " modified flag
@@ -281,6 +305,9 @@ augroup WinConfig
   autocmd!
   autocmd BufEnter,FocusGained,WinEnter * call s:OnWinEnter()
   autocmd FocusLost,WinLeave * call s:OnWinLeave()
+  " On :cd, reset the statusline
+  " (because of hard-coded GetCwdContext in 'statusline')
+  autocmd DirChanged * call s:SetStatusline()
 augroup END
 
 augroup DisableSyntaxForLargeFiles
