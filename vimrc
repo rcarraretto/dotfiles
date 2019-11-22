@@ -149,7 +149,7 @@ function! s:GetCwdContext() abort
     return 0
   endif
   " backend
-  let last_path_component = strpart(getcwd(), strridx(getcwd(), '/') + 1, strlen(getcwd()))
+  let last_path_component = strpart(getcwd(), strridx(getcwd(), '/') + 1)
   return '[' . last_path_component . ']'
 endfunction
 
