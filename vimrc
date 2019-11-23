@@ -141,23 +141,22 @@ function! s:SetStatuslineLineNums()
   execute "setlocal statusline+=%" . line_min_max . "l/%-" . line_min_max . "L"
 endfunction
 
-function! s:GetCwdContext() abort
-  " %:p => /Users/roberto/work/some-project/backend/src/feature.spec.ts
+function! GetCwdContext() abort
   " cwd => /Users/roberto/work/some-project/backend
+  " %:p => /Users/roberto/work/some-project/backend/src/feature.spec.ts
   let idx = stridx(expand('%:p'), getcwd())
   if idx == -1
-    return 0
+    " file is outside of cwd
+    return ''
   endif
-  " backend
-  let last_path_component = strpart(getcwd(), strridx(getcwd(), '/') + 1)
-  return '[' . last_path_component . ']'
+  " file is inside cwd.
+  " show last path component of cwd.
+  " [backend]
+  return '[' . fnamemodify(getcwd(), ':t') . '] '
 endfunction
 
 function! s:SetStatuslineCwdContext() abort
-  let cwd_context = s:GetCwdContext()
-  if !empty(cwd_context)
-    execute "setlocal statusline+=" . cwd_context . '\ '
-  endif
+  execute "setlocal statusline+=%{GetCwdContext()}"
 endfunction
 
 function! s:SetStatusline(...)
@@ -305,9 +304,6 @@ augroup WinConfig
   autocmd!
   autocmd BufEnter,FocusGained,WinEnter * call s:OnWinEnter()
   autocmd FocusLost,WinLeave * call s:OnWinLeave()
-  " On :cd, reset the statusline
-  " (because of hard-coded GetCwdContext in 'statusline')
-  autocmd DirChanged * call s:SetStatusline()
 augroup END
 
 augroup DisableSyntaxForLargeFiles
