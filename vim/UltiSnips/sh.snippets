@@ -12,6 +12,12 @@ if [ $1 ]; then
 fi
 endsnippet
 
+snippet for "for loop" b
+for $1 in "$2"; do
+  $3
+done
+endsnippet
+
 snippet f "function" b
 $1() {
   $2
