@@ -178,7 +178,13 @@ function! s:SetStatusline(...)
     if isActiveWindow
       " truncate file path when window is active and on a vsplit,
       " as the statusline has several other elements in it.
-      let max_path_length = winwidth('.') <= 120 ? ".60" : ""
+      if winwidth('.') <= 92
+        let max_path_length = ".45"
+      elseif winwidth('.') <= 120
+        let max_path_length = ".60"
+      else
+        let max_path_length = ""
+      endif
     else
       " when window is inactive, we have less elements in the statusline
       " and therefore it's OK to display the path without truncating it.
