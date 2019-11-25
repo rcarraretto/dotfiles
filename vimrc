@@ -191,6 +191,7 @@ function! s:SetStatusline(...)
       let max_path_length = ""
     endif
     execute "setlocal statusline+=%" . max_path_length . "{expand('%:~:.')}"
+    setlocal statusline+=\  " separator
   else
     setlocal statusline+=%f\  " filename
   endif
