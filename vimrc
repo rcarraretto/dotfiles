@@ -155,20 +155,18 @@ function! GetCwdContext() abort
   return '[' . fnamemodify(getcwd(), ':t') . '] '
 endfunction
 
-function! s:SetStatuslineCwdContext() abort
-  execute "setlocal statusline+=%{GetCwdContext()}"
-endfunction
-
 function! s:SetStatusline(...)
   if index(['diff', 'undotree'], &filetype) >= 0
     return
   endif
-  let isLeaving = get(a:, 1, 0)
+  let isActiveWindow = get(a:, 1, 1)
   let showFlags = index(['qf', 'help'], &filetype) == -1
-  let showRelativeFilename = index(['qf', 'help', 'dirvish'], &filetype) == -1
+  let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   setlocal statusline=
   if showRelativeFilename
-    call s:SetStatuslineCwdContext()
+    if isActiveWindow
+      execute "setlocal statusline+=%{GetCwdContext()}"
+    endif
     " Apparently %f doesn't always show the relative filename
     " https://stackoverflow.com/a/45244610/2277505
     " :h filename-modifiers
@@ -177,11 +175,17 @@ function! s:SetStatusline(...)
     " expand('%:~:.') =>
     " - expands the name of the current file, but prevents the expansion of the tilde (:~)
     " - makes the path relative to the current working directory (:.)
-    setlocal statusline+=%{expand('%:~:.')}\  " filename
-  else
-    if &filetype == 'dirvish'
-      call s:SetStatuslineCwdContext()
+    if isActiveWindow
+      " truncate file path when window is active and on a vsplit,
+      " as the statusline has several other elements in it.
+      let max_path_length = winwidth('.') <= 120 ? ".60" : ""
+    else
+      " when window is inactive, we have less elements in the statusline
+      " and therefore it's OK to display the path without truncating it.
+      let max_path_length = ""
     endif
+    execute "setlocal statusline+=%" . max_path_length . "{expand('%:~:.')}"
+  else
     setlocal statusline+=%f\  " filename
   endif
   if showFlags
@@ -200,14 +204,7 @@ function! s:SetStatusline(...)
     endif
   endif
   setlocal statusline+=%=  " left/right separator
-  if isLeaving
-    if &ft == 'qf'
-      call s:SetStatuslineLineNums()  " line number / number of lines
-      setlocal statusline+=\ \|\  " separator
-    endif
-    setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
-    setlocal statusline+=\ \ \  " separator
-  else
+  if isActiveWindow
     let showFt = index(['qf', ''], &filetype) == -1
     if showFt
       setlocal statusline+=\ \|\ %{&ft}\ \|
@@ -217,6 +214,13 @@ function! s:SetStatusline(...)
     setlocal statusline+=\ \|\  " separator
     setlocal statusline+=col\ %-3.v  " column number
     setlocal statusline+=\  " separator
+  else
+    if &ft == 'qf'
+      call s:SetStatuslineLineNums()  " line number / number of lines
+      setlocal statusline+=\ \|\  " separator
+    endif
+    setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
+    setlocal statusline+=\ \ \  " separator
   endif
 endfunction
 
@@ -693,7 +697,7 @@ endfunction
 
 function! s:OnWinLeave()
   setlocal nocursorline
-  call s:SetStatusline(1)
+  call s:SetStatusline(0)
   if s:ShouldColorColumn()
     let &l:colorcolumn=join(range(1, 255), ',')
   endif
