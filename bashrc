@@ -49,6 +49,10 @@ add-to-path() {
   fi
 }
 
+print-path() {
+  echo "$PATH" | tr : \\n
+}
+
 command-exists() {
   command -v "$1" 1>/dev/null 2>&1
 }
