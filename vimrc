@@ -414,11 +414,15 @@ augroup END
 function! s:VimEnter()
   " Revert plugin side effects
   " rsi.vim
-  cunmap <c-f>
+  if !empty(maparg("<c-f>", "c", 0, 1))
+    cunmap <c-f>
+  endif
   " rsi.vim
   " ä ('a' umlaut)
   " https://github.com/tpope/vim-rsi/issues/14
-  iunmap <M-d>
+  if !empty(maparg("<M-d>", "i", 0, 1))
+    iunmap <M-d>
+  endif
 endfunction
 
 function! s:NetrwMappings()
