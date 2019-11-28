@@ -755,25 +755,8 @@ function! s:Prompt(msg)
   return 1
 endfunction
 
-function! s:GetGitRoot()
-  " dir of current file (resolves symbolic links)
-  let buf_dir = fnamemodify(resolve(expand('%:p')), ':h')
-  if len(buf_dir) == 0
-    " e.g. netrw
-    return 0
-  endif
-  let output = system('cd ' .  buf_dir . ' && git rev-parse --show-toplevel')
-  if v:shell_error
-    return 0
-  endif
-  " Remove null character (^@) from output
-  " echom split(output, '\zs')
-  " :h expr-[:]
-  return output[:-2]
-endfunction
-
 function! s:CdToGitRoot(cd_cmd)
-  let output = s:GetGitRoot()
+  let output = util#GetGitRoot()
   if empty(output)
     echohl ErrorMsg
     echom "CdToGitRoot: couldn't find git root"
@@ -785,7 +768,7 @@ function! s:CdToGitRoot(cd_cmd)
 endfunction
 
 function! s:OpenInSourceTree()
-  let output = s:GetGitRoot()
+  let output = util#GetGitRoot()
   if empty(output)
     echohl ErrorMsg
     echom "OpenInSourceTree: couldn't find git root"
@@ -1410,7 +1393,7 @@ nnoremap <space>: :History:<cr>
 " search in project
 nnoremap <space>a :Ack! --hidden -Q ''<left>
 " search in git root
-nnoremap <space>A :Ack! --hidden -Q '' <c-r>=<sid>GetGitRoot()<cr><c-f>F'<c-c>
+nnoremap <space>A :Ack! --hidden -Q '' <c-r>=util#GetGitRoot()<cr><c-f>F'<c-c>
 nnoremap <leader>aa :AckFromSearch<cr>
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
