@@ -1482,10 +1482,6 @@ nnoremap <leader>rf ggdG"*P=G
 inoremap <c-g>f <c-r>=expand('%:t')<cr>
 cnoremap <c-g>f <c-r>=expand('%:t')<cr>
 
-nnoremap <silent> <leader>tf :w<cr>:TestFile<cr>
-nnoremap <silent> <leader>ts :w<cr>:TestSuite<cr>
-nnoremap <silent> <space>t :w<cr>:TestLast<cr>
-
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 imap <c-x><c-x> <plug>(fzf-complete-line)
