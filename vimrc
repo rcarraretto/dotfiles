@@ -669,13 +669,39 @@ function! s:FugitiveMappings()
   nunmap <buffer> <cr>
 endfunction
 
-function! s:ToggleRelativeNumber()
+" Executes callback function for all windows.
+"
+" based on https://vi.stackexchange.com/a/12068
+"
+function! s:GlobalWinDo(callback) abort
+  for t in range(1, tabpagenr('$'))
+    for w in range(1, tabpagewinnr(t, '$'))
+      call function(a:callback)(t, w)
+    endfor
+  endfor
+endfunction
+
+function! s:ToggleRelativeNumber() abort
+  " buffers that don't have 'number' set won't be touched
+  " (e.g., dirvish, fugitive, agit)
+
+  function! s:SetNoRelativeNumber(t, w) abort
+    if gettabwinvar(a:t, a:w, '&number') == 1
+      call settabwinvar(a:t, a:w, '&relativenumber', 0)
+    endif
+  endfunction
+
+  function! s:SetRelativeNumber(t, w) abort
+    if gettabwinvar(a:t, a:w, '&number') == 1
+      call settabwinvar(a:t, a:w, '&relativenumber', 1)
+    endif
+  endfunction
+
   if &relativenumber
-    set norelativenumber
+    call s:GlobalWinDo('s:SetNoRelativeNumber')
   else
-    set relativenumber
+    call s:GlobalWinDo('s:SetRelativeNumber')
   endif
-  set number
 endfunction
 
 function! s:ToggleListChars()
