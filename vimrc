@@ -1051,8 +1051,8 @@ command! -nargs=1 -complete=file VExploreProject call s:ExploreProject(<q-args>,
 command! -nargs=1 -complete=file HExploreProject call s:ExploreProject(<q-args>, 'sp')
 
 function! s:FzfExploreProject()
-  " 1) folders in ~/work
-  let cmd1 = 'find ~/work -mindepth 1 -maxdepth 1 -type d'
+  " 1) folders in ~/work and ~/.vim/bundle
+  let cmd1 = 'find ~/work ~/.vim/bundle -mindepth 1 -maxdepth 1 -type d'
   " 2) folders in the git root that have a package.json
   "    (to explore backend and frontend node projects that are in the same git repo)
   let cmd2 = 'git rev-parse --show-toplevel 2> /dev/null '
