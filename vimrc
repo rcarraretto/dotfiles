@@ -207,7 +207,8 @@ function! s:SetStatusline(...)
     " /path/to/something/ => /path/to/something
     let path = substitute(expand('%'), '\(.*\)/$', '\1', '')
     if path !=# resolve(expand('%'))
-      setlocal statusline+=[%{resolve(expand('%'))}]
+      " display full resolved path, but don't expand tilde (~).
+      setlocal statusline+=[%{fnamemodify(resolve(expand('%')),':~')}]
     endif
   endif
   setlocal statusline+=%=  " left/right separator
