@@ -1510,10 +1510,18 @@ nnoremap <leader>co :%s///gn<cr>
 " Replace entire content of file with clipboard
 nnoremap <leader>rf ggdG"*P=G
 
+" Paste from clipboard in insert and command-line mode
+inoremap <c-q> <c-r>*
+cnoremap <c-q> <c-r>*
+
 " Insert the current filename with <c-g>f
 " (and the built-in <c-r>% is used to insert the current relative path)
 inoremap <c-g>f <c-r>=expand('%:t')<cr>
 cnoremap <c-g>f <c-r>=expand('%:t')<cr>
+
+" Paste escaped content from clipboard in command-line (search) mode.
+" Useful when pasting a path for search.
+cnoremap <c-g>e <c-r>=escape(getreg('*'), '/~')<cr>
 
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
