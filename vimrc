@@ -697,6 +697,13 @@ function! s:ToggleRelativeNumber() abort
     endif
   endfunction
 
+  if &number == 0
+    echohl ErrorMsg
+    echom "ToggleRelativeNumber: can only be triggered when 'number' is set"
+    echohl NONE
+    return
+  endif
+
   if &relativenumber
     call s:GlobalWinDo('s:SetNoRelativeNumber')
   else
