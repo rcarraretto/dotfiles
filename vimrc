@@ -1446,7 +1446,9 @@ nnoremap <silent> <leader>tg :call <sid>CdToGitRoot('tcd')<cr>
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
-nnoremap <space>e :YcmCompleter GoToDefinition<cr>
+nnoremap <space>e :silent YcmCompleter GoToDefinition<cr>
+nnoremap <leader>js :split <bar> silent YcmCompleter GoToDefinition<cr>
+nnoremap <leader>jv :vsplit <bar> silent YcmCompleter GoToDefinition<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
