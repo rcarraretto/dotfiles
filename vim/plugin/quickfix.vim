@@ -42,7 +42,12 @@ function! s:QfDeletePattern() abort
 endfunction
 command! QfDeletePattern :call <sid>QfDeletePattern()
 
-function! s:RegisterMappings()
+function! s:QfFilterPattern()
+  call setqflist(filter(getqflist(), "v:val['text'] =~ '" . @/ . "'"))
+endfunction
+command! QfFilterPattern call s:QfFilterPattern()
+
+function! s:QfConfig()
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
   nnoremap <buffer> <silent> s :call <sid>OpenOnLeftSplit()<cr>
@@ -50,6 +55,7 @@ function! s:RegisterMappings()
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
+  call s:AdjustWinHeight(3, 10)
 endfunction
 
 " From http://vim.wikia.com/wiki/Automatically_fitting_a_quickfix_window_height
@@ -59,13 +65,8 @@ endfunction
 
 augroup Qf
   autocmd!
-  autocmd FileType qf call s:RegisterMappings() | call s:AdjustWinHeight(3, 10)
+  autocmd FileType qf call s:QfConfig()
 augroup END
-
-function! s:FilterBySearchPattern()
-  call setqflist(filter(getqflist(), "v:val['text'] =~ '" . @/ . "'"))
-endfunction
-command! Qfilter call s:FilterBySearchPattern()
 
 " Adapted from
 " https://github.com/milkypostman/vim-togglelist
