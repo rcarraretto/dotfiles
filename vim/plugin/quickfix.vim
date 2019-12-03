@@ -15,7 +15,7 @@ function! s:OpenOnLeftSplit()
 endfunction
 
 " Adapted from https://stackoverflow.com/a/48817071/2277505
-function! s:RemoveQFItem()
+function! s:DeleteCurrentLine()
   let curqfidx = line('.') - 1
   let qfall = getqflist()
   call remove(qfall, curqfidx)
@@ -24,6 +24,24 @@ function! s:RemoveQFItem()
   wincmd p
 endfunction
 
+" Based on https://gist.github.com/AndrewRadev/1424679
+function! s:QfDeletePattern() abort
+  let saved_cursor = getpos('.')
+
+  let new_qflist = []
+  for entry in getqflist()
+    let file_path = getbufinfo(entry.bufnr)[0].name
+    if (entry.text !~ @/) && (file_path !~ @/)
+      call add(new_qflist, entry)
+    endif
+  endfor
+
+  call setqflist(new_qflist)
+
+  call setpos('.', saved_cursor)
+endfunction
+command! QfDeletePattern :call <sid>QfDeletePattern()
+
 function! s:RegisterMappings()
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
@@ -31,7 +49,7 @@ function! s:RegisterMappings()
   nnoremap <buffer> <silent> S :call <sid>OpenNewLeftSplit()<cr>
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
-  nnoremap <buffer> <silent> dd :call <sid>RemoveQFItem()<cr>
+  nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
 endfunction
 
 " From http://vim.wikia.com/wiki/Automatically_fitting_a_quickfix_window_height
