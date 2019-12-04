@@ -24,28 +24,45 @@ function! s:DeleteCurrentLine()
   wincmd p
 endfunction
 
-" Based on https://gist.github.com/AndrewRadev/1424679
+" Based on https://github.com/sk1418/QFGrep
 function! s:QfDeletePattern() abort
   let saved_cursor = getpos('.')
 
-  let new_qflist = []
-  for entry in getqflist()
-    let file_path = getbufinfo(entry.bufnr)[0].name
-    if (entry.text !~ @/) && (file_path !~ @/)
-      call add(new_qflist, entry)
+  let qflist = getqflist()
+
+  " Loop from the last line to the first line.
+  " This way, we can remove items from 'qflist'
+  " without shifting the indexes.
+  for line_index in reverse(range(1, line('$')))
+    if getline(line_index) =~ @/
+      call remove(qflist, line_index - 1)
     endif
   endfor
 
-  call setqflist(new_qflist)
+  call setqflist(qflist)
 
   call setpos('.', saved_cursor)
 endfunction
-command! QfDeletePattern :call <sid>QfDeletePattern()
 
-function! s:QfFilterPattern()
-  call setqflist(filter(getqflist(), "v:val['text'] =~ '" . @/ . "'"))
+" Based on https://github.com/sk1418/QFGrep
+function! s:QfFilterPattern() abort
+  let saved_cursor = getpos('.')
+
+  let qflist = getqflist()
+
+  " Loop from the last line to the first line.
+  " This way, we can remove items from 'qflist'
+  " without shifting the indexes.
+  for line_index in reverse(range(1, line('$')))
+    if getline(line_index) !~ @/
+      call remove(qflist, line_index - 1)
+    endif
+  endfor
+
+  call setqflist(qflist)
+
+  call setpos('.', saved_cursor)
 endfunction
-command! QfFilterPattern call s:QfFilterPattern()
 
 function! s:QfConfig()
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
@@ -55,6 +72,8 @@ function! s:QfConfig()
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
+  command! -buffer QfDeletePattern call s:QfDeletePattern()
+  command! -buffer QfFilterPattern call s:QfFilterPattern()
   call s:AdjustWinHeight(3, 10)
 endfunction
 
