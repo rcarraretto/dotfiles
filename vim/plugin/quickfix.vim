@@ -24,6 +24,15 @@ function! s:DeleteCurrentLine()
   wincmd p
 endfunction
 
+" Based on https://github.com/AndrewRadev/qftools.vim
+function! s:DeleteOperator(_type) abort
+  let saved_cursor = getpos('.')
+  let qflist = getqflist()
+  call remove(qflist, line("'[") - 1, line("']") - 1)
+  call setqflist(qflist)
+  call setpos('.', saved_cursor)
+endfunction
+
 " Based on https://github.com/sk1418/QFGrep
 function! s:QfDeletePattern() abort
   let saved_cursor = getpos('.')
@@ -72,6 +81,7 @@ function! s:QfConfig()
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
+  nnoremap <buffer> <silent> d :set operatorfunc=<sid>DeleteOperator<cr>g@
   command! -buffer QfDeletePattern call s:QfDeletePattern()
   command! -buffer QfFilterPattern call s:QfFilterPattern()
   call s:AdjustWinHeight(3, 10)
