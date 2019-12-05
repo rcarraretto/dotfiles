@@ -73,6 +73,7 @@ Plug 'leafgarland/typescript-vim'
 " Plug 'Quramy/tsuquyomi'
 Plug 'jparise/vim-graphql'
 Plug 'ianks/vim-tsx'
+Plug 'vim-scripts/applescript.vim'
 Plug 'udalov/kotlin-vim'
 " View colored output of shell commands
 Plug 'chrisbra/Colorizer'
@@ -299,6 +300,7 @@ augroup FTOptions
   autocmd FileType cpp setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
+  autocmd FileType applescript setlocal commentstring=--\ %s
   autocmd FileType crontab setlocal backupcopy=yes
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
@@ -313,6 +315,7 @@ augroup SetFiletype
   autocmd!
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
   autocmd BufNewFile,BufRead .ignore set filetype=conf
+  autocmd BufNewFile,BufRead *.applescript set filetype=applescript
   " my own personal notes format
   autocmd BufNewFile,BufRead *.ntx,.todo set filetype=ntx
 augroup END
