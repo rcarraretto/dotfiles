@@ -287,7 +287,7 @@ endif
 
 augroup FTOptions
   autocmd!
-  autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0
+  autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0 | call s:VimscriptMappings()
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType text setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal noexpandtab
   autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker | setlocal commentstring=#\ %s
@@ -432,6 +432,10 @@ function! s:VimEnter()
   if !empty(maparg("<M-d>", "i", 0, 1))
     iunmap <M-d>
   endif
+endfunction
+
+function! s:VimscriptMappings() abort
+  nnoremap <buffer> <leader>ss :silent write <bar> :source %<cr>
 endfunction
 
 function! s:NetrwMappings()
@@ -1390,7 +1394,6 @@ cnoremap <c-l> <c-n>
 " vimrc, vimscript
 nnoremap <leader>ev :call <sid>EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ss :silent write <bar> :source %<cr>
 
 " Browse files & search
 " quickly edit some files and folders
