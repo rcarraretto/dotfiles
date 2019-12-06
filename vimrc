@@ -1098,6 +1098,25 @@ function! s:SearchNotes(input) abort
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
+function! s:SearchInFile(input) abort
+  let path = expand('%:p')
+  if empty(path)
+    echohl ErrorMsg
+    echom 'SearchInFile: current buffer has invalid path'
+    echohl NONE
+    return
+  endif
+  if isdirectory(path)
+    echohl ErrorMsg
+    echom 'SearchInFile: current buffer is a directory'
+    echohl NONE
+    return
+  endif
+  execute 'Ack! -Q "' . a:input . '" ' . path
+  cfirst
+endfunction
+command! -nargs=* SearchInFile :call <sid>SearchInFile(<q-args>)
+
 function! s:SysOpen(filename)
   let ext = fnamemodify(a:filename, ':e')
   if index(['sh'], ext) != -1
@@ -1426,6 +1445,8 @@ nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/
 nnoremap <leader>ad :Ack! --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
 " search notes
 nnoremap <leader>an :SearchNotes<space>
+" search in file
+nnoremap <leader>af :SearchInFile<space>
 " browse source code of vim plugins
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
 " browse Downloads, most recent first
