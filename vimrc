@@ -889,7 +889,7 @@ function! s:GrepOperator(type)
   else
     return
   endif
-  silent execute "Ack! -Q --hidden " . shellescape(@@)
+  silent execute "Ag -Q --hidden " . shellescape(@@)
 endfunction
 
 " Make * and # work on visual mode.
@@ -1094,7 +1094,7 @@ function! s:FzfExploreProject()
 endfunction
 
 function! s:SearchNotes(input) abort
-  execute 'Ack! --hidden -Q "' . a:input . '" -G "\.ntx$|\.txt$" ~/Dropbox/notes/'
+  execute 'Ag --hidden -Q "' . a:input . '" -G "\.ntx$|\.txt$" ~/Dropbox/notes/'
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
@@ -1112,7 +1112,7 @@ function! s:SearchInFile(input) abort
     echohl NONE
     return
   endif
-  execute 'Ack! -Q "' . a:input . '" ' . path
+  execute 'Ag -Q "' . a:input . '" ' . path
   cfirst
 endfunction
 command! -nargs=* SearchInFile :call <sid>SearchInFile(<q-args>)
@@ -1321,6 +1321,44 @@ function! s:FzfHistory(...)
 endfunction
 command! -bang -nargs=* FzfHistory call s:FzfHistory(<bang>0)
 
+function! s:StatelessGrep(prg, format, args) abort
+  let prg_back = &l:grepprg
+  let format_back = &grepformat
+  try
+    let &l:grepprg = a:prg
+    let &grepformat = a:format
+    " Escape special chars because of vim cmdline, to avoid e.g.:
+    " E499: Empty file name for '%' or '#', only works with ":p:h"
+    let args = escape(a:args, '|#%')
+    silent execute 'grep!' args
+  finally
+    let &l:grepprg = prg_back
+    let &grepformat = format_back
+  endtry
+  " fix screen going blank after :grep
+  redraw!
+  botright copen
+endfunction
+
+" :Ag command.
+" Based on ack.vim (ack#Ack)
+function! s:Ag(args) abort
+  if empty(a:args)
+    echohl ErrorMsg
+    echom 'Ag: Empty args'
+    echohl NONE
+    return
+  endif
+  call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
+  " Highlight
+  let @/ = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
+  call feedkeys(":let &hlsearch=1\<cr>", "n")
+endfunction
+" The :Ack command from ack.vim uses -complete=files,
+" which causes <q-args> to expand characters like # and % (unless you escape them).
+" For this reason, this :Ag command doesn't use file completion.
+command! -nargs=* Ag call s:Ag(<q-args>)
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1442,7 +1480,7 @@ nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
 " search dotfiles
-nnoremap <leader>ad :Ack! --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
+nnoremap <leader>ad :Ag --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
 " search notes
 nnoremap <leader>an :SearchNotes<space>
 " search in file
@@ -1457,10 +1495,9 @@ nnoremap <space>c :Commands<cr>
 " browse command-line history
 nnoremap <space>: :History:<cr>
 " search in project
-nnoremap <space>a :Ack! --hidden -Q ''<left>
+nnoremap <space>a :Ag --hidden -Q ''<left>
 " search in git root
-nnoremap <space>A :Ack! --hidden -Q '' <c-r>=util#GetGitRoot()<cr><c-f>F'<c-c>
-nnoremap <leader>aa :AckFromSearch<cr>
+nnoremap <space>A :Ag --hidden -Q '' <c-r>=util#GetGitRoot()<cr><c-f>F'<c-c>
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
 " search in file (from visual mode)
