@@ -241,6 +241,10 @@ endfunction
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
+" Remove underline from cursor line
+" https://stackoverflow.com/a/58181112/2277505
+highlight CursorLineNr cterm=bold
+
 " Change for base16-default-dark colorscheme
 " colorcolumn + search highlighting doesn't work well
 " because base16 Search changes the fgcolor of search
