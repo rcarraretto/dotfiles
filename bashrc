@@ -67,16 +67,9 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 # Ctrl+S in vim
 stty -ixon -ixoff
 
-# Python bins from 'pip install --user'
-add-to-path ~/Library/Python/2.7/bin after
-
 # Ruby env
 if command-exists rbenv && [ -z $RBENV_SET ]; then
   eval "$(rbenv init -)" && RBENV_SET=1 # && echo "rbenv set!"
-fi
-# Python env
-if command-exists pyenv && [ -z $PYENV_SET ]; then
-  eval "$(pyenv init -)" && PYENV_SET=1 # && echo "pyenv set!"
 fi
 
 # Nvm
