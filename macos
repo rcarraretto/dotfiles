@@ -1,10 +1,28 @@
 #!/usr/bin/env bash
 
-# Based on https://mths.be/macos
+# Based on https://mths.be/macos and
+# https://github.com/pawelgrzybek/dotfiles/blob/master/setup-macos.sh
+# For a guide on how to obtain these yourself, see:
+# https://pawelgrzybek.com/change-macos-user-preferences-via-command-line/
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we're about to change
 osascript -e 'tell application "System Preferences" to quit'
+
+#----------------------------------------------------------------------------
+# Dock
+
+# System Preferences > Dock > [X] Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+
+# System Preferences > Dock > [X] Magnification
+defaults write com.apple.dock magnification -bool true
+
+# System Preferences > Dock > Magnification Size
+defaults write com.apple.dock largesize -int 95
+
+killall Dock
+#----------------------------------------------------------------------------
 
 # Frequency of software update check, in days
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 14
