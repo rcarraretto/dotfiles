@@ -72,7 +72,7 @@ Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
 " Plug 'Quramy/tsuquyomi'
 Plug 'jparise/vim-graphql'
-Plug 'ianks/vim-tsx'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'vim-scripts/applescript.vim'
 Plug 'udalov/kotlin-vim'
 " View colored output of shell commands
