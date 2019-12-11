@@ -23,6 +23,25 @@ defaults write com.apple.dock largesize -int 95
 
 killall Dock
 #----------------------------------------------------------------------------
+# Trackpad
+#
+# It seems that the standard 'write' sets the behaviour,
+# but it is also required to do a -currentHost -g 'write' so that
+# the System Preferences UI is in sync.
+# It also seems that a logout is necessary for changes to take effect.
+# (See https://apple.stackexchange.com/a/348831)
+
+# Zeigen und Klicken -> [ ] Nachschlagen & Datenerkennung
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 0
+defaults -currentHost write -g com.apple.trackpad.threeFingerTapGesture -int 0
+
+# Zeigen und Klicken -> [X] Sekundärklick - Mit zwei Fingern klicken oder tippen
+# Note: System Preferences UI doesn't seem to update.
+# defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+# defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true
+
+#----------------------------------------------------------------------------
 
 # Frequency of software update check, in days
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 14
