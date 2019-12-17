@@ -143,21 +143,7 @@ function! s:SetStatuslineLineNums()
 endfunction
 
 function! GetCwdContext() abort
-  " cwd => /Users/roberto/work/some-project/backend
-  " %:p => /Users/roberto/work/some-project/backend/src/feature.spec.ts
-  "
-  " Resolve %:p to cover the case when we edit e.g. a symlink folder ~/.vim/bundle/auto-pairs
-  " cwd          => /Users/roberto/work/dotfiles/vim/bundle/auto-pairs
-  " %:p          => /Users/roberto/.vim/bundle/auto-pairs/
-  " resolved %:p => /Users/roberto/work/dotfiles/vim/bundle/auto-pairs
-  let idx = stridx(resolve(expand('%:p')), getcwd())
-  if idx == -1
-    " file is outside of cwd
-    return ''
-  endif
-  " file is inside cwd.
-  " show last path component of cwd.
-  " [backend]
+  " show last path component of cwd
   return '[' . fnamemodify(getcwd(), ':t') . '] '
 endfunction
 
@@ -213,8 +199,7 @@ function! s:SetStatusline(...)
     " /path/to/something/ => /path/to/something
     let path = substitute(expand('%'), '\(.*\)/$', '\1', '')
     if path !=# resolve(expand('%'))
-      " display full resolved path, but don't expand tilde (~).
-      setlocal statusline+=[%{fnamemodify(resolve(expand('%')),':~')}]
+      setlocal statusline+=[@]
     endif
   endif
   setlocal statusline+=%=  " left/right separator
