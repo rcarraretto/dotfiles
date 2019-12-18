@@ -1341,7 +1341,7 @@ function! s:Ag(args) abort
   call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
   " Highlight
   let @/ = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
-  call feedkeys(":let &hlsearch=1\<cr>", "n")
+  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
 endfunction
 " The :Ack command from ack.vim uses -complete=files,
 " which causes <q-args> to expand characters like # and % (unless you escape them).
