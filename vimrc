@@ -309,6 +309,13 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead *.ntx,.todo set filetype=ntx
 augroup END
 
+augroup KarabinerEOL
+  autocmd!
+  " Apparently Karabiner likes to save this file without an EOL
+  autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
+  autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
+augroup END
+
 augroup WinConfig
   autocmd!
   autocmd BufEnter,FocusGained,WinEnter * call s:OnWinEnter()
@@ -396,13 +403,6 @@ augroup DisableE211
   " https://stackoverflow.com/a/52781365/2277505
   autocmd!
   autocmd FileChangedShell * call s:FileChangedShell(expand("<afile>:p"))
-augroup END
-
-augroup KarabinerEOL
-  autocmd!
-  " Apparently Karabiner likes to save this file without an EOL
-  autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
-  autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
 augroup END
 
 " }}}
