@@ -1000,7 +1000,7 @@ endfunction
 
 function! s:EditSketchBuffer()
   call s:EditFile('/var/tmp/sketch.ts')
-  nnoremap <buffer> <space>t :update <bar> Dispatch ts-node %<cr>
+  nnoremap <buffer> <space>t :update <bar> Dispatch ts-node --project ~/work/dotfiles-private/tsconfig.json %<cr>
 endfunction
 
 " Adapted from:
