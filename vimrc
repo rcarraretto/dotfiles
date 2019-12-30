@@ -3,7 +3,6 @@
 " Plugins ---------------------- {{{
 set rtp+=/usr/local/opt/fzf
 set rtp+=$HOME/work/dotfiles-private/vim
-set rtp+=$HOME/work/tsuquyomi
 
 if $USE_NETRW
   set rtp+=$HOME/work/netrw
@@ -70,7 +69,7 @@ Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'leafgarland/typescript-vim'
-" Plug 'Quramy/tsuquyomi'
+Plug 'Quramy/tsuquyomi'
 Plug 'jparise/vim-graphql'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'vim-scripts/applescript.vim'
