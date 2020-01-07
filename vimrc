@@ -146,6 +146,23 @@ function! GetCwdContext() abort
   return '[' . fnamemodify(getcwd(), ':t') . '] '
 endfunction
 
+function! GetIndentationInfo() abort
+  if &list == 0
+    return ''
+  endif
+  let type = &expandtab ? '<space>' : '<tab>'
+  if &softtabstop == 0
+    if &tabstop == &shiftwidth
+      let length = &tabstop
+    else
+      let length = 'ts: ' . &tabstop . ' ' . 'sw: ' . &shiftwidth
+    endif
+  else
+    let length = 'ts: ' . &tabstop . ' sts: ' . &softtabstop . ' sw: ' . &shiftwidth
+  endif
+  return '| ' . type . ' ' . length
+endfunction
+
 function! s:SetStatusline(...)
   if index(['diff', 'undotree'], &filetype) >= 0
     return
@@ -156,7 +173,7 @@ function! s:SetStatusline(...)
   setlocal statusline=
   if showRelativeFilename
     if isActiveWindow
-      execute "setlocal statusline+=%{GetCwdContext()}"
+      setlocal statusline+=%{GetCwdContext()}
     endif
     " Apparently %f doesn't always show the relative filename
     " https://stackoverflow.com/a/45244610/2277505
@@ -203,6 +220,7 @@ function! s:SetStatusline(...)
   endif
   setlocal statusline+=%=  " left/right separator
   if isActiveWindow
+    setlocal statusline+=%{GetIndentationInfo()}
     let showFt = index(['qf', ''], &filetype) == -1
     if showFt
       setlocal statusline+=\ \|\ %{&ft}\ \|
@@ -719,7 +737,7 @@ function! s:ToggleListChars()
     setlocal listchars=
   else
     setlocal list
-    setlocal listchars=tab:>·,space:␣,trail:~
+    setlocal listchars=tab:>\ ,space:␣
   endif
 endfunction
 
