@@ -304,6 +304,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead .luacheckrc set filetype=lua
   autocmd BufNewFile,BufRead .ignore set filetype=conf
   autocmd BufNewFile,BufRead *.applescript set filetype=applescript
+  autocmd BufNewFile,BufRead *.jenkinsfile set filetype=groovy
   " my own personal notes format
   autocmd BufNewFile,BufRead *.ntx,.todo set filetype=ntx
 augroup END
