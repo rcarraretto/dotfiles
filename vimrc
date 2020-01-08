@@ -1017,8 +1017,15 @@ function! s:EditFileUpwards(filename)
     call s:EditFile(a:filename)
     return
   endif
-  " search from the directory of the current file upwards, until the home folder
+  " Search from the directory of the current file upwards, until the home folder
   let path = findfile(a:filename, '.;' . $HOME)
+  if !empty(path)
+    call s:EditFile(path)
+    return
+  endif
+  " Search from cwd upwards, until the home folder.
+  " This might help in case the current file is outside of cwd (e.g. a Dropbox note).
+  let path = findfile(a:filename, getcwd() . ';' . $HOME)
   if !empty(path)
     call s:EditFile(path)
     return
