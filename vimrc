@@ -504,12 +504,24 @@ function! s:DirvishMappings()
   nnoremap <buffer> <silent> mv :<c-u>call <sid>DirvishMv()<cr>
 endfunction
 
+function! s:DirvishRefresh() abort
+  silent edit
+  try
+    " restore cursor position
+    " :h `"
+    execute "normal! g`\""
+  catch /E19/
+    " E19: Mark has invalid line number
+    " Line is gone. Ignore it.
+    " This happens e.g. when deleting the last file of the list.
+  endtry
+endfunction
+
 function! s:DirvishRename()
   let path = getline('.')
   let new_path = input('Moving ' . path . ' to: ', path, 'file')
   call rename(path, new_path)
-  silent edit
-  execute "normal! g`\""
+  call s:DirvishRefresh()
 endfunction
 
 function! s:DirvishMkdir()
@@ -519,8 +531,7 @@ function! s:DirvishMkdir()
   endif
   let new_path = @% . dirname
   call mkdir(new_path)
-  silent edit
-  execute "normal! g`\""
+  call s:DirvishRefresh()
 endfunction
 
 function! s:DirvishRm()
@@ -549,8 +560,7 @@ function! s:DirvishRm()
     echohl NONE
     return
   endif
-  silent edit
-  execute "normal! g`\""
+  call s:DirvishRefresh()
 endfunction
 
 " Move contents of folder to parent folder
@@ -579,8 +589,7 @@ function s:DirvishImplode()
     echom 'DirvishImplode: Error: ' . output
     echohl NONE
   endif
-  silent edit
-  execute "normal! g`\""
+  call s:DirvishRefresh()
 endfunction
 
 function! ArgList()
