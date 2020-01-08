@@ -1017,12 +1017,13 @@ function! s:EditFileUpwards(filename)
     call s:EditFile(a:filename)
     return
   endif
+  " search from the directory of the current file upwards, until the home folder
   let path = findfile(a:filename, '.;' . $HOME)
-  if len(path) == 0
-    echo 'File not found: ' . a:filename
+  if !empty(path)
+    call s:EditFile(path)
     return
   endif
-  call s:EditFile(path)
+  echo 'File not found: ' . a:filename
 endfunction
 
 function! s:EditSketchBuffer()
