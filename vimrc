@@ -123,6 +123,7 @@ set formatoptions-=cro
 set synmaxcol=1000
 set backspace=indent,eol,start
 set encoding=utf-8
+set listchars=tab:>\ ,space:␣
 
 set shortmess+=A " no warning for existing swap file
 
@@ -734,10 +735,8 @@ endfunction
 function! s:ToggleListChars()
   if &list
     setlocal nolist
-    setlocal listchars=
   else
     setlocal list
-    setlocal listchars=tab:>\ ,space:␣
   endif
 endfunction
 
