@@ -131,6 +131,10 @@ function! Qftitle()
   return getqflist({'title': 1}).title
 endfunction
 
+function! s:SetStatuslineSeparator() abort
+  setlocal statusline+=\ \|\ " separator
+endfunction
+
 function! s:SetStatuslineLineNums()
   let length = len(string(line('$')))
   if length < 4
@@ -140,6 +144,7 @@ function! s:SetStatuslineLineNums()
   " line number / number of lines
   " e.g. %4.4l/%-4.4L
   execute "setlocal statusline+=%" . line_min_max . "l/%-" . line_min_max . "L"
+  setlocal statusline+=\  " separator
 endfunction
 
 function! GetCwdContext() abort
@@ -161,7 +166,7 @@ function! GetIndentationInfo() abort
   else
     let length = 'ts: ' . &tabstop . ' sts: ' . &softtabstop . ' sw: ' . &shiftwidth
   endif
-  return '| ' . type . ' ' . length
+  return ' | ' . type . ' ' . length
 endfunction
 
 function! s:SetStatusline(...)
@@ -224,17 +229,19 @@ function! s:SetStatusline(...)
     setlocal statusline+=%{GetIndentationInfo()}
     let showFt = index(['qf', ''], &filetype) == -1
     if showFt
-      setlocal statusline+=\ \|\ %{&ft}\ \|
-      setlocal statusline+=\  " separator
+      call s:SetStatuslineSeparator()
+      setlocal statusline+=%{&ft} " filetype
     endif
+    call s:SetStatuslineSeparator()
     call s:SetStatuslineLineNums()  " line number / number of lines
-    setlocal statusline+=\ \|\  " separator
-    setlocal statusline+=col\ %-3.v  " column number
+    call s:SetStatuslineSeparator()
+    setlocal statusline+=col\ %-3.v " column number
     setlocal statusline+=\  " separator
   else
     if &ft == 'qf'
+      call s:SetStatuslineSeparator()
       call s:SetStatuslineLineNums()  " line number / number of lines
-      setlocal statusline+=\ \|\  " separator
+      call s:SetStatuslineSeparator()
     endif
     setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
     setlocal statusline+=\ \ \  " separator
