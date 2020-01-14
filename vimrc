@@ -304,6 +304,7 @@ augroup FTOptions
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0 | call s:VimscriptMappings()
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType text setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal noexpandtab
+  " my own personal notes format
   autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker | setlocal commentstring=#\ %s
   autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript,typescript.tsx setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal commentstring=//\ %s
@@ -331,8 +332,6 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead .ignore set filetype=conf
   autocmd BufNewFile,BufRead *.applescript set filetype=applescript
   autocmd BufNewFile,BufRead *.jenkinsfile set filetype=groovy
-  " my own personal notes format
-  autocmd BufNewFile,BufRead *.ntx,.todo set filetype=ntx
 augroup END
 
 augroup KarabinerEOL
@@ -1124,7 +1123,7 @@ function! s:FzfExploreProject()
 endfunction
 
 function! s:SearchNotes(input) abort
-  execute 'Ag --hidden -Q "' . a:input . '" -G "\.ntx$|\.txt$" ~/Dropbox/notes/'
+  execute 'Ag --hidden -Q "' . a:input . '" -G "\.txt$" ~/Dropbox/notes/'
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
@@ -1489,9 +1488,9 @@ nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes -type f \( -name "*.txt" -or -name "*.ntx" \)'}))<cr>
-nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/misc.ntx")<cr>
-nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev/dev.ntx")<cr>
+nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes -type f -name "*.txt"'}))<cr>
+nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/misc.txt")<cr>
+nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
 nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/work.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
