@@ -21,3 +21,9 @@ function! util#GetGitRoot()
   " :h expr-[:]
   return output[:-2]
 endfunction
+
+function! util#error_msg(msg) abort
+  echohl ErrorMsg
+  echom a:msg
+  echohl NONE
+endfunction

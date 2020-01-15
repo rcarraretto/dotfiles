@@ -1169,6 +1169,29 @@ function! s:JsonFormat()
 endfunction
 command! JsonFormat call s:JsonFormat()
 
+function! s:JsonSortKeys() abort
+  if &ft !=# 'json'
+    return util#error_msg('JsonSortKeys: Not a json file')
+  endif
+  if !executable('jq')
+    return util#error_msg("JsonSortKeys: 'jq' tool is not installed")
+  endif
+  %!jq -S '.'
+endfunction
+command! JsonSortKeys call s:JsonSortKeys()
+
+function! s:Prettier() abort
+  let parser=''
+  if &ft == 'json'
+    let parser='json'
+  endif
+  if empty(parser)
+    return util#error_msg('Unsupported filetype: ' . &ft)
+  endif
+  execute "%!prettier --parser=" . parser
+endfunction
+command! Prettier call s:Prettier()
+
 function! s:HighestWinnr()
   let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
   return wins[-1]['winnr']
