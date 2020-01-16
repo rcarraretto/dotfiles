@@ -1127,6 +1127,11 @@ function! s:SearchNotes(input) abort
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
+function! s:SearchDotfiles(input) abort
+  execute 'Ag --hidden -Q "' . a:input . '" ~/work/dotfiles/ ~/work/dotfiles-private/'
+endfunction
+command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
+
 function! s:SearchInFile(input) abort
   let path = expand('%:p')
   if empty(path)
@@ -1533,7 +1538,7 @@ nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
 " search dotfiles
-nnoremap <leader>ad :Ag --hidden -Q '' ~/work/dotfiles/ ~/work/dotfiles-private/<c-f>F'<c-c>
+nnoremap <leader>ad :SearchDotfiles<space>
 " search notes
 nnoremap <leader>an :SearchNotes<space>
 " search in file
