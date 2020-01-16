@@ -124,6 +124,9 @@ set synmaxcol=1000
 set backspace=indent,eol,start
 set encoding=utf-8
 set listchars=tab:>\ ,space:␣
+set tabstop=2
+set shiftwidth=2
+set expandtab
 
 set shortmess+=A " no warning for existing swap file
 
