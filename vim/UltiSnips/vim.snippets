@@ -54,3 +54,7 @@ echom '${1}'
 echohl NONE
 return
 endsnippet
+
+snippet reterr "print error and return"
+return util#error_msg('${1}')
+endsnippet
