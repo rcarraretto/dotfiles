@@ -45,7 +45,7 @@ augroup END
 endsnippet
 
 snippet cmd "command"
-command! ${1} :call <sid>$1(<q-args>)
+command! -nargs=* ${1} :call <sid>$1(<q-args>)
 endsnippet
 
 snippet errormsg "echohl ErrorMsg"
