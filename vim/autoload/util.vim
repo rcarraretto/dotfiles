@@ -1,25 +1,26 @@
-function! util#GetGitRoot()
-  " path of current file (resolves symbolic links)
-  let buf_path = resolve(expand('%:p'))
-  if isdirectory(buf_path)
+function! util#GetGitRoot(...)
+  " GetGitRoot()     => in relation to current buffer
+  " GetGitRoot(path) => in relation to given path
+  let path = get(a:, 1, expand('%:p'))
+  " Resolves symbolic links
+  let resolved_path = resolve(path)
+  if isdirectory(resolved_path)
     " dirvish
-    let buf_dir = buf_path
+    let dir = resolved_path
   else
     " dir of current file
-    let buf_dir = fnamemodify(buf_path, ':h')
-    if len(buf_dir) == 0
+    let dir = fnamemodify(resolved_path, ':h')
+    if len(dir) == 0
       " e.g. netrw
       return 0
     endif
   endif
-  let output = system('cd ' .  buf_dir . ' && git rev-parse --show-toplevel')
+  let git_root_path = system('cd ' . dir . ' && git rev-parse --show-toplevel')
   if v:shell_error
     return 0
   endif
-  " Remove null character (^@) from output
-  " echom split(output, '\zs')
-  " :h expr-[:]
-  return output[:-2]
+  " Return path without expanded tilde, so it is easier to read.
+  return fnamemodify(git_root_path, ':~')
 endfunction
 
 function! util#error_msg(msg) abort

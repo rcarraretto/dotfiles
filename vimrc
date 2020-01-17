@@ -1135,6 +1135,18 @@ function! s:SearchDotfiles(input) abort
 endfunction
 command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
 
+function! s:SearchInGitRoot(input) abort
+  let path = util#GetGitRoot()
+  if empty(path)
+    let path = util#GetGitRoot(getcwd())
+  endif
+  if empty(path)
+    return util#error_msg('SearchInGitRoot: Git root not found')
+  endif
+  execute 'Ag --hidden -Q "' . a:input . '" ' . path
+endfunction
+command! -nargs=* SearchInGitRoot :call <sid>SearchInGitRoot(<q-args>)
+
 function! s:SearchInFile(input) abort
   let path = expand('%:p')
   if empty(path)
@@ -1558,7 +1570,7 @@ nnoremap <space>: :History:<cr>
 " search in project
 nnoremap <space>a :Ag --hidden -Q ''<left>
 " search in git root
-nnoremap <space>A :Ag --hidden -Q '' <c-r>=util#GetGitRoot()<cr><c-f>F'<c-c>
+nnoremap <space>A :SearchInGitRoot<space>
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
 " search in file (from visual mode)
