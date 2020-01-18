@@ -1210,7 +1210,10 @@ function! s:Prettier() abort
   if empty(parser)
     return util#error_msg('Unsupported filetype: ' . &ft)
   endif
+  let save_pos = getpos('.')
   execute "%!prettier --parser=" . parser
+  call setpos('.', save_pos)
+  silent! write
 endfunction
 command! Prettier call s:Prettier()
 
