@@ -67,11 +67,6 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 # Ctrl+S in vim
 stty -ixon -ixoff
 
-# Ruby env
-if command-exists rbenv && [ -z $RBENV_SET ]; then
-  eval "$(rbenv init -)" && RBENV_SET=1 # && echo "rbenv set!"
-fi
-
 # Nvm
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ] && ! command-exists nvm; then
