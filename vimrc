@@ -1044,7 +1044,7 @@ function! s:EditFileUpwards(filename)
 endfunction
 
 function! s:EditSketchBuffer()
-  call s:EditFile('/var/tmp/sketch.ts')
+  call s:EditFile('~/work/dotfiles-private/src/sketch.ts')
   nnoremap <buffer> <space>t :update <bar> Dispatch ts-node --project ~/work/dotfiles-private/tsconfig.json %<cr>
 endfunction
 
