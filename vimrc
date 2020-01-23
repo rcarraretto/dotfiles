@@ -846,7 +846,6 @@ function! s:OpenInSourceTree()
     echohl NONE
     return
   endif
-  echo 'open -a SourceTree ' . output
   call system('open -a SourceTree ' . output)
 endfunction
 
