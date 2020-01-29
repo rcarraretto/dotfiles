@@ -1417,19 +1417,31 @@ function! s:StatelessGrep(prg, format, args) abort
   botright copen
 endfunction
 
+function! s:AgVimgrep(format, args) abort
+  call s:StatelessGrep('ag --vimgrep', a:format, a:args)
+endfunction
+
+function! s:AgSetHighlight(args) abort
+  let @/ = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
+  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
+endfunction
+
+function! s:AgSearchFromSearchReg() abort
+  let search = getreg('/')
+  " translate vim regular expression to perl regular expression.
+  let search = substitute(search, '\(\\<\|\\>\)', '\\b', 'g')
+  return '"' . search . '"'
+endfunction
+
 " :Ag command.
 " Based on ack.vim (ack#Ack)
 function! s:Ag(args) abort
+  let format = '%f:%l:%c:%m,%f:%l:%m'
   if empty(a:args)
-    echohl ErrorMsg
-    echom 'Ag: Empty args'
-    echohl NONE
-    return
+    return s:AgVimgrep(format, s:AgSearchFromSearchReg())
   endif
-  call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
-  " Highlight
-  let @/ = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
-  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
+  call s:AgVimgrep(format, a:args)
+  call s:AgSetHighlight(a:args)
 endfunction
 " The :Ack command from ack.vim uses -complete=files,
 " which causes <q-args> to expand characters like # and % (unless you escape them).
@@ -1555,6 +1567,8 @@ nnoremap <space>O :GFiles<cr>
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
+" Ag from search reg
+nnoremap <leader>aa :Ag<cr>
 " search dotfiles
 nnoremap <leader>ad :SearchDotfiles<space>
 " search notes
