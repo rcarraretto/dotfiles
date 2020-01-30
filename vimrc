@@ -1451,6 +1451,24 @@ endfunction
 " For this reason, this :Ag command doesn't use file completion.
 command! -nargs=* Ag call s:Ag(<q-args>)
 
+function! s:ExploreSyntaxFiles() abort
+  " Should probably look for patterns in :scriptnames instead
+  let paths = [
+  \ $VIMRUNTIME . "/syntax/" . &syntax . ".vim",
+  \ $HOME . "/.vim/syntax/" . &syntax . ".vim",
+  \ $HOME . "/.vim/after/syntax/" . &syntax . ".vim"
+  \ ]
+  call filter(paths, 'filereadable(v:val)')
+  if empty(paths)
+    return util#error_msg('ExploreSyntaxFiles: no syntax files found')
+  endif
+  let items = map(paths, "{'filename': v:val}")
+  call setqflist(items)
+  botright copen
+  wincmd p
+  cfirst
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1558,10 +1576,8 @@ nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
 nnoremap <leader>ek :call <sid>EditSketchBuffer()<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
-" edit syntax for the current filetype
-nnoremap <leader>ey1 :execute "edit " . $VIMRUNTIME . "/syntax/" . &syntax . ".vim"<cr>
-nnoremap <leader>ey2 :execute "edit ~/.vim/syntax/" . &syntax . ".vim"<cr>
-nnoremap <leader>ey3 :execute "edit ~/.vim/after/syntax/" . &syntax . ".vim"<cr>
+" explore syntax files for the current filetype
+nnoremap <leader>ey :call <sid>ExploreSyntaxFiles()<cr>
 " browse files
 nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
