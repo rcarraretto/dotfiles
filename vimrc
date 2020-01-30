@@ -338,11 +338,14 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead *.jenkinsfile set filetype=groovy
 augroup END
 
-augroup KarabinerEOL
+augroup SpecialFiles
   autocmd!
   " Apparently Karabiner likes to save this file without an EOL
   autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
   autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
+  " Approximate highlight for aws conf files
+  " https://stackoverflow.com/a/16338432/2277505
+  autocmd BufRead ~/.aws/credentials,~/.aws/config set filetype=dosini | setlocal commentstring=#\ %s
 augroup END
 
 augroup WinConfig
