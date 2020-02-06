@@ -1088,7 +1088,7 @@ function s:FileChangedShell(name)
 endfunction
 
 function! s:ExploreProject(path, opencmd)
-  execute a:opencmd . a:path . " | lcd " . a:path
+  execute a:opencmd a:path . " | lcd " . a:path
   " Somehow the statusline doesn't get properly rendered,
   " when calling this from FzfExploreProject().
   call s:SetStatusline()
@@ -1107,15 +1107,24 @@ function! s:FzfExploreProject()
   let cmd2 = cmd2 . '| xargs -I GIT_PATH find GIT_PATH -maxdepth 3 -not -path "*/node_modules/*" -name package.json '
   let cmd2 = cmd2 . '| sed -n "s_/package.json__p"'
   let cmd = cmd2 . '; ' . cmd1 . ';'
-  let opts = {'source': cmd, 'down': '~40%' }
-  " Put custom actions, instead of using g:fzf_action.
-  " This is based on fzf#wrap().
-  let opts._action = {
+  call s:FzfExplorePaths(cmd)
+endfunction
+
+function! s:FzfExplorePaths(cmd) abort
+  let action = {
         \ '': 'ExploreProject',
         \ 'ctrl-t': 'TExploreProject',
         \ 'ctrl-x': 'HExploreProject',
         \ 'ctrl-v': 'VExploreProject',
         \ }
+  call s:FzfWithAction(a:cmd, action)
+endfunction
+
+function! s:FzfWithAction(cmd, action) abort
+  let opts = {'source': a:cmd, 'down': '~40%' }
+  " Put custom actions, instead of using g:fzf_action.
+  " This is based on fzf#wrap().
+  let opts._action = a:action
   let opts.options = ' --expect='.join(keys(opts._action), ',')
   let CommonSink = s:GetScriptFunc('/usr/local/Cellar/fzf/.*/plugin/fzf.vim', 'common_sink')
   function! opts.sink(lines) abort closure
@@ -1126,6 +1135,14 @@ function! s:FzfExploreProject()
   endfunction
   let opts['sink*'] = remove(opts, 'sink')
   call fzf#run(opts)
+endfunction
+
+function! s:FzfExploreNodeModules() abort
+  if !isdirectory(getcwd() . '/node_modules')
+    return util#error_msg('FzfExploreNodeModules: No node modules found in ' . getcwd())
+  endif
+  let cmd = 'find node_modules -mindepth 1 -maxdepth 1'
+  call s:FzfExplorePaths(cmd)
 endfunction
 
 function! s:SearchNotes(input) abort
@@ -1586,6 +1603,8 @@ nnoremap <space>O :GFiles<cr>
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
 nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
+" browse node_modules
+nnoremap <leader>eM :call <sid>FzfExploreNodeModules()<cr>
 " Ag from search reg
 nnoremap <leader>aa :Ag<cr>
 " search dotfiles
