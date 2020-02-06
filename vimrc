@@ -1469,13 +1469,13 @@ endfunction
 command! -nargs=* Ag call s:Ag(<q-args>)
 
 function! s:ExploreSyntaxFiles() abort
-  " Should probably look for patterns in :scriptnames instead
-  let paths = [
-  \ $VIMRUNTIME . "/syntax/" . &syntax . ".vim",
-  \ $HOME . "/.vim/syntax/" . &syntax . ".vim",
-  \ $HOME . "/.vim/after/syntax/" . &syntax . ".vim"
-  \ ]
-  call filter(paths, 'filereadable(v:val)')
+  let script_paths = s:GetScriptPaths()
+  let paths = []
+  for script_path in script_paths
+    if match(script_path, 'syntax/' . &syntax . '.vim') >= 0
+      call add(paths, script_path)
+    endif
+  endfor
   if empty(paths)
     return util#error_msg('ExploreSyntaxFiles: no syntax files found')
   endif
@@ -1484,6 +1484,11 @@ function! s:ExploreSyntaxFiles() abort
   botright copen
   wincmd p
   cfirst
+endfunction
+
+" Get full paths from :scriptnames
+function! s:GetScriptPaths() abort
+   return map(split(execute('scriptnames'), "\n"), 'fnamemodify(substitute(v:val, ''^\s*\d*: '', "", ""), '':p'')')
 endfunction
 
 "}}}
