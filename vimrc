@@ -1226,6 +1226,8 @@ function! s:Prettier() abort
     let parser='json'
   elseif index(['javascript', 'typescript', 'typescript.jsx'], &ft) >= 0
     let parser='babel'
+  elseif &ft == 'markdown'
+    let parser='markdown'
   endif
   if empty(parser)
     return util#error_msg('Unsupported filetype: ' . &ft)
