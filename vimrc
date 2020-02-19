@@ -1493,6 +1493,18 @@ function! s:GetScriptPaths() abort
    return map(split(execute('scriptnames'), "\n"), 'fnamemodify(substitute(v:val, ''^\s*\d*: '', "", ""), '':p'')')
 endfunction
 
+function! s:FormatParagraph() abort
+  if getline('.')[0] == '|'
+    " table (using easy-align)
+    let save_pos = getpos('.')
+    normal gaip*|
+    call setpos('.', save_pos)
+  else
+    " paragraph
+    normal! gqip
+  endif
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1709,7 +1721,7 @@ nnoremap <leader>gg :Agit<cr>
 nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
 
 " Format paragraph
-nnoremap <space>\ gqip
+nnoremap <space>\ :call <sid>FormatParagraph()<cr>
 
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<cr>
