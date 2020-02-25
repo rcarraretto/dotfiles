@@ -763,7 +763,7 @@ function! s:ToggleListChars()
 endfunction
 
 function! s:ShouldColorColumn()
-  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff'], &filetype) == -1
+  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log'], &filetype) == -1
 endfunction
 
 function! s:ShouldCursorLine()
@@ -816,19 +816,6 @@ function! s:TrimWhitespace()
   call setpos('.', save_cursor)
 endfunction
 
-function! s:Prompt(msg)
-  echohl Statement
-  let ok = input(a:msg . ' ')
-  echohl NONE
-  " clear input
-  normal! :<esc>
-  if ok !=# 'y'
-    echo 'skipped'
-    return 0
-  endif
-  return 1
-endfunction
-
 function! s:CdToGitRoot(cd_cmd)
   let output = util#GetGitRoot()
   if empty(output)
@@ -855,7 +842,7 @@ endfunction
 " Remove views.
 " Usually call this because folding is buggy.
 function! s:RemoveViews()
-  if !s:Prompt('Delete all buffers and remove views?')
+  if !util#prompt('Delete all buffers and remove views?')
     return
   endif
   " Delete all buffers first.

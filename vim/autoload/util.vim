@@ -28,3 +28,16 @@ function! util#error_msg(msg) abort
   echom a:msg
   echohl NONE
 endfunction
+
+function! util#prompt(msg) abort
+  echohl Statement
+  let ok = input(a:msg . ' ')
+  echohl NONE
+  " clear input
+  normal! :<esc>
+  if ok !=# 'y'
+    echo 'skipped'
+    return 0
+  endif
+  return 1
+endfunction
