@@ -26,7 +26,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', { 'commit': 'a60a394dbee587b6f2dea8416e7bdeb996324f6c' }
 Plug 'AndrewRadev/splitjoin.vim'
 
 " >>> Support <<<
@@ -37,7 +37,7 @@ Plug 'wincent/terminus'
 Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
 " git
-Plug 'tpope/vim-fugitive', { 'commit': '60eac8c97457af5a96eb06ad4b564e4c813d806e' }
+Plug 'tpope/vim-fugitive', { 'commit': 'c452181975761f8b055b88eb1c98f736323510fd' }
 " github
 Plug 'tpope/vim-rhubarb'
 Plug 'cohama/agit.vim'
@@ -68,8 +68,8 @@ Plug 'junegunn/vim-easy-align'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'mustache/vim-mustache-handlebars'
-Plug 'leafgarland/typescript-vim'
-Plug 'Quramy/tsuquyomi'
+Plug 'leafgarland/typescript-vim', { 'commit': '09cf6a6ecdef11cd32d38213093cfe86660255aa' }
+Plug 'Quramy/tsuquyomi', { 'commit': '785af7476e0db2522372ef585c86947fc5625c81' }
 Plug 'jparise/vim-graphql'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'vim-scripts/applescript.vim'
