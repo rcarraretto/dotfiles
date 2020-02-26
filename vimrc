@@ -1670,9 +1670,10 @@ nnoremap <leader>te :tabedit <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 " clone file
 nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr><c-f>F/l
-" copy path to clipboard
-nnoremap <leader>cp :let @" = expand("%") \| let @* = expand("%")<cr>
-nnoremap <leader>cP :let @" = expand("%:p") \| let @* = expand("%:p")<cr>
+" copy relative path to clipboard
+nnoremap <leader>cp :let @* = expand("%")<cr>
+" copy full path (with ~) to clipboard
+nnoremap <leader>cP :let @* = expand("%:~")<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :call <sid>SysOpen('<c-r>%')<cr>
 
