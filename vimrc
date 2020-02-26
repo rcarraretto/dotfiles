@@ -276,9 +276,10 @@ highlight vimError ctermfg=red ctermbg=NONE cterm=underline
 " e.g., typescript syntax error
 highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
-highlight agitDiff ctermfg=black ctermbg=white cterm=none
-highlight agitDiffAdd ctermfg=black ctermbg=151 cterm=none
-highlight agitDiffRemove ctermfg=black ctermbg=lightred cterm=none
+" color agit diff similar to vim's git diff syntax
+" $VIM/vim81/syntax/git.vim
+hi def link agitDiffAdd diffAdded
+hi def link agitDiffRemove diffRemoved
 
 " }}}
 
