@@ -1560,6 +1560,7 @@ nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
 nnoremap <space>w <c-w><c-w>
 nnoremap <space>q :q<cr>
+nnoremap <space>Q :bd!<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
