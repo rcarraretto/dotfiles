@@ -1515,6 +1515,10 @@ vnoremap <c-k> k
 nnoremap <cr> :
 xnoremap <cr> :
 
+" Copy until the end of line.
+" Make Y consistent with C and D.
+nnoremap Y y$
+
 " Stop highlighting
 nnoremap <silent> gh :noh<cr>
 
