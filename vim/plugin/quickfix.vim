@@ -1,17 +1,33 @@
 " Based on https://stackoverflow.com/a/49345500/2277505
-function! s:OpenNewLeftSplit()
+function! s:OpenOnSplit(direction)
+  let num_wins = len(gettabinfo(tabpagenr())[0]['windows']) - 1
+  " 1) on quickfix, get error number
   let qf_line_num = line('.')
-  wincmd w
-  VSplitLeft
-  execute qf_line_num . 'cc'
-endfunction
-
-function! s:OpenOnLeftSplit()
-  let num_wins = len(gettabinfo(tabpagenr())[0]['windows'])
-  if num_wins > 2
-    execute "1wincmd c"
+  " 2) go to the active window to do the split,
+  " so we clone the jumplist and alternate buffer
+  if a:direction == 'left'
+    1wincmd w
+  else
+    if num_wins == 1
+      1wincmd w
+    else
+      2wincmd w
+    endif
   endif
-  call s:OpenNewLeftSplit()
+  " 3) split the active window
+  if a:direction == 'left'
+    VSplitLeft
+  else
+    VSplitRight
+  endif
+  " 4) open error in that new split
+  execute qf_line_num . 'cc'
+  " 5) remove old window
+  if num_wins >= 2
+    " if already had 2 project windows:
+    " Close the cloned one, so we always have 2 project windows (left + right).
+    2wincmd c
+  endif
 endfunction
 
 " Adapted from https://stackoverflow.com/a/48817071/2277505
@@ -76,8 +92,8 @@ endfunction
 function! s:QfConfig()
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
-  nnoremap <buffer> <silent> s :call <sid>OpenOnLeftSplit()<cr>
-  nnoremap <buffer> <silent> S :call <sid>OpenNewLeftSplit()<cr>
+  nnoremap <buffer> <silent> s :call <sid>OpenOnSplit('right')<cr>
+  nnoremap <buffer> <silent> S :call <sid>OpenOnSplit('left')<cr>
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
