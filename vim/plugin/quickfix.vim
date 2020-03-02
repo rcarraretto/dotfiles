@@ -1,4 +1,5 @@
 function! s:OpenNewLeftSplit()
+  " On the quickfix list, <c-w><cr> opens the file in a new window.
   " :h CTRL-W_<CR>
   execute "normal \<c-w>\<cr>\<c-w>H"
   cclose
