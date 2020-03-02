@@ -893,6 +893,7 @@ function! ToggleGStatus()
     bd .git/index
   else
     Gstatus
+    wincmd T
   endif
 endfunction
 
