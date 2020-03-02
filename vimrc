@@ -1494,6 +1494,36 @@ function! s:FormatParagraph() abort
   endif
 endfunction
 
+function! s:VSplitRight(path) abort
+  " backup
+  let prev = &splitright
+  " split
+  if prev == 0
+    set splitright
+  endif
+  execute "vsplit " . a:path
+  " restore
+  if prev == 0
+    set nosplitright
+  endif
+endfunction
+command! -nargs=? -complete=file VSplitRight :call s:VSplitRight(<q-args>)
+
+function! s:VSplitLeft(path) abort
+  " backup
+  let prev = &splitright
+  " split
+  if prev == 1
+    set nosplitright
+  endif
+  execute "vsplit " . a:path
+  " restore
+  if prev == 1
+    set splitright
+  endif
+endfunction
+command! -nargs=? -complete=file VSplitLeft :call s:VSplitLeft(<q-args>)
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1776,6 +1806,7 @@ let g:fzf_action = {
 \ 'ctrl-t': 'silent tab split',
 \ 'ctrl-x': 'silent split',
 \ 'ctrl-v': 'silent vsplit',
+\ 'ctrl-f': 'silent VSplitLeft',
 \ 'ctrl-s': 'SysOpen'
 \ }
 
