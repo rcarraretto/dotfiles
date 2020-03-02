@@ -1,10 +1,9 @@
+" Based on https://stackoverflow.com/a/49345500/2277505
 function! s:OpenNewLeftSplit()
-  " On the quickfix list, <c-w><cr> opens the file in a new window.
-  " :h CTRL-W_<CR>
-  execute "normal \<c-w>\<cr>\<c-w>H"
-  cclose
-  botright copen
-  execute "normal \<c-w>\p"
+  let qf_line_num = line('.')
+  wincmd w
+  VSplitLeft
+  execute qf_line_num . 'cc'
 endfunction
 
 function! s:OpenOnLeftSplit()
