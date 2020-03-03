@@ -41,3 +41,15 @@ function! util#prompt(msg) abort
   endif
   return 1
 endfunction
+
+function! util#input(msg, ...) abort
+  let text = get(a:, 1, '')
+  let user_input = input(a:msg . ': ', text)
+  " clear input
+  normal! :<esc>
+  if empty(user_input)
+    echo 'skipped'
+    return
+  endif
+  return user_input
+endfunction
