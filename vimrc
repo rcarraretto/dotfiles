@@ -76,8 +76,6 @@ Plug 'vim-scripts/applescript.vim'
 Plug 'udalov/kotlin-vim'
 " PowerShell
 Plug 'PProvost/vim-ps1'
-" View colored output of shell commands
-Plug 'chrisbra/Colorizer'
 
 call plug#end()
 " }}}
