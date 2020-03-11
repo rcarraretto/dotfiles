@@ -177,7 +177,7 @@ function! s:SetStatusline(...)
     return
   endif
   let isActiveWindow = get(a:, 1, 1)
-  let showFlags = index(['qf', 'help'], &filetype) == -1
+  let showFlags = index(['qf', 'help', 'rc_git_branches', 'rc_git_log'], &filetype) == -1
   let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   setlocal statusline=
   if showRelativeFilename
