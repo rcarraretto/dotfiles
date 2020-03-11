@@ -764,7 +764,7 @@ function! s:ToggleListChars()
 endfunction
 
 function! s:ShouldColorColumn()
-  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'fugitive', 'fugitiveblame'], &filetype) == -1
+  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'fugitive', 'fugitiveblame'], &filetype) == -1
 endfunction
 
 function! s:ShouldCursorLine()
