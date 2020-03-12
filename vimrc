@@ -228,7 +228,7 @@ function! s:SetStatusline(...)
     endif
   endif
   setlocal statusline+=%=  " left/right separator
-  if isActiveWindow
+  if isActiveWindow && winwidth('.') > 50
     setlocal statusline+=%{GetIndentationInfo()}
     let showFt = index(['qf', ''], &filetype) == -1
     if showFt
@@ -240,7 +240,7 @@ function! s:SetStatusline(...)
     call s:SetStatuslineSeparator()
     setlocal statusline+=col\ %-3.v " column number
     setlocal statusline+=\  " separator
-  else
+  elseif !isActiveWindow
     if &ft == 'qf'
       call s:SetStatuslineSeparator()
       call s:SetStatuslineLineNums()  " line number / number of lines
