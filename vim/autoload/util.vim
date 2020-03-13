@@ -55,6 +55,8 @@ function! util#input(msg, ...) abort
 endfunction
 
 " http://vim.1045645.n5.nabble.com/Add-milliseconds-to-strftime-td5724772.html
-function! util#print_time() abort
-  python3 print('time:', datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3])
+function! util#print_time(...) abort
+  let text = get(a:, 1, 'time')
+  execute "python3 text = '" . text . "'"
+  python3 print(text + ':', datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3])
 endfunction
