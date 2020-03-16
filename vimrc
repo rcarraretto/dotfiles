@@ -177,7 +177,7 @@ function! s:SetStatusline(...)
     return
   endif
   let isActiveWindow = get(a:, 1, 1)
-  let showFlags = index(['qf', 'help', 'rc_git_branches', 'rc_git_log'], &filetype) == -1
+  let showFlags = index(['qf', 'help', 'rc_git_branches', 'rc_git_log', 'rc_git_diff'], &filetype) == -1
   let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   setlocal statusline=
   if showRelativeFilename
@@ -764,7 +764,7 @@ function! s:ToggleListChars()
 endfunction
 
 function! s:ShouldColorColumn()
-  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'fugitive', 'fugitiveblame'], &filetype) == -1
+  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'rc_git_diff', 'fugitive', 'fugitiveblame'], &filetype) == -1
 endfunction
 
 function! s:ShouldCursorLine()
