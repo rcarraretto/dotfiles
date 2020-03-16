@@ -768,7 +768,7 @@ function! s:ShouldColorColumn()
 endfunction
 
 function! s:ShouldCursorLine()
-  return index(['agit_diff'], &filetype) == -1
+  return index(['agit_diff', 'rc_git_diff'], &filetype) == -1
 endfunction
 
 function! s:OnWinEnter()
