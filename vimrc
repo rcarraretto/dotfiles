@@ -1833,7 +1833,7 @@ let g:TerminusCursorShape = 0
 
 " Pymode
 let g:pymode_folding = 0
-let g:pymode_options_max_line_length = 119
+let g:pymode_options_max_line_length = 300
 let g:pymode_options_colorcolumn = 0
 let g:pymode_run = 0
 
