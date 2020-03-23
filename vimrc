@@ -1034,10 +1034,18 @@ function! s:EditFileUpwards(filename)
   echo 'File not found: ' . a:filename
 endfunction
 
-function! s:EditSketchBuffer()
-  call s:EditFile('~/work/dotfiles-private/src/sketch.ts')
-  nnoremap <buffer> <space>t :update <bar> Dispatch ts-node --project ~/work/dotfiles-private/tsconfig.json %<cr>
+function! s:EditSketchBuffer(ft)
+  if a:ft ==# 'typescript'
+    call s:EditFile('~/work/dotfiles-private/src/sketch.ts')
+    nnoremap <buffer> <space>t :update <bar> Dispatch ts-node --project ~/work/dotfiles-private/tsconfig.json %<cr>
+  elseif a:ft ==# 'javascript'
+    call s:EditFile('~/work/dotfiles-private/src/sketch.js')
+    nnoremap <buffer> <space>t :update <bar> Dispatch node %<cr>
+  else
+    return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
+  endif
 endfunction
+command! -nargs=1 EditSketchBuffer call s:EditSketchBuffer(<q-args>)
 
 " Adapted from:
 " https://vim.fandom.com/wiki/File_no_longer_available_-_mark_buffer_modified
@@ -1634,7 +1642,7 @@ nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/misc.txt")<cr>
 nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
-nnoremap <leader>ek :call <sid>EditSketchBuffer()<cr>
+nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " explore syntax files for the current filetype
 nnoremap <leader>ey :call <sid>ExploreSyntaxFiles()<cr>
