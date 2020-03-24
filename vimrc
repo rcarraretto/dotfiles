@@ -1040,7 +1040,7 @@ function! s:EditSketchBuffer(ft)
     nnoremap <buffer> <space>t :update <bar> Dispatch ts-node --project ~/work/dotfiles-private/tsconfig.json %<cr>
   elseif a:ft ==# 'javascript'
     call s:EditFile('~/work/dotfiles-private/src/sketch.js')
-    nnoremap <buffer> <space>t :update <bar> Dispatch node %<cr>
+    nnoremap <buffer> <space>t :update <bar> Dispatch node % > /var/tmp/test-results.txt<cr>
   else
     return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
   endif
