@@ -1230,7 +1230,7 @@ function! s:Prettier() abort
     return util#error_msg('Unsupported filetype: ' . &ft)
   endif
   let save_pos = getpos('.')
-  execute "%!prettier --parser=" . parser
+  execute "%!prettier --config=" . $HOME . "/work/dotfiles-private/.prettierrc --parser=" . parser
   call setpos('.', save_pos)
   silent! write
 endfunction
