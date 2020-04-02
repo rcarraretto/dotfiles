@@ -1,3 +1,5 @@
+# vim: set foldmethod=marker:
+
 snippet if "if (condition) { ... }"
 if ($1) {
 	${0:${VISUAL}}
@@ -20,6 +22,8 @@ snippet ret
 return $0;
 endsnippet
 
+# Test -------------------------------------------------------------------- {{{
+
 snippet des "describe"
 describe('$1', function() {
 	$2
@@ -27,14 +31,40 @@ describe('$1', function() {
 endsnippet
 
 snippet it "it"
-it('$1', function() {
+it('$1', async () => {
 	$2
+});
+endsnippet
+
+snippet before "before"
+before(async () => {
+	$1
+});
+endsnippet
+
+snippet bE "beforeEach"
+beforeEach(async () => {
+	$1
+});
+endsnippet
+
+snippet after "after"
+after(async () => {
+	$1
+});
+endsnippet
+
+snippet aE "afterEach"
+afterEach(async () => {
+	$1
 });
 endsnippet
 
 snippet exp "expect equal" b
 expect($1).to.equal($2);
 endsnippet
+
+# }}}
 
 snippet vf "var function"
 var ${1:function_name} = function(${2}) {
@@ -43,7 +73,7 @@ var ${1:function_name} = function(${2}) {
 endsnippet
 
 snippet cf "const function"
-const ${1:function_name} = function(${2}) {
+const ${1} = (${2}) => {
 	${VISUAL}$0
 };
 endsnippet
@@ -54,10 +84,16 @@ function($1) {
 };
 endsnippet
 
-snippet pc "Promise.coroutine"
-const $1 = Promise.coroutine(function*($2) {
-	$3
-});
+snippet th "throw new Error"
+throw new Error($0);
+endsnippet
+
+snippet req "require"
+const $2 = require('$1');
+endsnippet
+
+snippet r* "require complete module"
+const $1 = require('${1}');
 endsnippet
 
 snippet r_ "require lodash"
