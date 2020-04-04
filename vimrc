@@ -1221,8 +1221,10 @@ function! s:Prettier() abort
   let parser=''
   if &ft == 'json'
     let parser='json'
-  elseif index(['javascript', 'typescript', 'typescript.jsx'], &ft) >= 0
+  elseif &ft == 'javascript'
     let parser='babel'
+  elseif index(['typescript', 'typescript.jsx'], &ft) >= 0
+    let parser='typescript'
   elseif &ft == 'markdown'
     let parser='markdown'
   endif
