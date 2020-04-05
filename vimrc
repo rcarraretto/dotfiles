@@ -169,7 +169,7 @@ function! GetIndentationInfo() abort
   else
     let length = 'ts: ' . &tabstop . ' sts: ' . &softtabstop . ' sw: ' . &shiftwidth
   endif
-  return ' | ' . type . ' ' . length
+  return ' | ' . &fileencoding . ' | ' . type . ' ' . length
 endfunction
 
 function! s:SetStatusline(...)
