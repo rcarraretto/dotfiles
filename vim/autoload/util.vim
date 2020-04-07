@@ -58,5 +58,5 @@ endfunction
 function! util#print_time(...) abort
   let text = get(a:, 1, 'time')
   execute "python3 text = '" . text . "'"
-  python3 print(text + ':', datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3])
+  python3 import datetime; print(text + ':', datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3])
 endfunction
