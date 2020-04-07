@@ -90,6 +90,11 @@ function! s:QfFilterPattern() abort
 endfunction
 
 function! s:QfConfig()
+  if exists('b:qf_configured')
+    " Prevent e.g. height to be reset when calling the delete operator,
+    " since setqflist() triggers the 'FileType qf' autocmd.
+    return
+  endif
   nnoremap <buffer> <silent> t <c-w><cr><c-w>T
   nnoremap <buffer> <silent> o <cr>
   nnoremap <buffer> <silent> s :call <sid>OpenOnSplit('right')<cr>
@@ -101,6 +106,7 @@ function! s:QfConfig()
   command! -buffer QfDeletePattern call s:QfDeletePattern()
   command! -buffer QfFilterPattern call s:QfFilterPattern()
   call s:AdjustWinHeight(3, 10)
+  let b:qf_configured = 1
 endfunction
 
 " From http://vim.wikia.com/wiki/Automatically_fitting_a_quickfix_window_height
