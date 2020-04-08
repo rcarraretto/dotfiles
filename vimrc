@@ -1184,18 +1184,29 @@ endfunction
 command! -nargs=* SearchInFile :call <sid>SearchInFile(<q-args>)
 
 function! s:SysOpen(filename)
-  let ext = fnamemodify(a:filename, ':e')
+  let filename = a:filename
+  if empty(a:filename)
+    if &ft == 'dirvish'
+      let filename = getline('.')
+    else
+      let filename = expand('%')
+    endif
+  endif
+  if isdirectory(filename)
+    return util#error_msg('SysOpen: selected path cannot be a directory')
+  endif
+  let ext = fnamemodify(filename, ':e')
   if index(['sh'], ext) != -1
     echo 'SysOpen: unsupported extension: ' . ext
     return
   endif
-  let output = system('open ' . a:filename)
+  let output = system('open ' . filename)
   if v:shell_error
     echo 'Error: ' . substitute(output, '\n', ' ', 'g')
     return
   endif
 endfunction
-command! -nargs=1 -complete=file SysOpen call s:SysOpen(<q-args>)
+command! -nargs=? -complete=file SysOpen call s:SysOpen(<q-args>)
 
 function! s:JsonFormat()
   if &ft !=# 'json'
@@ -1721,7 +1732,7 @@ nnoremap <leader>cp :let @* = expand("%")<cr>
 " copy full path (with ~) to clipboard
 nnoremap <leader>cP :let @* = expand("%:~")<cr>
 " open file in system view (e.g., pdf, image, csv)
-nnoremap <leader>oS :call <sid>SysOpen('<c-r>%')<cr>
+nnoremap <leader>oS :SysOpen<cr>
 
 " Find and Replace / Find and Bulk Change
 "
