@@ -195,7 +195,17 @@ local showTrack = function()
   hs.alert.show(hs.spotify.getCurrentTrack())
 end
 
-hs.hotkey.bind(hyper, 'k', hs.spotify.playpause)
+-- Play/pause
+hs.hotkey.bind(hyper, 'k', function()
+  if hs.spotify.isRunning() then
+    hs.spotify.playpause()
+  else
+    -- Control other music player (like VLC).
+    -- Press PLAY media key (will play/pause)
+    hs.eventtap.event.newSystemKeyEvent('PLAY', true):post()
+    hs.eventtap.event.newSystemKeyEvent('PLAY', false):post()
+  end
+end)
 
 hs.hotkey.bind(hyper, ',', function()
   hs.spotify.previous()
