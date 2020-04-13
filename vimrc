@@ -95,6 +95,26 @@ set ruler
 set showcmd		" display incomplete commands
 set incsearch
 set backupdir=~/.tmp-vim
+" backupcopy
+"
+" Cope with webpack watch mode.
+" https://webpack.js.org/guides/development/#adjusting-your-text-editor
+"
+" "yes": make a copy of the file and overwrite the original one
+"   - preserves inode
+"   - slower than "no"
+"
+" "no": rename the file and write a new one
+"   - changes inode
+"   - messes up symbolic links
+"   - faster than "yes"
+"
+" "auto": will use "no" if no side effects, else will use "yes"
+"
+" To test this, inspect the inode before and after saving a file:
+" ls -i path/to/file
+" https://vi.stackexchange.com/a/138/24815
+set backupcopy=yes
 set directory=~/.tmp-vim
 set hlsearch
 set smartcase
@@ -321,6 +341,8 @@ augroup FTOptions
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType applescript setlocal commentstring=--\ %s
+  " Avoid "crontab: temp file must be edited in place".
+  " https://vi.stackexchange.com/a/138/24815
   autocmd FileType crontab setlocal backupcopy=yes
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
