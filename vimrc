@@ -1260,6 +1260,8 @@ function! s:Prettier() abort
     let parser='typescript'
   elseif &ft == 'markdown'
     let parser='markdown'
+  elseif &ft == 'html'
+    let parser='html'
   endif
   if empty(parser)
     return util#error_msg('Unsupported filetype: ' . &ft)
