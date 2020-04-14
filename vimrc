@@ -1209,7 +1209,7 @@ function! s:SysOpen(filename)
   let filename = a:filename
   if empty(a:filename)
     if &ft == 'dirvish'
-      let filename = getline('.')
+      let filename = fnameescape(getline('.'))
     else
       let filename = expand('%')
     endif
