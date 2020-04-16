@@ -81,12 +81,6 @@ call plug#end()
 " }}}
 
 " Settings ---------------------- {{{
-let base16colorspace=256  " Access colors present in 256 colorspace"
-set background=dark
-try
-  colorscheme base16-default-dark
-catch /^Vim\%((\a\+)\)\=:E185/
-endtry
 
 set number
 set relativenumber
@@ -274,32 +268,67 @@ endfunction
 " Load aliases for executing shell commands within vim
 let $BASH_ENV = "~/.bash_aliases"
 
-" Remove underline from cursor line
-" https://stackoverflow.com/a/58181112/2277505
-highlight CursorLineNr cterm=bold
+function! s:SetHighlight() abort
+  " Remove underline from cursor line
+  " https://stackoverflow.com/a/58181112/2277505
+  highlight CursorLineNr cterm=bold
 
-" Change for base16-default-dark colorscheme
-" colorcolumn + search highlighting doesn't work well
-" because base16 Search changes the fgcolor of search
-" to be the same as colorcolumn
-" making search invisible in colorcolumn
-highlight Search ctermbg=none ctermfg=none cterm=underline,bold
-" Distinguish Folded bg from CursorLine bg
-highlight Folded ctermbg=00
+  " Change for base16-default-dark colorscheme
+  " colorcolumn + search highlighting doesn't work well
+  " because base16 Search changes the fgcolor of search
+  " to be the same as colorcolumn
+  " making search invisible in colorcolumn
+  highlight Search ctermbg=none ctermfg=none cterm=underline,bold
+  " Distinguish Folded bg from CursorLine bg
+  highlight Folded ctermbg=00
 
-" Change error style.
-" :h attr-list
-" e.g., error gutter
-highlight Error ctermfg=red ctermbg=00 cterm=reverse
-" e.g., error in some vim setting
-highlight vimError ctermfg=red ctermbg=NONE cterm=underline
-" e.g., typescript syntax error
-highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
+  " Change error style.
+  " :h attr-list
+  " e.g., error gutter
+  highlight Error ctermfg=red ctermbg=00 cterm=reverse
+  " e.g., error in some vim setting
+  highlight vimError ctermfg=red ctermbg=NONE cterm=underline
+  " e.g., typescript syntax error
+  highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
-" color agit diff similar to vim's git diff syntax
-" $VIM/vim81/syntax/git.vim
-hi def link agitDiffAdd diffAdded
-hi def link agitDiffRemove diffRemoved
+  " color agit diff similar to vim's git diff syntax
+  " $VIM/vim81/syntax/git.vim
+  highlight def link agitDiffAdd diffAdded
+  highlight def link agitDiffRemove diffRemoved
+endfunction
+
+" Custom highlights are lost when :colorscheme is executed.
+" Therefore, one must listen to 'ColorScheme' events,
+" instead of executing :highlight commands directly in the vimrc.
+"
+" https://github.com/chriskempson/base16-vim#customization
+"
+" This autocmd is set up before the :colorscheme is set,
+" so that s:SetHighlight() gets called when vim loads.
+augroup SetHighlight
+  autocmd!
+  " This is triggered by both:
+  " - set background=<value> (apparently only after a colorscheme has been set)
+  " - colorscheme <name>
+  autocmd ColorScheme * call s:SetHighlight()
+augroup END
+
+if !exists('g:colors_name')
+  " Only set the background on the first load of vimrc.
+  " Else, when re-sourcing the vimrc, both ':set background' and ':colorscheme'
+  " would trigger the ColorScheme event unnecessarily.
+  set background=dark
+endif
+
+try
+  " base16-vim plugin config:
+  " Access colors present in 256 colorspace
+  " https://github.com/chriskempson/base16-vim#256-colorspace
+  let base16colorspace=256
+  colorscheme base16-default-dark
+catch /^Vim\%((\a\+)\)\=:E185/
+  " Don't fail if base16-vim plugin is not installed
+endtry
 
 " }}}
 
