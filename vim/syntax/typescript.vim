@@ -14,6 +14,9 @@ hi def link typescriptExceptions Keyword
 " return
 hi def link typescriptStatement Keyword
 
+" for / while
+hi def link typescriptRepeat Keyword
+
 " this
 hi def link typescriptIdentifier Function
 " Math
