@@ -60,3 +60,14 @@ function! util#print_time(...) abort
   execute "python3 text = '" . text . "'"
   python3 import datetime; print(text + ':', datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3])
 endfunction
+
+" scriptease#capture
+function! util#capture(excmd) abort
+  try
+    redir => out
+    execute 'silent! ' . a:excmd
+  finally
+    redir END
+  endtry
+  return out
+endfunction

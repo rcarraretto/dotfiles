@@ -1613,6 +1613,17 @@ function! s:VSplitLeft(path) abort
 endfunction
 command! -nargs=? -complete=file VSplitLeft :call s:VSplitLeft(<q-args>)
 
+" Based on https://stackoverflow.com/a/38735392/2277505
+function! s:ListCtrlMappings() abort
+  let out = util#capture('map')
+  vnew
+  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  silent put =out
+  silent v/^.  <C-/d
+  sort
+endfunction
+command! ListCtrlMappings :call <sid>ListCtrlMappings()
+
 "}}}
 
 " Mappings ---------------------- {{{
