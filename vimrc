@@ -1687,15 +1687,21 @@ nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
 " Toggle showing whitespace
 nnoremap <silent> col :call <sid>ToggleListChars()<cr>
 
-" Window navigation
+" Windows
+" window navigation
 nnoremap <space>j <c-w>j
 nnoremap <space>k <c-w>k
 nnoremap <silent> <space>h :call <sid>CycleWinLeft()<cr>
 nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
 nnoremap <space>w <c-w><c-w>
+" close window
 nnoremap <space>q :q<cr>
 nnoremap <space>Q :bd!<cr>
+" decrease window size
+nnoremap <space>, :20wincmd <<cr>
+" increase window size
+nnoremap <space>. :20wincmd ><cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
