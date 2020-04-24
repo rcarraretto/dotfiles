@@ -1,3 +1,7 @@
+# PS1 is normally set by /etc/bashrc, which is sourced by /etc/profile.
+# However, I set tmux not to run login shells, so /etc/profile is not sourced on each pane.
+PS1='\h:\W \u\$ '
+
 # Vim
 export EDITOR='vim'
 
