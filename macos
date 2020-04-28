@@ -48,3 +48,9 @@ defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 14
 
 # Download newly available updates in background
 defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+
+#----------------------------------------------------------------------------
+# Hammerspoon
+
+# Preferences -> [ ] Show dock icon
+defaults write org.hammerspoon.Hammerspoon MJShowDockIconKey -bool false
