@@ -1812,6 +1812,8 @@ nnoremap <leader>te :tabedit <c-r>=expand("%:h"). "/" <cr>
 nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 " clone file
 nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr><c-f>F/l
+" copy file name to clipboard
+nnoremap <leader>cf :let @* = expand("%:t")<cr>
 " copy relative path to clipboard
 nnoremap <leader>cp :let @* = expand("%")<cr>
 " copy full path (with ~) to clipboard
