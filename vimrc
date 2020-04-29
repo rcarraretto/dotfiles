@@ -1766,6 +1766,8 @@ nnoremap <leader>af :SearchInFile<space>
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
 " browse Downloads, most recent first
 nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<cr>
+" browse /var/tmp
+nnoremap <leader>ot :Files /var/tmp<cr>
 " browse commands
 " (<c-x> executes the command directly)
 nnoremap <space>c :Commands<cr>
