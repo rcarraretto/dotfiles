@@ -10,6 +10,12 @@
 osascript -e 'tell application "System Preferences" to quit'
 
 #----------------------------------------------------------------------------
+# Desktop & Screen Saver
+
+# Screen Saver -> Start after: [5 minutes]
+defaults -currentHost write com.apple.screensaver idleTime -integer 300
+
+#----------------------------------------------------------------------------
 # Dock
 
 # System Preferences > Dock > [X] Automatically hide and show the Dock
