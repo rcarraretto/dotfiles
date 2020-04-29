@@ -18,13 +18,13 @@ defaults -currentHost write com.apple.screensaver idleTime -integer 300
 #----------------------------------------------------------------------------
 # Dock
 
-# System Preferences > Dock > [X] Automatically hide and show the Dock
+# System Preferences -> Dock -> [X] Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
 
-# System Preferences > Dock > [X] Magnification
+# System Preferences -> Dock -> [X] Magnification
 defaults write com.apple.dock magnification -bool true
 
-# System Preferences > Dock > Magnification Size
+# System Preferences -> Dock -> Magnification Size
 defaults write com.apple.dock largesize -int 95
 
 killall Dock
