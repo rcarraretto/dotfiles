@@ -43,6 +43,14 @@ defaults -currentHost write -g com.apple.trackpad.threeFingerTapGesture -int 0
 
 #----------------------------------------------------------------------------
 
+# Accessibility
+
+# Display -> Cursor -> [ ] Shake mouse pointer to locate
+# (logout required)
+defaults write NSGlobalDomain CGDisableCursorLocationMagnification -bool YES
+
+#----------------------------------------------------------------------------
+
 # Frequency of software update check, in days
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 14
 
