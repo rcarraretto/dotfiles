@@ -1209,7 +1209,11 @@ function! s:FzfExploreNodeModules() abort
 endfunction
 
 function! s:SearchNotes(input) abort
-  execute 'Ag --hidden -Q "' . a:input . '" -G "\.txt$" ~/Dropbox/notes/'
+  let search_dirs = ['~/Dropbox/notes/']
+  if isdirectory($HOME . '/Dropbox/notes-home')
+    call add(search_dirs, ' ~/Dropbox/notes-home')
+  endif
+  execute 'Ag --hidden -Q "' . a:input . '" -G "\.txt$" ' . join(search_dirs, ' ')
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
@@ -1735,8 +1739,7 @@ nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes -type f -name "*.txt"'}))<cr>
-nnoremap <leader>et :call <sid>EditFile("~/Dropbox/notes/misc.txt")<cr>
+nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes ~/Dropbox/notes-home -type f -name "*.txt"'}))<cr>
 nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
 nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
