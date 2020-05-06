@@ -1063,49 +1063,12 @@ endfunction
 
 command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
-function! s:EditFile(path)
-  if bufnr(a:path) == -1
-    silent execute 'tabnew ' . a:path
-  else
-    let wins = getbufinfo(a:path)[0]['windows']
-    if empty(wins)
-      silent execute 'tabnew ' . a:path
-    else
-      call win_gotoid(wins[0])
-    endif
-  endif
-endfunction
-
-function! s:EditFileUpwards(filename)
-  if filereadable(a:filename)
-    " When exploring the root folder with Dirvish and
-    " the file is at the root.
-    " findfile() does not seem to work with Dirvish in that case.
-    call s:EditFile(a:filename)
-    return
-  endif
-  " Search from the directory of the current file upwards, until the home folder
-  let path = findfile(a:filename, '.;' . $HOME)
-  if !empty(path)
-    call s:EditFile(path)
-    return
-  endif
-  " Search from cwd upwards, until the home folder.
-  " This might help in case the current file is outside of cwd (e.g. a Dropbox note).
-  let path = findfile(a:filename, getcwd() . ';' . $HOME)
-  if !empty(path)
-    call s:EditFile(path)
-    return
-  endif
-  echo 'File not found: ' . a:filename
-endfunction
-
 function! s:EditSketchBuffer(ft)
   if a:ft ==# 'typescript'
-    call s:EditFile('~/work/dotfiles-private/src/sketch.ts')
+    call util#EditFile('~/work/dotfiles-private/src/sketch.ts')
     nnoremap <buffer> <space>t :update <bar> Dispatch! ts-node --project ~/work/dotfiles-private/tsconfig.json % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
   elseif a:ft ==# 'javascript'
-    call s:EditFile('~/work/dotfiles-private/src/sketch.js')
+    call util#EditFile('~/work/dotfiles-private/src/sketch.js')
     nnoremap <buffer> <space>t :update <bar> Dispatch! node % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
   else
     return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
@@ -1729,21 +1692,20 @@ cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
 
 " vimrc, vimscript
-nnoremap <leader>ev :call <sid>EditFile($MYVIMRC)<cr>
+nnoremap <leader>ev :call util#EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " Browse files & search
 " quickly edit some files and folders
-nnoremap <leader>el :call <sid>EditFile('~/.vim/vimrc.local')<cr>
+nnoremap <leader>el :call util#EditFile('~/.vim/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
-nnoremap <leader>eo :call <sid>EditFileUpwards(".todo")<cr>
+nnoremap <leader>eo :call util#EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes ~/Dropbox/notes-home -type f -name "*.txt"'}))<cr>
-nnoremap <leader>ei :call <sid>EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
-nnoremap <leader>ew :call <sid>EditFile("~/Dropbox/notes/dev/work.txt")<cr>
-nnoremap <leader>em :call <sid>EditFile("~/work/dotfiles-private/README.md")<cr>
-nnoremap <leader>eb :call <sid>EditFile("~/.bashrc.local")<cr>
+nnoremap <leader>ei :call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
+nnoremap <leader>em :call util#EditFile("~/work/dotfiles-private/README.md")<cr>
+nnoremap <leader>eb :call util#EditFile("~/.bashrc.local")<cr>
 nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " explore syntax files for the current filetype

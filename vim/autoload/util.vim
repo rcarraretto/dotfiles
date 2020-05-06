@@ -71,3 +71,40 @@ function! util#capture(excmd) abort
   endtry
   return out
 endfunction
+
+function! util#EditFile(path)
+  if bufnr(a:path) == -1
+    silent execute 'tabnew ' . a:path
+  else
+    let wins = getbufinfo(a:path)[0]['windows']
+    if empty(wins)
+      silent execute 'tabnew ' . a:path
+    else
+      call win_gotoid(wins[0])
+    endif
+  endif
+endfunction
+
+function! util#EditFileUpwards(filename)
+  if filereadable(a:filename)
+    " When exploring the root folder with Dirvish and
+    " the file is at the root.
+    " findfile() does not seem to work with Dirvish in that case.
+    call util#EditFile(a:filename)
+    return
+  endif
+  " Search from the directory of the current file upwards, until the home folder
+  let path = findfile(a:filename, '.;' . $HOME)
+  if !empty(path)
+    call util#EditFile(path)
+    return
+  endif
+  " Search from cwd upwards, until the home folder.
+  " This might help in case the current file is outside of cwd (e.g. a Dropbox note).
+  let path = findfile(a:filename, getcwd() . ';' . $HOME)
+  if !empty(path)
+    call util#EditFile(path)
+    return
+  endif
+  echo 'File not found: ' . a:filename
+endfunction
