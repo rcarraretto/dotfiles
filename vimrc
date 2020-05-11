@@ -1172,18 +1172,43 @@ function! s:FzfExploreNodeModules() abort
 endfunction
 
 function! s:SearchNotes(input) abort
-  let search_dirs = ['~/Dropbox/notes/']
-  if isdirectory($HOME . '/Dropbox/notes-home')
-    call add(search_dirs, ' ~/Dropbox/notes-home')
-  endif
-  execute 'Ag --hidden -Q "' . a:input . '" -G "\.txt$" ' . join(search_dirs, ' ')
+  execute 'Ag --hidden -Q "' . a:input . '" -G "\.txt$" ' . s:GetNoteDirs()
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
+function! s:FzfNotes() abort
+  let cmd = 'find ' . s:GetNoteDirs() . ' -type f -name "*.txt"'
+  call fzf#run(fzf#wrap({'source': cmd}))
+endfunction
+
+function! s:GetNoteDirs() abort
+  let dirs = ['~/Dropbox/notes/']
+  if isdirectory($HOME . '/Dropbox/notes-home')
+    call add(dirs, '~/Dropbox/notes-home')
+  endif
+  if isdirectory($HOME . '/Google Drive/notes')
+    call add(dirs, '~/Google\ Drive/notes')
+  endif
+  return join(dirs, ' ')
+endfunction
+
 function! s:SearchDotfiles(input) abort
-  execute 'Ag --hidden -Q "' . a:input . '" ~/work/dotfiles/ ~/work/dotfiles-private/'
+  execute 'Ag --hidden -Q "' . a:input . '" ' . s:GetDotfilesDirs()
 endfunction
 command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
+
+function! s:FzfDotfiles() abort
+  let cmd = 'ag -g "" --hidden ' . s:GetDotfilesDirs()
+  call fzf#run(fzf#wrap({'source': cmd}))
+endfunction
+
+function! s:GetDotfilesDirs() abort
+  let dirs = ['~/work/dotfiles/', '~/work/dotfiles-private/']
+  if isdirectory($HOME . '/Google Drive/scripts')
+    call add(dirs, '~/Google\ Drive/scripts')
+  endif
+  return join(dirs, ' ')
+endfunction
 
 function! s:SearchInGitRoot(input) abort
   let path = util#GetGitRoot()
@@ -1702,7 +1727,7 @@ nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :call util#EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :call fzf#run(fzf#wrap({'source': 'find ~/Dropbox/notes ~/Dropbox/notes-home -type f -name "*.txt"'}))<cr>
+nnoremap <leader>en :call <sid>FzfNotes()<cr>
 nnoremap <leader>ei :call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
 nnoremap <leader>em :call util#EditFile("~/work/dotfiles-private/README.md")<cr>
 nnoremap <leader>eb :call util#EditFile("~/.bashrc.local")<cr>
@@ -1717,7 +1742,7 @@ nnoremap <space>O :GFiles<cr>
 " browse history
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
-nnoremap <leader>od :call fzf#run(fzf#wrap({'source': 'ag -g "" --hidden ~/work/dotfiles ~/work/dotfiles-private'}))<cr>
+nnoremap <leader>od :call <sid>FzfDotfiles()<cr>
 " browse node_modules
 nnoremap <leader>eM :call <sid>FzfExploreNodeModules()<cr>
 " Ag from search reg
