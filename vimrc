@@ -4,6 +4,10 @@
 set rtp+=/usr/local/opt/fzf
 set rtp+=$HOME/work/dotfiles-private/vim
 
+if isdirectory($HOME . '/Google Drive/dotfiles-drive')
+  set rtp+=$HOME/Google\ Drive/dotfiles-drive/vim
+endif
+
 if $USE_NETRW
   set rtp+=$HOME/work/netrw
 endif
@@ -1204,8 +1208,8 @@ endfunction
 
 function! s:GetDotfilesDirs() abort
   let dirs = ['~/work/dotfiles/', '~/work/dotfiles-private/']
-  if isdirectory($HOME . '/Google Drive/scripts')
-    call add(dirs, '~/Google\ Drive/scripts')
+  if isdirectory($HOME . '/Google Drive/dotfiles-drive')
+    call add(dirs, '~/Google\ Drive/dotfiles-drive')
   endif
   return join(dirs, ' ')
 endfunction
