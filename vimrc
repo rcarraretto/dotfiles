@@ -4,8 +4,8 @@
 set rtp+=/usr/local/opt/fzf
 set rtp+=$HOME/work/dotfiles-private/vim
 
-if isdirectory($HOME . '/Google Drive/dotfiles-drive')
-  set rtp+=$HOME/Google\ Drive/dotfiles-drive/vim
+if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK . '/vim')
+  set rtp+=$DOTFILES_WORK/vim
 endif
 
 if $USE_NETRW
@@ -1190,8 +1190,8 @@ function! s:GetNoteDirs() abort
   if isdirectory($HOME . '/Dropbox/notes-home')
     call add(dirs, '~/Dropbox/notes-home')
   endif
-  if isdirectory($HOME . '/Google Drive/notes')
-    call add(dirs, '~/Google\ Drive/notes')
+  if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
+    call add(dirs, fnameescape($NOTES_WORK))
   endif
   return join(dirs, ' ')
 endfunction
@@ -1208,8 +1208,8 @@ endfunction
 
 function! s:GetDotfilesDirs() abort
   let dirs = ['~/work/dotfiles/', '~/work/dotfiles-private/']
-  if isdirectory($HOME . '/Google Drive/dotfiles-drive')
-    call add(dirs, '~/Google\ Drive/dotfiles-drive')
+  if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK)
+    call add(dirs, fnameescape($DOTFILES_WORK))
   endif
   return join(dirs, ' ')
 endfunction
