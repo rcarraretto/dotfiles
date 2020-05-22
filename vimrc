@@ -515,8 +515,45 @@ function! s:VimEnter()
   endif
 endfunction
 
+function! s:DisarmPluginGuard() abort
+  for i in range(1, line('$'))
+    let line = getline(i)
+    " Skip empty lines
+    if len(line) == 0
+      continue
+    endif
+    " Skip comments
+    if match(line, '^"') >= 0
+      continue
+    endif
+    " Check if it's guarding a plugin.
+    "
+    " Example:
+    " if exists('g:autoloaded_fugitive')
+    "   finish
+    " endif
+    "
+    let m = matchlist(line, '^if exists(''\(g:.*\)'')$')
+    if empty(m)
+      return 0
+    endif
+    if match(getline(i + 1), '^\s*finish$') == -1
+      return 0
+    endif
+    let global_var_name = m[1]
+    if !exists(global_var_name)
+      return 0
+    endif
+    let cmd = "unlet " . global_var_name
+    echom cmd
+    execute cmd
+    return global_var_name
+  endfor
+  return 0
+endfunction
+
 function! s:VimscriptMappings() abort
-  nnoremap <buffer> <leader>ss :silent write <bar> :source %<cr>
+  nnoremap <buffer> <leader>ss :silent update <bar> call <sid>DisarmPluginGuard() <bar> source %<cr>
 endfunction
 
 function! s:NetrwMappings()
