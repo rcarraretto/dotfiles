@@ -72,6 +72,11 @@ function! util#capture(excmd) abort
   return out
 endfunction
 
+function! util#messages() abort
+  let messages = util#capture('messages')
+  return reverse(filter(split(messages, '\n'), '!empty(v:val)'))
+endfunction
+
 function! util#EditFile(path)
   if bufnr(a:path) == -1
     silent execute 'tabnew ' . a:path

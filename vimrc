@@ -556,6 +556,21 @@ function! s:VimscriptMappings() abort
   nnoremap <buffer> <leader>ss :silent update <bar> call <sid>DisarmPluginGuard() <bar> source %<cr>
 endfunction
 
+function! s:YankLastMessage() abort
+  let @* = util#messages()[0]
+endfunction
+command! Ym :call <sid>YankLastMessage()
+
+" Example:
+" :Eval 2 + 2
+" :Eval range(1, 5)
+function! s:Eval(cmd) abort
+  let result = eval(a:cmd)
+  echom result
+  call s:YankLastMessage()
+endfunction
+command! -complete=expression -nargs=* Eval :call <sid>Eval(<q-args>)
+
 function! s:NetrwMappings()
   " note:
   " 'echom' might not work within this function
@@ -1760,6 +1775,10 @@ cnoremap <c-l> <c-n>
 " vimrc, vimscript
 nnoremap <leader>ev :call util#EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+" Yank last message
+nnoremap <leader>ym :Ym<cr>
+" :Eval <vimscript>
+nnoremap <space>v :Eval<space>
 
 " Browse files & search
 " quickly edit some files and folders
