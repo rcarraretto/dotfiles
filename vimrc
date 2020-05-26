@@ -1359,7 +1359,16 @@ function! s:Prettier() abort
     return util#error_msg('Unsupported filetype: ' . &ft)
   endif
   let save_pos = getpos('.')
-  execute "%!prettier --config=" . $HOME . "/work/dotfiles-private/.prettierrc --parser=" . parser
+  let opts = ''
+  " Try to find .prettierrc.json upwards until the git root.
+  " This would be an evidence that the project uses prettier.
+  let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
+  if empty(prettierrc_json)
+    " Use global prettier config for example in sketch buffers or
+    " projects that don't have prettier installed.
+    let opts = "--config=" . $HOME . "/work/dotfiles-private/.prettierrc "
+  endif
+  execute "%!npx prettier " . opts . "--parser=" . parser
   call setpos('.', save_pos)
   silent! write
 endfunction
