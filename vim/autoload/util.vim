@@ -19,6 +19,8 @@ function! util#GetGitRoot(...)
   if v:shell_error
     return 0
   endif
+  " Remove null character at the end of output
+  let git_root_path = substitute(git_root_path, '\%x00$', '', '')
   " Return path without expanded tilde, so it is easier to read.
   return fnamemodify(git_root_path, ':~')
 endfunction
