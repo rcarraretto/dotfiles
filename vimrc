@@ -962,6 +962,18 @@ function! s:CdToNodeJsRoot(cd_cmd) abort
   echo cmd
 endfunction
 
+function! s:CdToBufferDir(cd_cmd) abort
+  " Expand to full path (:~) for better logs,
+  " then get the directory (:h).
+  let path = expand('%:~:h')
+  if empty(path)
+    return util#error_msg("CdToBufferDir: buffer doesn't have a disk path")
+  endif
+  let cmd = a:cd_cmd . ' ' . path
+  execute cmd
+  echo cmd
+endfunction
+
 function! s:OpenInSourceTree()
   let output = util#GetGitRoot()
   if empty(output)
@@ -1858,6 +1870,8 @@ nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
 nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
 nnoremap <silent> <leader>cn :call <sid>CdToNodeJsRoot('lcd')<cr>
 nnoremap <silent> <leader>cN :call <sid>CdToNodeJsRoot('cd')<cr>
+nnoremap <silent> <leader>cc :call <sid>CdToBufferDir('lcd')<cr>
+nnoremap <silent> <leader>cC :call <sid>CdToBufferDir('cd')<cr>
 
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
