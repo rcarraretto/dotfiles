@@ -942,13 +942,24 @@ endfunction
 function! s:CdToGitRoot(cd_cmd)
   let output = util#GetGitRoot()
   if empty(output)
-    echohl ErrorMsg
-    echom "CdToGitRoot: couldn't find git root"
-    echohl NONE
-    return
+    return util#error_msg("CdToGitRoot: couldn't find git root")
   endif
-  execute a:cd_cmd . ' ' . output
-  pwd
+  let cmd = a:cd_cmd . ' ' . output
+  execute cmd
+  echo cmd
+endfunction
+
+function! s:CdToNodeJsRoot(cd_cmd) abort
+  let package_json_path = findfile('package.json', '.;' . util#GetGitRoot())
+  if empty(package_json_path)
+    return util#error_msg("CdToNodeJsRoot: couldn't find package.json")
+  endif
+  " Expand to full path (:~) for better logs,
+  " then get the directory (:h).
+  let nodejs_root = fnamemodify(package_json_path, ':~:h')
+  let cmd = a:cd_cmd . ' ' . nodejs_root
+  execute cmd
+  echo cmd
 endfunction
 
 function! s:OpenInSourceTree()
@@ -1844,7 +1855,9 @@ xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
 xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 " change directory
 nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
-nnoremap <silent> <leader>tg :call <sid>CdToGitRoot('tcd')<cr>
+nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
+nnoremap <silent> <leader>cn :call <sid>CdToNodeJsRoot('lcd')<cr>
+nnoremap <silent> <leader>cN :call <sid>CdToNodeJsRoot('cd')<cr>
 
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
