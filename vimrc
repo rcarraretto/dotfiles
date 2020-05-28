@@ -763,7 +763,7 @@ function! s:DirvishMv()
     echo 'skipped'
     return
   endif
-  let cmd = 'mv ' . join(filepaths, ' ') . ' ' . dirpath
+  let cmd = 'mv ' . join(map(filepaths, 'fnameescape(v:val)'), ' ') . ' ' . fnameescape(dirpath)
   let output = system(cmd)
   if v:shell_error
     echohl Error
