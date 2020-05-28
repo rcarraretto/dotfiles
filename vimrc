@@ -1704,6 +1704,37 @@ function! s:ListCtrlMappings() abort
 endfunction
 command! ListCtrlMappings :call <sid>ListCtrlMappings()
 
+function! s:CopyCursorReference() abort
+  let path = expand("%:~")
+  let line_num = line('.')
+  let col_num = col('.')
+  let @* = printf('%s:%s:%s', path, line_num, col_num)
+endfunction
+
+function! s:GoToCursorReference() abort
+  let line = getline('.')
+  let cursor = getpos('.')
+  normal! gf
+  let jumped_filename = expand('%:t')
+  " [Note]
+  " Use 'very nomagic' (\V) so that the filename is not interpreted as a regex
+  " https://stackoverflow.com/a/11311701/2277505
+  let regex = '\V' . jumped_filename . ':\(\d\+\)\(:\(\d\+\)\)\?'
+  let matches = matchlist(line, regex)
+  if empty(matches)
+    return
+  endif
+  let target_line = matches[1]
+  let target_col = matches[3]
+  call cursor(target_line, target_col)
+  try
+    " Open folds
+    normal! zO
+  catch /E490/
+    " No fold found
+  endtry
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1907,6 +1938,10 @@ nnoremap <leader>cf :let @* = expand("%:t")<cr>
 nnoremap <leader>cp :let @* = expand("%")<cr>
 " copy full path (with ~) to clipboard
 nnoremap <leader>cP :let @* = expand("%:~")<cr>
+" copy full path, line and column number
+nnoremap <leader>cr :call <sid>CopyCursorReference()<cr>
+" go to file path (like vim's gf mapping), but also line and column number
+nnoremap <leader>gr :call <sid>GoToCursorReference()<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :SysOpen<cr>
 
