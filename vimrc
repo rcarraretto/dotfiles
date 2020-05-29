@@ -1043,6 +1043,16 @@ function! ToggleGStatus()
 endfunction
 
 function! s:GrepOperator(type)
+  let target = s:YankOperatorTarget(a:type)
+  silent execute "Ag -Q --hidden " . shellescape(target)
+endfunction
+
+function! s:GrepOperatorInGitRoot(type)
+  let target = s:YankOperatorTarget(a:type)
+  call s:SearchInGitRoot(target)
+endfunction
+
+function! s:YankOperatorTarget(type) abort
   if a:type ==# 'v'
     execute "normal! `<v`>y"
   elseif a:type ==# 'char'
@@ -1050,7 +1060,7 @@ function! s:GrepOperator(type)
   else
     return
   endif
-  silent execute "Ag -Q --hidden " . shellescape(@@)
+  return @@
 endfunction
 
 " Make * and # work on visual mode.
@@ -1891,8 +1901,11 @@ nnoremap <space>: :History:<cr>
 nnoremap <space>a :Ag --hidden -Q ''<left>
 " search in git root
 nnoremap <space>A :SearchInGitRoot<space>
+" grep operator
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
+nnoremap <space>G :set operatorfunc=<sid>GrepOperatorInGitRoot<cr>g@
+vnoremap <space>G :<c-u>call <sid>GrepOperatorInGitRoot(visualmode())<cr>
 " search in file (from visual mode)
 xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
 xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
