@@ -561,15 +561,47 @@ function! s:YankLastMessage() abort
 endfunction
 command! Ym :call <sid>YankLastMessage()
 
+" :Log {expr}
+"
+" Based on :PPmsg from scriptease
+" ~/.vim/bundle/vim-scriptease/plugin/scriptease.vim:41:11
+"
+" Pretty print the value of {expr} using :echomsg
+" Extended to also:
+" - log to a special file
+" - yank result
+"
 " Example:
-" :Eval 2 + 2
-" :Eval range(1, 5)
-function! s:Eval(cmd) abort
-  let result = eval(a:cmd)
-  echom result
-  call s:YankLastMessage()
+" :Log
+" :Log 2 + 2
+" :Log range(1, 5)
+" :Log b:
+command! -complete=expression -nargs=? Log
+      \ if !empty(<q-args>) |
+      \   call <sid>LogExpr(<q-args>) |
+      \ elseif !empty(expand('<sfile>')) |
+      \   call <sid>LogSourcedFile(expand('<sfile>'), expand('<slnum>')) |
+      \ endif
+
+function! s:LogExpr(expr) abort
+  let result = eval(a:expr)
+  let lines = split(scriptease#dump(result, {'width': &columns - 1}), "\n")
+  call s:LogLines(lines)
 endfunction
-command! -complete=expression -nargs=* Eval :call <sid>Eval(<q-args>)
+
+function! s:LogSourcedFile(sfile, slnum) abort
+  let line = a:sfile . ', line ' . a:slnum
+  call s:LogLines([line])
+endfunction
+
+function! s:LogLines(lines) abort
+  for line in a:lines
+    echomsg line
+  endfor
+  call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
+  silent checktime "/var/tmp/vim-messages.txt"
+  let @* = a:lines[-1]
+endfunction
 
 function! s:NetrwMappings()
   " note:
@@ -1850,8 +1882,8 @@ nnoremap <leader>ev :call util#EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " Yank last message
 nnoremap <leader>ym :Ym<cr>
-" :Eval <vimscript>
-nnoremap <space>v :Eval<space>
+" :Log {expr}
+nnoremap <space>v :Log<space>
 
 " Browse files & search
 " quickly edit some files and folders
