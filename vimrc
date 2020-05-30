@@ -1782,6 +1782,11 @@ function! s:GoToCursorReference() abort
   endtry
 endfunction
 
+function! s:CopyCmdline() abort
+  let @* = getcmdline()
+  return ""
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -1881,6 +1886,8 @@ cnoremap <c-p> <up>
 cnoremap <c-n> <down>
 cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
+" Copy current command-line
+cnoremap <expr> <c-x>y <sid>CopyCmdline()
 
 " vimrc, vimscript
 nnoremap <leader>ev :call util#EditFile($MYVIMRC)<cr>
