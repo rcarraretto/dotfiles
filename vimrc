@@ -1756,7 +1756,12 @@ endfunction
 function! s:GoToCursorReference() abort
   let line = getline('.')
   let cursor = getpos('.')
-  normal! gf
+  try
+    normal! gf
+  catch /E447/
+    let msg = 'GoToCursorReference: ' . matchstr(v:exception, 'Vim(normal):E447: \zs\(.*\)')
+    return util#error_msg(msg)
+  endtry
   let jumped_filename = expand('%:t')
   " [Note]
   " Use 'very nomagic' (\V) so that the filename is not interpreted as a regex
