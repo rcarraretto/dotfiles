@@ -2038,8 +2038,10 @@ nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
 nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
 nnoremap <silent> <leader>cn :call <sid>CdToNodeJsRoot('lcd')<cr>
 nnoremap <silent> <leader>cN :call <sid>CdToNodeJsRoot('cd')<cr>
-nnoremap <silent> <leader>cc :call <sid>CdToBufferDir('lcd')<cr>
-nnoremap <silent> <leader>cC :call <sid>CdToBufferDir('cd')<cr>
+nnoremap <silent> <leader>cb :call <sid>CdToBufferDir('lcd')<cr>
+nnoremap <silent> <leader>cB :call <sid>CdToBufferDir('cd')<cr>
+" change to previous current directory
+nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
 " toggle log windows
 nnoremap <leader>2 :call <sid>ToggleLogWindow('/var/tmp/test-console.txt')<cr>
 nnoremap <leader>3 :call <sid>ToggleLogWindow('/var/tmp/test-results.txt')<cr>
