@@ -578,14 +578,13 @@ command! Ym :call <sid>YankLastMessage()
 " :Log b:
 command! -complete=expression -nargs=? Log
       \ if !empty(<q-args>) |
-      \   call <sid>LogExpr(<q-args>) |
+      \   call <sid>LogExprResult(eval(<q-args>)) |
       \ elseif !empty(expand('<sfile>')) |
       \   call <sid>LogSourcedFile(expand('<sfile>'), expand('<slnum>')) |
       \ endif
 
-function! s:LogExpr(expr) abort
-  let result = eval(a:expr)
-  let lines = split(scriptease#dump(result, {'width': &columns - 1}), "\n")
+function! s:LogExprResult(result) abort
+  let lines = split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
   call s:LogLines(lines)
 endfunction
 
