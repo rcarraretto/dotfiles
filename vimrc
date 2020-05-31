@@ -173,25 +173,35 @@ function! GetCwdContext() abort
   return '[' . fnamemodify(getcwd(), ':t') . '] '
 endfunction
 
-function! GetIndentationInfo() abort
+function! GetExtendedFileInfo() abort
   if &list == 0
     return ''
   endif
+  let str = ''
+  " <SNR>
+  if &rtp =~ 'scriptease'
+    let script_id = scriptease#scriptid('%')
+    if !empty(script_id)
+      let str .= printf(' | <SNR>%d', script_id)
+    endif
+  endif
+  " fileencoding
+  if !empty(&fileencoding)
+    let str .= printf(' | %s', &fileencoding)
+  endif
+  " indentation
   let type = &expandtab ? '<space>' : '<tab>'
   if &softtabstop == 0
     if &tabstop == &shiftwidth
       let length = &tabstop
     else
-      let length = 'ts: ' . &tabstop . ' ' . 'sw: ' . &shiftwidth
+      let length = printf('ts: %s sw: %s', &tabstop, &shiftwidth)
     endif
   else
-    let length = 'ts: ' . &tabstop . ' sts: ' . &softtabstop . ' sw: ' . &shiftwidth
+    let length = printf('ts: %s sts: %s sw: %s', &tabstop, &softtabstop, &shiftwidth)
   endif
-  let str = ''
-  if !empty(&fileencoding)
-    let str .= ' | ' . &fileencoding
-  endif
-  return  str . ' | ' . type . ' ' . length
+  let str .=  printf(' | %s %s', type, length)
+  return str
 endfunction
 
 function! s:SetStatusline(...)
@@ -251,7 +261,7 @@ function! s:SetStatusline(...)
   endif
   setlocal statusline+=%=  " left/right separator
   if isActiveWindow && winwidth('.') > 50
-    setlocal statusline+=%{GetIndentationInfo()}
+    setlocal statusline+=%{GetExtendedFileInfo()}
     let showFt = index(['qf', ''], &filetype) == -1
     if showFt
       call s:SetStatuslineSeparator()
