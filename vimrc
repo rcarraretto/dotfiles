@@ -608,8 +608,22 @@ function! s:LogLines(lines) abort
     echomsg line
   endfor
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
-  silent checktime "/var/tmp/vim-messages.txt"
+  call s:RefreshBuffer("/var/tmp/vim-messages.txt")
   let @* = a:lines[-1]
+endfunction
+
+function! s:RefreshBuffer(path) abort
+  try
+    execute 'silent checktime ' . a:path
+  catch /E93\|E94\|E523/
+    " E93: More than one match for /some/path/
+    "
+    " E94: No matching buffer for /some/path/
+    " Could happen with Dirvish buffers (a:path is a directory),
+    "
+    " E523: May not be allowed, when executing code in the context of autocmd.
+    " For example, running :Log inside of s:SetStatusline().
+  endtry
 endfunction
 
 function! s:NetrwMappings()
