@@ -174,18 +174,18 @@ function! GetCwdContext() abort
 endfunction
 
 function! GetExtendedFileInfo() abort
-  if &list == 0
-    return ''
-  endif
   let str = ''
   " <SNR>
-  if &ft == 'vim' && &rtp =~ 'scriptease'
+  if get(g:, 'statusline_show_ext_info', 0) && &ft == 'vim' && &rtp =~ 'scriptease'
     let script_id = scriptease#scriptid('%')
     if empty(script_id)
       " e.g. script in autoload folder was not loaded yet
       let script_id = '?'
     endif
     let str .= printf(' | <SNR>%s', script_id)
+  endif
+  if &list == 0
+    return str
   endif
   " fileencoding
   if !empty(&fileencoding)
@@ -928,6 +928,15 @@ function! s:ToggleListChars()
     setlocal nolist
   else
     setlocal list
+  endif
+endfunction
+
+function! s:ToggleGlobalVar(varname) abort
+  let value = get(g:, a:varname, 0)
+  if value == 0
+    let g:[a:varname] = 1
+  else
+    let g:[a:varname] = 0
   endif
 endfunction
 
@@ -1954,6 +1963,8 @@ nnoremap <leader><leader> <c-^>
 nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
 " Toggle showing whitespace
 nnoremap <silent> col :call <sid>ToggleListChars()<cr>
+" Toggle showing extended info in statusline
+nnoremap <silent> cos :call <sid>ToggleGlobalVar('statusline_show_ext_info')<cr>
 
 " Windows
 " window navigation
