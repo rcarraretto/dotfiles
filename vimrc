@@ -179,11 +179,13 @@ function! GetExtendedFileInfo() abort
   endif
   let str = ''
   " <SNR>
-  if &rtp =~ 'scriptease'
+  if &ft == 'vim' && &rtp =~ 'scriptease'
     let script_id = scriptease#scriptid('%')
-    if !empty(script_id)
-      let str .= printf(' | <SNR>%d', script_id)
+    if empty(script_id)
+      " e.g. script in autoload folder was not loaded yet
+      let script_id = '?'
     endif
+    let str .= printf(' | <SNR>%s', script_id)
   endif
   " fileencoding
   if !empty(&fileencoding)
