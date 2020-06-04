@@ -2120,7 +2120,7 @@ nnoremap <leader>cP :let @* = expand("%:~")<cr>
 " copy full path, line and column number
 nnoremap <leader>cr :call <sid>CopyCursorReference()<cr>
 " go to file path (like vim's gf mapping), but also line and column number
-nnoremap <leader>gr :call <sid>GoToCursorReference()<cr>
+nnoremap <leader>gf :call <sid>GoToCursorReference()<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :SysOpen<cr>
 
