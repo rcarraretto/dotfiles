@@ -607,6 +607,7 @@ function! s:LogSourcedFile(sfile, slnum) abort
 endfunction
 
 function! s:LogLines(lines) abort
+  let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
   for line in a:lines
     echomsg line
   endfor
