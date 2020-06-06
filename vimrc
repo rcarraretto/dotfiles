@@ -590,11 +590,16 @@ command! Ym :call <sid>YankLastMessage()
 " :Log range(1, 5)
 " :Log b:
 command! -complete=expression -nargs=? Log
-      \ if !empty(<q-args>) |
-      \   call <sid>LogExprResult(eval(<q-args>)) |
-      \ elseif !empty(expand('<sfile>')) |
-      \   call <sid>LogSourcedFile(expand('<sfile>'), expand('<slnum>')) |
-      \ endif
+      \ try |
+      \   if !empty(<q-args>) |
+      \     call <sid>LogExprResult(eval(<q-args>)) |
+      \   elseif !empty(expand('<sfile>')) |
+      \     call <sid>LogSourcedFile(expand('<sfile>'), expand('<slnum>')) |
+      \   endif |
+      \ catch |
+      \   let msg = matchstr(v:exception, 'Vim.*:\zsE\d\+: .*') |
+      \   call <sid>LogLines([msg], 1) |
+      \ endtry
 
 function! s:LogExprResult(result) abort
   let lines = split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
@@ -606,11 +611,18 @@ function! s:LogSourcedFile(sfile, slnum) abort
   call s:LogLines([line])
 endfunction
 
-function! s:LogLines(lines) abort
-  let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
+function! s:LogLines(lines, ...) abort
+  let is_error = get(a:, 1, 0)
   for line in a:lines
-    echomsg line
+    if is_error
+      echohl ErrorMsg
+      echomsg line
+      echohl NONE
+    else
+      echomsg line
+    endif
   endfor
+  let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
   call s:RefreshBuffer("/var/tmp/vim-messages.txt")
   let @* = a:lines[-1]
