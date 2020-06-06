@@ -525,6 +525,7 @@ function! s:VimEnter()
   if !empty(maparg("<M-d>", "i", 0, 1))
     iunmap <M-d>
   endif
+  call writefile([], "/var/tmp/vim-messages.txt")
 endfunction
 
 function! s:DisarmPluginGuard() abort
