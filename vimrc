@@ -1819,7 +1819,12 @@ function! s:GoToCursorReference() abort
 endfunction
 
 function! s:CopyCmdline() abort
-  let @* = getcmdline()
+  " If it's a :Log command, then don't include the 'Log ' part.
+  " For example:
+  " > Log strftime('%H:%M:%S')
+  " copies
+  " > strftime('%H:%M:%S')
+  let @* = matchstr(getcmdline(), '^\(Log \)\?\zs.*')
   return ""
 endfunction
 
