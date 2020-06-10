@@ -42,8 +42,10 @@ Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
 " git
 Plug 'tpope/vim-fugitive', { 'commit': 'c452181975761f8b055b88eb1c98f736323510fd' }
-" github
+" github support for fugitive
 Plug 'tpope/vim-rhubarb'
+" gitlab support for fugitive
+Plug 'shumphrey/fugitive-gitlab.vim'
 Plug 'cohama/agit.vim'
 " debugging vim / vimscript
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
