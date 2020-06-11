@@ -2127,12 +2127,6 @@ nnoremap <leader>jv :vsplit <bar> silent YcmCompleter GoToDefinition<cr>
 nnoremap c* *Ncgn
 nnoremap c# #NcgN
 
-nnoremap <leader>V o<esc>"*p
-
-" Copy and paste visual
-xnoremap <space>y "*y
-xnoremap <space>p "*p
-
 " Quotes textobj
 omap q iq
 
@@ -2195,9 +2189,6 @@ nnoremap <space>\ :call <sid>FormatParagraph()<cr>
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<cr>
 
-" Replace entire content of file with clipboard
-nnoremap <leader>rf ggdG"*P=G
-
 " Paste from clipboard in insert and command-line mode
 inoremap <c-q> <c-r>*
 cnoremap <c-q> <c-r>*
@@ -2221,12 +2212,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " Go align Elixir paragraph
 nmap gae gaipe
-
-nnoremap ]h $]mzzF(B
-nnoremap [h [mzzF(B
-
-" Move function arg to the right
-nnoremap <leader>sl "adt,dwep"ap
 
 " }}}
 
