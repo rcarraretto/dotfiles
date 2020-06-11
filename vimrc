@@ -414,6 +414,10 @@ augroup END
 
 augroup SpecialFiles
   autocmd!
+  autocmd BufRead /var/tmp/vim-messages.txt,/private/var/tmp/vim-messages.txt set ft=vim_log
+    \| let b:skip_color_column=1
+    \| let b:skip_cursor_line=1
+    \| setlocal nonumber norelativenumber
   " Apparently Karabiner likes to save this file without an EOL
   autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
   autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
@@ -957,10 +961,16 @@ function! s:ToggleGlobalVar(varname) abort
 endfunction
 
 function! s:ShouldColorColumn()
+  if get(b:, 'skip_color_column')
+    return 0
+  endif
   return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'rc_git_diff', 'fugitive', 'fugitiveblame'], &filetype) == -1
 endfunction
 
 function! s:ShouldCursorLine()
+  if get(b:, 'skip_cursor_line')
+    return 0
+  endif
   return index(['agit_diff', 'rc_git_diff'], &filetype) == -1
 endfunction
 
