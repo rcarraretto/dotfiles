@@ -2036,13 +2036,15 @@ cnoremap <c-l> <c-n>
 " Copy current command-line
 cnoremap <expr> <c-x>y <sid>CopyCmdline()
 
-" vimrc, vimscript
+" Vimscript, vim debug
 nnoremap <leader>ev :call util#EditFile($MYVIMRC)<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-" Yank last message
+" yank last message
 nnoremap <leader>ym :Ym<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
+" reload syntax highlighting
+nnoremap <leader>sy :syntax sync fromstart<cr>
 
 " Browse files & search
 " quickly edit some files and folders
