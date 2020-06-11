@@ -54,6 +54,15 @@ if !$USE_NETRW
   Plug 'justinmk/vim-dirvish'
 endif
 
+" highlight matching parentheses.
+" alternative to the standard 'matchparen' plugin.
+" it offers the ability to toggle highlighting per buffer.
+Plug 'itchyny/vim-parenmatch', { 'commit': '5128890281b2fb7a32bb9437a2927800196858d3' }
+" disable the standard 'matchparen' plugin
+" to use the 'parenmatch' plugin instead
+let g:loaded_matchparen = 1
+let g:parenmatch_highlight = 0
+
 " >>> Text editing (Part 2) <<<
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
@@ -313,6 +322,10 @@ function! s:SetHighlight() abort
   " e.g., typescript syntax error
   highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
+  " Customize highlight from 'parenmatch' plugin.
+  " Basically copy MatchParen highlight from the standard 'matchparen' plugin.
+  highlight ParenMatch term=reverse ctermbg=8
+
   " color agit diff similar to vim's git diff syntax
   " $VIM/vim81/syntax/git.vim
   highlight def link agitDiffAdd diffAdded
@@ -417,6 +430,7 @@ augroup SpecialFiles
   autocmd BufRead /var/tmp/vim-messages.txt,/private/var/tmp/vim-messages.txt set ft=vim_log
     \| let b:skip_color_column=1
     \| let b:skip_cursor_line=1
+    \| let b:parenmatch=0
     \| setlocal nonumber norelativenumber
   " Apparently Karabiner likes to save this file without an EOL
   autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
