@@ -482,14 +482,19 @@ augroup END
 
 augroup AutoSaveFolds
   " Whitelist of filetypes that will have folding saved/restored.
+  " When using :edit in these filetypes, folds will not be reset.
   "
   " Using a whitelist because there will be exceptions like
   " quickfix, netrw and help buffers. And also special buffers
   " used by plugins like plug, fzf, fugitive, etc.
-  let s:ft_save_fold = ['typescript']
+  let ft_save_fold = ['typescript']
   autocmd!
   " Mkview
-  autocmd BufUnload * if index(s:ft_save_fold, &ft) >= 0 | mkview | endif
+  "
+  " Note: BufUnload requires <afile>
+  " https://vi.stackexchange.com/a/22341
+  "
+  autocmd BufUnload * let ft = getbufvar(expand('<afile>'), '&ft') | if index(ft_save_fold, ft) >= 0 | mkview | endif
   " Loadview
   "
   " hack 1: Not using BufWinEnter here because it seems that it doesn't work
