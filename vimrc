@@ -767,7 +767,7 @@ function! s:DirvishRm()
     return
   endif
   if isdirectory(path)
-    let output = system('rm -r ' . path)
+    let output = system('rm -r ' . fnameescape(path))
     if v:shell_error
       echohl Error
       echom 'DirvishRm: Error: ' . output
