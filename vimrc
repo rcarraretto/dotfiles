@@ -738,14 +738,14 @@ function! s:DirvishRefresh() abort
   endtry
 endfunction
 
-function! s:DirvishRename()
+function! s:DirvishRename() abort
   let path = getline('.')
   let new_path = input('Moving ' . path . ' to: ', path, 'file')
   call rename(path, new_path)
   call s:DirvishRefresh()
 endfunction
 
-function! s:DirvishMkdir()
+function! s:DirvishMkdir() abort
   let dirname = input('Mkdir: ')
   if !len(dirname)
     return
@@ -755,7 +755,7 @@ function! s:DirvishMkdir()
   call s:DirvishRefresh()
 endfunction
 
-function! s:DirvishRm()
+function! s:DirvishRm() abort
   let path = getline('.')
   echohl Statement
   let ok = input('Remove ' . path . '? ')
@@ -785,7 +785,7 @@ function! s:DirvishRm()
 endfunction
 
 " Move contents of folder to parent folder
-function s:DirvishImplode()
+function s:DirvishImplode() abort
   let path = getline('.')
   if !isdirectory(path)
     echohl Statement
@@ -813,7 +813,7 @@ function s:DirvishImplode()
   call s:DirvishRefresh()
 endfunction
 
-function! ArgList()
+function! ArgList() abort
   let i = 0
   let l = []
   while i < argc()
@@ -823,7 +823,7 @@ function! ArgList()
   return l
 endfunction
 
-function! s:DirvishMv()
+function! s:DirvishMv() abort
   let dirpath = getline('.')
   if !isdirectory(dirpath)
     let dirpath = fnamemodify(dirpath, ':h') . '/'
