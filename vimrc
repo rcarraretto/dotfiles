@@ -222,7 +222,7 @@ function! s:SetStatusline(...)
     return
   endif
   let isActiveWindow = get(a:, 1, 1)
-  let showFlags = index(['qf', 'help', 'rc_git_branches', 'rc_git_log', 'rc_git_diff'], &filetype) == -1
+  let showFlags = (index(['qf', 'help'], &filetype) == -1) && !get(b:, 'statusline_skip_flags')
   let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   setlocal statusline=
   if showRelativeFilename
@@ -275,7 +275,7 @@ function! s:SetStatusline(...)
   setlocal statusline+=%=  " left/right separator
   if isActiveWindow && winwidth('.') > 50
     setlocal statusline+=%{GetExtendedFileInfo()}
-    let showFt = index(['qf', ''], &filetype) == -1
+    let showFt = (index(['qf', ''], &filetype) == -1) && !get(b:, 'statusline_skip_ft')
     if showFt
       call s:SetStatuslineSeparator()
       setlocal statusline+=%{&ft} " filetype
