@@ -1523,6 +1523,34 @@ function! s:HighestWinnr()
   return wins[-1]['winnr']
 endfunction
 
+function! s:CycleWinDownOrNext() abort
+  let prev_winnr = winnr()
+  wincmd j
+  if prev_winnr == winnr()
+    " Can move from B to C
+    "   A  |  C
+    " -----|
+    "  *B* |
+    "
+    wincmd w
+  endif
+endfunction
+
+function! s:CycleWinUpOrPrev() abort
+  let prev_winnr = winnr()
+  wincmd k
+  if prev_winnr == winnr()
+    " Can move from C to B
+    " ('wincmd h' will move from C to A sometimes, depending on
+    "  where you are on C)
+    "   A  | *C*
+    " -----|
+    "   B  |
+    "
+    wincmd W
+  endif
+endfunction
+
 function! s:CycleWinLeft()
   if winnr() == 1
     " This is the first window.
@@ -2018,8 +2046,8 @@ nnoremap <silent> cos :call <sid>ToggleGlobalVar('statusline_show_ext_info')<cr>
 
 " Windows
 " window navigation
-nnoremap <space>j <c-w>j
-nnoremap <space>k <c-w>k
+nnoremap <silent> <space>j :call <sid>CycleWinDownOrNext()<cr>
+nnoremap <silent> <space>k :call <sid>CycleWinUpOrPrev()<cr>
 nnoremap <silent> <space>h :call <sid>CycleWinLeft()<cr>
 nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
