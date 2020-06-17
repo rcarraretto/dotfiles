@@ -1861,11 +1861,18 @@ function! s:CopyCursorReference() abort
 endfunction
 
 function! s:GoToCursorReference() abort
+  let should_split = v:count > 0
   let line = getline('.')
   let cursor = getpos('.')
   try
+    if should_split
+      vsplit
+    endif
     normal! gf
   catch /E447/
+    if should_split
+      quit
+    endif
     let msg = 'GoToCursorReference: ' . matchstr(v:exception, 'Vim(normal):E447: \zs\(.*\)')
     return util#error_msg(msg)
   endtry
@@ -2194,7 +2201,7 @@ nnoremap <leader>cP :let @* = expand("%:~")<cr>
 " copy full path, line and column number
 nnoremap <leader>cr :call <sid>CopyCursorReference()<cr>
 " go to file path (like vim's gf mapping), but also line and column number
-nnoremap <leader>gf :call <sid>GoToCursorReference()<cr>
+nnoremap <leader>gf :<c-u>call <sid>GoToCursorReference()<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :SysOpen<cr>
 
