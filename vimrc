@@ -1220,44 +1220,35 @@ command! BufOnly :call s:BufOnly()
 " Adapted from:
 " https://github.com/vim-scripts/Rename
 function! s:RenameFile(name)
-  let l:oldfile = expand('%:p')
-
-  if bufexists(fnamemodify(a:name, ':p'))
-    echohl ErrorMsg
-    echomsg 'A buffer with that name already exists.'
-    echohl None
-    return
+  let oldfile = expand('%:p')
+  let newfile = fnamemodify(a:name, ':p')
+  if oldfile == newfile
+    return util#error_msg('RenameFile: renaming to the same file')
+  endif
+  if bufexists(newfile)
+    return util#error_msg('RenameFile: A buffer with that name already exists')
   endif
 
   let v:errmsg = ''
   silent! execute 'saveas ' . a:name
-
   if v:errmsg !~# '^$\|^E329'
     echoerr v:errmsg
     return
   endif
 
-  if expand('%:p') ==# l:oldfile || !filewritable(expand('%:p'))
-    echohl ErrorMsg
-    echomsg 'Rename failed for some reason.'
-    echohl None
-    return
+  if expand('%:p') == oldfile || !filewritable(expand('%:p'))
+    return util#error_msg('RenameFile: Rename failed for some reason')
   endif
 
-  let l:lastbufnr = bufnr('$')
-
-  if fnamemodify(bufname(l:lastbufnr), ':p') ==# l:oldfile
-    silent execute l:lastbufnr . 'bwipe!'
+  let lastbufnr = bufnr('$')
+  if fnamemodify(bufname(lastbufnr), ':p') == oldfile
+    silent execute lastbufnr . 'bwipe!'
   else
-    echohl ErrorMsg
-    echomsg 'Could not wipe out the old buffer for some reason.'
-    echohl None
+    return util#error_msg('RenameFile: Could not wipe out the old buffer for some reason')
   endif
 
-  if delete(l:oldfile) != 0
-    echohl ErrorMsg
-    echomsg 'Could not delete the old file: ' . l:oldfile
-    echohl None
+  if delete(oldfile) != 0
+    return util#error_msg('RenameFile: Could not delete the old file: ' . oldfile)
   endif
 endfunction
 
