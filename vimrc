@@ -647,10 +647,10 @@ function! s:LogLines(lines, ...) abort
       echomsg line
     endif
   endfor
+  let @* = a:lines[-1]
   let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
   call s:RefreshBuffer("/var/tmp/vim-messages.txt")
-  let @* = a:lines[-1]
 endfunction
 
 function! s:RefreshBuffer(path) abort
