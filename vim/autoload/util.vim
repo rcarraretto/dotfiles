@@ -26,7 +26,7 @@ function! util#GetGitRoot(...)
 endfunction
 
 function! util#GetNodeJsRoot() abort
-  let package_json_path = findfile('package.json', '.;' . util#GetGitRoot())
+  let package_json_path = findfile('package.json', '.;' . $HOME . '/work')
   if empty(package_json_path)
     return 0
   endif
