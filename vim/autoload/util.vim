@@ -25,6 +25,16 @@ function! util#GetGitRoot(...)
   return fnamemodify(git_root_path, ':~')
 endfunction
 
+function! util#GetNodeJsRoot() abort
+  let package_json_path = findfile('package.json', '.;' . util#GetGitRoot())
+  if empty(package_json_path)
+    return 0
+  endif
+  " Expand to full path (:~) for better logs,
+  " then get the directory (:h).
+  return fnamemodify(package_json_path, ':~:h')
+endfunction
+
 function! util#error_msg(msg) abort
   echohl ErrorMsg
   echom a:msg

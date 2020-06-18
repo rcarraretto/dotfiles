@@ -1051,24 +1051,21 @@ function! s:TrimWhitespace()
 endfunction
 
 function! s:CdToGitRoot(cd_cmd)
-  let output = util#GetGitRoot()
-  if empty(output)
+  let path = util#GetGitRoot()
+  if empty(path)
     return util#error_msg("CdToGitRoot: couldn't find git root")
   endif
-  let cmd = a:cd_cmd . ' ' . output
+  let cmd = a:cd_cmd . ' ' . path
   execute cmd
   echo cmd
 endfunction
 
 function! s:CdToNodeJsRoot(cd_cmd) abort
-  let package_json_path = findfile('package.json', '.;' . util#GetGitRoot())
-  if empty(package_json_path)
+  let path = util#GetNodeJsRoot()
+  if empty(path)
     return util#error_msg("CdToNodeJsRoot: couldn't find package.json")
   endif
-  " Expand to full path (:~) for better logs,
-  " then get the directory (:h).
-  let nodejs_root = fnamemodify(package_json_path, ':~:h')
-  let cmd = a:cd_cmd . ' ' . nodejs_root
+  let cmd = a:cd_cmd . ' ' . path
   execute cmd
   echo cmd
 endfunction
