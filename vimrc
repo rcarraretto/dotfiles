@@ -2048,7 +2048,7 @@ cnoremap <c-l> <c-n>
 cnoremap <expr> <c-x>y <sid>CopyCmdline()
 
 " Vimscript, vim debug
-nnoremap <leader>ev :call util#EditFile($MYVIMRC)<cr>
+nnoremap <leader>ev :call util#EditFile(resolve($MYVIMRC))<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " yank last message
 nnoremap <leader>ym :Ym<cr>
