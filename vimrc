@@ -480,37 +480,6 @@ augroup VimEnterCustom
   autocmd VimEnter * call s:VimEnter()
 augroup END
 
-augroup AutoSaveFolds
-  " Whitelist of filetypes that will have folding saved/restored.
-  " When using :edit in these filetypes, folds will not be reset.
-  "
-  " Using a whitelist because there will be exceptions like
-  " quickfix, netrw and help buffers. And also special buffers
-  " used by plugins like plug, fzf, fugitive, etc.
-  let ft_save_fold = ['typescript']
-  autocmd!
-  " Mkview
-  "
-  " Note: BufUnload requires <afile>
-  " https://vi.stackexchange.com/a/22341
-  "
-  autocmd BufUnload * let ft = getbufvar(expand('<afile>'), '&ft') | if index(ft_save_fold, ft) >= 0 | mkview | endif
-  " Loadview
-  "
-  " hack 1: Not using BufWinEnter here because it seems that it doesn't work
-  " for the following case:
-  " - use Dispatch.vim to call an external tool to change the code (e.g. prettier)
-  " - then the buffer will be refreshed by vim
-  "   (because of :checktime and &autoread set by terminus plugin)
-  " - then it seems like none of the events are being triggered,
-  "     BufWinEnter or BufRead or ShellCmdPost or FileChangedShellPost
-  "
-  " hack 2: after loading view, it seems that the cursor bugs, when going up and down.
-  " Going right and left after loadview seems to fix it.
-  "
-  autocmd FileType typescript silent! loadview | call feedkeys("\<right>\<left>")
-augroup END
-
 augroup TmuxGitStatus
   " Refresh tmux status bar, since it shows git branch information.
   " Each buffers has its own current working directory.
