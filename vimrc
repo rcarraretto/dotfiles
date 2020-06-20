@@ -576,33 +576,43 @@ command! Ym :call <sid>YankLastMessage()
 " Pretty print the value of {expr} using :echomsg
 " Extended to also:
 " - log to a special file
-" - yank result
+" - yank {expr} and result
 "
 " Example:
 " :Log
 " :Log 2 + 2
 " :Log range(1, 5)
 " :Log b:
+"
+" It has to be implemented inline in order for eval(<q-args>) and expand('<sfile>')
+" to work properly.
 command! -complete=expression -nargs=? Log
+      \ let lines = [] |
+      \ let is_error = 0 |
       \ try |
       \   if !empty(<q-args>) |
       \     let lines = <sid>LogExprResult(eval(<q-args>)) |
       \   elseif !empty(expand('<sfile>')) |
       \     let lines = [expand('<sfile>') . ', line ' . expand('<slnum>')] |
       \   endif |
-      \   call s:LogLines(lines, {'sfile': expand('<sfile>')}) |
       \ catch |
-      \   let msg = matchstr(v:exception, 'Vim.*:\zsE\d\+: .*') |
-      \   call <sid>LogLines([msg], {'is_error': 1, 'sfile': expand('<sfile>')}) |
-      \ endtry
+      \   let lines = [matchstr(v:exception, 'Vim.*:\zsE\d\+: .*')] |
+      \   let is_error = 1 |
+      \ endtry |
+      \ call s:LogLines(lines, {'qargs': <q-args>, 'sfile': expand('<sfile>'), 'is_error': is_error})
 
 function! s:LogExprResult(result) abort
   return split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
 endfunction
 
 function! s:LogLines(lines, opts) abort
-  let is_error = get(a:opts, 'is_error', 0)
+  if empty(a:lines)
+    " :Log on cmd-line without args
+    return
+  endif
+  let qargs = get(a:opts, 'qargs', 0)
   let sfile = get(a:opts, 'sfile', 0)
+  let is_error = get(a:opts, 'is_error', 0)
   for line in a:lines
     if is_error
       echohl ErrorMsg
@@ -615,7 +625,7 @@ function! s:LogLines(lines, opts) abort
   if empty(sfile)
     " Copy to clipboard, but only if :Log was called from cmd-line
     " (and not within a script).
-    let @* = a:lines[-1]
+    let @* = qargs . "\n> " . a:lines[-1]
   endif
   let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
