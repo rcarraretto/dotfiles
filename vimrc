@@ -586,27 +586,23 @@ command! Ym :call <sid>YankLastMessage()
 command! -complete=expression -nargs=? Log
       \ try |
       \   if !empty(<q-args>) |
-      \     call <sid>LogExprResult(eval(<q-args>)) |
+      \     let lines = <sid>LogExprResult(eval(<q-args>)) |
       \   elseif !empty(expand('<sfile>')) |
-      \     call <sid>LogSourcedFile(expand('<sfile>'), expand('<slnum>')) |
+      \     let lines = [expand('<sfile>') . ', line ' . expand('<slnum>')] |
       \   endif |
+      \   call s:LogLines(lines, {'sfile': expand('<sfile>')}) |
       \ catch |
       \   let msg = matchstr(v:exception, 'Vim.*:\zsE\d\+: .*') |
-      \   call <sid>LogLines([msg], 1) |
+      \   call <sid>LogLines([msg], {'is_error': 1, 'sfile': expand('<sfile>')}) |
       \ endtry
 
 function! s:LogExprResult(result) abort
-  let lines = split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
-  call s:LogLines(lines)
+  return split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
 endfunction
 
-function! s:LogSourcedFile(sfile, slnum) abort
-  let line = a:sfile . ', line ' . a:slnum
-  call s:LogLines([line])
-endfunction
-
-function! s:LogLines(lines, ...) abort
-  let is_error = get(a:, 1, 0)
+function! s:LogLines(lines, opts) abort
+  let is_error = get(a:opts, 'is_error', 0)
+  let sfile = get(a:opts, 'sfile', 0)
   for line in a:lines
     if is_error
       echohl ErrorMsg
@@ -616,7 +612,11 @@ function! s:LogLines(lines, ...) abort
       echomsg line
     endif
   endfor
-  let @* = a:lines[-1]
+  if empty(sfile)
+    " Copy to clipboard, but only if :Log was called from cmd-line
+    " (and not within a script).
+    let @* = a:lines[-1]
+  endif
   let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
   call s:RefreshBuffer("/var/tmp/vim-messages.txt")
