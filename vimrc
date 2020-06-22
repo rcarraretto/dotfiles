@@ -625,7 +625,7 @@ function! s:LogLines(lines, opts) abort
   if empty(sfile)
     " Copy to clipboard, but only if :Log was called from cmd-line
     " (and not within a script).
-    let @* = qargs . "\n> " . a:lines[-1]
+    let @* = qargs . "\n> " . join(a:lines, "\n")
   endif
   let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
