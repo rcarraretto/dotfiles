@@ -586,20 +586,29 @@ command! Ym :call <sid>YankLastMessage()
 "
 " It has to be implemented inline in order for eval(<q-args>) and expand('<sfile>')
 " to work properly.
+"
+" Variables inside the expression below are prefixed with underscore
+" to avoid polluting the other function's scope.
+" e.g. if the other function has a variable named 'lines', this could be a problem:
+" Log lines
+" == (expression is expanded) ==>
+" let lines = []
+" eval('lines')
+"
 command! -complete=expression -nargs=? Log
-      \ let lines = [] |
-      \ let is_error = 0 |
+      \ let _lines = [] |
+      \ let _is_error = 0 |
       \ try |
       \   if !empty(<q-args>) |
-      \     let lines = <sid>LogExprResult(eval(<q-args>)) |
+      \     let _lines = <sid>LogExprResult(eval(<q-args>)) |
       \   elseif !empty(expand('<sfile>')) |
-      \     let lines = [expand('<sfile>') . ', line ' . expand('<slnum>')] |
+      \     let _lines = [expand('<sfile>') . ', line ' . expand('<slnum>')] |
       \   endif |
       \ catch |
-      \   let lines = [matchstr(v:exception, 'Vim.*:\zsE\d\+: .*')] |
-      \   let is_error = 1 |
+      \   let _lines = [matchstr(v:exception, 'Vim.*:\zsE\d\+: .*')] |
+      \   let _is_error = 1 |
       \ endtry |
-      \ call s:LogLines(lines, {'qargs': <q-args>, 'sfile': expand('<sfile>'), 'is_error': is_error})
+      \ call s:LogLines(_lines, {'qargs': <q-args>, 'sfile': expand('<sfile>'), 'is_error': _is_error})
 
 function! s:LogExprResult(result) abort
   return split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
