@@ -423,6 +423,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead .ignore set filetype=conf
   autocmd BufNewFile,BufRead *.applescript set filetype=applescript
   autocmd BufNewFile,BufRead *.jenkinsfile set filetype=groovy
+  autocmd BufNewFile,BufRead Dockerfile.* set filetype=Dockerfile
 augroup END
 
 augroup SpecialFiles
