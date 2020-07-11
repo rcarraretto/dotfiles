@@ -141,7 +141,10 @@ hs.hotkey.bind(hyper, "`", function()
   source_ids = hs.keycodes.layouts(true)
   source_id = hs.keycodes.currentSourceID()
   key = get_key_for_value(source_ids, source_id)
-  if (key == #source_ids) then
+  -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
+  -- But this source_id is not listed in source_ids,
+  -- so key is nil.
+  if (key == #source_ids) or key == nil then
     next_key = 1
   else
     next_key = key + 1
@@ -154,6 +157,24 @@ hs.hotkey.bind(hyper, "`", function()
   end
 end)
 
+-- Toggle Hiragana and Katakana (hyper + shift + `)
+hs.hotkey.bind(shift_hyper, "`", function()
+  -- hs.keycodes.methods() without "Romaji"
+  methods = {"Hiragana", "Katakana"}
+  method = hs.keycodes.currentMethod()
+  key = get_key_for_value(methods, method)
+  if (key == #methods) or key == nil then
+    next_key = 1
+  else
+    next_key = key + 1
+  end
+  next_method = methods[next_key]
+  ret = hs.keycodes.setMethod(next_method)
+  if ret then
+    hs.alert.closeAll()
+    hs.alert.show(hs.keycodes.currentMethod())
+  end
+end)
 
 --- Volume Control
 local changeVolume = function(delta)
