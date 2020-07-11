@@ -146,14 +146,36 @@ local cycle_list = function(list, current)
   return list[next_key]
 end
 
-local setSourceId = function(source_id, notify)
+local showAlert = function(msg, notify)
   if type(notify) == "nil" then
     notify = true
   end
-  local ret = hs.keycodes.currentSourceID(source_id)
-  if ret and notify then
+  if notify then
     hs.alert.closeAll()
-    hs.alert.show(hs.keycodes.currentLayout())
+    hs.alert.show(msg)
+  end
+end
+
+local refreshTmuxStatus = function()
+  -- Hack to get Hammerspoon to call tmux in a non-blocking way.
+  -- This would block:
+  -- hs.execute('tmux refresh-client -S &', true)
+  hs.task.new("~/work/dotfiles/bin/hs-refresh-tmux-status", nil):start()
+end
+
+local setSourceId = function(source_id, notify)
+  local ret = hs.keycodes.currentSourceID(source_id)
+  if ret then
+    refreshTmuxStatus()
+    showAlert(hs.keycodes.currentLayout(), notify)
+  end
+end
+
+local setMethod = function(method, notify)
+  local ret = hs.keycodes.setMethod(method)
+  if ret then
+    refreshTmuxStatus()
+    showAlert(hs.keycodes.currentMethod(), notify)
   end
 end
 
@@ -167,14 +189,6 @@ hs.hotkey.bind(hyper, "`", function()
   setSourceId(next_source_id)
 end)
 
-local setMethod = function(method)
-  local ret = hs.keycodes.setMethod(method)
-  if ret then
-    hs.alert.closeAll()
-    hs.alert.show(hs.keycodes.currentMethod())
-  end
-end
-
 -- Toggle Hiragana and Katakana (hyper + shift + `)
 hs.hotkey.bind(shift_hyper, "`", function()
   -- hs.keycodes.methods() without "Romaji"
@@ -186,10 +200,10 @@ end)
 
 function switchToPreviousKeyboardLayout()
   if prev_method then
-    return setMethod(prev_method)
+    return setMethod(prev_method, false)
   end
   if prev_source_id then
-    return setSourceId(prev_source_id)
+    return setSourceId(prev_source_id, false)
   end
 end
 
@@ -203,6 +217,15 @@ function switchToStandardKeyboardLayout()
   prev_method = hs.keycodes.currentMethod()
   prev_source_id = hs.keycodes.currentSourceID()
   setSourceId(target_source_id, false)
+end
+
+function getKeyboardLayout()
+  local method = hs.keycodes.currentMethod()
+  if method then
+    return method
+  end
+  local layout = hs.keycodes.currentLayout()
+  return layout
 end
 
 --- Volume Control

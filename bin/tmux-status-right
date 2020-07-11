@@ -3,11 +3,22 @@
 pane_current_path="$(tmux display-message -p -F "#{pane_current_path}")"
 branch=$(cd $pane_current_path; git rev-parse --abbrev-ref HEAD 2> /dev/null)
 timer=$(timer)
+
 tmux_status=""
+
 if [ "$timer" ]; then
   tmux_status="#[fg=colour20] $(timer) |"
 fi
+
 if [ "$branch" ]; then
   tmux_status="#[fg=colour13] ⎇ $branch #[fg=colour20]|$tmux_status"
 fi
+
+if command -v hs 1>/dev/null 2>&1; then
+  keyboard_layout=$(hs -c 'getKeyboardLayout()')
+  if [ "$keyboard_layout" != "Brazilian" ]; then
+    tmux_status="#[fg=colour20] $keyboard_layout |$tmux_status"
+  fi
+fi
+
 echo $tmux_status
