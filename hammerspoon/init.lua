@@ -135,21 +135,23 @@ hs.hotkey.bind(shift_hyper, "l", function()
   hs.execute('timer -o', true)
 end)
 
-
--- Toggle input source (hyper + `)
-hs.hotkey.bind(hyper, "`", function()
-  source_ids = hs.keycodes.layouts(true)
-  source_id = hs.keycodes.currentSourceID()
-  key = get_key_for_value(source_ids, source_id)
-  -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
-  -- But this source_id is not listed in source_ids,
-  -- so key is nil.
-  if (key == #source_ids) or key == nil then
+function cycle_list(list, current)
+  key = get_key_for_value(list, current)
+  if (key == #list) or key == nil then
     next_key = 1
   else
     next_key = key + 1
   end
-  next_source_id = source_ids[next_key]
+  return list[next_key]
+end
+
+-- Toggle input source (hyper + `)
+hs.hotkey.bind(hyper, "`", function()
+  -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
+  -- But this source_id is not listed in source_ids.
+  source_ids = hs.keycodes.layouts(true)
+  source_id = hs.keycodes.currentSourceID()
+  next_source_id = cycle_list(source_ids, source_id)
   ret = hs.keycodes.currentSourceID(next_source_id)
   if ret then
     hs.alert.closeAll()
@@ -162,13 +164,7 @@ hs.hotkey.bind(shift_hyper, "`", function()
   -- hs.keycodes.methods() without "Romaji"
   methods = {"Hiragana", "Katakana"}
   method = hs.keycodes.currentMethod()
-  key = get_key_for_value(methods, method)
-  if (key == #methods) or key == nil then
-    next_key = 1
-  else
-    next_key = key + 1
-  end
-  next_method = methods[next_key]
+  next_method = cycle_list(methods, method)
   ret = hs.keycodes.setMethod(next_method)
   if ret then
     hs.alert.closeAll()
