@@ -379,6 +379,8 @@ augroup vimrcEx
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
         \   execute "normal! g`\"" |
         \ endif
+  autocmd InsertEnter * call s:OnInsertEnter()
+  autocmd InsertLeave * call s:OnInsertLeave()
 augroup END
 
 if $USE_NETRW
@@ -521,6 +523,32 @@ function! s:VimEnter()
     iunmap <M-d>
   endif
   call writefile([], "/var/tmp/vim-messages.txt")
+  call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+endfunction
+
+function! s:OnInsertEnter() abort
+  return s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
+endfunction
+
+function! s:OnInsertLeave() abort
+  return s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+endfunction
+
+" Use vim-compatible keyboard layout when in normal mode.
+" When in insert mode, switch back to the original keyboard layout.
+"
+" https://stackoverflow.com/q/10983604/2277505
+" Based on https://github.com/ironhouzi/bikey-vim/blob/master/plugin/bikey.vim
+"
+function! s:ToggleKeyboardLayout(hsFuncName) abort
+  if !get(g:, 'auto_change_keyboard_layout', 1)
+    return
+  endif
+  let out = system(printf("hs -c '%s()'", a:hsFuncName))
+  if v:shell_error
+    let g:auto_change_keyboard_layout = 0
+    throw printf('%s: %s', a:hsFuncName, out)
+  endif
 endfunction
 
 function! s:DisarmPluginGuard() abort
@@ -2254,6 +2282,10 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
+endif
+
+if !executable('hs')
+  let g:auto_change_keyboard_layout = 0
 endif
 
 " Ack.vim

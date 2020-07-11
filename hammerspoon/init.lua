@@ -146,6 +146,17 @@ local cycle_list = function(list, current)
   return list[next_key]
 end
 
+local setSourceId = function(source_id, notify)
+  if type(notify) == "nil" then
+    notify = true
+  end
+  local ret = hs.keycodes.currentSourceID(source_id)
+  if ret and notify then
+    hs.alert.closeAll()
+    hs.alert.show(hs.keycodes.currentLayout())
+  end
+end
+
 -- Toggle input source (hyper + `)
 hs.hotkey.bind(hyper, "`", function()
   -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
@@ -153,12 +164,16 @@ hs.hotkey.bind(hyper, "`", function()
   local source_ids = hs.keycodes.layouts(true)
   local source_id = hs.keycodes.currentSourceID()
   local next_source_id = cycle_list(source_ids, source_id)
-  local ret = hs.keycodes.currentSourceID(next_source_id)
+  setSourceId(next_source_id)
+end)
+
+local setMethod = function(method)
+  local ret = hs.keycodes.setMethod(method)
   if ret then
     hs.alert.closeAll()
-    hs.alert.show(hs.keycodes.currentLayout())
+    hs.alert.show(hs.keycodes.currentMethod())
   end
-end)
+end
 
 -- Toggle Hiragana and Katakana (hyper + shift + `)
 hs.hotkey.bind(shift_hyper, "`", function()
@@ -166,12 +181,29 @@ hs.hotkey.bind(shift_hyper, "`", function()
   local methods = {"Hiragana", "Katakana"}
   local method = hs.keycodes.currentMethod()
   local next_method = cycle_list(methods, method)
-  local ret = hs.keycodes.setMethod(next_method)
-  if ret then
-    hs.alert.closeAll()
-    hs.alert.show(hs.keycodes.currentMethod())
-  end
+  setMethod(next_method)
 end)
+
+function switchToPreviousKeyboardLayout()
+  if prev_method then
+    return setMethod(prev_method)
+  end
+  if prev_source_id then
+    return setSourceId(prev_source_id)
+  end
+end
+
+function switchToStandardKeyboardLayout()
+  local target_source_id = "com.apple.keylayout.Brazilian"
+  if hs.keycodes.currentSourceID() == target_source_id then
+    prev_method = nil
+    prev_source_id = nil
+    return
+  end
+  prev_method = hs.keycodes.currentMethod()
+  prev_source_id = hs.keycodes.currentSourceID()
+  setSourceId(target_source_id, false)
+end
 
 --- Volume Control
 local changeVolume = function(delta)
