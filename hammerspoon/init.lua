@@ -58,7 +58,7 @@ function p(t)
   end
 end
 
-function get_key_for_value(t, value)
+local get_key_for_value = function(t, value)
   for k, v in pairs(t) do
     if v == value then
       return k
@@ -135,8 +135,9 @@ hs.hotkey.bind(shift_hyper, "l", function()
   hs.execute('timer -o', true)
 end)
 
-function cycle_list(list, current)
-  key = get_key_for_value(list, current)
+local cycle_list = function(list, current)
+  local key = get_key_for_value(list, current)
+  local next_key
   if (key == #list) or key == nil then
     next_key = 1
   else
@@ -149,10 +150,10 @@ end
 hs.hotkey.bind(hyper, "`", function()
   -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
   -- But this source_id is not listed in source_ids.
-  source_ids = hs.keycodes.layouts(true)
-  source_id = hs.keycodes.currentSourceID()
-  next_source_id = cycle_list(source_ids, source_id)
-  ret = hs.keycodes.currentSourceID(next_source_id)
+  local source_ids = hs.keycodes.layouts(true)
+  local source_id = hs.keycodes.currentSourceID()
+  local next_source_id = cycle_list(source_ids, source_id)
+  local ret = hs.keycodes.currentSourceID(next_source_id)
   if ret then
     hs.alert.closeAll()
     hs.alert.show(hs.keycodes.currentLayout())
@@ -162,10 +163,10 @@ end)
 -- Toggle Hiragana and Katakana (hyper + shift + `)
 hs.hotkey.bind(shift_hyper, "`", function()
   -- hs.keycodes.methods() without "Romaji"
-  methods = {"Hiragana", "Katakana"}
-  method = hs.keycodes.currentMethod()
-  next_method = cycle_list(methods, method)
-  ret = hs.keycodes.setMethod(next_method)
+  local methods = {"Hiragana", "Katakana"}
+  local method = hs.keycodes.currentMethod()
+  local next_method = cycle_list(methods, method)
+  local ret = hs.keycodes.setMethod(next_method)
   if ret then
     hs.alert.closeAll()
     hs.alert.show(hs.keycodes.currentMethod())
@@ -242,7 +243,7 @@ end)
 
 
 -- Reload config when any lua file in config directory changes
-function reloadConfig(files)
+local reloadConfig = function(files)
   doReload = false
   for _,file in pairs(files) do
     if file:sub(-4) == '.lua' then
