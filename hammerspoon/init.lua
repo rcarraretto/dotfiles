@@ -222,9 +222,21 @@ end
 function getKeyboardLayout()
   local method = hs.keycodes.currentMethod()
   if method then
+    if method == "Hiragana" then
+      return "あ"
+    end
+    if method == "Katakana" then
+      return "ア"
+    end
     return method
   end
   local layout = hs.keycodes.currentLayout()
+  if layout == "U.S. International - PC" then
+    return "US"
+  end
+  if layout == "Brazilian" then
+    return "BR"
+  end
   return layout
 end
 

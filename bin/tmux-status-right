@@ -6,19 +6,17 @@ timer=$(timer)
 
 tmux_status=""
 
+if command -v hs 1>/dev/null 2>&1; then
+  keyboard_layout=$(hs -q -c 'getKeyboardLayout()')
+  tmux_status="|#[fg=colour20] $keyboard_layout $tmux_status"
+fi
+
 if [ "$timer" ]; then
-  tmux_status="#[fg=colour20] $(timer) |"
+  tmux_status="| #[fg=colour20] $(timer) "
 fi
 
 if [ "$branch" ]; then
-  tmux_status="#[fg=colour13] ⎇ $branch #[fg=colour20]|$tmux_status"
-fi
-
-if command -v hs 1>/dev/null 2>&1; then
-  keyboard_layout=$(hs -c 'getKeyboardLayout()')
-  if [ "$keyboard_layout" != "Brazilian" ]; then
-    tmux_status="#[fg=colour20] $keyboard_layout |$tmux_status"
-  fi
+  tmux_status="| #[fg=colour13] ⎇ $branch #[fg=colour20] $tmux_status"
 fi
 
 echo $tmux_status
