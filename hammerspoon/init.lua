@@ -58,6 +58,18 @@ function p(t)
   end
 end
 
+-- https://www.programming-idioms.org/idiom/19/reverse-a-list/1314/lua
+function reverse(t)
+  local n = #t
+  local i = 1
+  while i < n do
+    t[i],t[n] = t[n],t[i]
+    i = i + 1
+    n = n - 1
+  end
+  return t
+end
+
 local get_key_for_value = function(t, value)
   for k, v in pairs(t) do
     if v == value then
@@ -185,7 +197,9 @@ hs.hotkey.bind(hyper, "`", function()
   -- But this source_id is not listed in source_ids.
   local source_ids = hs.keycodes.layouts(true)
   local source_id = hs.keycodes.currentSourceID()
-  local next_source_id = cycle_list(source_ids, source_id)
+  -- Reverse list, so Brazilian layout is the default layout,
+  -- when coming from Japanese layout.
+  local next_source_id = cycle_list(reverse(source_ids), source_id)
   setSourceId(next_source_id)
 end)
 
