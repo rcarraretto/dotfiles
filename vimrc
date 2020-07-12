@@ -379,8 +379,12 @@ augroup vimrcEx
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
         \   execute "normal! g`\"" |
         \ endif
-  autocmd InsertEnter * call s:OnInsertEnter()
-  autocmd InsertLeave * call s:OnInsertLeave()
+augroup END
+
+augroup AutoChangeKeyboardLayout
+  autocmd!
+  autocmd VimEnter,FocusGained,InsertLeave * call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+  autocmd FocusLost,InsertEnter * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
 augroup END
 
 if $USE_NETRW
@@ -523,15 +527,6 @@ function! s:VimEnter()
     iunmap <M-d>
   endif
   call writefile([], "/var/tmp/vim-messages.txt")
-  call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
-endfunction
-
-function! s:OnInsertEnter() abort
-  return s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
-endfunction
-
-function! s:OnInsertLeave() abort
-  return s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
 endfunction
 
 " Use vim-compatible keyboard layout when in normal mode.
