@@ -1790,8 +1790,7 @@ function! s:ExploreSyntaxFiles() abort
   endif
   let items = map(paths, "{'filename': v:val}")
   call setqflist(items)
-  botright copen
-  wincmd p
+  call s:MaybeSplit()
   cfirst
 endfunction
 
@@ -1860,17 +1859,28 @@ function! s:CopyCursorReference() abort
   let @* = printf('%s:%s:%s', path, line_num, col_num)
 endfunction
 
+function! s:MaybeSplit() abort
+  if v:count == 1
+    split
+    return 1
+  elseif v:count == 2
+    vsplit
+    return 1
+  elseif v:count == 3
+    tab split
+    return 1
+  endif
+  return 0
+endfunction
+
 function! s:GoToCursorReference() abort
-  let should_split = v:count > 0
   let line = getline('.')
   let cursor = getpos('.')
   try
-    if should_split
-      vsplit
-    endif
+    let did_split = s:MaybeSplit()
     normal! gf
   catch /E447/
-    if should_split
+    if did_split
       quit
     endif
     let msg = 'GoToCursorReference: ' . matchstr(v:exception, 'Vim(normal):E447: \zs\(.*\)')
@@ -2114,7 +2124,7 @@ nnoremap <leader>eb :call util#EditFile("~/.bashrc.local")<cr>
 nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " explore syntax files for the current filetype
-nnoremap <leader>ey :call <sid>ExploreSyntaxFiles()<cr>
+nnoremap <leader>ey :<c-u>call <sid>ExploreSyntaxFiles()<cr>
 " browse files
 nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
