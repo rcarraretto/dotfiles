@@ -2108,7 +2108,7 @@ nnoremap <leader>ym :Ym<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
-nnoremap <leader>sy :syntax sync fromstart<cr>
+nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
 
 " Browse files & search
 " quickly edit some files and folders
