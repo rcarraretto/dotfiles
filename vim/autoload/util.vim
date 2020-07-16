@@ -125,3 +125,13 @@ function! util#EditFileUpwards(filename)
   endif
   echo 'File not found: ' . a:filename
 endfunction
+
+function! util#ToggleGlobalVar(varname) abort
+  let value = get(g:, a:varname, 0)
+  if value == 0
+    let g:[a:varname] = 1
+  else
+    let g:[a:varname] = 0
+  endif
+  return get(g:, a:varname)
+endfunction

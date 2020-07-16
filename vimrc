@@ -982,15 +982,6 @@ function! s:ToggleListChars()
   endif
 endfunction
 
-function! s:ToggleGlobalVar(varname) abort
-  let value = get(g:, a:varname, 0)
-  if value == 0
-    let g:[a:varname] = 1
-  else
-    let g:[a:varname] = 0
-  endif
-endfunction
-
 function! s:ShouldColorColumn()
   if get(b:, 'skip_color_column')
     return 0
@@ -2059,7 +2050,7 @@ nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
 " Toggle showing whitespace
 nnoremap <silent> col :call <sid>ToggleListChars()<cr>
 " Toggle showing extended info in statusline
-nnoremap <silent> cos :call <sid>ToggleGlobalVar('statusline_show_ext_info')<cr>
+nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
 
 " Windows
 " window navigation
