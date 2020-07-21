@@ -1987,6 +1987,25 @@ function! s:ToggleLogWindow(target_path)
   endif
 endfunction
 
+" Given the current search term, show the uniques matches.
+" Based on https://vi.stackexchange.com/a/8914
+function! s:ShowUniqueSearchMatches() abort
+  let matches = []
+  silent execute '%s//\=add(matches, submatch(0))/nge'
+  if empty(matches)
+    return util#error_msg('ShowUniqueSearchMatches: no matches: ' . @/)
+  endif
+  call uniq(sort(matches))
+  let str = join(matches, "\n")
+  " Open buffer with results
+  new
+  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  noautocmd silent! 1put= str
+  noautocmd silent! 1delete _
+  call feedkeys(":nohlsearch\<cr>")
+endfunction
+command! ShowUniqueSearchMatches :call <sid>ShowUniqueSearchMatches()
+
 "}}}
 
 " Mappings ---------------------- {{{
