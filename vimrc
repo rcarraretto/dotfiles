@@ -2213,11 +2213,11 @@ nnoremap <leader>mv :RenameFile <c-r>=expand("%:p")<cr>
 " clone file
 nnoremap <leader>ce :saveas <c-r>=expand("%:p")<cr><c-f>F/l
 " copy file name to clipboard
-nnoremap <leader>cf :let @* = expand("%:t")<cr>
+nnoremap <leader>cf :let @* = fnameescape(expand("%:t"))<cr>
 " copy relative path to clipboard
-nnoremap <leader>cp :let @* = expand("%")<cr>
+nnoremap <leader>cp :let @* = fnameescape(expand("%"))<cr>
 " copy full path (with ~) to clipboard
-nnoremap <leader>cP :let @* = expand("%:~")<cr>
+nnoremap <leader>cP :let @* = fnameescape(expand("%:~"))<cr>
 " copy full path, line and column number
 nnoremap <leader>cr :call <sid>CopyCursorReference()<cr>
 " go to file path (like vim's gf mapping), but also line and column number
