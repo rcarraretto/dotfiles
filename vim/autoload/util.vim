@@ -15,7 +15,7 @@ function! util#GetGitRoot(...)
       return 0
     endif
   endif
-  let git_root_path = system('cd ' . dir . ' && git rev-parse --show-toplevel')
+  let git_root_path = system('cd ' . fnameescape(dir) . ' && git rev-parse --show-toplevel')
   if v:shell_error
     return 0
   endif
