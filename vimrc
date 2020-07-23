@@ -1844,7 +1844,7 @@ endfunction
 command! ListCtrlMappings :call <sid>ListCtrlMappings()
 
 function! s:CopyCursorReference() abort
-  let path = expand("%:~")
+  let path = fnameescape(expand("%:~"))
   let line_num = line('.')
   let col_num = col('.')
   let @* = printf('%s:%s:%s', path, line_num, col_num)
