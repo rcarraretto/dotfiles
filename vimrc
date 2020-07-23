@@ -2130,7 +2130,7 @@ nnoremap <leader>eo :call util#EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :call <sid>FzfNotes()<cr>
 nnoremap <leader>ei :call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
 nnoremap <leader>em :call util#EditFile("~/work/dotfiles-private/README.md")<cr>
-nnoremap <leader>eb :call util#EditFile("~/.bashrc.local")<cr>
+nnoremap <leader>eb :call util#EditFile(resolve("~/.bashrc.local"))<cr>
 nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " explore syntax files for the current filetype
