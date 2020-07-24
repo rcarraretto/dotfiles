@@ -159,6 +159,11 @@ set expandtab
 
 set shortmess+=A " no warning for existing swap file
 
+" "save and restore global variables that start with an uppercase letter, and
+" don't contain a lowercase letter"
+" :h viminfo-!
+set viminfo+=!
+
 function! Qftitle()
   return getqflist({'title': 1}).title
 endfunction
