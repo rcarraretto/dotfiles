@@ -1857,13 +1857,13 @@ endfunction
 
 function! s:MaybeSplit() abort
   if v:count == 1
-    split
+    silent split
     return 1
   elseif v:count == 2
-    vsplit
+    silent vsplit
     return 1
   elseif v:count == 3
-    tab split
+    silent tab split
     return 1
   endif
   return 0
@@ -2198,9 +2198,7 @@ nnoremap <leader>4 :call <sid>ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
-nnoremap <space>e :silent YcmCompleter GoToDefinition<cr>
-nnoremap <leader>js :split <bar> silent YcmCompleter GoToDefinition<cr>
-nnoremap <leader>jv :vsplit <bar> silent YcmCompleter GoToDefinition<cr>
+nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> silent YcmCompleter GoToDefinition<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
