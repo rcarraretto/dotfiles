@@ -2,7 +2,10 @@
 
 " Plugins ---------------------- {{{
 set rtp+=/usr/local/opt/fzf
-set rtp+=$HOME/work/dotfiles-private/vim
+
+if exists('$DOTFILES_PRIVATE') && isdirectory($DOTFILES_PRIVATE . '/vim')
+  set rtp+=$DOTFILES_PRIVATE/vim
+endif
 
 if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK . '/vim')
   set rtp+=$DOTFILES_WORK/vim
@@ -2127,7 +2130,7 @@ nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
 
 " Browse files & search
 " quickly edit some files and folders
-nnoremap <leader>el :call util#EditFile('~/.vim/vimrc.local')<cr>
+nnoremap <leader>el :call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
@@ -2386,9 +2389,8 @@ let g:colorizer_disable_bufleave = 1
 
 " vimrc override ---------------------- {{{
 
-let vimrc_local = $HOME . '/.vim/vimrc.local'
-if filereadable(vimrc_local)
-  execute 'source ' . vimrc_local
+if exists('$DOTFILES_PRIVATE') && filereadable($DOTFILES_PRIVATE . '/vimrc.local')
+  execute 'source ' . $DOTFILES_PRIVATE . '/vimrc.local'
 endif
 
 " }}}
