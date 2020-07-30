@@ -89,13 +89,23 @@ function! util#messages() abort
   return reverse(filter(split(messages, '\n'), '!empty(v:val)'))
 endfunction
 
+function! s:GetOpenCmdFromCount() abort
+  if v:count == 1 || v:count == 6
+    return 'new'
+  elseif v:count == 2 || v:count == 7
+    return 'vnew'
+  endif
+  return 'tabnew'
+endfunction
+
 function! util#EditFile(path)
+  let opencmd = s:GetOpenCmdFromCount()
   if bufnr(a:path) == -1
-    silent execute 'tabnew ' . a:path
+    silent execute opencmd . ' ' . a:path
   else
     let wins = getbufinfo(a:path)[0]['windows']
     if empty(wins)
-      silent execute 'tabnew ' . a:path
+      silent execute opencmd . ' ' . a:path
     else
       call win_gotoid(wins[0])
     endif

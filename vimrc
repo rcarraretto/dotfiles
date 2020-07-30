@@ -2120,7 +2120,7 @@ cnoremap <c-l> <c-n>
 cnoremap <expr> <c-x>y <sid>CopyCmdline()
 
 " Vimscript, vim debug
-nnoremap <leader>ev :call util#EditFile(resolve($MYVIMRC))<cr>
+nnoremap <leader>ev :<c-u>call util#EditFile(resolve($MYVIMRC))<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " yank last message
 nnoremap <leader>ym :Ym<cr>
@@ -2131,15 +2131,18 @@ nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
 
 " Browse files & search
 " quickly edit some files and folders
-nnoremap <leader>el :call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
+nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
 nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
-nnoremap <leader>eo :call util#EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :call <sid>FzfNotes()<cr>
-nnoremap <leader>ei :call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
-nnoremap <leader>em :call util#EditFile("~/work/dotfiles-private/README.md")<cr>
-nnoremap <leader>eb :call util#EditFile(resolve("~/.bashrc.local"))<cr>
+nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
+nnoremap <leader>en :<c-u>call <sid>FzfNotes()<cr>
+nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
+nnoremap <leader>em :<c-u>call util#EditFile("~/work/dotfiles-private/README.md")<cr>
+nnoremap <leader>eb :<c-u>call util#EditFile(resolve("~/.bashrc.local"))<cr>
+if exists('$NOTES_WORK')
+  nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work.txt")<cr>
+endif
 nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " explore syntax files for the current filetype
