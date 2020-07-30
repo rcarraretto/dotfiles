@@ -1102,7 +1102,7 @@ function! s:OpenInSourceTree()
     echohl NONE
     return
   endif
-  call system('open -a SourceTree ' . output)
+  call system('open -a SourceTree ' . fnameescape(output))
 endfunction
 
 " Remove views.
