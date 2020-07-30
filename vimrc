@@ -523,6 +523,7 @@ augroup END
 " Functions ---------------------- {{{
 
 function! s:VimEnter()
+  let g:original_cwd = getcwd()
   " Revert plugin side effects
   " rsi.vim
   if !empty(maparg("<c-f>", "c", 0, 1))
@@ -2147,6 +2148,8 @@ nnoremap <leader>ey :<c-u>call <sid>ExploreSyntaxFiles()<cr>
 nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
 nnoremap <space>O :GFiles<cr>
+" browse original cwd
+nnoremap <leader>oo :execute "Files " . g:original_cwd<cr>
 " browse history
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
