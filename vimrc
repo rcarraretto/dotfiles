@@ -1735,7 +1735,11 @@ function! s:StatelessGrep(prg, format, args) abort
     let &grepformat = a:format
     " Escape special chars because of vim cmdline, to avoid e.g.:
     " E499: Empty file name for '%' or '#', only works with ":p:h"
-    let args = escape(a:args, '|#%')
+    "
+    " Escape '$' as it has a special meaning in the shell.
+    " (e.g. echo "$#" vs echo "\$#")
+    " Else the following search terms wouldn't work: "$#" and "$@".
+    let args = escape(a:args, '|#%$')
     silent execute 'grep!' args
   finally
     let &l:grepprg = prg_back
