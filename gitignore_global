@@ -33,3 +33,7 @@ __pycache__/
 .projections.json
 
 profile.log
+
+# Dropbox icon
+# https://stackoverflow.com/a/21111738/2277505
+Icon
