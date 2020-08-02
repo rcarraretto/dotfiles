@@ -1046,6 +1046,9 @@ function! s:TrimWhitespace()
   if &modifiable == 0
     return
   endif
+  if get(b:, 'skip_trim_whitespace')
+    return
+  endif
   let save_cursor = getpos('.')
   if &ft == 'markdown'
     " Keep 2 trailing whitespaces.
@@ -2083,6 +2086,8 @@ nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
 nnoremap <silent> col :call <sid>ToggleListChars()<cr>
 " Toggle showing extended info in statusline
 nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
+" Toggle trim whitespace
+nnoremap <silent> cot :call util#ToggleBufVar('skip_trim_whitespace', 1)<cr>
 
 " Windows
 " window navigation

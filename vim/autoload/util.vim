@@ -136,12 +136,30 @@ function! util#EditFileUpwards(filename)
   echo 'File not found: ' . a:filename
 endfunction
 
-function! util#ToggleGlobalVar(varname) abort
+function! util#ToggleGlobalVar(varname, ...) abort
   let value = get(g:, a:varname, 0)
   if value == 0
     let g:[a:varname] = 1
   else
     let g:[a:varname] = 0
   endif
+  let print = get(a:, 1)
+  if print
+    echo "g:" . a:varname . "=" . get(g:, a:varname)
+  endif
   return get(g:, a:varname)
+endfunction
+
+function! util#ToggleBufVar(varname, ...) abort
+  let value = get(b:, a:varname, 0)
+  if value == 0
+    let b:[a:varname] = 1
+  else
+    let b:[a:varname] = 0
+  endif
+  let print = get(a:, 1)
+  if print
+    echo "b:" . a:varname . "=" . get(b:, a:varname)
+  endif
+  return get(b:, a:varname)
 endfunction
