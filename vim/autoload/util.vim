@@ -84,6 +84,11 @@ function! util#delayed_echo(msg) abort
   call timer_start(0, 'util#delayed_echo_callback')
 endfunction
 
+" Based on vim's inputlist()
+" and
+" Quramy/tsuquyomi :TsuImport
+" https://github.com/Quramy/tsuquyomi/blob/85fffd5939c8fc5750b35a937b965af2ad5b0b15/autoload/tsuquyomi/es6import.vim#L415
+" ~/.vim/bundle/tsuquyomi/autoload/tsuquyomi/es6import.vim:410:46
 function! util#inputlist(list, ...) abort
   let opts = a:0 > 0 ? a:1 : {}
   let msg = join(map(copy(a:list), "(v:key + 1) . '. ' . v:val"), "\n") . "\nSelect number: "
