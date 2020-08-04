@@ -41,8 +41,13 @@ function! util#error_msg(msg) abort
   echohl NONE
 endfunction
 
-function! util#prompt(msg) abort
-  echohl Statement
+function! util#prompt(msg, ...) abort
+  let opts = a:0 > 0 ? a:1 : {'type': 'danger'}
+  if get(opts, 'type') == 'info'
+    echohl Function
+  else
+    echohl Statement
+  endif
   let ok = input(a:msg . ' ')
   echohl NONE
   " clear input
