@@ -75,6 +75,15 @@ function! util#inputlist_complete(arg_lead, cmd_line, cursor_pos) abort
   return join(s:inputlist, "\n")
 endfunction
 
+function! util#delayed_echo_callback(timer_id) abort
+  echo s:delayed_echo_msg
+endfunction
+
+function! util#delayed_echo(msg) abort
+  let s:delayed_echo_msg = a:msg
+  call timer_start(0, 'util#delayed_echo_callback')
+endfunction
+
 function! util#inputlist(list, ...) abort
   let opts = a:0 > 0 ? a:1 : {}
   let msg = join(map(copy(a:list), "(v:key + 1) . '. ' . v:val"), "\n") . "\nSelect number: "
@@ -85,31 +94,30 @@ function! util#inputlist(list, ...) abort
   echohl String
   let user_input = input(msg, '', 'custom,util#inputlist_complete')
   echohl none
-  " Clear input.
-  " Else 'skipped' echos would print on the same line as user input.
-  echo ' '
   if empty(user_input)
-    echo 'skipped'
+    " User pressed <cr> or <esc>.
+    "
+    " Delayed echo is used to avoid:
+    " - Having the message on the same line as user input
+    " - Seeing the message 'Press ENTER or type command to continue'
+    "
+    " This is not perfect, as an error may be printed in-between and then
+    " shadowed by this message.
+    call util#delayed_echo('skipped')
     return
   endif
   if user_input !~ '^\d\+$'
     if index(a:list, user_input) >= 0
-      " The previous 'echo' will cause 'Press ENTER or type command to continue'.
-      " Press enter to skip that message.
-      call feedkeys("\<CR>")
       return user_input
     endif
-    echo 'skipped (invalid number)'
+    call util#delayed_echo('skipped (invalid number)')
     return
   endif
   let index = str2nr(user_input)
   if index <= 0 || index > len(a:list)
-    echo 'skipped (out of bounds)'
+    call util#delayed_echo('skipped (out of bounds)')
     return
   endif
-  " The previous 'echo' will cause 'Press ENTER or type command to continue'.
-  " Press enter to skip that message.
-  call feedkeys("\<CR>")
   return a:list[index - 1]
 endfunction
 
