@@ -15,6 +15,9 @@ export LANG=en_US.UTF-8
 export HISTFILESIZE=1000
 export HISTSIZE=1000
 
+export DOTFILES_PUBLIC="$HOME/work/dotfiles"
+export DOTFILES_PRIVATE="$HOME/work/dotfiles-private"
+
 alias sb='source ~/.bashrc'
 
 # ls
@@ -92,5 +95,5 @@ if ! [[ "$PROMPT_COMMAND" =~ "tmux refresh-client" ]]; then
   PROMPT_COMMAND="tmux refresh-client -S &> /dev/null; $PROMPT_COMMAND"
 fi
 
-LOCAL_RC=$HOME/.bashrc.local
+LOCAL_RC="$DOTFILES_PRIVATE/bashrc.local"
 test -f $LOCAL_RC && source $LOCAL_RC
