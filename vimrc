@@ -1268,10 +1268,10 @@ command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
 function! s:EditSketchBuffer(ft)
   if a:ft ==# 'typescript'
-    call util#EditFile('~/work/dotfiles-private/src/sketch.ts')
-    nnoremap <buffer> <space>t :update <bar> Dispatch! ts-node --project ~/work/dotfiles-private/tsconfig.json % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
+    call util#EditFile($DOTFILES_PRIVATE . '/src/sketch.ts')
+    nnoremap <buffer> <space>t :update <bar> Dispatch! ts-node --project $DOTFILES_PRIVATE/tsconfig.json % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
   elseif a:ft ==# 'javascript'
-    call util#EditFile('~/work/dotfiles-private/src/sketch.js')
+    call util#EditFile($DOTFILES_PRIVATE . '/src/sketch.js')
     nnoremap <buffer> <space>t :update <bar> Dispatch! node % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
   else
     return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
@@ -1406,7 +1406,7 @@ function! s:FzfDotfiles() abort
 endfunction
 
 function! s:GetDotfilesDirs() abort
-  let dirs = ['~/work/dotfiles/', '~/work/dotfiles-private/']
+  let dirs = [$DOTFILES_PUBLIC, $DOTFILES_PRIVATE]
   if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK)
     call add(dirs, fnameescape($DOTFILES_WORK))
   endif
@@ -1513,7 +1513,7 @@ function! s:Prettier() abort
   if empty(prettierrc_json)
     " Use global prettier config for example in sketch buffers or
     " projects that don't have prettier installed.
-    let opts = "--config=" . $HOME . "/work/dotfiles-private/.prettierrc "
+    let opts = "--config=" . $DOTFILES_PRIVATE . "/.prettierrc "
   endif
   execute "%!npx prettier " . opts . "--parser=" . parser
   call setpos('.', save_pos)
@@ -2142,12 +2142,12 @@ nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
 " quickly edit some files and folders
 nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
 nnoremap <leader>ess :UltiSnipsEdit<cr>
-nnoremap <leader>esp :e ~/work/dotfiles-private/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
+nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :<c-u>call <sid>FzfNotes()<cr>
 nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
-nnoremap <leader>em :<c-u>call util#EditFile("~/work/dotfiles-private/README.md")<cr>
+nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
 nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.local')<cr>
 if exists('$NOTES_WORK')
   nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work.txt")<cr>
