@@ -59,7 +59,7 @@ function! s:QfDeletePattern() abort
   " This way, we can remove items from 'qflist'
   " without shifting the indexes.
   for line_index in reverse(range(1, line('$')))
-    if getline(line_index) =~ @/
+    if getline(line_index) =~# @/
       call remove(qflist, line_index - 1)
     endif
   endfor
@@ -79,7 +79,7 @@ function! s:QfFilterPattern() abort
   " This way, we can remove items from 'qflist'
   " without shifting the indexes.
   for line_index in reverse(range(1, line('$')))
-    if getline(line_index) !~ @/
+    if getline(line_index) !~# @/
       call remove(qflist, line_index - 1)
     endif
   endfor
