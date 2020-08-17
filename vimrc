@@ -1399,7 +1399,7 @@ endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
 function! s:FzfNotes() abort
-  let cmd = 'find ' . s:GetNoteDirs() . ' -type f -name "*.txt"'
+  let cmd = 'find ' . s:GetNoteDirs() . ' -type f -name "*.txt" | sed "s|^$HOME|~|"'
   call fzf#run(fzf#wrap({'source': cmd, 'options': ['--prompt', '[notes*] ']}))
 endfunction
 
@@ -1420,7 +1420,7 @@ endfunction
 command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
 
 function! s:FzfDotfiles() abort
-  let cmd = 'ag -g "" --hidden ' . s:GetDotfilesDirs()
+  let cmd = 'ag -g "" --hidden ' . s:GetDotfilesDirs() . ' | sed "s|^$HOME|~|"'
   call fzf#run(fzf#wrap({'source': cmd, 'options': ['--prompt', '[dotfiles*] ']}))
 endfunction
 
