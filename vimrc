@@ -1316,18 +1316,15 @@ function s:FileChangedShell(name)
   echohl None
 endfunction
 
-function! s:ExploreProject(path, opencmd)
-  execute a:opencmd a:path . " | lcd " . a:path
+function! s:ExploreProject(edit_cmd, selection) abort
+  let path = a:selection[0]
+  execute a:edit_cmd . ' ' . path . " | lcd " . path
   " Somehow the statusline doesn't get properly rendered,
   " when calling this from FzfExploreProject().
   call s:SetStatusline()
 endfunction
-command! -nargs=1 -complete=file ExploreProject call s:ExploreProject(<q-args>, 'edit')
-command! -nargs=1 -complete=file TExploreProject call s:ExploreProject(<q-args>, 'tabedit')
-command! -nargs=1 -complete=file VExploreProject call s:ExploreProject(<q-args>, 'vs')
-command! -nargs=1 -complete=file HExploreProject call s:ExploreProject(<q-args>, 'sp')
 
-function! s:FzfExploreProject()
+function! s:FzfExploreProject() abort
   " 1) folders in ~/work and ~/.vim/bundle
   let cmd1 = 'find ~/work ~/.vim/bundle -mindepth 1 -maxdepth 1 -type d'
   " 2) folders in the git root that have a package.json
@@ -1341,10 +1338,10 @@ endfunction
 
 function! s:FzfExplorePaths(cmd) abort
   let action = {
-        \ '': 'ExploreProject',
-        \ 'ctrl-t': 'TExploreProject',
-        \ 'ctrl-x': 'HExploreProject',
-        \ 'ctrl-v': 'VExploreProject',
+        \ '': function('s:ExploreProject', ['edit']),
+        \ 'ctrl-t': function('s:ExploreProject', ['tabedit']),
+        \ 'ctrl-x': function('s:ExploreProject', ['split']),
+        \ 'ctrl-v': function('s:ExploreProject', ['vsplit']),
         \ }
   call s:FzfWithAction({'source': a:cmd}, action)
 endfunction
@@ -1381,30 +1378,17 @@ endfunction
 
 function! s:FzfCurrentFolder(folder) abort
   " https://unix.stackexchange.com/a/104803
-  let cmd = '(cd ' . a:folder . ' && find . -mindepth 1 -maxdepth 1 -type f | cut -c 3-)'
+  let cmd = '(cd ' . fnameescape(a:folder) . ' && find . -mindepth 1 -maxdepth 1 -type f | cut -c 3-)'
   let prompt = '[CurrentFolder] ' . a:folder . '/'
-  let s:fzf_current_folder = a:folder
-  function! s:FzfCurrentFolderEdit(selection) abort
-    let path = s:fzf_current_folder . '/' . a:selection[0]
-    execute 'edit ' . path
-  endfunction
-  function! s:FzfCurrentFolderEditT(selection) abort
-    let path = s:fzf_current_folder . '/' . a:selection[0]
-    execute 'tabedit ' . path
-  endfunction
-  function! s:FzfCurrentFolderEditX(selection) abort
-    let path = s:fzf_current_folder . '/' . a:selection[0]
-    execute 'split ' . path
-  endfunction
-  function! s:FzfCurrentFolderEditV(selection) abort
-    let path = s:fzf_current_folder . '/' . a:selection[0]
-    execute 'vsplit ' . path
+  function! s:FzfCurrentFolderEdit(edit_cmd, selection) abort closure
+    let path = a:folder . '/' . a:selection[0]
+    execute a:edit_cmd . ' ' . path
   endfunction
   let action = {
-        \ '': function('s:FzfCurrentFolderEdit'),
-        \ 'ctrl-t': function('s:FzfCurrentFolderEditT'),
-        \ 'ctrl-x': function('s:FzfCurrentFolderEditX'),
-        \ 'ctrl-v': function('s:FzfCurrentFolderEditV'),
+        \ '': function('s:FzfCurrentFolderEdit', ['edit']),
+        \ 'ctrl-t': function('s:FzfCurrentFolderEdit', ['tabedit']),
+        \ 'ctrl-x': function('s:FzfCurrentFolderEdit', ['split']),
+        \ 'ctrl-v': function('s:FzfCurrentFolderEdit', ['vsplit']),
         \ }
   call s:FzfWithAction({'source': cmd, 'options': ['--prompt', prompt]}, action)
 endfunction
