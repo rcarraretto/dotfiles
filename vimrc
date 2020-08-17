@@ -1346,15 +1346,20 @@ function! s:FzfExplorePaths(cmd) abort
         \ 'ctrl-x': 'HExploreProject',
         \ 'ctrl-v': 'VExploreProject',
         \ }
-  call s:FzfWithAction(a:cmd, action)
+  call s:FzfWithAction({'source': a:cmd}, action)
 endfunction
 
-function! s:FzfWithAction(cmd, action) abort
-  let opts = {'source': a:cmd, 'down': '~40%' }
+function! s:FzfWithAction(opts, action) abort
+  let opts = a:opts
+  let opts['down'] = '~40%'
   " Put custom actions, instead of using g:fzf_action.
   " This is based on fzf#wrap().
   let opts._action = a:action
-  let opts.options = ' --expect='.join(keys(opts._action), ',')
+  if !has_key(opts, 'options')
+    let opts.options = []
+  endif
+  call add(opts.options, '--expect')
+  call add(opts.options, join(keys(opts._action), ','))
   let CommonSink = s:GetScriptFunc('/usr/local/Cellar/fzf/.*/plugin/fzf.vim', 'common_sink')
   function! opts.sink(lines) abort closure
     " Example of a:lines
@@ -1372,6 +1377,36 @@ function! s:FzfExploreNodeModules() abort
   endif
   let cmd = 'find node_modules -mindepth 1 -maxdepth 1'
   call s:FzfExplorePaths(cmd)
+endfunction
+
+function! s:FzfCurrentFolder(folder) abort
+  " https://unix.stackexchange.com/a/104803
+  let cmd = '(cd ' . a:folder . ' && find . -mindepth 1 -maxdepth 1 -type f | cut -c 3-)'
+  let prompt = '[CurrentFolder] ' . a:folder . '/'
+  let s:fzf_current_folder = a:folder
+  function! s:FzfCurrentFolderEdit(selection) abort
+    let path = s:fzf_current_folder . '/' . a:selection[0]
+    execute 'edit ' . path
+  endfunction
+  function! s:FzfCurrentFolderEditT(selection) abort
+    let path = s:fzf_current_folder . '/' . a:selection[0]
+    execute 'tabedit ' . path
+  endfunction
+  function! s:FzfCurrentFolderEditX(selection) abort
+    let path = s:fzf_current_folder . '/' . a:selection[0]
+    execute 'split ' . path
+  endfunction
+  function! s:FzfCurrentFolderEditV(selection) abort
+    let path = s:fzf_current_folder . '/' . a:selection[0]
+    execute 'vsplit ' . path
+  endfunction
+  let action = {
+        \ '': function('s:FzfCurrentFolderEdit'),
+        \ 'ctrl-t': function('s:FzfCurrentFolderEditT'),
+        \ 'ctrl-x': function('s:FzfCurrentFolderEditX'),
+        \ 'ctrl-v': function('s:FzfCurrentFolderEditV'),
+        \ }
+  call s:FzfWithAction({'source': cmd, 'options': ['--prompt', prompt]}, action)
 endfunction
 
 function! s:SearchNotes(input) abort
@@ -2162,6 +2197,8 @@ nnoremap <space>o :WrapCommand Files<cr>
 nnoremap <space>O :GFiles<cr>
 " browse original cwd
 nnoremap <leader>oo :execute "Files " . g:original_cwd<cr>
+" browse current folder
+nnoremap <leader>of :call <sid>FzfCurrentFolder(expand("%:h"))<cr>
 " browse history
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
