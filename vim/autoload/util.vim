@@ -197,29 +197,39 @@ function! util#EditFileUpwards(filename)
 endfunction
 
 function! util#ToggleGlobalVar(varname, ...) abort
+  let opts = get(a:, 1, {})
   let value = get(g:, a:varname, 0)
   if value == 0
-    let g:[a:varname] = 1
+    let new_value = get(opts, 'on_value', 1)
   else
-    let g:[a:varname] = 0
+    let new_value = 0
   endif
-  let print = get(a:, 1)
-  if print
-    echo "g:" . a:varname . "=" . get(g:, a:varname)
+  let g:[a:varname] = new_value
+  let updated_value = get(g:, a:varname)
+  if get(opts, 'print') == 1
+    echo "g:" . a:varname . "=" . updated_value
   endif
-  return get(g:, a:varname)
+  return updated_value
 endfunction
 
 function! util#ToggleBufVar(varname, ...) abort
-  let value = get(b:, a:varname, 0)
-  if value == 0
-    let b:[a:varname] = 1
+  let opts = get(a:, 1, {})
+  let value = getbufvar('', a:varname, 0)
+  let off_value = get(opts, 'off_value', 0)
+  let on_value = get(opts, 'on_value', 1)
+  if value == off_value
+    let new_value = on_value
   else
-    let b:[a:varname] = 0
+    let new_value = off_value
   endif
-  let print = get(a:, 1)
-  if print
-    echo "b:" . a:varname . "=" . get(b:, a:varname)
+  call setbufvar('', a:varname, new_value)
+  let updated_value = getbufvar('', a:varname)
+  if get(opts, 'print') == 1
+    if a:varname[0] == '&'
+      echo "setlocal " . a:varname . "=" . updated_value
+    else
+      echo "b:" . a:varname . "=" . updated_value
+    endif
   endif
-  return get(b:, a:varname)
+  return updated_value
 endfunction

@@ -2107,8 +2107,10 @@ nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
 nnoremap <silent> col :call <sid>ToggleListChars()<cr>
 " Toggle showing extended info in statusline
 nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
+" Toggle color column
+nnoremap <silent> coc :call util#ToggleBufVar('&colorcolumn', {'print': 1, 'on_value': '80'})<cr>
 " Toggle trim whitespace
-nnoremap <silent> cot :call util#ToggleBufVar('skip_trim_whitespace', 1)<cr>
+nnoremap <silent> cot :call util#ToggleBufVar('skip_trim_whitespace', {'print': 1})<cr>
 
 " Windows
 " window navigation
