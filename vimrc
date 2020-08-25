@@ -1013,7 +1013,7 @@ function! s:OnWinEnter()
   endif
   call s:SetStatusline()
   if s:ShouldColorColumn()
-    let &l:colorcolumn='0'
+    let &l:colorcolumn = get(b:, 'prev_colorcolumn', '0')
   endif
 endfunction
 
@@ -1021,7 +1021,8 @@ function! s:OnWinLeave()
   setlocal nocursorline
   call s:SetStatusline(0)
   if s:ShouldColorColumn()
-    let &l:colorcolumn=join(range(1, 255), ',')
+    let b:prev_colorcolumn = &colorcolumn
+    let &l:colorcolumn = join(range(1, 255), ',')
   endif
 endfunction
 
