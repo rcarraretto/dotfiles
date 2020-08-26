@@ -158,7 +158,7 @@ function! s:GetOpenCmdFromCount() abort
   return 'tabnew'
 endfunction
 
-function! util#EditFile(path)
+function! util#EditFile(path) abort
   let opencmd = s:GetOpenCmdFromCount()
   if bufnr(a:path) == -1
     silent execute opencmd . ' ' . a:path
@@ -172,7 +172,7 @@ function! util#EditFile(path)
   endif
 endfunction
 
-function! util#EditFileUpwards(filename)
+function! util#EditFileUpwards(filename) abort
   if filereadable(a:filename)
     " When exploring the root folder with Dirvish and
     " the file is at the root.
@@ -194,6 +194,57 @@ function! util#EditFileUpwards(filename)
     return
   endif
   echo 'File not found: ' . a:filename
+endfunction
+
+" Open/close window, depending on whether the file is opened in the current tab.
+function! util#ToggleWindowInTab(path, ...) abort
+  let wincmd = get(a:, 1, 'vsplit')
+  let opencmd = "silent " . wincmd . " " . a:path
+  if bufnr(a:path) == -1
+    " If no buffer (across all tabs), open file
+    " (new buffer and window)
+    execute opencmd
+    return 1
+  else
+    let wins = getbufinfo(a:path)[0]['windows']
+    if empty(wins)
+      " If buffer exists, but no corresponding window (across all tabs), open file
+      execute opencmd
+      return 1
+    else
+      for win in wins
+        if getwininfo(win)[0]['tabnr'] == tabpagenr()
+          " If already opened in tab, close file
+          call win_gotoid(win)
+          wincmd c
+          return 0
+        endif
+      endfor
+      " If not already opened in tab, open file
+      execute opencmd
+      return 1
+    endif
+  endif
+endfunction
+
+function! util#CloseWindowInTab(path) abort
+  if bufnr(a:path) == -1
+    return 0
+  else
+    let wins = getbufinfo(a:path)[0]['windows']
+    if empty(wins)
+      return 0
+    else
+      for win in wins
+        if getwininfo(win)[0]['tabnr'] == tabpagenr()
+          call win_gotoid(win)
+          wincmd c
+          return 1
+        endif
+      endfor
+      return 0
+    endif
+  endif
 endfunction
 
 function! util#ToggleGlobalVar(varname, ...) abort

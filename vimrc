@@ -1944,67 +1944,16 @@ function! s:CopyCmdline() abort
   return ""
 endfunction
 
-" Open/close window, depending on whether the file is opened in the current tab.
-function! s:ToggleWindowInTab(path, ...)
-  let wincmd = get(a:, 1, 'vsplit')
-  let opencmd = "silent " . wincmd . " " . a:path
-  if bufnr(a:path) == -1
-    " If no buffer (across all tabs), open file
-    " (new buffer and window)
-    execute opencmd
-    return 1
-  else
-    let wins = getbufinfo(a:path)[0]['windows']
-    if empty(wins)
-      " If buffer exists, but no corresponding window (across all tabs), open file
-      execute opencmd
-      return 1
-    else
-      for win in wins
-        if getwininfo(win)[0]['tabnr'] == tabpagenr()
-          " If already opened in tab, close file
-          call win_gotoid(win)
-          wincmd c
-          return 0
-        endif
-      endfor
-      " If not already opened in tab, open file
-      execute opencmd
-      return 1
-    endif
-  endif
-endfunction
-
-function! s:CloseWindowInTab(path)
-  if bufnr(a:path) == -1
-    return 0
-  else
-    let wins = getbufinfo(a:path)[0]['windows']
-    if empty(wins)
-      return 0
-    else
-      for win in wins
-        if getwininfo(win)[0]['tabnr'] == tabpagenr()
-          call win_gotoid(win)
-          wincmd c
-          return 1
-        endif
-      endfor
-      return 0
-    endif
-  endif
-endfunction
-
 " Open/close a log window on the right side of the current tab
 " and keep all other log windows closed.
-function! s:ToggleLogWindow(target_path)
+function! s:ToggleLogWindow(target_path) abort
   let paths = [
         \'/var/tmp/test-console.txt',
         \'/var/tmp/test-results.txt',
         \'/var/tmp/vim-messages.txt'
         \]
   let oldwinnr = winnr()
-  let opened = s:ToggleWindowInTab(a:target_path)
+  let opened = util#ToggleWindowInTab(a:target_path)
   if opened == 1
     " Window was opened.
     " Keep window on the right side.
@@ -2014,7 +1963,7 @@ function! s:ToggleLogWindow(target_path)
     " Close all the other log windows.
     for path in paths
       if path != a:target_path
-        call s:CloseWindowInTab(path)
+        call util#CloseWindowInTab(path)
       endif
     endfor
   endif
