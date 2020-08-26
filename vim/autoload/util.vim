@@ -227,6 +227,39 @@ function! util#ToggleWindowInTab(path, ...) abort
   endif
 endfunction
 
+function! util#OpenWindowInTab(path, ...) abort
+  let wincmd = get(a:, 1, 'vsplit')
+  let opencmd = "silent " . wincmd . " " . a:path
+  if bufnr(a:path) == -1
+    " There is no buffer with this path.
+    " Open the file.
+    silent execute opencmd
+    return 1
+  endif
+
+  let wins = getbufinfo(a:path)[0]['windows']
+  if empty(wins)
+    " Somehow there are no windows with this file open.
+    " Open the file.
+    silent execute opencmd
+    return 2
+  endif
+
+  for win in wins
+    if getwininfo(win)[0]['tabnr'] == tabpagenr()
+      " Found window in the current tab.
+      " Go to it.
+      call win_gotoid(win)
+      return 3
+    endif
+  endfor
+
+  " File is probably opened in a different tab.
+  " Create a new window in the current tab.
+  silent execute opencmd
+  return 4
+endfunction
+
 function! util#CloseWindowInTab(path) abort
   if bufnr(a:path) == -1
     return 0
