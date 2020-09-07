@@ -826,7 +826,7 @@ function s:DirvishImplode() abort
     echo 'skipped'
     return
   endif
-  let cmd = 'mv ' . path . '* ' . @% . ' && rmdir ' . path
+  let cmd = 'mv ' . fnameescape(path) . '* ' . fnameescape(@%) . ' && rmdir ' . fnameescape(path)
   let output = system(cmd)
   if v:shell_error
     echohl Error
