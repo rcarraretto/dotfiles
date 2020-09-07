@@ -980,8 +980,12 @@ function! s:ToggleRelativeNumber() abort
 
   if &relativenumber
     call s:GlobalWinDo('s:SetNoRelativeNumber')
+    " update setting globally for new buffers
+    set norelativenumber
   else
     call s:GlobalWinDo('s:SetRelativeNumber')
+    " update setting globally for new buffers
+    set relativenumber
   endif
 endfunction
 
