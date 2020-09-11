@@ -903,7 +903,7 @@ if !$USE_NETRW
       echo 'Not a url: ' . url
       return
     endif
-    silent exec "!open '" . shellescape(url, 1) . "'"
+    call system("open " . shellescape(url))
     redraw!
   endfunction
   nnoremap gx :call <sid>OpenUrl()<cr>
