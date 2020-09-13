@@ -537,6 +537,9 @@ function! s:VimEnter()
   if !empty(maparg("<M-d>", "i", 0, 1))
     iunmap <M-d>
   endif
+  " Overwrite eunuch.vim :Delete and :Remove
+  command! Delete call s:DeleteCurrentFile()
+  command! Remove Delete
   call writefile([], "/var/tmp/vim-messages.txt")
 endfunction
 
@@ -893,6 +896,21 @@ function! s:DirvishMv() abort
   execute "Dirvish " . dirpath
 endfunction
 
+" Based on eunuch.vim :Delete
+function! s:DeleteCurrentFile() abort
+  let absolute_path = expand('%:p')
+  if isdirectory(absolute_path)
+    " e.g. dirvish buffer
+    return util#error_msg('DeleteCurrentFile: Buffer cannot be a directory')
+  endif
+  " Use bwipeout instead of bdelete.
+  " This way, another file can be renamed to have the name of the deleted file.
+  " Else s:RenameFile() causes 'A buffer with that name already exists'.
+  bwipeout
+  if !bufloaded(absolute_path) && delete(absolute_path)
+    return util#error_msg('DeleteCurrentFile: Failed to delete "' . absolute_path . '"')
+  endif
+endfunction
 
 if !$USE_NETRW
   " Replacement for netrw 'gx',
