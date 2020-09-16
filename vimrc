@@ -681,7 +681,12 @@ endfunction
 
 function! s:RefreshBuffer(path) abort
   try
-    execute 'silent checktime ' . a:path
+    " 'noautocmd' avoids:
+    " "E218: autocommand nesting too deep"
+    " when calling s:RefreshBuffer() from certain autocmds.
+    " (more specifically, autocmd => :Log => s:RefreshBuffer())
+    "
+    execute 'noautocmd silent checktime ' . a:path
   catch /E93\|E94\|E523/
     " E93: More than one match for /some/path/
     "
