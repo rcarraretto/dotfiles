@@ -1902,6 +1902,16 @@ function! s:ListCtrlMappings() abort
 endfunction
 command! ListCtrlMappings :call <sid>ListCtrlMappings()
 
+function! s:CaptureRuntime() abort
+  " &rtp with removed leading \n
+  let rtp = util#capture('echo &rtp')[1:]
+  let paths = split(rtp, ',')
+  let items = map(paths, "{'filename': v:val}")
+  call setqflist(items)
+  botright copen
+endfunction
+command! CaptureRuntime :call <sid>CaptureRuntime()
+
 function! s:CopyCursorReference() abort
   let path = fnameescape(expand("%:~"))
   let line_num = line('.')
