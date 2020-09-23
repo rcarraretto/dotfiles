@@ -2241,6 +2241,12 @@ vnoremap <space>G :<c-u>call <sid>GrepOperatorInGitRoot(visualmode())<cr>
 " search in file (from visual mode)
 xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
 xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
+" search fold markers in buffer
+" hack:
+"   typing '{' 3 times creates a fold marker in this vimrc.
+"   close it with a comment after the mapping.
+"   https://stackoverflow.com/a/24717020
+nnoremap <space>/f :BLines {{{$<cr>| " }}}
 " change directory
 nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
 nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
