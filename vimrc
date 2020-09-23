@@ -522,6 +522,32 @@ augroup END
 
 " }}}
 
+" AutoCd {{{
+function! s:AutoCd() abort
+  let git_root = util#GetGitRoot()
+  if empty(git_root)
+    return
+  endif
+  execute "lcd " . git_root
+endfunction
+
+function! s:AutoCdDotfiles() abort
+  if get(g:, 'AUTO_CD_DOTFILES', 1) == 0
+    return
+  endif
+  call s:AutoCd()
+endfunction
+
+augroup AutoCd
+  autocmd!
+  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/* :call s:AutoCd()
+  autocmd BufRead,BufNewFile $DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/* :call s:AutoCdDotfiles()
+  if exists('$DOTFILES_WORK')
+    autocmd BufRead,BufNewFile $DOTFILES_WORK/* :call s:AutoCdDotfiles()
+  endif
+augroup END
+" }}}
+
 " Functions ---------------------- {{{
 
 function! s:VimEnter()
