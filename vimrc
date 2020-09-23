@@ -524,27 +524,32 @@ augroup END
 
 " AutoCd {{{
 function! s:AutoCd() abort
-  let git_root = util#GetGitRoot()
-  if empty(git_root)
+  if !exists('b:git_root')
+    let b:git_root = util#GetGitRoot({'full_path': 1})
+  endif
+  if empty(b:git_root)
     return
   endif
-  execute "lcd " . git_root
-endfunction
-
-function! s:AutoCdDotfiles() abort
-  if get(g:, 'AUTO_CD_DOTFILES', 1) == 0
+  if getcwd() == b:git_root
+    " Log printf('AutoCd: skip: already there: %s', expand('%:p'))
     return
   endif
-  call s:AutoCd()
+  let dotfiles = [
+        \ $DOTFILES_PUBLIC,
+        \ $DOTFILES_PRIVATE,
+        \ $DOTFILES_WORK
+        \ ]
+  if index(dotfiles, b:git_root) >= 0 && get(g:, 'AUTO_CD_DOTFILES', 1) == 0
+    " Log printf('AutoCd: skip dotfiles: %s', expand('%:p'))
+    return
+  endif
+  " Log printf("AutoCd: lcd to %s (from %s) / file: %s", b:git_root, getcwd(), expand('%:p'))
+  execute "lcd " . b:git_root
 endfunction
 
 augroup AutoCd
   autocmd!
-  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/* :call s:AutoCd()
-  autocmd BufRead,BufNewFile $DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/* :call s:AutoCdDotfiles()
-  if exists('$DOTFILES_WORK')
-    autocmd BufRead,BufNewFile $DOTFILES_WORK/* :call s:AutoCdDotfiles()
-  endif
+  autocmd BufEnter ~/work/*,$DOTFILES_WORK/* :call s:AutoCd()
 augroup END
 " }}}
 
@@ -1490,7 +1495,7 @@ endfunction
 function! s:SearchInGitRoot(input) abort
   let path = util#GetGitRoot()
   if empty(path)
-    let path = util#GetGitRoot(getcwd())
+    let path = util#GetGitRoot({'path': getcwd()})
   endif
   if empty(path)
     return util#error_msg('SearchInGitRoot: Git root not found')

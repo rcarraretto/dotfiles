@@ -1,7 +1,8 @@
 function! util#GetGitRoot(...)
   " GetGitRoot()     => in relation to current buffer
   " GetGitRoot(path) => in relation to given path
-  let path = get(a:, 1, expand('%:p'))
+  let opts = get(a:, 1, {})
+  let path = get(opts, 'path', expand('%:p'))
   " Resolves symbolic links
   let resolved_path = resolve(path)
   if isdirectory(resolved_path)
@@ -21,6 +22,9 @@ function! util#GetGitRoot(...)
   endif
   " Remove null character at the end of output
   let git_root_path = substitute(git_root_path, '\%x00$', '', '')
+  if get(opts, 'full_path', 0)
+    return fnamemodify(git_root_path, ':p')[:-2]
+  endif
   " Return path without expanded tilde, so it is easier to read.
   return fnamemodify(git_root_path, ':~')
 endfunction
