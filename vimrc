@@ -1464,7 +1464,7 @@ function! s:FzfExploreNodeModules() abort
   call s:FzfExplorePaths(cmd)
 endfunction
 
-function! s:FzfCurrentFolder(folder) abort
+function! s:FzfCurrentFolderNonRecursive(folder) abort
   " https://unix.stackexchange.com/a/104803
   let cmd = '(cd ' . fnameescape(a:folder) . ' && find . -mindepth 1 -maxdepth 1 -type f | cut -c 3-)'
   let prompt = '[CurrentFolder] ' . a:folder . '/'
@@ -2230,8 +2230,8 @@ nnoremap <space>o :WrapCommand Files<cr>
 nnoremap <space>O :GFiles<cr>
 " browse original cwd
 nnoremap <leader>oo :execute "Files " . g:original_cwd<cr>
-" browse current folder
-nnoremap <leader>of :call <sid>FzfCurrentFolder(expand("%:h"))<cr>
+" browse current folder (non-recursive)
+nnoremap <leader>of :call <sid>FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
 " browse history
 nnoremap <space>m :WrapCommand FzfHistory<cr>
 " browse dotfiles
