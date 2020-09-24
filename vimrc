@@ -196,6 +196,8 @@ function! GetExtendedFileInfo() abort
   let str = ''
   " <SNR>
   if get(g:, 'statusline_show_ext_info', 0)
+    let str .= printf(' | win %s', tabpagewinnr(tabpagenr()))
+    let str .= printf(' | buf %s', bufnr())
     if &ft == 'vim' && &rtp =~ 'scriptease'
       let script_id = scriptease#scriptid('%')
       if empty(script_id)
@@ -204,7 +206,6 @@ function! GetExtendedFileInfo() abort
       endif
       let str .= printf(' | <SNR>%s', script_id)
     endif
-    let str .= printf(' | buf %s', bufnr())
   endif
   if &list == 0
     return str
