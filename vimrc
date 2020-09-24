@@ -935,15 +935,25 @@ endfunction
 " Based on eunuch.vim :Delete
 function! s:DeleteCurrentFile() abort
   let absolute_path = expand('%:p')
+  if empty(absolute_path)
+    " e.g. :new
+    return util#error_msg('DeleteCurrentFile: Buffer does not have a path')
+  endif
   if isdirectory(absolute_path)
     " e.g. dirvish buffer
     return util#error_msg('DeleteCurrentFile: Buffer cannot be a directory')
+  endif
+  if !filereadable(absolute_path)
+    " e.g.
+    " :new path/to/file
+    " :Remove
+    return util#error_msg('DeleteCurrentFile: Buffer is not associated to a file in disk')
   endif
   " Use bwipeout instead of bdelete.
   " This way, another file can be renamed to have the name of the deleted file.
   " Else s:RenameFile() causes 'A buffer with that name already exists'.
   bwipeout
-  if !bufloaded(absolute_path) && delete(absolute_path)
+  if delete(absolute_path)
     return util#error_msg('DeleteCurrentFile: Failed to delete "' . absolute_path . '"')
   endif
 endfunction
