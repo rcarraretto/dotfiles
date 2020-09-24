@@ -557,20 +557,34 @@ augroup END
 
 function! s:VimEnter()
   let g:original_cwd = getcwd()
+
+  " Remove arguments from arglist.
+  "
+  " The arglist can be used by dirvish to select files,
+  " so I prefer to start vim with an emtpy list.
+  "
+  " On startup, the arglist is populated with the path arguments.
+  " So when starting vim with `vim .`, it's populated with the path
+  " of the current directory.
+  argdelete *
+
   " Revert plugin side effects
   " rsi.vim
   if !empty(maparg("<c-f>", "c", 0, 1))
     cunmap <c-f>
   endif
+
   " rsi.vim
   " ä ('a' umlaut)
   " https://github.com/tpope/vim-rsi/issues/14
   if !empty(maparg("<M-d>", "i", 0, 1))
     iunmap <M-d>
   endif
+
   " Overwrite eunuch.vim :Delete and :Remove
   command! Delete call s:DeleteCurrentFile()
   command! Remove Delete
+
   call writefile([], "/var/tmp/vim-messages.txt")
 endfunction
 
