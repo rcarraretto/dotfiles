@@ -195,13 +195,16 @@ endfunction
 function! GetExtendedFileInfo() abort
   let str = ''
   " <SNR>
-  if get(g:, 'statusline_show_ext_info', 0) && &ft == 'vim' && &rtp =~ 'scriptease'
-    let script_id = scriptease#scriptid('%')
-    if empty(script_id)
-      " e.g. script in autoload folder was not loaded yet
-      let script_id = '?'
+  if get(g:, 'statusline_show_ext_info', 0)
+    if &ft == 'vim' && &rtp =~ 'scriptease'
+      let script_id = scriptease#scriptid('%')
+      if empty(script_id)
+        " e.g. script in autoload folder was not loaded yet
+        let script_id = '?'
+      endif
+      let str .= printf(' | <SNR>%s', script_id)
     endif
-    let str .= printf(' | <SNR>%s', script_id)
+    let str .= printf(' | buf %s', bufnr())
   endif
   if &list == 0
     return str
