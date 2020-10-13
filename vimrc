@@ -1485,7 +1485,7 @@ function! s:FzfCurrentFolderNonRecursive(folder) abort
 endfunction
 
 function! s:SearchNotes(input) abort
-  execute 'Ag --hidden -Q "' . a:input . '" -G "\.txt$" ' . s:GetNoteDirs()
+  execute printf('Ag --hidden -Q %s -G "\.txt$" %s', s:AgBuildPattern(a:input), s:GetNoteDirs())
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
@@ -1506,7 +1506,7 @@ function! s:GetNoteDirs() abort
 endfunction
 
 function! s:SearchDotfiles(input) abort
-  execute 'Ag --hidden -Q "' . a:input . '" ' . s:GetDotfilesDirs()
+  execute printf("Ag --hidden -Q %s %s", s:AgBuildPattern(a:input), s:GetDotfilesDirs())
 endfunction
 command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
 
@@ -1531,7 +1531,7 @@ function! s:SearchInGitRoot(input) abort
   if empty(path)
     return util#error_msg('SearchInGitRoot: Git root not found')
   endif
-  execute 'Ag --hidden -Q "' . a:input . '" ' . path
+  execute printf('Ag --hidden -Q %s %s', s:AgBuildPattern(a:input), path)
 endfunction
 command! -nargs=* SearchInGitRoot :call <sid>SearchInGitRoot(<q-args>)
 
@@ -1549,7 +1549,7 @@ function! s:SearchInFile(input) abort
     echohl NONE
     return
   endif
-  execute 'Ag -Q "' . a:input . '" ' . path
+  execute printf('Ag -Q %s %s', s:AgBuildPattern(a:input), path)
   cfirst
 endfunction
 command! -nargs=* SearchInFile :call <sid>SearchInFile(<q-args>)
@@ -1848,11 +1848,7 @@ function! s:StatelessGrep(prg, format, args) abort
     let &grepformat = a:format
     " Escape special chars because of vim cmdline, to avoid e.g.:
     " E499: Empty file name for '%' or '#', only works with ":p:h"
-    "
-    " Escape '$' as it has a special meaning in the shell.
-    " (e.g. echo "$#" vs echo "\$#")
-    " Else the following search terms wouldn't work: "$#" and "$@".
-    let args = escape(a:args, '|#%$')
+    let args = escape(a:args, '|#%')
     silent execute 'grep!' args
   finally
     let &l:grepprg = prg_back
@@ -1877,6 +1873,15 @@ function! s:AgSearchFromSearchReg() abort
   " translate vim regular expression to perl regular expression.
   let search = substitute(search, '\(\\<\|\\>\)', '\\b', 'g')
   return '"' . search . '"'
+endfunction
+
+" It seems like the search pattern should be surrounded with single quotes
+" instead of double quotes.
+"
+" Else the following search terms wouldn't work: "$#" and "$@".
+" I think these would be interpreted by the shell, when in double quotes.
+function! s:AgBuildPattern(input) abort
+  return printf("'%s'", a:input)
 endfunction
 
 " :Ag command.
