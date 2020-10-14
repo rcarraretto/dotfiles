@@ -529,25 +529,8 @@ augroup END
 " AutoCd {{{
 
 function! s:AutoCd() abort
-  if !exists('b:cd_dir')
-    if exists('g:previous_cwd') && stridx(g:previous_cwd, getcwd()) >= 0
-      " For new buffers that were opened e.g. via fzf,
-      " use the `cwd` from the previous buffer.
-      "
-      " Else we would always point new buffers to the git root,
-      " instead of the current context (e.g., NodeJs root).
-      "
-      " Log printf('AutoCd: inheriting cwd from previous buffer')
-      let b:cd_dir = g:previous_cwd
-    else
-      let b:cd_dir = util#GetGitRoot({'full_path': 1})
-    endif
-  endif
-  if empty(b:cd_dir)
-    return
-  endif
-  if getcwd() == b:cd_dir
-    " Log printf('AutoCd: skip: already there: %s', expand('%:p'))
+  let git_root = util#GetGitRoot({'full_path': 1})
+  if empty(git_root)
     return
   endif
   let dotfiles = [
@@ -555,27 +538,21 @@ function! s:AutoCd() abort
         \ $DOTFILES_PRIVATE,
         \ $DOTFILES_WORK
         \ ]
-  if index(dotfiles, b:cd_dir) >= 0 && get(g:, 'AUTO_CD_DOTFILES', 1) == 0
+  if index(dotfiles, git_root) >= 0 && get(g:, 'AUTO_CD_DOTFILES', 1) == 0
     " Log printf('AutoCd: skip dotfiles: %s', expand('%:p'))
     return
   endif
-  " Log printf("AutoCd: lcd to %s (from %s) / file: %s", b:cd_dir, getcwd(), expand('%:p'))
-  execute "lcd " . b:cd_dir
+  " Log printf("AutoCd: lcd to %s (from %s) / file: %s", git_root, getcwd(), expand('%:p'))
+  execute "lcd " . git_root
 endfunction
 
 augroup AutoCd
   autocmd!
-  autocmd BufEnter ~/work/*,$DOTFILES_WORK/* :call s:AutoCd()
-  autocmd BufLeave ~/work/*,$DOTFILES_WORK/* let g:previous_cwd = getcwd()
-  " Handle manually issued :cd and :lcd.
-  " Else the directory change would be undone when we leave the buffer
-  " and enter it again.
-  autocmd DirChanged * let b:cd_dir = getcwd()
+  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/*,$DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/*,$DOTFILES_WORK/* :call s:AutoCd()
 augroup END
 
 function! s:Cd(cd_cmd, cd_dir) abort
-  let b:cd_dir = a:cd_dir
-  let cmd = a:cd_cmd . ' ' . b:cd_dir
+  let cmd = a:cd_cmd . ' ' . a:cd_dir
   execute cmd
   echo cmd
 endfunction
