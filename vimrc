@@ -530,7 +530,18 @@ augroup END
 
 function! s:AutoCd() abort
   if !exists('b:cd_dir')
-    let b:cd_dir = util#GetGitRoot({'full_path': 1})
+    if exists('g:previous_cwd') && stridx(g:previous_cwd, getcwd()) >= 0
+      " For new buffers that were opened e.g. via fzf,
+      " use the `cwd` from the previous buffer.
+      "
+      " Else we would always point new buffers to the git root,
+      " instead of the current context (e.g., NodeJs root).
+      "
+      " Log printf('AutoCd: inheriting cwd from previous buffer')
+      let b:cd_dir = g:previous_cwd
+    else
+      let b:cd_dir = util#GetGitRoot({'full_path': 1})
+    endif
   endif
   if empty(b:cd_dir)
     return
@@ -555,6 +566,11 @@ endfunction
 augroup AutoCd
   autocmd!
   autocmd BufEnter ~/work/*,$DOTFILES_WORK/* :call s:AutoCd()
+  autocmd BufLeave ~/work/*,$DOTFILES_WORK/* let g:previous_cwd = getcwd()
+  " Handle manually issued :cd and :lcd.
+  " Else the directory change would be undone when we leave the buffer
+  " and enter it again.
+  autocmd DirChanged * let b:cd_dir = getcwd()
 augroup END
 
 function! s:Cd(cd_cmd, cd_dir) abort
