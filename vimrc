@@ -2372,7 +2372,8 @@ cnoremap <c-g>f <c-r>=expand('%:t')<cr>
 
 " Paste escaped content from clipboard in command-line (search) mode.
 " Useful when pasting a path for search.
-cnoremap <c-g>e <c-r>=escape(getreg('*'), '/~')<cr>
+" Based on s:VisualStar
+cnoremap <c-g>e \V<c-r>=substitute(escape(getreg('*'), '/\'), '\n', '\\n', 'g')<cr>
 
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
