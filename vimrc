@@ -2164,6 +2164,8 @@ nnoremap <silent> col :call <sid>ToggleListChars()<cr>
 nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
 " Toggle color column
 nnoremap <silent> coc :call util#ToggleBufVar('&colorcolumn', {'print': 1, 'on_value': '80,100'})<cr>
+" Toggle cursor column
+nnoremap <silent> cox :call util#ToggleBufVar('&cursorcolumn', {'print': 1})<cr>
 " Toggle trim whitespace
 nnoremap <silent> cot :call util#ToggleBufVar('skip_trim_whitespace', {'print': 1})<cr>
 
