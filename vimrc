@@ -1605,20 +1605,29 @@ function! s:Prettier() abort
   elseif &ft == 'html'
     let parser='html'
   endif
-  if empty(parser)
-    return util#error_msg('Unsupported filetype: ' . &ft)
-  endif
+
   let save_pos = getpos('.')
-  let opts = ''
-  " Try to find .prettierrc.json upwards until the git root.
-  " This would be an evidence that the project uses prettier.
-  let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
-  if empty(prettierrc_json)
-    " Use global prettier config for example in sketch buffers or
-    " projects that don't have prettier installed.
-    let opts = "--config=" . $DOTFILES_PRIVATE . "/.prettierrc "
+
+  if !empty(parser)
+    let opts = ''
+    " Try to find .prettierrc.json upwards until the git root.
+    " This would be an evidence that the project uses prettier.
+    let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
+    if empty(prettierrc_json)
+      " Use global prettier config for example in sketch buffers or
+      " projects that don't have prettier installed.
+      let opts = "--config=" . $DOTFILES_PRIVATE . "/.prettierrc "
+    endif
+    execute "%!npx prettier " . opts . "--parser=" . parser
+  else
+    if &ft == 'xml'
+      " https://stackoverflow.com/a/16090892
+      %!python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'
+    else
+      return util#error_msg('Unsupported filetype: ' . &ft)
+    endif
   endif
-  execute "%!npx prettier " . opts . "--parser=" . parser
+
   call setpos('.', save_pos)
   silent! write
 endfunction
