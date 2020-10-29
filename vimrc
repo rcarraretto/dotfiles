@@ -1545,7 +1545,13 @@ function! s:SearchInFile(input) abort
     echohl NONE
     return
   endif
-  execute printf('Ag -Q %s %s', s:AgBuildPattern(a:input), path)
+  if !empty(a:input)
+    execute printf('Ag -Q %s %s', s:AgBuildPattern(a:input), path)
+  else
+    " Use s:AgVimgrep instead of :Ag to bypass calling s:AgSetHighlight,
+    " which is buggy.
+    call s:AgVimgrep(printf('%s %s', s:AgSearchFromSearchReg(), path))
+  endif
   cfirst
 endfunction
 command! -nargs=* SearchInFile :call <sid>SearchInFile(<q-args>)
@@ -1864,11 +1870,13 @@ function! s:StatelessGrep(prg, format, args) abort
   botright copen
 endfunction
 
-function! s:AgVimgrep(format, args) abort
-  call s:StatelessGrep('ag --vimgrep', a:format, a:args)
+function! s:AgVimgrep(args) abort
+  call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
 endfunction
 
 function! s:AgSetHighlight(args) abort
+  " Note: This does not properly translate an 'ag' pattern to a vim regex.
+  " e.g. \bbatata\b should become \<batata\>
   let @/ = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
   call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
 endfunction
@@ -1892,11 +1900,10 @@ endfunction
 " :Ag command.
 " Based on ack.vim (ack#Ack)
 function! s:Ag(args) abort
-  let format = '%f:%l:%c:%m,%f:%l:%m'
   if empty(a:args)
-    return s:AgVimgrep(format, s:AgSearchFromSearchReg())
+    return s:AgVimgrep(s:AgSearchFromSearchReg())
   endif
-  call s:AgVimgrep(format, a:args)
+  call s:AgVimgrep(a:args)
   call s:AgSetHighlight(a:args)
 endfunction
 " The :Ack command from ack.vim uses -complete=files,
