@@ -412,7 +412,11 @@ augroup FTOptions
   autocmd FileType text setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType markdown setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   " my own personal notes format
-  autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=marker | setlocal commentstring=#\ %s | setlocal nocursorline | let b:skip_cursor_line=1
+  autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+    \| setlocal foldmethod=marker
+    \| setlocal commentstring=#\ %s
+    \| setlocal nocursorline | let b:skip_cursor_line=1
+    \| setlocal conceallevel=2 concealcursor=nvc
   autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript,typescript.tsx setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal commentstring=//\ %s
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
