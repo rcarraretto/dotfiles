@@ -2181,7 +2181,9 @@ nnoremap <silent> coc :call util#ToggleBufVar('&colorcolumn', {'print': 1, 'on_v
 " Toggle cursor column
 nnoremap <silent> cox :call util#ToggleBufVar('&cursorcolumn', {'print': 1})<cr>
 " Toggle trim whitespace
-nnoremap <silent> cot :call util#ToggleBufVar('skip_trim_whitespace', {'print': 1})<cr>
+command! ToggleTrimWhitespace :call util#ToggleBufVar('skip_trim_whitespace', {'print': 1})
+" Toggle conceal
+command! ToggleConceal :call util#ToggleBufVar('&conceallevel', {'print': 1, 'off_value': '0', 'on_value': '3'})
 
 " Windows
 " window navigation
