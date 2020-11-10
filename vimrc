@@ -2367,7 +2367,7 @@ nnoremap <leader>rN :%s/<c-r>=GetSubstituteTerm2()<cr>/<c-r>=GetSubstituteTerm2(
 nnoremap <leader>rl :SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
 " - replace within paragraph
 nnoremap <leader>rp :'{,'}SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
-nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>///g <Bar> update<c-f>F/<c-c>
+nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>=GetSubstituteTerm2()<cr>//g <Bar> update<c-f>F/<c-c>
 nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
