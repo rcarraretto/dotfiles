@@ -41,7 +41,11 @@ endfunction
 
 function! util#error_msg(msg) abort
   echohl ErrorMsg
-  echom a:msg
+  let msg = substitute(a:msg, "\t", "  ", 'g')
+  let lines = split(msg, "\n")
+  for line in lines
+    echom line
+  endfor
   echohl NONE
 endfunction
 
