@@ -2112,6 +2112,23 @@ function! s:ShowUniqueSearchMatches() abort
 endfunction
 command! ShowUniqueSearchMatches :call <sid>ShowUniqueSearchMatches()
 
+" Based on:
+" https://stackoverflow.com/a/3264176
+" https://vim.fandom.com/wiki/Search_only_over_a_visual_range
+function! s:SearchInFold() abort
+  let pos = getpos('.')
+  normal! [z
+  let start = line('.')
+  normal! ]z
+  let end = line('.')
+  call setpos('.', pos)
+  " :help \%>l
+  " :help \%<l
+  let after_start = '\%>' . start . 'l'
+  let before_end = '\%<' . end . 'l'
+  call feedkeys('/' . after_start . before_end)
+endfunction
+
 "}}}
 
 " Mappings ---------------------- {{{
@@ -2303,6 +2320,7 @@ xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 "   close it with a comment after the mapping.
 "   https://stackoverflow.com/a/24717020
 nnoremap <space>/f :BLines {{{$<cr>| " }}}
+nnoremap <space>/z :call <sid>SearchInFold()<cr>
 " change directory
 nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
 nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
