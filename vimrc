@@ -451,6 +451,7 @@ augroup SetFiletype
   " filetype 'dosini' seems to highlight better than 'conf',
   " as it highlights keys and values differently.
   autocmd BufNewFile,BufRead *.conf set filetype=dosini | setlocal commentstring=#\ %s
+  autocmd BufNewFile,BufRead package.json call s:ConfPackageJsonBuffer()
 augroup END
 
 augroup SpecialFiles
@@ -2127,6 +2128,20 @@ function! s:SearchInFold() abort
   let after_start = '\%>' . start . 'l'
   let before_end = '\%<' . end . 'l'
   call feedkeys('/' . after_start . before_end)
+endfunction
+
+function! s:YankNpm() abort
+  let matches = matchlist(getline('.'), '^\s*"\([^"]*\)": "^\?\([^"]*\)",')
+  if empty(matches)
+    return util#error_msg('YankNpm: pattern not found')
+  endif
+  let npm = matches[1] . '@' . matches[2]
+  let @* = npm
+  echom npm
+endfunction
+
+function! s:ConfPackageJsonBuffer() abort
+  command! -buffer YankNpm :call <sid>YankNpm()
 endfunction
 
 "}}}
