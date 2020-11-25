@@ -233,14 +233,13 @@ function! s:SetStatusline(...)
   if index(['diff', 'undotree'], &filetype) >= 0
     return
   endif
-  let isActiveWindow = get(a:, 1, 1)
-  let showFlags = (index(['qf', 'help'], &filetype) == -1) && !get(b:, 'statusline_skip_flags')
-  let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   setlocal statusline=
+  let isActiveWindow = get(a:, 1, 1)
+  if isActiveWindow && index(['help'], &filetype) == -1
+    setlocal statusline+=%{GetCwdContext()}
+  endif
+  let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   if showRelativeFilename
-    if isActiveWindow
-      setlocal statusline+=%{GetCwdContext()}
-    endif
     " Apparently %f doesn't always show the relative filename
     " https://stackoverflow.com/a/45244610/2277505
     " :h filename-modifiers
@@ -269,6 +268,7 @@ function! s:SetStatusline(...)
   else
     setlocal statusline+=%f\  " filename
   endif
+  let showFlags = (index(['qf', 'help'], &filetype) == -1) && !get(b:, 'statusline_skip_flags')
   if showFlags
     setlocal statusline+=%m  " modified flag
     setlocal statusline+=%r  " read only flag
