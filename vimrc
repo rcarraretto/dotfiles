@@ -66,14 +66,21 @@ Plug 'rcarraretto/vim-parenmatch'
 let g:loaded_matchparen = 1
 let g:parenmatch_highlight = 0
 
-" >>> Text editing (Part 2) <<<
+" >>> Text Objects <<<
 Plug 'kana/vim-textobj-user'
+" indent: ai
 Plug 'kana/vim-textobj-indent'
+" fold: az
+Plug 'kana/vim-textobj-fold'
+" quotes: aq / iq
 Plug 'beloglazov/vim-textobj-quotes'
-" text obj: e.g. seg_seg_seg, SegSegSeg
+" variable segment: av / iv
+" e.g. seg_seg_seg, SegSegSeg
 Plug 'Julian/vim-textobj-variable-segment'
-" text obj: function arguments
+" function arguments: aa / ia
 Plug 'vim-scripts/argtextobj.vim'
+
+" >>> Text editing (Part 2) <<<
 " indentation
 Plug 'tpope/vim-sleuth'
 " change word casing, case-aware substitute
