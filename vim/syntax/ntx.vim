@@ -11,7 +11,7 @@ syn match ntxEndSection "^}}}.*"
 syn match ntxInlineCode "`[^`]\+`" contains=ntxInlineCodeMark
 syn match ntxInlineCodeMark "`" contained conceal
 syn region ntxCodeBlock start=/^```$/ end=/^```$/
-syn match ntxKeyword "|[^|]\+|" contains=ntxKeywordMark
+syn match ntxKeyword "|[^| ]\+|" contains=ntxKeywordMark
 syn match ntxKeywordMark "|" contained conceal
 
 hi def link ntxLineComment Function
