@@ -5,3 +5,7 @@ yarn.lock
 pnpm-lock.yaml
 *.class
 *.svg
+
+# Xcode
+*.xcodeproj
+*.xcassets
