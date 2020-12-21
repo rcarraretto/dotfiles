@@ -1373,16 +1373,31 @@ endfunction
 
 command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
+function! s:DispatchAndLogOutput(cmd) abort
+  silent execute printf("Dispatch! %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
+endfunction
+
 function! s:EditSketchBuffer(ft)
-  if a:ft ==# 'typescript'
-    call util#EditFile($DOTFILES_PRIVATE . '/src/sketch.ts')
-    nnoremap <buffer> <space>t :update <bar> Dispatch! ts-node --project $DOTFILES_PRIVATE/tsconfig.json % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
-  elseif a:ft ==# 'javascript'
-    call util#EditFile($DOTFILES_PRIVATE . '/src/sketch.js')
-    nnoremap <buffer> <space>t :update <bar> Dispatch! node % <bar>& tee /var/tmp/test-results.txt /var/tmp/test-console.txt<cr>
-  else
+  let configs = {
+  \  'typescript': {
+  \    'path': $DOTFILES_PRIVATE . '/src/sketch.ts',
+  \    'cmd': 'ts-node --project $DOTFILES_PRIVATE/tsconfig.json %'
+  \  },
+  \  'javascript': {
+  \    'path': $DOTFILES_PRIVATE . '/src/sketch.js',
+  \    'cmd': 'node %'
+  \  },
+  \  'go': {
+  \    'path': $DOTFILES_PRIVATE . '/src/sketch.go',
+  \    'cmd': 'go run %'
+  \  }
+  \}
+  if !has_key(configs, a:ft)
     return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
   endif
+  let config = configs[a:ft]
+  call util#EditFile(config['path'])
+  execute "nnoremap <buffer> <space>t :update <bar> call <sid>DispatchAndLogOutput('" . config['cmd'] . "')<cr>"
 endfunction
 command! -nargs=1 EditSketchBuffer call s:EditSketchBuffer(<q-args>)
 
