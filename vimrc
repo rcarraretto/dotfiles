@@ -90,14 +90,22 @@ Plug 'tpope/vim-rsi'
 Plug 'junegunn/vim-easy-align'
 
 " >>> Language specific <<<
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-Plug 'elixir-lang/vim-elixir'
-Plug 'mustache/vim-mustache-handlebars'
+" Typescript
 Plug 'leafgarland/typescript-vim', { 'commit': '09cf6a6ecdef11cd32d38213093cfe86660255aa' }
 Plug 'Quramy/tsuquyomi', { 'commit': '785af7476e0db2522372ef585c86947fc5625c81' }
 Plug 'jparise/vim-graphql'
 Plug 'peitalin/vim-jsx-typescript'
+" Python
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Golang
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'commit': '2855115efb1dd8a5f4436a80138633a1cb5d9f0c' }
+" Applescript
 Plug 'vim-scripts/applescript.vim'
+" Handlebars
+Plug 'mustache/vim-mustache-handlebars'
+" Elixir
+Plug 'elixir-lang/vim-elixir'
+" Kotlin
 Plug 'udalov/kotlin-vim'
 " PowerShell
 Plug 'PProvost/vim-ps1'
