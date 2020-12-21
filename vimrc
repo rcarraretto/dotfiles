@@ -445,7 +445,7 @@ augroup FTOptions
   autocmd FileType agit call s:AgitConfig()
   " when calling setqflist(), the status line is reset
   autocmd FileType qf call s:SetStatusline()
-  autocmd FileType javascript,typescript,json,markdown,html nnoremap <buffer> <leader>gp :Prettier<cr>
+  autocmd FileType javascript,typescript,json,markdown,html,go nnoremap <buffer> <leader>gp :Prettier<cr>
 augroup END
 
 augroup SetFiletype
@@ -1614,22 +1614,26 @@ endfunction
 command! JsonSortKeys call s:JsonSortKeys()
 
 function! s:Prettier() abort
-  let parser=''
-  if &ft == 'json'
-    let parser='json'
-  elseif &ft == 'javascript'
-    let parser='babel'
-  elseif index(['typescript', 'typescript.jsx'], &ft) >= 0
-    let parser='typescript'
-  elseif &ft == 'markdown'
-    let parser='markdown'
-  elseif &ft == 'html'
-    let parser='html'
+  let prettier_parsers={
+  \ 'json': 'json',
+  \ 'javascript': 'babel',
+  \ 'typescript': 'typescript',
+  \ 'typescript.jsx': 'typescript',
+  \ 'markdown': 'markdown',
+  \ 'html': 'html'
+  \}
+  let adhoc_fts = ['xml', 'go']
+  let supported_ft = has_key(prettier_parsers, &ft) || index(adhoc_fts, &ft) >= 0
+
+  if !supported_ft
+    return util#error_msg('Unsupported filetype: ' . &ft)
   endif
 
   let save_pos = getpos('.')
+  silent! update
 
-  if !empty(parser)
+  if has_key(prettier_parsers, &ft)
+    let parser = prettier_parsers[&ft]
     let opts = ''
     " Try to find .prettierrc.json upwards until the git root.
     " This would be an evidence that the project uses prettier.
@@ -1644,13 +1648,17 @@ function! s:Prettier() abort
     if &ft == 'xml'
       " https://stackoverflow.com/a/16090892
       %!python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'
+    elseif &ft == 'go'
+      call system('go fmt ' . expand('%:p'))
+      silent checktime
+      return
     else
-      return util#error_msg('Unsupported filetype: ' . &ft)
+      return util#error_msg('Unimplemented filetype: ' . &ft)
     endif
   endif
 
   call setpos('.', save_pos)
-  silent! write
+  silent! update
 endfunction
 command! Prettier call s:Prettier()
 
