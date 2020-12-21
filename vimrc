@@ -2557,6 +2557,12 @@ let g:tsuquyomi_single_quote_import = 1
 " import { Repository } from 'typeorm';
 let g:tsuquyomi_shortest_import_path = 1
 
+" Golang
+" remove syntax highlight of trailing whitespace as red
+" $VIMRUNTIME/syntax/go.vim:44:9
+" https://stackoverflow.com/a/40945424
+let g:go_highlight_trailing_whitespace_error = 0
+
 " Colorizer
 " keep buffer colorized when you leave it
 let g:colorizer_disable_bufleave = 1
