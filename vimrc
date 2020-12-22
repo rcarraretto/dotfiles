@@ -2554,6 +2554,9 @@ let g:ycm_filetype_specific_completion_to_disable = {
 \ 'cpp': 1
 \ }
 let g:ycm_always_populate_location_list = 1
+" disable documentation popup
+" (used by Golang)
+let g:ycm_auto_hover = ''
 
 " EasyAlign
 " e: elixir
@@ -2579,10 +2582,12 @@ let g:tsuquyomi_shortest_import_path = 1
 let g:go_highlight_trailing_whitespace_error = 0
 
 " vim-go
-" Don't call :GoFmt on save
+" don't call :GoFmt on save
 let g:go_fmt_autosave = 0
-" Do not fill new Golang files with template content
+" do not fill new Golang files with template content
 let g:go_template_autocreate = 0
+" use popup for :GoDoc and K
+let g:go_doc_popup_window = 1
 
 " Colorizer
 " keep buffer colorized when you leave it
