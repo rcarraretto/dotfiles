@@ -2581,6 +2581,8 @@ let g:go_highlight_trailing_whitespace_error = 0
 " vim-go
 " Don't call :GoFmt on save
 let g:go_fmt_autosave = 0
+" Do not fill new Golang files with template content
+let g:go_template_autocreate = 0
 
 " Colorizer
 " keep buffer colorized when you leave it
