@@ -2621,6 +2621,8 @@ let g:go_doc_popup_window = 1
 " don't add K as :GoDoc mapping.
 " K is mapped to s:GoDocToggle instead
 let g:go_doc_keywordprg_enabled = 0
+" disable snippets shipped with the plugin
+let g:go_snippet_engine = ''
 
 " Colorizer
 " keep buffer colorized when you leave it
