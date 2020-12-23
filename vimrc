@@ -723,6 +723,12 @@ endfunction
 
 function! s:GolangMappings() abort
   nnoremap <buffer> <silent> K :call <sid>GoDocToggle()<cr>
+  " vim-go
+  " Remove :GoPlay command, as it uploads code to the internet
+  " One could accidentally leak sensitive information
+  if exists(':GoPlay')
+    delcommand GoPlay
+  endif
 endfunction
 
 function! s:YankLastMessage() abort
