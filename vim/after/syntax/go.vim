@@ -15,3 +15,4 @@ hi link goImport Keyword
 hi link goPackage Keyword
 hi link goStatement Keyword
 hi link goBuiltins Keyword
+hi link goRepeat Keyword
