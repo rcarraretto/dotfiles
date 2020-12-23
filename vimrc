@@ -443,6 +443,7 @@ augroup FTOptions
   autocmd FileType ruby setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldlevel=20
   autocmd FileType c setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType cpp setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
+  autocmd FileType go call s:GolangMappings()
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType applescript setlocal commentstring=--\ %s
@@ -702,6 +703,26 @@ endfunction
 
 function! s:VimscriptMappings() abort
   nnoremap <buffer> <leader>ss :silent update <bar> call <sid>DisarmPluginGuard() <bar> source %<cr>
+endfunction
+
+" Adapted version of :GoDoc from vim-go:
+" - When the popup is already open, close it
+" - Set the popup to close with any cursor move
+function! s:GoDocToggle() abort
+  if empty(popup_list())
+    GoDoc
+    let popup_ids = popup_list()
+    if empty(popup_ids)
+      return
+    endif
+    call popup_setoptions(popup_ids[0], {'moved': 'any'})
+  else
+    call popup_clear()
+  endif
+endfunction
+
+function! s:GolangMappings() abort
+  nnoremap <buffer> <silent> K :call <sid>GoDocToggle()<cr>
 endfunction
 
 function! s:YankLastMessage() abort
@@ -2587,10 +2608,13 @@ let g:go_highlight_trailing_whitespace_error = 0
 " vim-go
 " don't call :GoFmt on save
 let g:go_fmt_autosave = 0
-" do not fill new Golang files with template content
+" don't fill new Golang files with template content
 let g:go_template_autocreate = 0
-" use popup for :GoDoc and K
+" use popup for :GoDoc
 let g:go_doc_popup_window = 1
+" don't add K as :GoDoc mapping.
+" K is mapped to s:GoDocToggle instead
+let g:go_doc_keywordprg_enabled = 0
 
 " Colorizer
 " keep buffer colorized when you leave it
