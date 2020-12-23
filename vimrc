@@ -2337,7 +2337,7 @@ nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
 " Browse files & search
 " quickly edit some files and folders
 nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
-nnoremap <leader>ess :UltiSnipsEdit<cr>
+nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
 nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
