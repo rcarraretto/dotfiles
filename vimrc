@@ -2006,6 +2006,15 @@ function! s:GetScriptPaths() abort
    return map(split(execute('scriptnames'), "\n"), 'fnamemodify(substitute(v:val, ''^\s*\d*: '', "", ""), '':p'')')
 endfunction
 
+function! s:ResetFoldLevel()
+  if index(['ntx'], &ft) >= 0
+    setlocal foldlevel=0
+  else
+    setlocal foldlevel=1
+  endif
+  normal! zz
+endfunction
+
 function! s:FormatParagraph() abort
   if getline('.')[0] == '|'
     " table (using easy-align)
@@ -2482,6 +2491,9 @@ vnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gg :Agit<cr>
 " open repo in SourceTree
 nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
+
+" Reset foldlevel to 1
+nnoremap <silent> <leader>zf :call <sid>ResetFoldLevel()<cr>
 
 " Format paragraph
 nnoremap <space>\ :call <sid>FormatParagraph()<cr>
