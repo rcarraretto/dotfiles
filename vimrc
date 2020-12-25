@@ -868,6 +868,17 @@ function! s:GoToCommandDefinition(cmd)
 endfunction
 command! -nargs=1 -complete=command GoToCommandDefinition :call s:GoToCommandDefinition(<q-args>)
 
+function! s:CaptureMessages()
+  let messages = util#messages()
+  silent call writefile(messages, '/var/tmp/test-results.txt')
+  call s:RefreshBuffer('/var/tmp/test-results.txt')
+  " open test-results.txt
+  let a = util#OpenWindowInTab('/var/tmp/test-results.txt', 'vs')
+  wincmd L
+  wincmd p
+endfunction
+command! CaptureMessages call s:CaptureMessages()
+
 function! s:VerboseToQfItems(cmd, text) abort
   let out = util#capture('verbose ' . a:cmd)
   let lines = split(out, '\n')
@@ -2466,6 +2477,8 @@ nnoremap <leader>ym :Ym<cr>
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
 nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
+" capture :messages in a file
+nnoremap <space>z :CaptureMessages<cr>
 
 " Browse files & search
 " quickly edit some files and folders
