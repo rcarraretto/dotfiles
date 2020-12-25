@@ -828,6 +828,42 @@ function! s:RefreshBuffer(path) abort
   endtry
 endfunction
 
+function! s:VerboseToQfItems(cmd, text) abort
+  let out = util#capture('verbose ' . a:cmd)
+  let lines = split(out, '\n')
+  let items = []
+  for line in lines
+    let m = matchlist(line, '.*Last set from \(.*\) line \(\d\+\)')
+    if !len(m)
+      continue
+    endif
+    let filename = fnamemodify(m[1], ':p')
+    let lnum = m[2]
+    call add(items, {'text': a:text, 'filename': filename, 'lnum': lnum})
+  endfor
+  if empty(items)
+    return [{'text': a:text}]
+  endif
+  return items
+endfunction
+
+" Based on zS mapping from scriptease.vim
+" scriptease#synnames()
+function! s:DebugSynStack() abort
+  let elems = reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")'))
+  if empty(elems)
+    return util#error_msg('DebugSynStack: no elements found in current line')
+  endif
+  let all_qf_items = []
+  for elem in elems
+    let qf_items = s:VerboseToQfItems('highlight ' . elem, elem)
+    let all_qf_items += qf_items
+  endfor
+  call setqflist(all_qf_items)
+  botright copen
+endfunction
+nnoremap <silent> <leader>zS :call <sid>DebugSynStack()<cr>
+
 function! s:NetrwMappings()
   " note:
   " 'echom' might not work within this function
