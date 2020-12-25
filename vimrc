@@ -2319,6 +2319,37 @@ function! s:ShowUniqueSearchMatches() abort
 endfunction
 command! ShowUniqueSearchMatches :call <sid>ShowUniqueSearchMatches()
 
+function! s:JsonFromClipboard()
+  let str = getreg('*')
+  " remove line feed at the end
+  if char2nr(str[-1:-1]) == 10
+    let str = str[:-2]
+  endif
+  " replace null character by newline
+  let str = substitute(str, '\%x00', '\r', 'g')
+  " remove carriage return character (CTRL-V + <cr>)
+  let str = substitute(str, '\r', '', 'g')
+  " handle stringified json
+  if (str[0] == '"' && str[-1:] == '"') || str =~ '^\[\?{\\"'
+    if str[0] == '"' && str[-1:] == '"'
+      " remove surrounding double quotes
+      let str = str[1:-2]
+    endif
+    " unescape double quotes
+    let str = substitute(str, '\\"', '"', 'g')
+  endif
+  tabnew
+  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  call setline(1, str)
+  set ft=json
+  silent %!python -m json.tool
+  if v:shell_error
+    call setline(1, str)
+    return util#error_msg('JsonFromClipboard: invalid json')
+  endif
+endfunction
+command! JsonFromClipboard call s:JsonFromClipboard()
+
 " Based on:
 " https://stackoverflow.com/a/3264176
 " https://vim.fandom.com/wiki/Search_only_over_a_visual_range
