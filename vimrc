@@ -1234,6 +1234,48 @@ function! s:TrimWhitespace()
   call setpos('.', save_cursor)
 endfunction
 
+function! s:MoveToPrevParagraph()
+  let former_line = line('.')
+  " if in the middle of paragraph
+  if len(getline(line('.') - 1))
+    normal! {
+    if line('.') == 1
+      return
+    endif
+    normal! +
+    " Sometimes doing {+ makes it go back to
+    " the same line, when using folding and when
+    " there are paragraphs inside the fold.
+    if line('.') == former_line
+      normal! {
+    endif
+    return
+  end
+  " if current line is empty
+  if len(getline('.')) == 0
+    normal! {
+    if line('.') == 1
+      return
+    endif
+    normal! +
+    return
+  end
+  " if on the beginning of paragraph
+  normal! {{
+  if line('.') == 1
+    return
+  endif
+  normal! +
+endfunction
+
+function! s:MoveToNextParagraph()
+  if len(getline('.')) == 0
+    normal! +
+    return
+  end
+  normal! }+
+endfunction
+
 function! s:OpenInSourceTree()
   let output = util#GetGitRoot()
   if empty(output)
@@ -2256,6 +2298,12 @@ inoremap <c-l> <esc>:silent write<cr>
 
 " Show output of last command
 nnoremap K :!<cr>
+
+" Move between paragraphs.
+" Similar to vim's { and }, but jumps to the first line of paragraph,
+" instead of to an empty line.
+nnoremap <silent> { :call <sid>MoveToPrevParagraph()<cr>
+nnoremap <silent> } :call <sid>MoveToNextParagraph()<cr>
 
 " Use <tab> to toggle folding.
 " On Karabiner Elements, <c-i> will send <f6>
