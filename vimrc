@@ -828,6 +828,46 @@ function! s:RefreshBuffer(path) abort
   endtry
 endfunction
 
+" :GoToDefinition map <cr>
+" :GoToDefinition function fzf#run
+" :GoToDefinition hi typescriptFuncKeyword
+function! s:GoToDefinition(cmd)
+  " Sample verbose output:
+  "
+  " :verbose command TsuReload
+  "     Name              Args Address Complete    Definition
+  " b   TsuReload         *            buffer      :call tsuquyomi#reload(<f-args>)
+  "         Last set from ~/work/tsuquyomi/autoload/tsuquyomi/config.vim line 185
+  "     TsuReloadProject  0                        : call tsuquyomi#reloadProject()
+  "         Last set from ~/work/tsuquyomi/plugin/tsuquyomi.vim line 91
+  "
+  let out = util#capture('verbose ' . a:cmd)
+  let lines = split(out, '\n')
+  for line in lines
+    let m = matchlist(line, '.*Last set from \(.*\) line \(\d\+\)')
+    if !len(m)
+      continue
+    endif
+    let filename = m[1]
+    let line_num = m[2]
+    silent execute 'edit ' . filename
+    execute line_num
+    return
+  endfor
+  echo substitute(out, '\n', '', '')
+endfunction
+command! -nargs=1 GoToDefinition :call s:GoToDefinition(<q-args>)
+
+" :GoToCommandDefinition AbortDispatch
+function! s:GoToCommandDefinition(cmd)
+  if a:cmd =~ '\s'
+    echo 'Not a *command*: ' . a:cmd
+    return
+  endif
+  call s:GoToDefinition('command ' . a:cmd)
+endfunction
+command! -nargs=1 -complete=command GoToCommandDefinition :call s:GoToCommandDefinition(<q-args>)
+
 function! s:VerboseToQfItems(cmd, text) abort
   let out = util#capture('verbose ' . a:cmd)
   let lines = split(out, '\n')
