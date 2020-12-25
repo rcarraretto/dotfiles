@@ -2350,6 +2350,14 @@ function! s:JsonFromClipboard()
 endfunction
 command! JsonFromClipboard call s:JsonFromClipboard()
 
+function! s:JavascriptFromClipboard() abort
+  silent tabedit
+  silent put! *
+  silent execute '%!prettier --parser=babel'
+  set ft=javascript
+endfunction
+command! JavascriptFromClipboard :call <sid>JavascriptFromClipboard()
+
 " Based on:
 " https://stackoverflow.com/a/3264176
 " https://vim.fandom.com/wiki/Search_only_over_a_visual_range
