@@ -1532,6 +1532,20 @@ endfunction
 
 command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
 
+function! s:CloseAuxiliaryBuffers() abort
+  cclose
+  lclose
+  " close buffers in /var/tmp:
+  " - test-results.txt
+  " - test-console.txt
+  " - vim-messages.txt
+  let bufs = filter(getbufinfo(), {idx, val -> val['listed'] && val['name'] =~ '^/private/var/tmp'})
+  let bufnrs = map(bufs, 'v:val.bufnr')
+  for bufnr in bufnrs
+    execute "bdelete " . bufnr
+  endfor
+endfunction
+
 function! s:DispatchAndLogOutput(cmd) abort
   silent execute printf("Dispatch! %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
 endfunction
@@ -2602,6 +2616,8 @@ nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
 nnoremap <leader>2 :call <sid>ToggleLogWindow('/var/tmp/test-console.txt')<cr>
 nnoremap <leader>3 :call <sid>ToggleLogWindow('/var/tmp/test-results.txt')<cr>
 nnoremap <leader>4 :call <sid>ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
+" close auxiliary buffers
+nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
 
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
