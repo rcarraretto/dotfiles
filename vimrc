@@ -731,6 +731,34 @@ function! s:GolangMappings() abort
   endif
 endfunction
 
+function! s:SplitFromCount(count) abort
+  if a:count == 1
+    silent new
+    return 1
+  elseif a:count == 2
+    silent vnew
+    return 1
+  elseif a:count == 3
+    tabnew
+    return 1
+  endif
+  return 0
+endfunction
+
+function! s:MaybeSplit() abort
+  if v:count == 1
+    silent split
+    return 1
+  elseif v:count == 2
+    silent vsplit
+    return 1
+  elseif v:count == 3
+    silent tab split
+    return 1
+  endif
+  return 0
+endfunction
+
 function! s:YankLastMessage() abort
   let @* = util#messages()[0]
 endfunction
@@ -2228,20 +2256,6 @@ function! s:CopyCursorReference() abort
   let @* = printf('%s:%s:%s', path, line_num, col_num)
 endfunction
 
-function! s:MaybeSplit() abort
-  if v:count == 1
-    silent split
-    return 1
-  elseif v:count == 2
-    silent vsplit
-    return 1
-  elseif v:count == 3
-    silent tab split
-    return 1
-  endif
-  return 0
-endfunction
-
 function! s:GoToCursorReference() abort
   let line = getline('.')
   let cursor = getpos('.')
@@ -2333,8 +2347,8 @@ function! s:ShowUniqueSearchMatches() abort
 endfunction
 command! ShowUniqueSearchMatches :call <sid>ShowUniqueSearchMatches()
 
-function! s:JsonFromClipboard()
-  let str = getreg('*')
+function! s:ViewFormattedJson(str, split_count) abort
+  let str = a:str
   " remove line feed at the end
   if char2nr(str[-1:-1]) == 10
     let str = str[:-2]
@@ -2352,17 +2366,35 @@ function! s:JsonFromClipboard()
     " unescape double quotes
     let str = substitute(str, '\\"', '"', 'g')
   endif
-  tabnew
+  call s:SplitFromCount(a:split_count)
   setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  let b:skip_color_column = 1
   call setline(1, str)
   set ft=json
   silent %!python -m json.tool
   if v:shell_error
     call setline(1, str)
-    return util#error_msg('JsonFromClipboard: invalid json')
+    return util#error_msg('ViewFormattedJson: invalid json')
   endif
 endfunction
-command! JsonFromClipboard call s:JsonFromClipboard()
+
+command! -count=3 JsonFromClipboard call s:ViewFormattedJson(getreg('*'), <count>)
+
+function! s:PreviewJsonLinesLine() abort
+  nnoremap <buffer> K :PreviewJsonLinesLine<cr>
+  " close other json previews
+  let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
+  for win in wins
+    if getbufinfo(win['bufnr'])[0]['listed'] == 0
+      call win_gotoid(win['winid'])
+      wincmd c
+    endif
+  endfor
+  call s:ViewFormattedJson(getline('.'), 2)
+  wincmd p
+  50 wincmd |
+endfunction
+command! PreviewJsonLinesLine call s:PreviewJsonLinesLine()
 
 function! s:JavascriptFromClipboard() abort
   silent tabedit
