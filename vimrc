@@ -2376,7 +2376,7 @@ function! s:ViewFormattedJson(str, split_count) abort
     call setline(1, str)
     return util#error_msg('ViewFormattedJson: invalid json')
   endif
-  nnoremap <buffer> K :PreviewJsonFieldValue<cr>
+  nnoremap <buffer> K :call <sid>PreviewJsonFieldValue()<cr>
 endfunction
 
 command! -count=3 JsonFromClipboard call s:ViewFormattedJson(getreg('*'), <count>)
@@ -2400,23 +2400,43 @@ function! s:PreviewJsonFieldValue() abort
   let b:skip_color_column = 1
   call setline(1, split(value, '\\n'))
 endfunction
-command! PreviewJsonFieldValue :call <sid>PreviewJsonFieldValue()
 
-function! s:PreviewJsonLinesLine() abort
-  nnoremap <buffer> K :PreviewJsonLinesLine<cr>
-  " close other json previews
+function! s:CloseUnlistedBuffersInTab() abort
   let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
   for win in wins
     if getbufinfo(win['bufnr'])[0]['listed'] == 0
       call win_gotoid(win['winid'])
-      wincmd c
+      noautocmd wincmd c
     endif
   endfor
-  call s:ViewFormattedJson(getline('.'), 2)
-  wincmd p
-  50 wincmd |
 endfunction
-command! PreviewJsonLinesLine call s:PreviewJsonLinesLine()
+
+function! s:PreviewJsonLine() abort
+  call s:CloseUnlistedBuffersInTab()
+  call s:ViewFormattedJson(getline('.'), 2)
+  noautocmd wincmd p
+  noautocmd 50 wincmd |
+endfunction
+
+function! s:TogglePreviewJsonLines() abort
+  let preview_json_lines = util#ToggleBufVar('preview_json_lines')
+  if preview_json_lines == 0
+    augroup AutoPreviewJsonLine
+      autocmd!
+    augroup END
+    call s:CloseUnlistedBuffersInTab()
+    return
+  endif
+  augroup AutoPreviewJsonLine
+    autocmd!
+    let s:save_ut = &updatetime
+    autocmd CursorMoved <buffer> set updatetime=100
+    autocmd CursorHold <buffer> call s:PreviewJsonLine()
+    autocmd BufLeave <buffer> let &updatetime = s:save_ut
+  augroup END
+  call s:PreviewJsonLine()
+endfunction
+command! TogglePreviewJsonLines call s:TogglePreviewJsonLines()
 
 function! s:JavascriptFromClipboard() abort
   silent tabedit
