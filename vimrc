@@ -2376,9 +2376,31 @@ function! s:ViewFormattedJson(str, split_count) abort
     call setline(1, str)
     return util#error_msg('ViewFormattedJson: invalid json')
   endif
+  nnoremap <buffer> K :PreviewJsonFieldValue<cr>
 endfunction
 
 command! -count=3 JsonFromClipboard call s:ViewFormattedJson(getreg('*'), <count>)
+
+" Sees prettified version of:
+" - stringified json
+" - string containing \n
+function! s:PreviewJsonFieldValue() abort
+  let matches = matchlist(getline('.'), '^\s*"[^"]\+": "\(.*\)"')
+  if empty(matches)
+    return util#error_msg('PreviewJsonFieldValue: could not extract value')
+  endif
+  let value = matches[1]
+  let split_count = 1
+  if value[0] == '{'
+    call s:ViewFormattedJson(value, split_count)
+    return
+  endif
+  call s:SplitFromCount(split_count)
+  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  let b:skip_color_column = 1
+  call setline(1, split(value, '\\n'))
+endfunction
+command! PreviewJsonFieldValue :call <sid>PreviewJsonFieldValue()
 
 function! s:PreviewJsonLinesLine() abort
   nnoremap <buffer> K :PreviewJsonLinesLine<cr>
