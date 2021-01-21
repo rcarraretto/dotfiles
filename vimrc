@@ -1838,6 +1838,19 @@ function! s:JsonSortKeys() abort
 endfunction
 command! JsonSortKeys call s:JsonSortKeys()
 
+" Similar to :%!cmd (:h :range!)
+" but do not replace the contents of buffer in case of error
+function! s:FilterBufferOrFail(cmd) abort
+  let input = join(getline(0, '$'), "\n")
+  let output = system(a:cmd, input)
+  if v:shell_error
+    call util#error_msg(printf("FilterBufferOrFail: %s\n%s", a:cmd, output))
+  else
+    call setline(1, split(output, "\n"))
+  endif
+  return output
+endfunction
+
 function! s:Prettier() abort
   let prettier_parsers={
   \ 'json': 'json',
@@ -1851,7 +1864,7 @@ function! s:Prettier() abort
   let supported_ft = has_key(prettier_parsers, &ft) || index(adhoc_fts, &ft) >= 0
 
   if !supported_ft
-    return util#error_msg('Unsupported filetype: ' . &ft)
+    return util#error_msg('Prettier: Unsupported filetype: ' . &ft)
   endif
 
   let save_pos = getpos('.')
@@ -1872,7 +1885,8 @@ function! s:Prettier() abort
   else
     if &ft == 'xml'
       " https://stackoverflow.com/a/16090892
-      %!python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'
+      let cmd = "python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'"
+      call s:FilterBufferOrFail(cmd)
     elseif &ft == 'go'
       call system('go fmt ' . expand('%:p'))
       silent checktime
@@ -2446,6 +2460,17 @@ function! s:JavascriptFromClipboard() abort
   set ft=javascript
 endfunction
 command! JavascriptFromClipboard :call <sid>JavascriptFromClipboard()
+
+" Opens a scratch buffer with the contents of the clipboard.
+" Formats content if possible.
+function! s:BufferFromClipboard(ft, split_count) abort
+  call s:SplitFromCount(a:split_count)
+  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  call setline(1, getreg('*'))
+  let &ft = a:ft
+  Prettier
+endfunction
+command! -nargs=1 -count=3 BufferFromClipboard call s:BufferFromClipboard(<q-args>, <count>)
 
 " Based on:
 " https://stackoverflow.com/a/3264176
