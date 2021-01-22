@@ -1090,7 +1090,7 @@ function s:DirvishImplode() abort
   call s:DirvishRefresh()
 endfunction
 
-function! ArgList() abort
+function! s:ArgList() abort
   let i = 0
   let l = []
   while i < argc()
@@ -1105,19 +1105,13 @@ function! s:DirvishMv() abort
   if !isdirectory(dirpath)
     let dirpath = fnamemodify(dirpath, ':h') . '/'
     if !isdirectory(dirpath)
-      echohl Statement
-      echom 'DirvishMv: target is not a directory: ' . dirpath
-      echohl NONE
-      return
+      return util#error_msg('DirvishMv: target is not a directory: ' . dirpath)
     endif
   endif
   let cwd = getcwd() . '/'
-  let filepaths = filter(ArgList(), 'filereadable(v:val) || (isdirectory(v:val) && v:val != cwd)')
+  let filepaths = filter(s:ArgList(), 'filereadable(v:val) || (isdirectory(v:val) && v:val != cwd)')
   if len(filepaths) < 1
-    echohl Statement
-    echom "DirvishMv: no file has been selected (use 'x' to select a file)"
-    echohl NONE
-    return
+    return util#error_msg("DirvishMv: no file has been selected (use 'x' to select a file)")
   endif
   function! s:shortname(path)
     if isdirectory(a:path)
@@ -1127,21 +1121,13 @@ function! s:DirvishMv() abort
   endfunction
   let filenames = map(copy(filepaths), 's:shortname(v:val)')
   let dirname = s:shortname(dirpath)
-  echohl Statement
-  let ok = input("Move " . join(filenames, ', ') . " to directory " . dirname . "? ")
-  echohl NONE
-  " clear input
-  normal! :<esc>
-  if ok !=# 'y'
-    echo 'skipped'
+  if !util#prompt("Move " . join(filenames, ', ') . " to directory " . dirname . "? ")
     return
   endif
   let cmd = 'mv ' . join(map(filepaths, 'fnameescape(v:val)'), ' ') . ' ' . fnameescape(dirpath)
   let output = system(cmd)
   if v:shell_error
-    echohl Error
-    echom 'DirvishMv: Error: ' . output
-    echohl NONE
+    call util#error_msg('DirvishMv: Error: ' . output)
   endif
   argdelete *
   execute "Dirvish " . dirpath
