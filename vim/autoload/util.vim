@@ -325,3 +325,24 @@ function! util#ToggleBufVar(varname, ...) abort
   endif
   return updated_value
 endfunction
+
+" Example:
+" :call util#ToggleOption('cursorlineopt', {'print': 1, 'off_value': 'number', 'on_value': 'both'})
+function! util#ToggleOption(option_name, ...) abort
+  let opts = get(a:, 1, {})
+  let value = eval('&' . a:option_name)
+  let off_value = get(opts, 'off_value', 0)
+  let on_value = get(opts, 'on_value', 1)
+  if value == off_value
+    let new_value = on_value
+  else
+    let new_value = off_value
+  endif
+  let update_cmd = "set " . a:option_name . "=" . new_value
+  execute update_cmd
+  let updated_value = eval('&' . a:option_name)
+  if get(opts, 'print') == 1
+    echo update_cmd
+  endif
+  return updated_value
+endfunction
