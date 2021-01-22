@@ -1000,6 +1000,8 @@ function! s:DirvishMappings()
   nnoremap <buffer> <silent> I :<c-u>call <sid>DirvishImplode()<cr>
   " mv
   nnoremap <buffer> <silent> mv :<c-u>call <sid>DirvishMv()<cr>
+  " opendiff
+  command! -buffer DirvishOpenDiff :call <sid>DirvishOpenDiff()
 endfunction
 
 function! s:DirvishRefresh() abort
@@ -1100,6 +1102,13 @@ function! s:ArgList() abort
   return l
 endfunction
 
+function! s:dirvish_path_shortname(path)
+  if isdirectory(a:path)
+    return "'" . fnamemodify(a:path[:-2], ':t') . "'"
+  endif
+  return "'" . fnamemodify(a:path, ':t') . "'"
+endfunction
+
 function! s:DirvishMv() abort
   let dirpath = getline('.')
   if !isdirectory(dirpath)
@@ -1113,14 +1122,8 @@ function! s:DirvishMv() abort
   if len(filepaths) < 1
     return util#error_msg("DirvishMv: no file has been selected (use 'x' to select a file)")
   endif
-  function! s:shortname(path)
-    if isdirectory(a:path)
-      return "'" . fnamemodify(a:path[:-2], ':t') . "'"
-    endif
-    return "'" . fnamemodify(a:path, ':t') . "'"
-  endfunction
-  let filenames = map(copy(filepaths), 's:shortname(v:val)')
-  let dirname = s:shortname(dirpath)
+  let filenames = map(copy(filepaths), 's:dirvish_path_shortname(v:val)')
+  let dirname = s:dirvish_path_shortname(dirpath)
   if !util#prompt("Move " . join(filenames, ', ') . " to directory " . dirname . "? ")
     return
   endif
@@ -1131,6 +1134,25 @@ function! s:DirvishMv() abort
   endif
   argdelete *
   execute "Dirvish " . dirpath
+endfunction
+
+function! s:DirvishOpenDiff() abort
+  let filepaths = filter(s:ArgList(), 'filereadable(v:val)')
+  if len(filepaths) < 1
+    return util#error_msg("DirvishOpenDiff: no file has been selected (use 'x' to select a file)")
+  endif
+  if len(filepaths) == 1
+    return util#error_msg("DirvishOpenDiff: only one file has been selected")
+  endif
+  let filenames = map(copy(filepaths), 's:dirvish_path_shortname(v:val)')
+  if !util#prompt("Diff " . join(filenames, ', ') . "? ")
+    return
+  endif
+  let cmd = 'opendiff ' . join(map(filepaths, 'fnameescape(v:val)'), ' ')
+  let output = system(cmd)
+  if v:shell_error
+    return util#error_msg('DirvishOpenDiff: Error: ' . output)
+  endif
 endfunction
 
 " Based on eunuch.vim :Delete
