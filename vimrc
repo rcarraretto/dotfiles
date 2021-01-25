@@ -1145,7 +1145,7 @@ function! s:DirvishOpenDiff() abort
     return util#error_msg("DirvishOpenDiff: only one file has been selected")
   endif
   let filenames = map(copy(filepaths), 's:dirvish_path_shortname(v:val)')
-  if !util#prompt("Diff " . join(filenames, ', ') . "? ")
+  if !util#prompt("Diff " . join(filenames, ', ') . "? ", {'type': 'info'})
     return
   endif
   let cmd = 'opendiff ' . join(map(filepaths, 'fnameescape(v:val)'), ' ')
