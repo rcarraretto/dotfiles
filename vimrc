@@ -458,7 +458,7 @@ augroup FTOptions
   autocmd FileType agit call s:AgitConfig()
   " when calling setqflist(), the status line is reset
   autocmd FileType qf call s:SetStatusline()
-  autocmd FileType javascript,typescript,typescript.tsx,json,markdown,html,go nnoremap <buffer> <leader>gp :Prettier<cr>
+  autocmd FileType javascript,typescript,typescript.tsx,go,json,markdown,html,xml nnoremap <buffer> <leader>gp :Prettier<cr>
 augroup END
 
 augroup SetFiletype
