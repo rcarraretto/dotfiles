@@ -1468,6 +1468,13 @@ function! ToggleGStatus()
   endif
 endfunction
 
+" Similar to star (*) but for arbitrary motions,
+" instead of just the word under cursor.
+function! s:SearchOperator(type)
+  let @/ = s:YankOperatorTarget(a:type)
+  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
+endfunction
+
 function! s:GrepOperator(type)
   let target = s:YankOperatorTarget(a:type)
   silent execute "Ag -Q --hidden " . shellescape(target)
@@ -2696,6 +2703,8 @@ nnoremap <space>: :History:<cr>
 nnoremap <space>a :Ag --hidden -Q ''<left>
 " search in git root
 nnoremap <space>A :SearchInGitRoot<space>
+" search operator
+nnoremap g/ :set operatorfunc=<sid>SearchOperator<cr>g@
 " grep operator
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
