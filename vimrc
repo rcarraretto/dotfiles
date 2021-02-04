@@ -2476,12 +2476,23 @@ function! s:JavascriptFromClipboard() abort
 endfunction
 command! JavascriptFromClipboard :call <sid>JavascriptFromClipboard()
 
+function! s:UnpackJsonStr(str) abort
+  let str = a:str[1:-2]
+  let str = substitute(str, '\\"', '"', 'g')
+  let str = substitute(str, '\\n', "\n", 'g')
+  return str
+endfunction
+
 " Opens a scratch buffer with the contents of the clipboard.
 " Formats content if possible.
 function! s:BufferFromClipboard(ft, split_count) abort
   call s:SplitFromCount(a:split_count)
   setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-  call setline(1, getreg('*'))
+  let str = trim(getreg('*'))
+  if a:ft == 'xml' && str[0] == '"' && str[-1:] == '"'
+    let str = s:UnpackJsonStr(str)
+  endif
+  call setline(1, str)
   let &ft = a:ft
   Prettier
 endfunction
