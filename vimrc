@@ -357,6 +357,9 @@ function! s:SetHighlight() abort
   " $VIM/vim81/syntax/git.vim
   highlight def link agitDiffAdd diffAdded
   highlight def link agitDiffRemove diffRemoved
+
+  " Customize YouCompleteMe highlight of warnings (e.g., java)
+  highlight YcmWarningSection cterm=undercurl ctermbg=none
 endfunction
 
 " Custom highlights are lost when :colorscheme is executed.
