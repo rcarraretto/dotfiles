@@ -147,10 +147,6 @@ function! s:toggle(op) abort
   return eval('&'.a:op) ? 'no'.a:op : a:op
 endfunction
 
-function! s:cursor_options() abort
-  return &cursorline && &cursorcolumn ? 'nocursorline nocursorcolumn' : 'cursorline cursorcolumn'
-endfunction
-
 function! s:option_map(letter, option, mode) abort
   call s:map('n', '[o'.a:letter, ':'.a:mode.' '.a:option.'<C-R>=<SID>statusbump()<CR><CR>')
   call s:map('n', ']o'.a:letter, ':'.a:mode.' no'.a:option.'<C-R>=<SID>statusbump()<CR><CR>')
