@@ -154,13 +154,10 @@ endfunction
 function! s:option_map(letter, option, mode) abort
   call s:map('n', '[o'.a:letter, ':'.a:mode.' '.a:option.'<C-R>=<SID>statusbump()<CR><CR>')
   call s:map('n', ']o'.a:letter, ':'.a:mode.' no'.a:option.'<C-R>=<SID>statusbump()<CR><CR>')
-  call s:map('n', '=o'.a:letter, ':'.a:mode.' <C-R>=<SID>toggle("'.a:option.'")<CR><CR>')
+  call s:map('n', 'co'.a:letter, ':'.a:mode.' <C-R>=<SID>toggle("'.a:option.'")<CR><CR>')
 endfunction
 
 call s:option_map('w', 'wrap', 'setlocal')
-if empty(maparg('co', 'n'))
-  nmap co =o
-endif
 
 function! s:setup_paste() abort
   let s:paste = &paste
@@ -201,13 +198,9 @@ endfunction
 nnoremap <silent> <Plug>unimpairedPutAbove :call <SID>putline('[p', 'Above')<CR>
 nnoremap <silent> <Plug>unimpairedPutBelow :call <SID>putline(']p', 'Below')<CR>
 
-call s:map('n', '[p', '<Plug>unimpairedPutAbove')
-call s:map('n', ']p', '<Plug>unimpairedPutBelow')
-call s:map('n', '>P', ":call <SID>putline('[p', 'Above')<CR>>']", '<silent>')
-call s:map('n', '>p', ":call <SID>putline(']p', 'Below')<CR>>']", '<silent>')
-call s:map('n', '<P', ":call <SID>putline('[p', 'Above')<CR><']", '<silent>')
-call s:map('n', '<p', ":call <SID>putline(']p', 'Below')<CR><']", '<silent>')
-call s:map('n', '=P', ":call <SID>putline('[p', 'Above')<CR>=']", '<silent>')
-call s:map('n', '=p', ":call <SID>putline(']p', 'Below')<CR>=']", '<silent>')
+call s:map('n', '=P', '<Plug>unimpairedPutAbove')
+call s:map('n', '=p', '<Plug>unimpairedPutBelow')
+call s:map('n', '=O', ":call <SID>putline('[p', 'Above')<CR>=']", '<silent>')
+call s:map('n', '=o', ":call <SID>putline(']p', 'Below')<CR>=']", '<silent>')
 
 " }}}1
