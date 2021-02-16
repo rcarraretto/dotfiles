@@ -1836,6 +1836,16 @@ function! s:SysOpen(filename)
 endfunction
 command! -nargs=? -complete=file SysOpen call s:SysOpen(<q-args>)
 
+function! s:OpenFolderInFinder() abort
+  let dir = expand('%:p:h')
+  if !isdirectory(dir)
+    return util#error_msg('OpenFolderInFinder: not a folder: ' . dir)
+  endif
+  echom "OpenFolderInFinder: " . dir
+  call system("open -a Finder " . fnameescape(dir))
+endfunction
+command! OpenFolderInFinder call s:OpenFolderInFinder()
+
 function! s:JsonFormat()
   if &ft !=# 'json'
     echo 'Not a json file'
@@ -2783,6 +2793,8 @@ nnoremap <leader>cr :call <sid>CopyCursorReference()<cr>
 nnoremap <leader>gf :<c-u>call <sid>GoToCursorReference()<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :SysOpen<cr>
+" open folder of current file in Finder
+nnoremap <leader>oF :OpenFolderInFinder<cr>
 
 " Find and Replace / Find and Bulk Change
 "
