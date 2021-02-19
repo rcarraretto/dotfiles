@@ -472,7 +472,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead *.applescript set filetype=applescript
   autocmd BufNewFile,BufRead *.jenkinsfile set filetype=groovy
   autocmd BufNewFile,BufRead Dockerfile.* set filetype=Dockerfile
-  autocmd BufNewFile,BufRead *.pem,*.crt,*.key set filetype=pem
+  autocmd BufNewFile,BufRead *.pem,*.crt,*.key,*.csr set filetype=pem
   " filetype 'dosini' seems to highlight better than 'conf',
   " as it highlights keys and values differently.
   autocmd BufNewFile,BufRead *.conf set filetype=dosini | setlocal commentstring=#\ %s
