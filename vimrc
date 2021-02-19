@@ -2601,6 +2601,11 @@ nnoremap K :!<cr>
 nnoremap <silent> { :call <sid>MoveToPrevParagraph()<cr>
 nnoremap <silent> } :call <sid>MoveToNextParagraph()<cr>
 
+" Move between folds
+" 'zj' moves downwards to the start of the next fold
+" Update 'zk' to move upwards to the start of the previous fold
+nnoremap zk zk[z
+
 " Use <tab> to toggle folding.
 " On Karabiner Elements, <c-i> will send <f6>
 " to avoid collision between <tab> and <c-i>.
