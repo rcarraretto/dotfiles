@@ -462,6 +462,7 @@ augroup FTOptions
   " when calling setqflist(), the status line is reset
   autocmd FileType qf call s:SetStatusline()
   autocmd FileType javascript,typescript,typescript.tsx,go,json,markdown,html,yaml,xml nnoremap <buffer> <leader>gp :Prettier<cr>
+  autocmd FileType pem setlocal foldmethod=marker | setlocal foldmarker=-----BEGIN,-----END | setlocal foldlevel=20
 augroup END
 
 augroup SetFiletype
@@ -471,6 +472,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead *.applescript set filetype=applescript
   autocmd BufNewFile,BufRead *.jenkinsfile set filetype=groovy
   autocmd BufNewFile,BufRead Dockerfile.* set filetype=Dockerfile
+  autocmd BufNewFile,BufRead *.pem,*.crt,*.key set filetype=pem
   " filetype 'dosini' seems to highlight better than 'conf',
   " as it highlights keys and values differently.
   autocmd BufNewFile,BufRead *.conf set filetype=dosini | setlocal commentstring=#\ %s
@@ -2236,7 +2238,7 @@ function! s:GetScriptPaths() abort
 endfunction
 
 function! s:ResetFoldLevel()
-  if index(['ntx'], &ft) >= 0
+  if index(['ntx', 'pem'], &ft) >= 0
     setlocal foldlevel=0
   else
     setlocal foldlevel=1
