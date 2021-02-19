@@ -2617,6 +2617,9 @@ nnoremap zk zk[z
 nnoremap <silent> <tab> :call <sid>ToggleFolding()<cr>
 nnoremap <f6> <c-i>
 
+" Reset foldlevel to 1
+nnoremap <silent> zf :call <sid>ResetFoldLevel()<cr>
+
 " Swap single quote and backtick
 nnoremap ' `
 vnoremap ' `
@@ -2850,9 +2853,6 @@ vnoremap <leader>gh :Gbrowse<cr>
 nnoremap <leader>gg :Agit<cr>
 " open repo in SourceTree
 nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
-
-" Reset foldlevel to 1
-nnoremap <silent> <leader>zf :call <sid>ResetFoldLevel()<cr>
 
 " Format paragraph
 nnoremap <space>\ :call <sid>FormatParagraph()<cr>
