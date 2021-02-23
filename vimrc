@@ -1354,6 +1354,28 @@ function! s:QuickfixFilenames()
 endfunction
 command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 
+" Wrap :TsuReferences (from tsuquyomi)
+" Use quickfix list instead of location list
+function! s:TsuReferences() abort
+  TsuReferences
+  lclose
+  call setqflist(getloclist(winnr()), 'r')
+  copen
+  wincmd J
+  wincmd p
+endfunction
+
+function! s:ListReferences() abort
+  if index(['typescript', 'typescript.tsx'], &ft) != -1
+    return s:TsuReferences()
+  elseif &ft == 'go'
+    GoReferrers
+    return
+  else
+    return util#error_msg(printf('ListReferences: unsupported filetype: %s', &ft))
+  endif
+endfunction
+
 function! s:TrimWhitespace()
   if &modifiable == 0
     return
@@ -2791,6 +2813,7 @@ nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
 nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> silent YcmCompleter GoToDefinition<cr>
+nnoremap <leader>ge :call <sid>ListReferences()<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -2994,6 +3017,8 @@ let g:go_doc_popup_window = 1
 let g:go_doc_keywordprg_enabled = 0
 " disable snippets shipped with the plugin
 let g:go_snippet_engine = ''
+" use quickfix list, instead of location list
+let g:go_list_type = "quickfix"
 
 " Colorizer
 " keep buffer colorized when you leave it
