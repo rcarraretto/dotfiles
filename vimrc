@@ -438,8 +438,8 @@ augroup FTOptions
     \| setlocal commentstring=#\ %s
     \| setlocal nocursorline | let b:skip_cursor_line=1
     \| setlocal conceallevel=2 concealcursor=nvc
-  autocmd FileType javascript setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
-  autocmd FileType typescript,typescript.tsx setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal commentstring=//\ %s
+  autocmd FileType javascript,typescript,typescript.tsx setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
+  autocmd FileType typescript.tsx setlocal commentstring=//\ %s
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType yaml setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType xml setlocal foldmethod=indent | setlocal foldlevel=20
