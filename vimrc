@@ -627,7 +627,9 @@ function! s:VimEnter()
   " On startup, the arglist is populated with the path arguments.
   " So when starting vim with `vim .`, it's populated with the path
   " of the current directory.
-  argdelete *
+  if argc() > 0
+    argdelete *
+  endif
 
   " Revert plugin side effects
   " rsi.vim
