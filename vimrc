@@ -11,10 +11,6 @@ if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK . '/vim')
   set rtp+=$DOTFILES_WORK/vim
 endif
 
-if $USE_NETRW
-  set rtp+=$HOME/work/netrw
-endif
-
 call plug#begin('~/.vim/bundle')
 
 Plug 'junegunn/vim-plug'
