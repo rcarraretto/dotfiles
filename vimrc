@@ -663,11 +663,17 @@ function! s:ToggleKeyboardLayout(hsFuncName) abort
   if !get(g:, 'auto_change_keyboard_layout', 1)
     return
   endif
+  " If Hammerspoon is off, the command will take too much time to respond
+  " and vim will be blocked.
+  " In that case, this function can be aborted with Ctrl-C and
+  " the feature will be turned off altogether.
+  let g:auto_change_keyboard_layout = 0
   let out = system(printf("hs -c '%s()'", a:hsFuncName))
   if v:shell_error
-    let g:auto_change_keyboard_layout = 0
-    throw printf('%s: %s', a:hsFuncName, out)
+    echoerr printf('%s: %s', a:hsFuncName, out)
+    return
   endif
+  let g:auto_change_keyboard_layout = 1
 endfunction
 
 function! s:DisarmPluginGuard() abort
