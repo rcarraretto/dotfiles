@@ -162,6 +162,8 @@ function! s:GetOpenCmdFromCount() abort
     return 'new'
   elseif v:count == 2 || v:count == 7
     return 'vnew'
+  elseif v:count == 3 || v:count == 8
+    return 'edit'
   endif
   return 'tabnew'
 endfunction
