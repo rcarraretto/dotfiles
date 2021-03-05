@@ -2733,11 +2733,11 @@ nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snip
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :<c-u>call <sid>FzfNotes()<cr>
-nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/dev.txt")<cr>
+nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
 nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
 nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.local')<cr>
 if exists('$NOTES_WORK')
-  nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work.txt")<cr>
+  nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
 endif
 nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
