@@ -443,7 +443,7 @@ augroup FTOptions
   autocmd FileType ruby setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldlevel=20
   autocmd FileType c setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType cpp setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
-  autocmd FileType go call s:GolangMappings()
+  autocmd FileType go setlocal foldmethod=indent | setlocal foldlevel=20 | call s:GolangMappings()
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType applescript setlocal commentstring=--\ %s
