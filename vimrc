@@ -1663,6 +1663,48 @@ function! s:EditSketchBuffer(ft)
 endfunction
 command! -nargs=1 EditSketchBuffer call s:EditSketchBuffer(<q-args>)
 
+function! s:EditTestFile() abort
+  if index(['javascript', 'typescript', 'typescript.tsx', 'go'], &ft) == -1
+    return util#error_msg('EditTestFile: unsupported file type: ' . &ft)
+  endif
+  " %     = 'path/to/file.ts'
+  " %:r   = 'path/to/file'
+  " %:r:r = 'path/to/file'
+  " %:e   = 'ts'
+  " %:e:e = 'ts'
+  "
+  " %     = 'path/to/file.test.ts'
+  " %:r   = 'path/to/file.test'
+  " %:r:r = 'path/to/file'
+  " %:e   = 'ts'
+  " %:e:e = 'test.ts'
+  "
+  let root = expand('%:r')
+  let ext = expand('%:e')
+  if root =~ '[\._]test$'
+    let is_test = 1
+    if &ft == 'go'
+      let candidate_path = substitute(expand('%:r:r'), '_test$', '', 'g') . '.' . ext
+    else
+      let candidate_path = expand('%:r:r') . '.' . ext
+    endif
+  else
+    let is_test = 0
+    if &ft == 'go'
+      let test_file_prefix = '_test'
+    else
+      let test_file_prefix = '.test'
+    endif
+    let candidate_path = root . test_file_prefix . '.' . ext
+  endif
+  if !filereadable(candidate_path)
+    let candidate_type = is_test ? 'source' : 'test'
+    return util#error_msg('EditTestFile: ' . candidate_type . ' file not found: ' . candidate_path)
+  endif
+  let split_type = is_test ? "rightbelow" : "leftabove"
+  call util#OpenWindowInTab(candidate_path, split_type . " vsplit")
+endfunction
+
 " Adapted from:
 " https://vim.fandom.com/wiki/File_no_longer_available_-_mark_buffer_modified
 function s:FileChangedShell(name)
@@ -2743,6 +2785,8 @@ nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
 nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
 " explore syntax files for the current filetype
 nnoremap <leader>ey :<c-u>call <sid>ExploreSyntaxFiles()<cr>
+" edit corresponding test or source file
+nnoremap <leader>et :call <sid>EditTestFile()<cr>
 " browse files
 nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
