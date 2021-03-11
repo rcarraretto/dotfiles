@@ -1,6 +1,18 @@
-# PS1 is normally set by /etc/bashrc, which is sourced by /etc/profile.
-# However, I set tmux not to run login shells, so /etc/profile is not sourced on each pane.
-PS1='\W $ '
+PROMPT_COMMAND=__prompt_command
+
+__prompt_command() {
+  local EXIT_CODE="$?"
+  local RED='\[\e[0;31m\]'
+  local NC='\[\e[0m\]'
+  PS1=""
+  if [ $EXIT_CODE -ne 0 ]; then
+    PS1+="${RED}${EXIT_CODE}${NC} "
+  fi
+  PS1+='\W $ '
+  # After each command, refresh tmux status bar,
+  # since the current git branch is being displayed on it.
+  tmux refresh-client -S &> /dev/null
+}
 
 # Vim
 export EDITOR='vim'
@@ -87,12 +99,6 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 # git completion
 if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
-fi
-
-# After each command, refresh tmux status bar,
-# since the current git branch is being displayed on it.
-if ! [[ "$PROMPT_COMMAND" =~ "tmux refresh-client" ]]; then
-  PROMPT_COMMAND="tmux refresh-client -S &> /dev/null; $PROMPT_COMMAND"
 fi
 
 LOCAL_RC="$DOTFILES_PRIVATE/bashrc.local"
