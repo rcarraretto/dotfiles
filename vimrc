@@ -2860,7 +2860,7 @@ nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
-nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> silent YcmCompleter GoToDefinition<cr>
+nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
 nnoremap <leader>ge :call <sid>ListReferences()<cr>
 
 " Easier change and replace word
