@@ -5,7 +5,10 @@ __prompt_command() {
   local RED='\[\e[0;31m\]'
   local NC='\[\e[0m\]'
   PS1=""
-  if [ $EXIT_CODE -ne 0 ]; then
+  if { [ $EXIT_CODE -ne 0 ] && [ $EXIT_CODE -ne 130 ]; }; then
+    # Show the exit code on prompt,
+    # except when exit code is 130 (set when Ctrl-C)
+    # https://tldp.org/LDP/abs/html/exitcodes.html
     PS1+="${RED}${EXIT_CODE}${NC} "
   fi
   PS1+='\W $ '
