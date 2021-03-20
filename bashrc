@@ -95,6 +95,11 @@ if [ -s "$NVM_DIR/nvm.sh" ] && ! command-exists nvm; then
   source "$NVM_DIR/nvm.sh" # && echo "nvm set!"
 fi
 
+# rbenv
+if command-exists rbenv && [ -z $RBENV_SET ]; then
+  eval "$(rbenv init -)" && RBENV_SET=1 # && echo "rbenv set!"
+fi
+
 # fzf
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
