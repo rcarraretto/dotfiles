@@ -1,0 +1,3 @@
+# Disable bracketed paste (enabled by default on bash 5.1).
+# When on, it highlights the pasted text.
+set enable-bracketed-paste off
