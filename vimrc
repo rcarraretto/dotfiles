@@ -1363,7 +1363,25 @@ command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 function! s:TsuReferences() abort
   TsuReferences
   lclose
-  call setqflist(getloclist(winnr()), 'r')
+  let items = getloclist(winnr())
+  for item in items
+    " Fix references to files outside of cwd().
+    "
+    " For some reason, when references are outside of cwd(), the
+    " quickfix/location list does not jump properly.
+    "
+    " When this happens, the listed file paths contain ~ instead of a full
+    " reference to $HOME. Maybe this could be the reason.
+    "
+    " To work around this problem, unset 'bufnr' and use the 'filename' feature
+    " instead.
+    "
+    " :h setqflist
+    "
+    let item['filename'] = fnamemodify(bufname(item['bufnr']), ':p')
+    unlet item['bufnr']
+  endfor
+  call setqflist(items, 'r')
   copen
   wincmd J
   wincmd p
