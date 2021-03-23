@@ -34,6 +34,12 @@ snippet cl "Println"
 fmt.Println($0)
 endsnippet
 
+snippet struct "struct"
+type $1 struct {
+	$2
+}
+endsnippet
+
 snippet test
 func Test$1(t *testing.T) {
 	$2
