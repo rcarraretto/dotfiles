@@ -34,6 +34,13 @@ __pycache__/
 
 profile.log
 
+# IntelliJ
+.idea
+*.iml
+
+# Eclipse
+.settings
+
 # Dropbox icon
 # https://stackoverflow.com/a/21111738/2277505
 Icon
