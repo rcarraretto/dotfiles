@@ -559,6 +559,10 @@ augroup END
 
 function! s:AutoCd() abort
   let git_root = util#GetGitRoot({'full_path': 1})
+  if git_root == $HOME . '/work/dotfiles/vim/bundle/YouCompleteMe/third_party/ycmd'
+    " Do not :cd to ycm when jumping to NodeJS standard lib
+    return
+  endif
   if empty(git_root)
     return
   endif
