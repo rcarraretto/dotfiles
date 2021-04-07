@@ -31,6 +31,12 @@ Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
 Plug 'Valloric/YouCompleteMe', { 'commit': '4904077bec593da031a73c972dfc516544f72f78' }
 Plug 'AndrewRadev/splitjoin.vim'
+" deoplete and its dependencies
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+"
+Plug 'dense-analysis/ale'
 
 " >>> Support <<<
 Plug 'tpope/vim-dispatch'
@@ -1400,6 +1406,14 @@ function! s:ListReferences() abort
   else
     return util#error_msg(printf('ListReferences: unsupported filetype: %s', &ft))
   endif
+endfunction
+
+function! s:GoToDefinition() abort
+  if &ft == 'go'
+    GoDef
+    return
+  endif
+  YcmCompleter GoToDefinition
 endfunction
 
 function! s:TrimWhitespace()
@@ -2882,7 +2896,7 @@ nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
 " Tags
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
-nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
+nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> call <sid>GoToDefinition()<cr>
 nnoremap <leader>ge :call <sid>ListReferences()<cr>
 
 " Easier change and replace word
@@ -3051,6 +3065,19 @@ let g:ycm_always_populate_location_list = 1
 " disable documentation popup
 " (used by Golang)
 let g:ycm_auto_hover = ''
+" Disable YCM for Golang (use deoplete instead)
+let g:ycm_filetype_blacklist = { 'go': 1 }
+
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+
+" Ale
+let g:ale_lsp_root = {'gopls': '~/.vim/bundle/vim-go/bin'}
+let g:ale_go_bingo_executable = 'gopls'
+let g:ale_completion_enabled = 0
+let g:ale_linters = { 'go': ['gofmt', 'golint', 'go vet', 'gopls'] }
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
 
 " EasyAlign
 " e: elixir
