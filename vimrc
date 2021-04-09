@@ -1402,6 +1402,18 @@ function! s:ListReferences() abort
   endif
 endfunction
 
+function! s:ImportSymbol() abort
+  if index(['typescript', 'typescript.tsx'], &ft) != -1
+    TsuImport
+    return
+  elseif &ft == 'go'
+    GoImports
+    return
+  else
+    return util#error_msg(printf('ImportSymbol: unsupported filetype: %s', &ft))
+  endif
+endfunction
+
 function! s:TrimWhitespace()
   if &modifiable == 0
     return
@@ -2879,11 +2891,12 @@ nnoremap <leader>4 :call <sid>ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
 " close auxiliary buffers
 nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
 
-" Tags
+" Tags / symbols
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
 nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
 nnoremap <leader>ge :call <sid>ListReferences()<cr>
+nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
