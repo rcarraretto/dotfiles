@@ -2134,6 +2134,21 @@ function! s:CycleWinRight()
   endif
 endfunction
 
+" Similar to :tabclose but land on the
+" last accessed tab.
+function! s:CloseTab() abort
+  let prev_tab_nr = tabpagenr()
+  " Go to last accessed tab
+  execute "normal! g\<tab>"
+  try
+    execute 'tabclose ' . prev_tab_nr
+  catch
+    echohl ErrorMsg
+    echom v:exception
+    echohl NONE
+  endtry
+endfunction
+
 function! GetSubstituteTerm()
   let str = GetSubstituteTerm2()
   " Make first char lower case,
@@ -2777,7 +2792,7 @@ nnoremap <leader>da :AbortDispatch<cr>
 nnoremap <silent> [r :tabprevious<cr>
 nnoremap <silent> ]r :tabnext<cr>
 nnoremap <leader>tn :tabnew<cr>
-nnoremap <leader>tc :tabclose<cr>
+nnoremap <leader>tc :call <sid>CloseTab()<cr>
 nnoremap <leader>th :tabm -1<cr>
 nnoremap <leader>tl :tabm +1<cr>
 
