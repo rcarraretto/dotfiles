@@ -2134,8 +2134,15 @@ function! s:CycleWinRight()
   endif
 endfunction
 
-" Similar to :tabclose but land on the
-" last accessed tab.
+" Similar to :quit but try to land on the previous window.
+" https://vi.stackexchange.com/a/9232
+function! s:CloseWindow() abort
+  let prev_win_nr = winnr()
+  wincmd p
+  execute prev_win_nr . "wincmd q"
+endfunction
+
+" Similar to :tabclose but land on the last accessed tab.
 function! s:CloseTab() abort
   let prev_tab_nr = tabpagenr()
   " Go to last accessed tab
@@ -2774,7 +2781,7 @@ nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
 nnoremap <space>w <c-w><c-w>
 " close window
-nnoremap <space>q :q<cr>
+nnoremap <space>q :call <sid>CloseWindow()<cr>
 nnoremap <space>Q :bd!<cr>
 " decrease window size
 nnoremap <space>, :20wincmd <<cr>
