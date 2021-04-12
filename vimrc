@@ -3063,6 +3063,10 @@ let g:dispatch_tmux_height = 3
 
 " Terminus
 let g:TerminusCursorShape = 0
+" attempt to fix issue with 'paste' being toggled on automatically.
+" similar issue to:
+" https://www.reddit.com/r/vim/comments/9uerhp/disable_insert_paste_mode/
+let g:TerminusBracketedPaste = 0
 
 " Pymode
 let g:pymode_folding = 0
