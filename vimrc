@@ -1793,6 +1793,10 @@ function! s:FzfExploreProject() abort
   let cmd2 = cmd2 . '| xargs -I GIT_PATH find GIT_PATH -maxdepth 3 -not -path "*/node_modules/*" -name package.json '
   let cmd2 = cmd2 . '| sed -n "s_/package.json__p"'
   let cmd = cmd2 . '; ' . cmd1 . ';'
+  " Ability to extend the command on dotfiles-private or dotfiles-work
+  if exists('g:fzf_explore_project_cmd')
+    let cmd = g:fzf_explore_project_cmd . ';' . cmd
+  endif
   call s:FzfExplorePaths(cmd)
 endfunction
 
