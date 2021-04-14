@@ -1863,7 +1863,7 @@ endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
 function! s:FzfNotes() abort
-  let cmd = 'find ' . s:GetNoteDirs() . ' -type f -name "*.txt" | sed "s|^$HOME|~|"'
+  let cmd = printf('find %s -type f \( -name "*.txt" -or -name "*.json" -or -name "*.xml" \) | sed "s|^$HOME|~|"', s:GetNoteDirs())
   call fzf#run(fzf#wrap({'source': cmd, 'options': ['--prompt', '[notes*] ']}))
 endfunction
 
