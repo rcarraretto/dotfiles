@@ -2374,6 +2374,26 @@ function! s:ResetFoldLevel()
   normal! zz
 endfunction
 
+function! s:PrintContextHeader() abort
+  if &ft == 'go'
+    " In Golang, print name of the current function.
+    let winview = winsaveview()
+    " go to top of function (vim-go)
+    noautocmd normal [[
+    let line = getline('.')
+    noautocmd execute "normal \<c-o>"
+    " fix scroll position that was changed by <c-o>
+    call winrestview(winview)
+    " Delay the echo.
+    " Else calling this function right after switching lines has the side effect
+    " of the echo being erased by some other code.
+    " Maybe this is related to some plugin using a Cursor autocmd.
+    call util#delayed_echo(line)
+  else
+    call util#error_msg("PrintContextHeader: unimplemented for filetype: " . &ft)
+  endif
+endfunction
+
 function! s:FormatParagraph() abort
   if getline('.')[0] == '|'
     " table (using easy-align)
@@ -2747,6 +2767,7 @@ nnoremap <f6> <c-i>
 
 " Reset foldlevel to 1
 nnoremap <silent> zf :call <sid>ResetFoldLevel()<cr>
+nnoremap <silent> zp :call <sid>PrintContextHeader()<cr>
 
 " Swap single quote and backtick
 nnoremap ' `
