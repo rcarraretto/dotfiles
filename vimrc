@@ -103,6 +103,8 @@ Plug 'mustache/vim-mustache-handlebars'
 Plug 'elixir-lang/vim-elixir'
 " Kotlin
 Plug 'udalov/kotlin-vim'
+" Terraform
+Plug 'hashivim/vim-terraform'
 " PowerShell
 Plug 'PProvost/vim-ps1'
 
