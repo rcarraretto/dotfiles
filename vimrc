@@ -419,10 +419,10 @@ augroup AutoChangeKeyboardLayout
   autocmd FocusLost    * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
   autocmd InsertEnter  * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
   autocmd InsertLeave  * call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-  autocmd CmdlineEnter / call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-  autocmd CmdlineLeave / call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-  autocmd CmdlineEnter ? call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-  autocmd CmdlineLeave ? call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
+"   autocmd CmdlineEnter / call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
+"   autocmd CmdlineLeave / call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
+"   autocmd CmdlineEnter ? call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
+"   autocmd CmdlineLeave ? call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
 augroup END
 
 if $USE_NETRW
