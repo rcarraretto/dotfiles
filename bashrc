@@ -109,5 +109,14 @@ if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
 fi
 
+# bash-completion
+# used by docker completion
+load-completion() {
+  BREW_PREFIX=$(brew --prefix)
+  if [ -f "$BREW_PREFIX/etc/bash_completion" ]; then
+    source "$BREW_PREFIX/etc/bash_completion"
+  fi
+}
+
 LOCAL_RC="$DOTFILES_PRIVATE/bashrc.local"
 test -f $LOCAL_RC && source $LOCAL_RC
