@@ -577,6 +577,7 @@ function! s:AutoCd() abort
   let dotfiles = [
         \ $DOTFILES_PUBLIC,
         \ $DOTFILES_PRIVATE,
+        \ $DOTFILES_HOME,
         \ $DOTFILES_WORK
         \ ]
   if index(dotfiles, git_root) >= 0 && get(g:, 'AUTO_CD_DOTFILES', 1) == 0
@@ -589,7 +590,7 @@ endfunction
 
 augroup AutoCd
   autocmd!
-  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/*,$DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/*,$DOTFILES_WORK/* :call s:AutoCd()
+  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/*,$DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/*,$DOTFILES_HOME/*,$DOTFILES_WORK/* :call s:AutoCd()
 augroup END
 
 function! s:Cd(cd_cmd, cd_dir) abort
@@ -1898,6 +1899,9 @@ endfunction
 
 function! s:GetDotfilesDirs() abort
   let dirs = [$DOTFILES_PUBLIC, $DOTFILES_PRIVATE]
+  if exists('$DOTFILES_HOME') && isdirectory($DOTFILES_HOME)
+    call add(dirs, fnameescape($DOTFILES_HOME))
+  endif
   if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK)
     call add(dirs, fnameescape($DOTFILES_WORK))
   endif
@@ -2866,8 +2870,8 @@ nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
 nnoremap <leader>en :<c-u>call <sid>FzfNotes()<cr>
 nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
 nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
-nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.local')<cr>
-if exists('$NOTES_WORK')
+nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.private')<cr>
+if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
   nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
 endif
 nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>

@@ -32,6 +32,8 @@ export HISTSIZE=1000
 
 export DOTFILES_PUBLIC="$HOME/work/dotfiles"
 export DOTFILES_PRIVATE="$HOME/work/dotfiles-private"
+export DOTFILES_HOME="$HOME/work/dotfiles-home"
+export DOTFILES_WORK="$HOME/work/dotfiles-work"
 
 alias sb='source ~/.bashrc'
 
@@ -118,5 +120,5 @@ load-completion() {
   fi
 }
 
-LOCAL_RC="$DOTFILES_PRIVATE/bashrc.local"
+LOCAL_RC="$DOTFILES_PRIVATE/bashrc.private"
 test -f $LOCAL_RC && source $LOCAL_RC
