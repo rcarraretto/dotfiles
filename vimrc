@@ -454,7 +454,7 @@ augroup FTOptions
   autocmd FileType go setlocal foldmethod=indent | setlocal foldlevel=20 | call s:GolangMappings()
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
-  autocmd FileType applescript setlocal commentstring=--\ %s
+  autocmd FileType applescript setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal commentstring=--\ %s
   " Avoid "crontab: temp file must be edited in place".
   " https://vi.stackexchange.com/a/138/24815
   autocmd FileType crontab setlocal backupcopy=yes
@@ -1695,6 +1695,10 @@ function! s:EditSketchBuffer(ft)
   \  'go': {
   \    'path': $DOTFILES_PRIVATE . '/src/sketch.go',
   \    'cmd': 'go run %'
+  \  },
+  \  'applescript': {
+  \    'path': $DOTFILES_PRIVATE . '/bin/sketch.applescript',
+  \    'cmd': '%'
   \  }
   \}
   if !has_key(configs, a:ft)
