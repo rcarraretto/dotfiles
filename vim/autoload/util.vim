@@ -350,22 +350,27 @@ function! util#ToggleOption(option_name, ...) abort
 endfunction
 
 function! util#SetTestTarget(opts) abort
-  let g:test_target = expand('%:p')
+  let g:test_file_target = expand('%:p')
   call util#TestCurrentTarget(a:opts)
 endfunction
 
 function! util#TestCurrentTarget(opts) abort
-  let target = get(g:, 'test_target', expand('%:p'))
+  let target = get(g:, 'test_file_target', expand('%:p'))
   if match(target, a:opts['test_file_regex']) == -1
-    return util#error_msg('util#TestCurrentTarget: Not a test file: ' . target)
+    return util#error_msg('util#TestCurrentTarget: not a test file: ' . target)
   endif
   call util#ExecTest(target, a:opts)
 endfunction
 
 function! util#ExecTest(target, opts) abort
-  let test_cmd = printf("%s --file=%s |& %s --cwd=%s",
+  let case_flag = ''
+  if exists('g:test_case_target')
+    let case_flag = printf(' --case=%s', g:test_case_target)
+  endif
+  let test_cmd = printf("%s --file=%s%s |& %s --cwd=%s",
         \ a:opts['test_cmd'],
         \ a:target,
+        \ case_flag,
         \ a:opts['parser'],
         \ getcwd()
         \)
@@ -384,4 +389,45 @@ function! util#AddTestMappings(opts) abort
   endif
   execute 'nnoremap <buffer> <leader>st :update <bar> call util#SetTestTarget(' . string(a:opts) . ')<cr>'
   execute 'nnoremap <buffer> <space>t :update <bar> call util#TestCurrentTarget(' . string(a:opts) . ')<cr>'
+  if has_key(a:opts, 'toggle_only_test_case_f')
+    execute 'nnoremap <buffer> <leader>to :call util#ToggleOnlyTestCase('
+          \ . string(a:opts['toggle_only_test_case_f']) . ', '
+          \ . string(a:opts['test_file_regex'])
+          \ ')<cr>'
+  endif
+endfunction
+
+function! util#ToggleOnlyTestCase(f, regex) abort
+  let path = expand('%:p')
+  if match(path, a:regex) == -1
+    return util#error_msg('util#ToggleOnlyTestCase: not a test file: ' . path)
+  endif
+  call function(a:f)()
+endfunction
+
+function! util#GolangToggleOnlyTestCase() abort
+  let save_pos = getpos('.')
+  " account for being exactly on the line of func definition
+  normal! $
+  let pat = '^func \zsTest[[:alnum:]_]\+'
+  let line_num = search(pat, 'bn')
+  if line_num == 0
+    call setpos('.', save_pos)
+    return util#error_msg('util#GolangToggleOnlyTestCase: test case not found')
+  endif
+  let line = getline(line_num)
+  let matches = matchlist(line, pat)
+  if len(matches) == 0
+    call setpos('.', save_pos)
+    return util#error_msg('util#GolangToggleOnlyTestCase: Could not match line: ' . line)
+  endif
+  let test_case = matches[0]
+  if get(g:, 'test_case_target', '') == test_case
+    unlet! g:test_case_target
+    echom "unlet g:test_case_target"
+  else
+    let g:test_case_target = test_case
+    echom printf("g:test_case_target = %s", g:test_case_target)
+  endif
+  call setpos('.', save_pos)
 endfunction
