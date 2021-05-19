@@ -348,3 +348,40 @@ function! util#ToggleOption(option_name, ...) abort
   endif
   return updated_value
 endfunction
+
+function! util#SetTestTarget(opts) abort
+  let g:test_target = expand('%:p')
+  call util#TestCurrentTarget(a:opts)
+endfunction
+
+function! util#TestCurrentTarget(opts) abort
+  let target = get(g:, 'test_target', expand('%:p'))
+  if match(target, a:opts['test_file_regex']) == -1
+    return util#error_msg('util#TestCurrentTarget: Not a test file: ' . target)
+  endif
+  call util#ExecTest(target, a:opts)
+endfunction
+
+function! util#ExecTest(target, opts) abort
+  let test_cmd = printf("%s --file=%s |& %s --cwd=%s",
+        \ a:opts['test_cmd'],
+        \ a:target,
+        \ a:opts['parser'],
+        \ getcwd()
+        \)
+  execute printf('Dispatch -compiler=rc_compiler %s', test_cmd)
+endfunction
+
+function! util#AddTestMappings(opts) abort
+  if !has_key(a:opts, 'test_cmd')
+    return util#error_msg('util#AddTestMappings: opts is missing "test_cmd" key')
+  endif
+  if !has_key(a:opts, 'parser')
+    return util#error_msg('util#AddTestMappings: opts is missing "parser" key')
+  endif
+  if !has_key(a:opts, 'test_file_regex')
+    return util#error_msg('util#AddTestMappings: opts is missing "test_file_regex" key')
+  endif
+  execute 'nnoremap <buffer> <leader>st :update <bar> call util#SetTestTarget(' . string(a:opts) . ')<cr>'
+  execute 'nnoremap <buffer> <space>t :update <bar> call util#TestCurrentTarget(' . string(a:opts) . ')<cr>'
+endfunction
