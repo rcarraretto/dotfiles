@@ -395,12 +395,26 @@ function! util#AddTestMappings(opts) abort
           \ . string(a:opts['test_file_regex'])
           \ ')<cr>'
   endif
+  if has_key(a:opts, 'reset_only_test_case_f')
+    execute 'nnoremap <buffer> <leader>tr :call util#ResetOnlyTestCase('
+          \ . string(a:opts['reset_only_test_case_f']) . ', '
+          \ . string(a:opts['test_file_regex'])
+          \ ')<cr>'
+  endif
 endfunction
 
 function! util#ToggleOnlyTestCase(f, regex) abort
   let path = expand('%:p')
   if match(path, a:regex) == -1
     return util#error_msg('util#ToggleOnlyTestCase: not a test file: ' . path)
+  endif
+  call function(a:f)()
+endfunction
+
+function! util#ResetOnlyTestCase(f, regex) abort
+  let path = expand('%:p')
+  if match(path, a:regex) == -1
+    return util#error_msg('util#ResetOnlyTestCase: not a test file: ' . path)
   endif
   call function(a:f)()
 endfunction
@@ -430,4 +444,9 @@ function! util#GolangToggleOnlyTestCase() abort
     echom printf("g:test_case_target = %s", g:test_case_target)
   endif
   call setpos('.', save_pos)
+endfunction
+
+function! util#GolangResetOnlyTestCase() abort
+  unlet! g:test_case_target
+  echom "unlet g:test_case_target"
 endfunction
