@@ -490,6 +490,7 @@ augroup SpecialFiles
     \| let b:skip_cursor_line=1
     \| let b:parenmatch=0
     \| setlocal nonumber norelativenumber
+  autocmd BufRead /var/tmp/test-results.txt let b:skip_trim_whitespace = 1
   " Apparently Karabiner likes to save this file without an EOL
   autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
   autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
