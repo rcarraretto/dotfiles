@@ -367,7 +367,7 @@ function! util#ExecTest(target, opts) abort
   if exists('g:test_case_target')
     let case_flag = printf(' --case=%s', g:test_case_target)
   endif
-  let test_cmd = printf("%s --file=%s%s |& tovimqf --parser=%s --cwd=%s",
+  let test_cmd = printf("set -o pipefail; %s --file=%s%s |& tovimqf --parser=%s --cwd=%s",
         \ a:opts['test_cmd'],
         \ a:target,
         \ case_flag,
