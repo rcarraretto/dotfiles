@@ -355,7 +355,10 @@ function! util#SetTestTarget(opts) abort
 endfunction
 
 function! util#TestCurrentTarget(opts) abort
-  let target = get(g:, 'test_file_target', expand('%:p'))
+  if !exists('g:test_file_target')
+    let g:test_file_target = expand('%:p')
+  endif
+  let target = g:test_file_target
   if match(target, a:opts['test_file_regex']) == -1
     return util#error_msg('util#TestCurrentTarget: not a test file: ' . target)
   endif
