@@ -105,7 +105,18 @@ function! util#inputlist(list, ...) abort
   endif
   let s:inputlist = a:list
   echohl String
-  let user_input = input(msg, '', 'custom,util#inputlist_complete')
+  if len(a:list) < 10
+    for line in split(msg, "\n")
+      echo line
+    endfor
+    " use getchar() to immediately collect the number,
+    " without needing to press enter.
+    let user_input = nr2char(getchar())
+    " erase text that has been echoed so far
+    redraw
+  else
+    let user_input = input(msg, '', 'custom,util#inputlist_complete')
+  endif
   echohl none
   if empty(user_input)
     " User pressed <cr> or <esc>.
