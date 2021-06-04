@@ -2963,6 +2963,9 @@ nnoremap <space>] :Tags<cr>
 nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
 nnoremap <leader>ge :call <sid>ListReferences()<cr>
 nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
+" account for YouCompleteMe getting stuck with Golang
+nnoremap <leader>yf :YcmForceCompileAndDiagnostics<cr>
+nnoremap <leader>yr :YcmRestartServer<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
