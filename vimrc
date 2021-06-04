@@ -29,7 +29,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
-Plug 'Valloric/YouCompleteMe', { 'commit': '4904077bec593da031a73c972dfc516544f72f78' }
+Plug 'Valloric/YouCompleteMe', { 'commit': '4df6f35f0c9f9aec21a3f567397496b5dee6acc7' }
 Plug 'AndrewRadev/splitjoin.vim'
 
 " >>> Support <<<
