@@ -118,7 +118,7 @@ function! util#inputlist(list, ...) abort
     let user_input = input(msg, '', 'custom,util#inputlist_complete')
   endif
   echohl none
-  if empty(user_input)
+  if empty(user_input) || user_input == "\r" || user_input == "\e"
     " User pressed <cr> or <esc>.
     "
     " Delayed echo is used to avoid:
