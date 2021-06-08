@@ -465,7 +465,6 @@ augroup FTOptions
   autocmd FileType agit call s:AgitConfig()
   " when calling setqflist(), the status line is reset
   autocmd FileType qf call s:SetStatusline()
-  autocmd FileType javascript,typescript,typescript.tsx,go,json,markdown,html,yaml,xml nnoremap <buffer> <leader>gp :Prettier<cr>
   autocmd FileType pem setlocal foldmethod=marker | setlocal foldmarker=-----BEGIN,-----END | setlocal foldlevel=20
 augroup END
 
@@ -2018,7 +2017,7 @@ function! s:FilterBufferOrFail(cmd) abort
   return output
 endfunction
 
-function! s:Prettier() abort
+function! s:Prettier(mode) abort
   let prettier_parsers={
   \ 'json': 'json',
   \ 'javascript': 'babel',
@@ -2028,7 +2027,7 @@ function! s:Prettier() abort
   \ 'html': 'html',
   \ 'yaml': 'yaml'
   \}
-  let adhoc_fts = ['xml', 'go']
+  let adhoc_fts = ['xml', 'go', 'sql']
   let supported_ft = has_key(prettier_parsers, &ft) || index(adhoc_fts, &ft) >= 0
 
   if !supported_ft
@@ -2059,6 +2058,18 @@ function! s:Prettier() abort
       call system('go fmt ' . expand('%:p'))
       silent checktime
       return
+    elseif &ft == 'sql'
+      if a:mode == 'V'
+        let range = "'<,'>"
+      else
+        let range = '%'
+      endif
+      " https://github.com/zeroturnaround/sql-formatter
+      let cmd = 'sql-formatter --lines-between-queries=2'
+      if exists('b:sql_language')
+        let cmd .= ' --language=' . b:sql_language
+      endif
+      execute range . '!' . cmd
     else
       return util#error_msg('Unimplemented filetype: ' . &ft)
     endif
@@ -2067,7 +2078,7 @@ function! s:Prettier() abort
   call setpos('.', save_pos)
   silent! update
 endfunction
-command! Prettier call s:Prettier()
+command! Prettier call s:Prettier('')
 
 function! s:HighestWinnr()
   let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
@@ -3028,6 +3039,9 @@ vnoremap <leader>gh :Gbrowse<cr>
 " open repo in SourceTree
 nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
 
+" Formatting
+nnoremap <leader>gp :call <sid>Prettier('')<cr>
+vnoremap <leader>gp :<c-u>call <sid>Prettier(visualmode())<cr>
 " Format paragraph
 nnoremap <space>\ :call <sid>FormatParagraph()<cr>
 
