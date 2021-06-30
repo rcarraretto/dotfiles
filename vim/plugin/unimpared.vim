@@ -35,7 +35,7 @@ endfunction
 
 call s:MapNextFamily('a','')
 call s:MapNextFamily('q','c')
-call s:MapNextFamily('c','l')
+call s:MapNextFamily('l','l')
 call s:MapNextFamily('b','b')
 
 function! s:entries(path)
