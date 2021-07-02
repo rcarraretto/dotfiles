@@ -40,13 +40,10 @@ alias sb='source ~/.bashrc'
 # ls
 # -G: color
 # -F: append '/' to directories, '*' to executables, etc.
-# -l: list in long format
-# -h: human-readable file sizes
-#
-# use \ls to bypass these aliases
-# https://stackoverflow.com/a/16506263/2277505
 alias ls='ls -GF'
-alias ll='ls -lhGF'
+# -A: show everything, but don't show '.' and '..'
+# -1: only show file names
+alias ll='ls -GFA1'
 
 source ~/.bash_aliases
 
