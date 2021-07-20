@@ -2166,6 +2166,22 @@ function! s:CycleWinRight()
   endif
 endfunction
 
+function! s:ToggleWindowSize() abort
+  if &columns - winwidth(0) < 10
+    " if the size of the current window is close enough to the size of the
+    " terminal, make window sizes even.
+    "
+    " Note: The size of the current window and the terminal will not exactly
+    " match when other windows were pushed away via 'wincmd _' and 'wincmd |'.
+    " The other windows are shrinked to be ~1 column long.
+    wincmd =
+  else
+    " maximize size of current window
+    wincmd _
+    wincmd |
+  endif
+endfunction
+
 " Similar to :quit but try to land on the previous window.
 " https://vi.stackexchange.com/a/9232
 function! s:CloseWindow() abort
@@ -2840,6 +2856,8 @@ nnoremap <space>Q :bd!<cr>
 nnoremap <space>, :20wincmd <<cr>
 " increase window size
 nnoremap <space>. :20wincmd ><cr>
+" toggle window size (maximize / make even)
+nnoremap <leader>ww :call <sid>ToggleWindowSize()<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
