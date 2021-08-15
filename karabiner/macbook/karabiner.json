@@ -115,7 +115,7 @@
                         ]
                     },
                     {
-                        "description": "Change Control+I to F6 in Vim",
+                        "description": "vim: Change Control+I to F6",
                         "manipulators": [
                             {
                                 "conditions": [
@@ -142,6 +142,28 @@
                                         "key_code": "f6"
                                     }
                                 ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Dota 2: backspace as mouse right-click",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "com.valvesoftware.dota2"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "delete_or_backspace"
+                                },
+                                "to": {
+                                    "pointing_button": "button2"
+                                },
                                 "type": "basic"
                             }
                         ]
