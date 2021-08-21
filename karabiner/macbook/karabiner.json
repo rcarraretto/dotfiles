@@ -21,13 +21,10 @@
                             {
                                 "conditions": [
                                     {
-                                        "identifiers": [
-                                            {
-                                                "product_id": 258,
-                                                "vendor_id": 10730
-                                            }
+                                        "bundle_identifiers": [
+                                            "com.valvesoftware.dota2"
                                         ],
-                                        "type": "device_unless"
+                                        "type": "frontmost_application_unless"
                                     }
                                 ],
                                 "from": {
@@ -167,6 +164,28 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "Dota 2: caps lock to backspace",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "com.valvesoftware.dota2"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "caps_lock"
+                                },
+                                "to": {
+                                    "key_code": "delete_or_backspace"
+                                },
+                                "type": "basic"
+                            }
+                        ]
                     }
                 ]
             },
@@ -233,7 +252,7 @@
                         "vendor_id": 10730
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": true,
+                    "manipulate_caps_lock_led": false,
                     "simple_modifications": [
                         {
                             "from": {
