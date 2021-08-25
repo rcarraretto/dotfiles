@@ -381,10 +381,17 @@ function! util#ExecTest(target, opts) abort
   if exists('g:test_case_target')
     let case_flag = printf(' --case=%s', g:test_case_target)
   endif
-  let test_cmd = printf("set -o pipefail; %s --file=%s%s |& tovimqf --parser=%s --cwd=%s",
-        \ a:opts['test_cmd'],
-        \ a:target,
-        \ case_flag,
+  if a:target == ''
+    let core_cmd = a:opts['test_cmd']
+  else
+    let core_cmd = printf("%s --file=%s%s",
+          \ a:opts['test_cmd'],
+          \ a:target,
+          \ case_flag
+          \)
+  endif
+  let test_cmd = printf("set -o pipefail; %s |& tovimqf --parser=%s --cwd=%s",
+        \ core_cmd,
         \ a:opts['parser'],
         \ getcwd()
         \)
@@ -403,6 +410,7 @@ function! util#AddTestMappings(opts) abort
   endif
   execute 'nnoremap <buffer> <leader>st :update <bar> call util#SetTestTarget(' . string(a:opts) . ')<cr>'
   execute 'nnoremap <buffer> <space>t :update <bar> call util#TestCurrentTarget(' . string(a:opts) . ')<cr>'
+  execute 'nnoremap <buffer> <space>T :update <bar> call util#ExecTest('''', ' . string(a:opts) . ')<cr>'
   if has_key(a:opts, 'toggle_only_test_case_f')
     execute 'nnoremap <buffer> <leader>to :call util#ToggleOnlyTestCase('
           \ . string(a:opts['toggle_only_test_case_f']) . ', '
