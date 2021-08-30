@@ -2353,7 +2353,10 @@ endfunction
 function! s:AgSetHighlight(args) abort
   " Note: This does not properly translate an 'ag' pattern to a vim regex.
   " e.g. \bbatata\b should become \<batata\>
-  let @/ = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
+  let s = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
+  " Escape forward slash, so @/ can be used later with :substitute
+  " (e.g. GetSubstituteTerm())
+  let @/ = escape(s, '/')
   call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
 endfunction
 
