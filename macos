@@ -63,6 +63,11 @@ defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 14
 # Download newly available updates in background
 defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
 
+# Disable window animations
+# e.g. when opening a new Chrome window
+# https://apple.stackexchange.com/a/63477
+defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+
 #----------------------------------------------------------------------------
 # Hammerspoon
 
