@@ -2025,6 +2025,7 @@ function! s:Prettier(mode) abort
   \ 'typescript.tsx': 'typescript',
   \ 'markdown': 'markdown',
   \ 'html': 'html',
+  \ 'css': 'css',
   \ 'yaml': 'yaml'
   \}
   let adhoc_fts = ['xml', 'go', 'sql']
