@@ -20,7 +20,7 @@ Plug 'danielwe/base16-vim', { 'commit': '4533d1ccab2483deabc743e51321d29a259a819
 
 " >>> Search <<<
 Plug 'mileszs/ack.vim'
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim', { 'commit': 'e393108bfae7ab308aa6ea38e0df19253cdc8499' }
 
 " >>> Text editing (Part 1) <<<
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -40,7 +40,7 @@ Plug 'wincent/terminus'
 Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
 " git
-Plug 'tpope/vim-fugitive', { 'commit': 'c452181975761f8b055b88eb1c98f736323510fd' }
+Plug 'tpope/vim-fugitive', { 'commit': '194d63da4f7111c156109375e8ca153f19b245cb' }
 " github support for fugitive
 Plug 'tpope/vim-rhubarb'
 " gitlab support for fugitive
@@ -89,7 +89,6 @@ Plug 'junegunn/vim-easy-align'
 " Typescript
 Plug 'leafgarland/typescript-vim', { 'commit': '09cf6a6ecdef11cd32d38213093cfe86660255aa' }
 Plug 'Quramy/tsuquyomi', { 'commit': '785af7476e0db2522372ef585c86947fc5625c81' }
-Plug 'jparise/vim-graphql'
 Plug 'peitalin/vim-jsx-typescript'
 " Python
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
@@ -104,9 +103,7 @@ Plug 'elixir-lang/vim-elixir'
 " Kotlin
 Plug 'udalov/kotlin-vim'
 " Terraform
-Plug 'hashivim/vim-terraform'
-" PowerShell
-Plug 'PProvost/vim-ps1'
+Plug 'hashivim/vim-terraform', { 'commit': '9166d42e5dc9bc0ef7e1b9e93d52bb4c5b923560' }
 
 call plug#end()
 " }}}
