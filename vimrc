@@ -3050,9 +3050,9 @@ nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
 " Git
 nnoremap <space>u :call ToggleGStatus()<cr>
-nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>go :Gcommit<cr>
+nnoremap <leader>go :Git commit<cr>
 nnoremap <leader>gh :<c-r>=line('.')<cr>Gbrowse<cr>
 vnoremap <leader>gh :Gbrowse<cr>
 " open repo in SourceTree
