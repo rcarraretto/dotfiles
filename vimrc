@@ -2291,40 +2291,6 @@ function! s:GetScriptFunc(scriptpath, funcname)
   endtry
 endfunction
 
-" Adapt :History from fzf.vim,
-" to cope with dirvish.vim
-"
-" Expected Behavior of --header-lines
-" - when editing a file, the current file will be a header
-" - else (e.g., quickfix, dirvish), there will be no header
-"
-" To achieve this, the original implementation sets --header-lines 1,
-" when there is a buffer-name.
-"
-" However, dirvish sets the buffer-name.
-" As a consequence, :History gains a header when called from dirvish buffer.
-"
-function! s:FzfHistory(...)
-  " To make this supposedly simpler, we copy the body of the fzf#vim#history.
-  " Then we use a hack to access script-scope functions from fzf.vim.
-  " 1) Call any function to trigger the sourcing fzf.vim autoload.
-  call fzf#vim#_uniq([])
-  " 2) Use a hack to get the script-scope functions
-  let Fzf = s:GetScriptFunc('autoload/fzf/vim.vim', 'fzf')
-  let All_files = s:GetScriptFunc('autoload/fzf/vim.vim', 'all_files')
-  if empty(Fzf) || empty(All_files)
-    return
-  endif
-  " 3) Adapt
-  " if buffer-name is set and it's not a directory, then put a header
-  let header = !empty(expand('%')) && !isdirectory(expand('%'))
-  return Fzf('history-files', {
-  \ 'source':  All_files(),
-  \ 'options': ['-m', '--header-lines', header, '--prompt', 'Hist> ']
-  \}, a:000)
-endfunction
-command! -bang -nargs=* FzfHistory call s:FzfHistory(<bang>0)
-
 function! s:StatelessGrep(prg, format, args) abort
   let prg_back = &l:grepprg
   let format_back = &grepformat
@@ -2924,7 +2890,7 @@ nnoremap <leader>oo :execute "Files " . g:original_cwd<cr>
 " browse current folder (non-recursive)
 nnoremap <leader>of :call <sid>FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
 " browse history
-nnoremap <space>m :WrapCommand FzfHistory<cr>
+nnoremap <space>m :WrapCommand History<cr>
 " browse dotfiles
 nnoremap <leader>od :call <sid>FzfDotfiles()<cr>
 " browse node_modules
