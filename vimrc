@@ -35,7 +35,7 @@ Plug 'AndrewRadev/splitjoin.vim'
 " >>> Support <<<
 Plug 'tpope/vim-dispatch'
 " focus reporting
-Plug 'wincent/terminus'
+Plug 'wincent/terminus', { 'commit': '340ea44dfec58c9d48e46c97c90896ed04e2a264' }
 " file system commands
 Plug 'tpope/vim-eunuch'
 Plug 'janko-m/vim-test'
