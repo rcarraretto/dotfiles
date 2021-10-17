@@ -422,12 +422,6 @@ augroup AutoChangeKeyboardLayout
 "   autocmd CmdlineLeave ? call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
 augroup END
 
-if $USE_NETRW
-  augroup CancelNetrw
-    autocmd VimEnter * silent! autocmd! FileExplorer
-  augroup END
-endif
-
 augroup FTOptions
   autocmd!
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0 | call s:VimscriptMappings()
