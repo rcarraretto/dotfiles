@@ -50,7 +50,7 @@ Plug 'cohama/agit.vim'
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
 " directory viewer (replaces netrw)
 if !$USE_NETRW
-  Plug 'justinmk/vim-dirvish'
+  Plug 'justinmk/vim-dirvish', { 'commit': 'f297b2effb0ec879f33a8539b9701d048d44f295' }
 endif
 
 " highlight matching parentheses.
