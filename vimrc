@@ -1783,9 +1783,6 @@ endfunction
 function! s:ExploreProject(edit_cmd, selection) abort
   let path = a:selection[0]
   execute a:edit_cmd . ' ' . path . " | lcd " . path
-  " Somehow the statusline doesn't get properly rendered,
-  " when calling this from FzfExploreProject().
-  call s:SetStatusline()
 endfunction
 
 function! s:FzfExploreProject() abort
