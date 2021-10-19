@@ -3013,8 +3013,8 @@ nnoremap <space>u :call ToggleGStatus()<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>go :Git commit<cr>
-nnoremap <leader>gh :<c-r>=line('.')<cr>Gbrowse<cr>
-vnoremap <leader>gh :Gbrowse<cr>
+nnoremap <leader>gh :<c-r>=line('.')<cr>GBrowse<cr>
+vnoremap <leader>gh :GBrowse<cr>
 " open repo in SourceTree
 nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
 
