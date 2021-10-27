@@ -409,19 +409,6 @@ augroup vimrcEx
         \ endif
 augroup END
 
-augroup AutoChangeKeyboardLayout
-  let s:is_insert_or_search = 0
-  autocmd!
-  autocmd FocusGained  * if s:is_insert_or_search == 0 | call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | endif
-  autocmd FocusLost    * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
-  autocmd InsertEnter  * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-  autocmd InsertLeave  * call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-"   autocmd CmdlineEnter / call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-"   autocmd CmdlineLeave / call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-"   autocmd CmdlineEnter ? call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-"   autocmd CmdlineLeave ? call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-augroup END
-
 augroup FTOptions
   autocmd!
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0 | call s:VimscriptMappings()
@@ -653,29 +640,6 @@ function! s:VimEnter()
   command! Remove Delete
 
   call writefile([], "/var/tmp/vim-messages.txt")
-endfunction
-
-" Use vim-compatible keyboard layout when in normal mode.
-" When in insert mode, switch back to the original keyboard layout.
-"
-" https://stackoverflow.com/q/10983604/2277505
-" Based on https://github.com/ironhouzi/bikey-vim/blob/master/plugin/bikey.vim
-"
-function! s:ToggleKeyboardLayout(hsFuncName) abort
-  if !get(g:, 'auto_change_keyboard_layout', 1)
-    return
-  endif
-  " If Hammerspoon is off, the command will take too much time to respond
-  " and vim will be blocked.
-  " In that case, this function can be aborted with Ctrl-C and
-  " the feature will be turned off altogether.
-  let g:auto_change_keyboard_layout = 0
-  let out = system(printf("hs -c '%s()'", a:hsFuncName))
-  if v:shell_error
-    echoerr printf('%s: %s', a:hsFuncName, out)
-    return
-  endif
-  let g:auto_change_keyboard_layout = 1
 endfunction
 
 function! s:DisarmPluginGuard() abort
@@ -3101,10 +3065,6 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
-endif
-
-if !executable('hs')
-  let g:auto_change_keyboard_layout = 0
 endif
 
 " Ack.vim

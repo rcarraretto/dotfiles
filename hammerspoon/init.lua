@@ -210,27 +210,6 @@ hs.hotkey.bind(shift_hyper, "`", function()
   setMethod(next_method)
 end)
 
-function switchToPreviousKeyboardLayout()
-  if prev_method then
-    return setMethod(prev_method, false)
-  end
-  if prev_source_id then
-    return setSourceId(prev_source_id, false)
-  end
-end
-
-function switchToStandardKeyboardLayout()
-  local target_source_id = "com.apple.keylayout.Brazilian"
-  if hs.keycodes.currentSourceID() == target_source_id then
-    prev_method = nil
-    prev_source_id = nil
-    return
-  end
-  prev_method = hs.keycodes.currentMethod()
-  prev_source_id = hs.keycodes.currentSourceID()
-  setSourceId(target_source_id, false)
-end
-
 function getKeyboardLayout()
   local method = hs.keycodes.currentMethod()
   if method then
