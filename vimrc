@@ -19,7 +19,6 @@ Plug 'junegunn/vim-plug'
 Plug 'danielwe/base16-vim', { 'commit': '4533d1ccab2483deabc743e51321d29a259a819e' }
 
 " >>> Search <<<
-Plug 'mileszs/ack.vim'
 Plug 'junegunn/fzf.vim', { 'commit': 'e393108bfae7ab308aa6ea38e0df19253cdc8499' }
 
 " >>> Text editing (Part 1) <<<
@@ -3036,9 +3035,6 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   let g:ackhighlight = 1
 endif
-
-" Ack.vim
-let g:ack_apply_qmappings = 0
 
 " fzf
 " extend actions with mapping to open in system editor
