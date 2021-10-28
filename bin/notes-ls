@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+[ "${TRACE:-}" ] && set -x
+
+usage() {
+  echo "usage:
+  $(basename "$0") [--all]"
+}
+
+opt_all=0
+for i in "$@"; do
+  case "$i" in
+    --all)
+      opt_all=1
+      shift
+      ;;
+    *)
+      echo "Unknown argument: $i"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+dirs=()
+if [ -d "$HOME/Dropbox/notes-home" ]; then
+  dirs+=("$HOME/Dropbox/notes-home")
+fi
+if [ -d "$NOTES_WORK" ]; then
+  dirs+=("$NOTES_WORK")
+fi
+dirs+=("$HOME/Dropbox/notes")
+
+args=()
+if [ $opt_all -eq 0 ]; then
+  args+=(-not -path '*/archive/*')
+  args+=(\( -name "*.txt" -or -name "*.json" -or -name "*.xml" \))
+fi
+
+find "${dirs[@]}" -type f "${args[@]}" \
+  | sed "s|^$HOME|~|"

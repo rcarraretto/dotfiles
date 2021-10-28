@@ -1827,11 +1827,6 @@ function! s:SearchNotes(input) abort
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
-function! s:FzfNotes() abort
-  let cmd = printf('find %s -type f \( -name "*.txt" -or -name "*.json" -or -name "*.xml" \) | sed "s|^$HOME|~|"', s:GetNoteDirs())
-  call fzf#run(fzf#wrap({'source': cmd, 'options': ['--prompt', '[notes*] ']}))
-endfunction
-
 function! s:GetNoteDirs() abort
   let dirs = ['~/Dropbox/notes/']
   if isdirectory($HOME . '/Dropbox/notes-home')
@@ -1841,6 +1836,20 @@ function! s:GetNoteDirs() abort
     call add(dirs, fnameescape($NOTES_WORK))
   endif
   return join(dirs, ' ')
+endfunction
+
+function! s:FzfNotes(all) abort
+  if a:all
+    let cmd = 'notes-ls --all'
+    let prompt = '[notes(all)] '
+  else
+    let cmd = 'notes-ls'
+    let prompt = '[notes] '
+  endif
+  call fzf#run(fzf#wrap({
+        \'source': cmd,
+        \'options': ['--prompt', prompt]
+        \}))
 endfunction
 
 function! s:SearchDotfiles(input) abort
@@ -2865,7 +2874,8 @@ nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
 nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :<c-u>call <sid>FzfNotes()<cr>
+nnoremap <leader>en :<c-u>call <sid>FzfNotes(0)<cr>
+nnoremap <leader>eN :<c-u>call <sid>FzfNotes(1)<cr>
 nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
 nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
 nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.private')<cr>
