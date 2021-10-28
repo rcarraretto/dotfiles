@@ -37,7 +37,6 @@ Plug 'tpope/vim-dispatch'
 Plug 'wincent/terminus', { 'commit': '340ea44dfec58c9d48e46c97c90896ed04e2a264' }
 " file system commands
 Plug 'tpope/vim-eunuch'
-Plug 'janko-m/vim-test'
 " git
 Plug 'tpope/vim-fugitive', { 'commit': '194d63da4f7111c156109375e8ca153f19b245cb' }
 " github support for fugitive
