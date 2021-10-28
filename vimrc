@@ -43,7 +43,6 @@ Plug 'tpope/vim-fugitive', { 'commit': '194d63da4f7111c156109375e8ca153f19b245cb
 Plug 'tpope/vim-rhubarb'
 " gitlab support for fugitive
 Plug 'shumphrey/fugitive-gitlab.vim'
-Plug 'cohama/agit.vim'
 " debugging vim / vimscript
 Plug 'tpope/vim-scriptease', { 'commit': '386f19cd92f7b30cd830784ae22ebbe7033564aa' }
 " directory viewer (replaces netrw)
@@ -92,16 +91,20 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 " Golang
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'commit': '2855115efb1dd8a5f4436a80138633a1cb5d9f0c' }
-" Applescript
-Plug 'vim-scripts/applescript.vim'
-" Handlebars
-Plug 'mustache/vim-mustache-handlebars'
-" Elixir
-Plug 'elixir-lang/vim-elixir'
-" Kotlin
-Plug 'udalov/kotlin-vim'
 " Terraform
 Plug 'hashivim/vim-terraform', { 'commit': '9166d42e5dc9bc0ef7e1b9e93d52bb4c5b923560' }
+" Applescript
+Plug 'vim-scripts/applescript.vim'
+
+" >>> Used occasionally <<<
+" Git log viewer
+" Plug 'cohama/agit.vim'
+" Handlebars
+" Plug 'mustache/vim-mustache-handlebars'
+" Kotlin
+" Plug 'udalov/kotlin-vim'
+" Elixir
+" Plug 'elixir-lang/vim-elixir'
 
 call plug#end()
 " }}}
