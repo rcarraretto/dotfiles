@@ -608,8 +608,6 @@ endfunction
 " Functions ---------------------- {{{
 
 function! s:VimEnter()
-  let g:original_cwd = getcwd()
-
   " Remove arguments from arglist.
   "
   " The arglist can be used by dirvish to select files,
@@ -2892,8 +2890,6 @@ nnoremap <leader>et :call <sid>EditTestFile()<cr>
 nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
 nnoremap <space>O :GFiles<cr>
-" browse original cwd
-nnoremap <leader>oo :execute "Files " . g:original_cwd<cr>
 " browse current folder (non-recursive)
 nnoremap <leader>of :call <sid>FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
 " browse history
