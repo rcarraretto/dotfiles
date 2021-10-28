@@ -236,6 +236,10 @@ function! GetExtendedFileInfo() abort
     let length = printf('ts: %s sts: %s sw: %s', &tabstop, &softtabstop, &shiftwidth)
   endif
   let str .=  printf(' | %s %s', type, length)
+  " filetype
+  if !empty(&filetype)
+    let str .= printf(' | %s', &filetype)
+  endif
   return str
 endfunction
 
@@ -297,11 +301,6 @@ function! s:SetStatusline(...)
   setlocal statusline+=%=  " left/right separator
   if isActiveWindow && winwidth('.') > 50
     setlocal statusline+=%{GetExtendedFileInfo()}
-    let showFt = (index(['qf', ''], &filetype) == -1) && !get(b:, 'statusline_skip_ft')
-    if showFt
-      call s:SetStatuslineSeparator()
-      setlocal statusline+=%{&ft} " filetype
-    endif
     call s:SetStatuslineSeparator()
     call s:SetStatuslineLineNums()  " line number / number of lines
     call s:SetStatuslineSeparator()
