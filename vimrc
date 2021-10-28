@@ -322,17 +322,10 @@ endfunction
 let $BASH_ENV = "~/.bash_aliases"
 
 function! s:SetHighlight() abort
-  " Remove underline from cursor line
-  " https://stackoverflow.com/a/58181112/2277505
-  highlight CursorLineNr cterm=bold
-
-  " Change for base16-default-dark colorscheme
-  " colorcolumn + search highlighting doesn't work well
-  " because base16 Search changes the fgcolor of search
-  " to be the same as colorcolumn
-  " making search invisible in colorcolumn
+  " Override base16-default-dark Search highlight
+  " Simply add underline, instead of changing fg and bg
   highlight Search ctermbg=none ctermfg=none cterm=underline,bold
-  " Distinguish Folded bg from CursorLine bg
+  " Don't use different bg when Folded
   highlight Folded ctermbg=00
 
   " Change error style.
@@ -419,7 +412,6 @@ augroup FTOptions
   autocmd FileType ntx setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
     \| setlocal foldmethod=marker
     \| setlocal commentstring=#\ %s
-    \| setlocal nocursorline | let b:skip_cursor_line=1
     \| setlocal conceallevel=2 concealcursor=nvc
   autocmd FileType javascript,typescript,typescript.tsx setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript.tsx setlocal commentstring=//\ %s
@@ -463,8 +455,6 @@ augroup END
 augroup SpecialFiles
   autocmd!
   autocmd BufRead /var/tmp/vim-messages.txt,/private/var/tmp/vim-messages.txt set ft=vim_log
-    \| let b:skip_color_column=1
-    \| let b:skip_cursor_line=1
     \| let b:parenmatch=0
     \| setlocal nonumber norelativenumber
   autocmd BufRead /var/tmp/test-results.txt let b:skip_trim_whitespace = 1
@@ -1259,50 +1249,12 @@ function! s:ToggleListChars()
   endif
 endfunction
 
-function! s:ToggleCursorFocusIndicators() abort
-  let updated1 = util#ToggleGlobalVar('skip_cursor_line')
-  let updated2 = util#ToggleGlobalVar('skip_color_column')
-  echom printf("ToggleCursorFocusIndicators: %s %s", updated1, updated2)
-endfunction
-
-function! s:ShouldColorColumn()
-  if get(g:, 'skip_color_column')
-    return 0
-  endif
-  if get(b:, 'skip_color_column')
-    return 0
-  endif
-  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'rc_git_diff', 'fugitive', 'fugitiveblame'], &filetype) == -1
-endfunction
-
-function! s:ShouldCursorLine()
-  if get(g:, 'skip_cursor_line')
-    return 0
-  endif
-  if get(b:, 'skip_cursor_line')
-    return 0
-  endif
-  return index(['agit_diff', 'rc_git_diff'], &filetype) == -1
-endfunction
-
 function! s:OnWinEnter()
-  if s:ShouldCursorLine()
-    setlocal cursorline
-  endif
   call s:SetStatusline()
-  if s:ShouldColorColumn()
-    let &l:colorcolumn='0'
-  endif
 endfunction
 
 function! s:OnWinLeave()
-  setlocal nocursorline
   call s:SetStatusline(0)
-  if s:ShouldColorColumn()
-    let &l:colorcolumn=join(range(1, 255), ',')
-  else
-    let &l:colorcolumn='0'
-  endif
 endfunction
 
 function! s:DisableSyntaxForLargeFiles()
@@ -2593,7 +2545,6 @@ function! s:ViewFormattedJson(str, split_count) abort
   endif
   call s:SplitFromCount(a:split_count)
   setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-  let b:skip_color_column = 1
   call setline(1, str)
   set ft=json
   silent %!python -m json.tool
@@ -2622,7 +2573,6 @@ function! s:PreviewJsonFieldValue() abort
   endif
   call s:SplitFromCount(split_count)
   setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-  let b:skip_color_column = 1
   call setline(1, split(value, '\\n'))
 endfunction
 
@@ -2819,8 +2769,6 @@ nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
 nnoremap <silent> coc :call util#ToggleBufVar('&colorcolumn', {'print': 1, 'on_value': '80,100'})<cr>
 " Toggle cursor column
 nnoremap <silent> cox :call util#ToggleBufVar('&cursorcolumn', {'print': 1})<cr>
-" Toggle cursor focus indicators (global)
-nnoremap <silent> yox :call <sid>ToggleCursorFocusIndicators()<cr>
 " Toggle trim whitespace
 command! ToggleTrimWhitespace :call util#ToggleBufVar('skip_trim_whitespace', {'print': 1})
 " Toggle conceal
