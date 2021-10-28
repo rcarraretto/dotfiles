@@ -1518,7 +1518,7 @@ endfunction
 
 function! s:GrepOperator(type)
   let target = s:YankOperatorTarget(a:type)
-  silent execute "Ag -Q --hidden " . shellescape(target)
+  silent execute "Ag -Q --hidden -- " . shellescape(target)
 endfunction
 
 function! s:GrepOperatorInGitRoot(type)
@@ -1821,6 +1821,9 @@ function! s:FzfCurrentFolderNonRecursive(folder) abort
 endfunction
 
 function! s:SearchNotes(input) abort
+  " To allow searches that start with -, the command should be:
+  " 'Ag --hidden -Q -G "\.txt$" -- %s %s'
+  " But currently AgSetHighlight would wrongly detect the search as '.txt$'
   execute printf('Ag --hidden -Q %s -G "\.txt$" %s', s:AgBuildPattern(a:input), s:GetNoteDirs())
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
@@ -1851,7 +1854,7 @@ function! s:FzfNotes(all) abort
 endfunction
 
 function! s:SearchDotfiles(input) abort
-  execute printf("Ag --hidden -Q %s %s", s:AgBuildPattern(a:input), s:GetDotfilesDirs())
+  execute printf("Ag --hidden -Q -- %s %s", s:AgBuildPattern(a:input), s:GetDotfilesDirs())
 endfunction
 command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
 
@@ -1879,7 +1882,7 @@ function! s:SearchInGitRoot(input) abort
   if empty(path)
     return util#error_msg('SearchInGitRoot: Git root not found')
   endif
-  execute printf('Ag --hidden -Q %s %s', s:AgBuildPattern(a:input), path)
+  execute printf('Ag --hidden -Q -- %s %s', s:AgBuildPattern(a:input), path)
 endfunction
 command! -nargs=* SearchInGitRoot :call <sid>SearchInGitRoot(<q-args>)
 
@@ -1898,7 +1901,7 @@ function! s:SearchInFile(input) abort
     return
   endif
   if !empty(a:input)
-    execute printf('Ag -Q %s %s', s:AgBuildPattern(a:input), path)
+    execute printf('Ag -Q -- %s %s', s:AgBuildPattern(a:input), path)
   else
     " Use s:AgVimgrep instead of :Ag to bypass calling s:AgSetHighlight,
     " which is buggy.
@@ -2871,7 +2874,7 @@ nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
 nnoremap <space>O :GFiles<cr>
 " search in project
-nnoremap <space>a :Ag --hidden -Q ''<left>
+nnoremap <space>a :Ag --hidden -Q -- ''<left>
 " search in git root
 nnoremap <space>A :SearchInGitRoot<space>
 " grep operator
