@@ -1821,10 +1821,7 @@ function! s:FzfCurrentFolderNonRecursive(folder) abort
 endfunction
 
 function! s:SearchNotes(input) abort
-  " To allow searches that start with -, the command should be:
-  " 'Ag --hidden -Q -G "\.txt$" -- %s %s'
-  " But currently AgSetHighlight would wrongly detect the search as '.txt$'
-  execute printf('Ag --hidden -Q %s -G "\.txt$" %s', s:AgBuildPattern(a:input), s:GetNoteDirs())
+  execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', s:AgBuildPattern(a:input), s:GetNoteDirs())
 endfunction
 command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
 
@@ -2279,13 +2276,16 @@ function! s:AgVimgrep(args) abort
   call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
 endfunction
 
-function! s:AgSetHighlight(args) abort
+function! s:AgSetHighlight(ag_args) abort
+  " Get the last segment that is surrounded by quotes.
+  " (does not work if the pattern is not surrounded by quotes)
+  let ag_pattern = matchstr(a:ag_args, '\v^.*[''"]\zs.{-}\ze[''"]')
   " Note: This does not properly translate an 'ag' pattern to a vim regex.
   " e.g. \bbatata\b should become \<batata\>
-  let s = matchstr(a:args, "\\v(-)\@<!(\<)\@<=\\w+|['\"]\\zs.{-}\\ze['\"]")
+  "
   " Escape forward slash, so @/ can be used later with :substitute
   " (e.g. GetSubstituteTerm())
-  let @/ = escape(s, '/')
+  let @/ = escape(ag_pattern, '/')
   call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
 endfunction
 
