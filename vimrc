@@ -505,12 +505,14 @@ augroup VimEnterCustom
   autocmd VimEnter * call s:VimEnter()
 augroup END
 
-augroup TmuxGitStatus
-  " Refresh tmux status bar, since it shows git branch information.
-  " Each buffers has its own current working directory.
-  autocmd!
-  autocmd BufEnter,DirChanged * silent call system('tmux refresh-client -S')
-augroup END
+if exists('$TMUX')
+  augroup TmuxGitStatus
+    " Refresh tmux status bar, since it shows git branch information.
+    " Each buffers has its own current working directory.
+    autocmd!
+    autocmd BufEnter,DirChanged * silent call system('tmux refresh-client -S')
+  augroup END
+endif
 
 augroup DisableE211
   " Vim sends a warning when a file was initially opened, but then deleted outside of vim.
