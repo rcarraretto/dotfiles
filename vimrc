@@ -2754,6 +2754,14 @@ nnoremap <silent> gh :noh<cr>
 nnoremap <c-l> <esc>:silent write<cr>
 inoremap <c-l> <esc>:silent write<cr>
 
+" Easier change and replace word
+nnoremap c* *Ncgn
+nnoremap c# #NcgN
+
+" Search in file (from visual mode)
+xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
+xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
+
 " Show output of last command
 nnoremap K :!<cr>
 
@@ -2794,6 +2802,9 @@ onoremap ` '
 
 " Edit the alternate file
 nnoremap <leader><leader> <c-^>
+
+" Quotes textobj
+omap q iq
 
 " Toggle relative number
 nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
@@ -2853,94 +2864,53 @@ cnoremap <c-l> <c-n>
 " Copy current command-line
 cnoremap <expr> <c-x>y <sid>CopyCmdline()
 
-" Vimscript, vim debug
-nnoremap <leader>ev :<c-u>call util#EditFile(resolve($MYVIMRC))<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-" yank last message
-nnoremap <leader>ym :Ym<cr>
-" :Log {expr}
-nnoremap <space>v :Log<space>
-" reload syntax highlighting
-nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
-" capture :messages in a file
-nnoremap <space>z :CaptureMessages<cr>
-
-" Browse files & search
-" quickly edit some files and folders
-nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
-nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
-nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
-nnoremap <leader>eag :e ./.ignore<cr>
-nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
-nnoremap <leader>en :<c-u>call <sid>FzfNotes(0)<cr>
-nnoremap <leader>eN :<c-u>call <sid>FzfNotes(1)<cr>
-nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
-nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
-nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.private')<cr>
-if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
-  nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
-endif
-nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
-nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
-" explore syntax files for the current filetype
-nnoremap <leader>ey :<c-u>call <sid>ExploreSyntaxFiles()<cr>
-" edit corresponding test or source file
-nnoremap <leader>et :call <sid>EditTestFile()<cr>
+" Browse files/folders & global search
+" ---
 " browse files
 nnoremap <space>o :WrapCommand Files<cr>
 " browse files under version control
 nnoremap <space>O :GFiles<cr>
-" browse current folder (non-recursive)
-nnoremap <leader>of :call <sid>FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
-" browse history
-nnoremap <space>m :WrapCommand History<cr>
-" browse dotfiles
-nnoremap <leader>od :call <sid>FzfDotfiles()<cr>
-" browse node_modules
-nnoremap <leader>eM :call <sid>FzfExploreNodeModules()<cr>
-" Ag from search reg
-nnoremap <leader>aa :Ag<cr>
-" search dotfiles
-nnoremap <leader>ad :SearchDotfiles<space>
-" search notes
-nnoremap <leader>an :SearchNotes<space>
-" search in file
-nnoremap <leader>af :SearchInFile<space>
-" browse source code of vim plugins
-nnoremap <leader>ob :Files ~/.vim/bundle<cr>
-" browse Downloads, most recent first
-nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<cr>
-" browse /var/tmp
-nnoremap <leader>ot :Files /var/tmp<cr>
-" browse commands
-" (<c-x> executes the command directly)
-nnoremap <space>c :Commands<cr>
-" browse command-line history
-nnoremap <space>: :History:<cr>
 " search in project
 nnoremap <space>a :Ag --hidden -Q ''<left>
 " search in git root
 nnoremap <space>A :SearchInGitRoot<space>
-" search operator
-nnoremap g/ :set operatorfunc=<sid>SearchOperator<cr>g@
 " grep operator
 nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
 nnoremap <space>G :set operatorfunc=<sid>GrepOperatorInGitRoot<cr>g@
 vnoremap <space>G :<c-u>call <sid>GrepOperatorInGitRoot(visualmode())<cr>
-" search in file (from visual mode)
-xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
-xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
-" fzf lines in buffer (via fzf.vim plugin)
-nnoremap <space>/b :BLines<cr>
-" search fold markers in buffer (via fzf.vim plugin)
-" hack:
-"   typing '{' 3 times creates a fold marker in this vimrc.
-"   close it with a comment after the mapping.
-"   https://stackoverflow.com/a/24717020
-nnoremap <space>/f :BLines {{{$<cr>| " }}}
-nnoremap <space>/z :call <sid>SearchInFold()<cr>
-" change directory
+" search in dotfiles
+nnoremap <leader>ad :SearchDotfiles<space>
+" browse dotfiles
+nnoremap <leader>od :call <sid>FzfDotfiles()<cr>
+" search in notes
+nnoremap <leader>an :SearchNotes<space>
+" browse notes
+nnoremap <leader>en :<c-u>call <sid>FzfNotes(0)<cr>
+nnoremap <leader>eN :<c-u>call <sid>FzfNotes(1)<cr>
+" browse projects
+nnoremap <leader>ep :call <sid>FzfExploreProject()<cr>
+" browse history
+nnoremap <space>m :WrapCommand History<cr>
+" browse /var/tmp
+nnoremap <leader>ot :Files /var/tmp<cr>
+" browse Downloads, most recent first
+nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<cr>
+" browse commands
+" (<c-x> executes the command directly)
+nnoremap <space>c :Commands<cr>
+" browse command-line history
+nnoremap <space>: :History:<cr>
+" Ag from search reg
+nnoremap <leader>aa :Ag<cr>
+" browse current folder (non-recursive)
+nnoremap <leader>of :call <sid>FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
+" browse node_modules
+nnoremap <leader>eM :call <sid>FzfExploreNodeModules()<cr>
+" browse source code of vim plugins
+nnoremap <leader>ob :Files ~/.vim/bundle<cr>
+
+" Change directory
 nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
 nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
 nnoremap <silent> <leader>cn :call <sid>CdToNodeJsRoot('lcd')<cr>
@@ -2949,29 +2919,44 @@ nnoremap <silent> <leader>cb :call <sid>CdToBufferDir('lcd')<cr>
 nnoremap <silent> <leader>cB :call <sid>CdToBufferDir('cd')<cr>
 " change to previous current directory
 nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
+
+" Edit special files
+nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
+if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
+  nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
+endif
 " toggle log windows
 nnoremap <leader>2 :call <sid>ToggleLogWindow('/var/tmp/test-console.txt')<cr>
 nnoremap <leader>3 :call <sid>ToggleLogWindow('/var/tmp/test-results.txt')<cr>
 nnoremap <leader>4 :call <sid>ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
 " close auxiliary buffers
 nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
+"
+nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
+nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
+nnoremap <leader>eag :e ./.ignore<cr>
+nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
+nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
+nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.private')<cr>
+" open sketch buffer for current programming language
+nnoremap <leader>ek :call <sid>EditSketchBuffer(&ft)<cr>
+" edit corresponding test or source file
+nnoremap <leader>et :call <sid>EditTestFile()<cr>
 
-" Tags / symbols
-nnoremap <space>[ :Tags <c-r><c-w><cr>
-nnoremap <space>] :Tags<cr>
-nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
-nnoremap <leader>ge :call <sid>ListReferences()<cr>
-nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
-" account for YouCompleteMe getting stuck with Golang
-nnoremap <leader>yf :YcmForceCompileAndDiagnostics<cr>
-nnoremap <leader>yr :YcmRestartServer<cr>
-
-" Easier change and replace word
-nnoremap c* *Ncgn
-nnoremap c# #NcgN
-
-" Quotes textobj
-omap q iq
+" Vimscript, vim debug
+nnoremap <leader>ev :<c-u>call util#EditFile(resolve($MYVIMRC))<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
+" yank last message
+nnoremap <leader>ym :Ym<cr>
+" :Log {expr}
+nnoremap <space>v :Log<space>
+" reload syntax highlighting
+nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
+" capture :messages in a file
+nnoremap <space>z :CaptureMessages<cr>
+" explore syntax files for the current filetype
+nnoremap <leader>ey :<c-u>call <sid>ExploreSyntaxFiles()<cr>
 
 " File handling
 nnoremap <space>n :e <c-r>=expand("%:h"). "/" <cr>
@@ -2995,6 +2980,23 @@ nnoremap <leader>gf :<c-u>call <sid>GoToCursorReference()<cr>
 nnoremap <leader>oS :SysOpen<cr>
 " open folder of current file in Finder
 nnoremap <leader>oF :OpenFolderInFinder<cr>
+
+" Search in file
+" ---
+" search fold markers in buffer (via fzf.vim plugin)
+" hack:
+"   typing '{' 3 times creates a fold marker in this vimrc.
+"   close it with a comment after the mapping.
+"   https://stackoverflow.com/a/24717020
+nnoremap <space>/f :BLines {{{$<cr>| " }}}
+" search in fold
+nnoremap <space>/z :call <sid>SearchInFold()<cr>
+" search in file with Ag
+nnoremap <leader>af :SearchInFile<space>
+" fzf lines in buffer (via fzf.vim plugin)
+nnoremap <space>/b :BLines<cr>
+" search operator
+nnoremap g/ :set operatorfunc=<sid>SearchOperator<cr>g@
 
 " Find and Replace / Find and Bulk Change
 "
@@ -3026,6 +3028,16 @@ nnoremap <leader>gh :<c-r>=line('.')<cr>GBrowse<cr>
 vnoremap <leader>gh :GBrowse<cr>
 " open repo in SourceTree
 nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
+
+" Tags / symbols
+nnoremap <space>[ :Tags <c-r><c-w><cr>
+nnoremap <space>] :Tags<cr>
+nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
+nnoremap <leader>ge :call <sid>ListReferences()<cr>
+nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
+" account for YouCompleteMe getting stuck with Golang
+nnoremap <leader>yf :YcmForceCompileAndDiagnostics<cr>
+nnoremap <leader>yr :YcmRestartServer<cr>
 
 " Formatting
 nnoremap <leader>gp :call <sid>Prettier('')<cr>
