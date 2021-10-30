@@ -166,7 +166,7 @@
                         ]
                     },
                     {
-                        "description": "Dota 2: caps lock to backspace",
+                        "description": "Dota 2: shift + backspace to backspace",
                         "manipulators": [
                             {
                                 "conditions": [
@@ -178,7 +178,13 @@
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "caps_lock"
+                                    "key_code": "backspace",
+                                    "modifiers": {
+                                        "mandatory": "right_shift",
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
                                 },
                                 "to": {
                                     "key_code": "delete_or_backspace"
