@@ -84,17 +84,30 @@ Plug 'junegunn/vim-easy-align'
 
 " >>> Language specific <<<
 " Typescript
-Plug 'leafgarland/typescript-vim', { 'commit': '09cf6a6ecdef11cd32d38213093cfe86660255aa' }
-Plug 'Quramy/tsuquyomi', { 'commit': '785af7476e0db2522372ef585c86947fc5625c81' }
-Plug 'peitalin/vim-jsx-typescript'
+Plug 'leafgarland/typescript-vim', {
+      \'for': ['javascript', 'typescript', 'typescript.tsx'],
+      \'commit': '09cf6a6ecdef11cd32d38213093cfe86660255aa' }
+Plug 'Quramy/tsuquyomi', {
+      \'for': ['javascript', 'typescript', 'typescript.tsx'],
+      \'commit': '785af7476e0db2522372ef585c86947fc5625c81' }
+Plug 'peitalin/vim-jsx-typescript', {
+      \'for': ['javascript', 'typescript', 'typescript.tsx'],
+      \'commit': '22df470d92651426f2377e3166488672f7b4b4ef' }
 " Python
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 " Golang
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'commit': '2855115efb1dd8a5f4436a80138633a1cb5d9f0c' }
+Plug 'fatih/vim-go', {
+      \'for': 'go',
+      \'do': ':GoUpdateBinaries',
+      \'commit': '2855115efb1dd8a5f4436a80138633a1cb5d9f0c' }
 " Terraform
-Plug 'hashivim/vim-terraform', { 'commit': '9166d42e5dc9bc0ef7e1b9e93d52bb4c5b923560' }
+Plug 'hashivim/vim-terraform', {
+      \'for': 'terraform',
+      \'commit': '9166d42e5dc9bc0ef7e1b9e93d52bb4c5b923560' }
 " Applescript
-Plug 'vim-scripts/applescript.vim'
+Plug 'vim-scripts/applescript.vim', {
+      \'for': 'applescript',
+      \'commit': '00840b4059c7884120913907f4778092edb006f7' }
 
 " >>> Used occasionally <<<
 " Git log viewer
