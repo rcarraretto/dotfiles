@@ -178,7 +178,7 @@
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "backspace",
+                                    "key_code": "delete_or_backspace",
                                     "modifiers": {
                                         "mandatory": "right_shift",
                                         "optional": [
