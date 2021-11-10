@@ -309,7 +309,6 @@ augroup FTOptions
   autocmd FileType crontab setlocal backupcopy=yes
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
-  autocmd FileType netrw call s:NetrwMappings()
   autocmd FileType agit call s:AgitConfig()
   autocmd FileType pem setlocal foldmethod=marker | setlocal foldmarker=-----BEGIN,-----END | setlocal foldlevel=20
 augroup END
@@ -789,31 +788,6 @@ function! s:DebugSynStack() abort
 endfunction
 nnoremap <silent> <leader>zS :call <sid>DebugSynStack()<cr>
 
-function! s:NetrwMappings()
-  " note:
-  " 'echom' might not work within this function
-  " https://vi.stackexchange.com/a/8380
-
-  " store original netrw mappings
-  if !exists('s:mapping_netrw_cr')
-    let s:mapping_netrw_cr = maparg("<cr>", "n")
-    let s:mapping_netrw_o = maparg("o", "n")
-  endif
-
-  " Cancel netrw default <cr> mapping that will open the file in a new window
-  " so <cr> is still : (nnoremap <cr> :)
-  let s:mapping_current_cr = maparg("<cr>", "n", 0, 1)
-  if !empty(s:mapping_current_cr) && s:mapping_current_cr['buffer']
-    nunmap <buffer> <cr>
-  endif
-
-  " map 'o' to what <cr> is in netrw (open file in a new window)
-  execute "nnoremap <buffer> <silent> o " . s:mapping_netrw_cr
-
-  " map 'x' to what 'o' is in netrw (open file in a horizontal split)
-  execute "nnoremap <buffer> <silent> x " . s:mapping_netrw_o
-endfunction
-
 " Based on eunuch.vim :Delete
 function! s:DeleteCurrentFile() abort
   let absolute_path = expand('%:p')
@@ -839,21 +813,6 @@ function! s:DeleteCurrentFile() abort
     return util#error_msg('DeleteCurrentFile: Failed to delete "' . absolute_path . '"')
   endif
 endfunction
-
-if !$USE_NETRW
-  " Replacement for netrw 'gx',
-  " but just for urls
-  function! s:OpenUrl()
-    let url = expand('<cfile>')
-    if url !~ 'http\(s\)\?:\/\/'
-      echo 'Not a url: ' . url
-      return
-    endif
-    call system("open " . shellescape(url))
-    redraw!
-  endfunction
-  nnoremap gx :call <sid>OpenUrl()<cr>
-endif
 
 function! s:AgitConfig()
   let mapping = maparg("<cr>", "n", 0, 1)
@@ -2781,15 +2740,6 @@ let g:fzf_action = {
 \ 'ctrl-s': 'SysOpen'
 \ }
 
-" Netrw
-" cancel netrw altogether
-if !$USE_NETRW
-  let g:loaded_netrwPlugin = 1
-endif
-let g:netrw_list_hide = '.*\.DS_Store$,.*\.pyc$'
-let g:netrw_banner = 0
-" when previewing files with 'p', split vertically
-let g:netrw_preview = 1
 
 " Dispatch
 let g:dispatch_no_maps = 1
