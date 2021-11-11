@@ -282,7 +282,11 @@ augroup END
 
 augroup FTOptions
   autocmd!
-  autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal textwidth=0 | call s:VimscriptMappings()
+  " iskeyword => easier search in 'someplugin#somefunc'
+  autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
+        \| setlocal textwidth=0
+        \| setlocal iskeyword-=#
+        \| call s:VimscriptMappings()
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType text setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   autocmd FileType markdown setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
