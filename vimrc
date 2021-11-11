@@ -1153,29 +1153,8 @@ endfunction
 " Similar to star (*) but for arbitrary motions,
 " instead of just the word under cursor.
 function! s:SearchOperator(type)
-  let @/ = s:YankOperatorTarget(a:type)
+  let @/ = util#YankOperatorTarget(a:type)
   call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
-endfunction
-
-function! s:GrepOperator(type)
-  let target = s:YankOperatorTarget(a:type)
-  silent execute "Ag -Q --hidden -- " . shellescape(target)
-endfunction
-
-function! s:GrepOperatorInGitRoot(type)
-  let target = s:YankOperatorTarget(a:type)
-  call s:SearchInGitRoot(target)
-endfunction
-
-function! s:YankOperatorTarget(type) abort
-  if a:type ==# 'v'
-    execute "normal! `<v`>y"
-  elseif a:type ==# 'char'
-    execute "normal! `[v`]y"
-  else
-    return
-  endif
-  return @@
 endfunction
 
 " Make * and # work on visual mode.
@@ -1461,22 +1440,6 @@ function! s:FzfCurrentFolderNonRecursive(folder) abort
   call s:FzfWithAction({'source': cmd, 'options': ['--prompt', prompt]}, action)
 endfunction
 
-function! s:SearchNotes(input) abort
-  execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', s:AgBuildPattern(a:input), s:GetNoteDirs())
-endfunction
-command! -nargs=* SearchNotes call s:SearchNotes(<q-args>)
-
-function! s:GetNoteDirs() abort
-  let dirs = ['~/Dropbox/notes/']
-  if isdirectory($HOME . '/Dropbox/notes-home')
-    call add(dirs, '~/Dropbox/notes-home')
-  endif
-  if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
-    call add(dirs, fnameescape($NOTES_WORK))
-  endif
-  return join(dirs, ' ')
-endfunction
-
 function! s:FzfNotes(all) abort
   if a:all
     let cmd = 'notes-ls --all'
@@ -1491,63 +1454,10 @@ function! s:FzfNotes(all) abort
         \}))
 endfunction
 
-function! s:SearchDotfiles(input) abort
-  execute printf("Ag --hidden -Q -- %s %s", s:AgBuildPattern(a:input), s:GetDotfilesDirs())
-endfunction
-command! -nargs=* SearchDotfiles :call <sid>SearchDotfiles(<q-args>)
-
 function! s:FzfDotfiles() abort
-  let cmd = 'ag -g "" --hidden ' . s:GetDotfilesDirs() . ' | sed "s|^$HOME|~|"'
+  let cmd = 'ag -g "" --hidden ' . util#GetDotfilesDirs() . ' | sed "s|^$HOME|~|"'
   call fzf#run(fzf#wrap({'source': cmd, 'options': ['--prompt', '[dotfiles*] ']}))
 endfunction
-
-function! s:GetDotfilesDirs() abort
-  let dirs = [$DOTFILES_PUBLIC, $DOTFILES_PRIVATE]
-  if exists('$DOTFILES_HOME') && isdirectory($DOTFILES_HOME)
-    call add(dirs, fnameescape($DOTFILES_HOME))
-  endif
-  if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK)
-    call add(dirs, fnameescape($DOTFILES_WORK))
-  endif
-  return join(dirs, ' ')
-endfunction
-
-function! s:SearchInGitRoot(input) abort
-  let path = util#GetGitRoot()
-  if empty(path)
-    let path = util#GetGitRoot({'path': getcwd()})
-  endif
-  if empty(path)
-    return util#error_msg('SearchInGitRoot: Git root not found')
-  endif
-  execute printf('Ag --hidden -Q -- %s %s', s:AgBuildPattern(a:input), path)
-endfunction
-command! -nargs=* SearchInGitRoot :call <sid>SearchInGitRoot(<q-args>)
-
-function! s:SearchInFile(input) abort
-  let path = expand('%:p')
-  if empty(path)
-    echohl ErrorMsg
-    echom 'SearchInFile: current buffer has invalid path'
-    echohl NONE
-    return
-  endif
-  if isdirectory(path)
-    echohl ErrorMsg
-    echom 'SearchInFile: current buffer is a directory'
-    echohl NONE
-    return
-  endif
-  if !empty(a:input)
-    execute printf('Ag -Q -- %s %s', s:AgBuildPattern(a:input), path)
-  else
-    " Use s:AgVimgrep instead of :Ag to bypass calling s:AgSetHighlight,
-    " which is buggy.
-    call s:AgVimgrep(printf('%s %s', s:AgSearchFromSearchReg(), path))
-  endif
-  cfirst
-endfunction
-command! -nargs=* SearchInFile :call <sid>SearchInFile(<q-args>)
 
 function! s:SysOpen(filename)
   let filename = a:filename
@@ -1893,72 +1803,6 @@ function! s:GetScriptFunc(scriptpath, funcname)
     echom "GetScriptFunc: Function not found: " . full_funcname
   endtry
 endfunction
-
-function! s:StatelessGrep(prg, format, args) abort
-  let prg_back = &l:grepprg
-  let format_back = &grepformat
-  try
-    let &l:grepprg = a:prg
-    let &grepformat = a:format
-    " Escape special chars because of vim cmdline, to avoid e.g.:
-    " E499: Empty file name for '%' or '#', only works with ":p:h"
-    let args = escape(a:args, '|#%')
-    silent execute 'grep!' args
-  finally
-    let &l:grepprg = prg_back
-    let &grepformat = format_back
-  endtry
-  " fix screen going blank after :grep
-  redraw!
-  botright copen
-endfunction
-
-function! s:AgVimgrep(args) abort
-  call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
-endfunction
-
-function! s:AgSetHighlight(ag_args) abort
-  " Get the last segment that is surrounded by quotes.
-  " (does not work if the pattern is not surrounded by quotes)
-  let ag_pattern = matchstr(a:ag_args, '\v^.*[''"]\zs.{-}\ze[''"]')
-  " Note: This does not properly translate an 'ag' pattern to a vim regex.
-  " e.g. \bbatata\b should become \<batata\>
-  "
-  " Escape forward slash, so @/ can be used later with :substitute
-  " (e.g. GetSubstituteTerm())
-  let @/ = escape(ag_pattern, '/')
-  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
-endfunction
-
-function! s:AgSearchFromSearchReg() abort
-  let search = getreg('/')
-  " translate vim regular expression to perl regular expression.
-  let search = substitute(search, '\(\\<\|\\>\)', '\\b', 'g')
-  return '"' . search . '"'
-endfunction
-
-" It seems like the search pattern should be surrounded with single quotes
-" instead of double quotes.
-"
-" Else the following search terms wouldn't work: "$#" and "$@".
-" I think these would be interpreted by the shell, when in double quotes.
-function! s:AgBuildPattern(input) abort
-  return printf("'%s'", a:input)
-endfunction
-
-" :Ag command.
-" Based on ack.vim (ack#Ack)
-function! s:Ag(args) abort
-  if empty(a:args)
-    return s:AgVimgrep(s:AgSearchFromSearchReg())
-  endif
-  call s:AgVimgrep(a:args)
-  call s:AgSetHighlight(a:args)
-endfunction
-" The :Ack command from ack.vim uses -complete=files,
-" which causes <q-args> to expand characters like # and % (unless you escape them).
-" For this reason, this :Ag command doesn't use file completion.
-command! -nargs=* Ag call s:Ag(<q-args>)
 
 function! s:ExploreSyntaxFiles() abort
   let script_paths = s:GetScriptPaths()
@@ -2519,10 +2363,10 @@ nnoremap <space>a :Ag --hidden -Q -- ''<left>
 " search in git root
 nnoremap <space>A :SearchInGitRoot<space>
 " grep operator
-nnoremap <space>g :set operatorfunc=<sid>GrepOperator<cr>g@
-vnoremap <space>g :<c-u>call <sid>GrepOperator(visualmode())<cr>
-nnoremap <space>G :set operatorfunc=<sid>GrepOperatorInGitRoot<cr>g@
-vnoremap <space>G :<c-u>call <sid>GrepOperatorInGitRoot(visualmode())<cr>
+nnoremap <space>g :set operatorfunc=ag#GrepOperator<cr>g@
+vnoremap <space>g :<c-u>call ag#GrepOperator(visualmode())<cr>
+nnoremap <space>G :set operatorfunc=ag#GrepOperatorInGitRoot<cr>g@
+vnoremap <space>G :<c-u>call ag#GrepOperatorInGitRoot(visualmode())<cr>
 " search in dotfiles
 nnoremap <leader>ad :SearchDotfiles<space>
 " browse dotfiles
@@ -2545,8 +2389,6 @@ nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<
 nnoremap <space>c :Commands<cr>
 " browse command-line history
 nnoremap <space>: :History:<cr>
-" Ag from search reg
-nnoremap <leader>aa :Ag<cr>
 " browse current folder (non-recursive)
 nnoremap <leader>of :call <sid>FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
 " browse node_modules
@@ -2720,14 +2562,6 @@ nmap gae gaipe
 " }}}
 
 " Plugin settings ---------------------- {{{
-
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  let g:ackprg = 'ag --vimgrep'
-  let g:ackhighlight = 1
-endif
 
 " fzf
 " extend actions with mapping to open in system editor

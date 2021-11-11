@@ -360,6 +360,28 @@ function! util#ToggleOption(option_name, ...) abort
   return updated_value
 endfunction
 
+function! util#YankOperatorTarget(type) abort
+  if a:type ==# 'v'
+    execute "normal! `<v`>y"
+  elseif a:type ==# 'char'
+    execute "normal! `[v`]y"
+  else
+    return
+  endif
+  return @@
+endfunction
+
+function! util#GetDotfilesDirs() abort
+  let dirs = [$DOTFILES_PUBLIC, $DOTFILES_PRIVATE]
+  if exists('$DOTFILES_HOME') && isdirectory($DOTFILES_HOME)
+    call add(dirs, fnameescape($DOTFILES_HOME))
+  endif
+  if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK)
+    call add(dirs, fnameescape($DOTFILES_WORK))
+  endif
+  return join(dirs, ' ')
+endfunction
+
 function! util#SetTestTarget(opts) abort
   let g:test_file_target = expand('%:p')
   call util#TestCurrentTarget(a:opts)
