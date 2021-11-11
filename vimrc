@@ -304,7 +304,7 @@ augroup FTOptions
   autocmd FileType lua setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType ruby setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldlevel=20
   autocmd FileType c,cpp setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal foldlevel=20
-  autocmd FileType go setlocal foldmethod=indent | setlocal foldlevel=20 | call s:GolangMappings()
+  autocmd FileType go setlocal foldmethod=indent | setlocal foldlevel=20 | call proglang#GolangMappings()
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType applescript setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal commentstring=--\ %s
@@ -513,71 +513,8 @@ function! s:VimEnter()
   call writefile([], "/var/tmp/vim-messages.txt")
 endfunction
 
-function! s:DisarmPluginGuard() abort
-  for i in range(1, line('$'))
-    let line = getline(i)
-    " Skip empty lines
-    if len(line) == 0
-      continue
-    endif
-    " Skip comments
-    if match(line, '^"') >= 0
-      continue
-    endif
-    " Check if it's guarding a plugin.
-    "
-    " Example:
-    " if exists('g:autoloaded_fugitive')
-    "   finish
-    " endif
-    "
-    let m = matchlist(line, '^if exists(''\(g:.*\)'')$')
-    if empty(m)
-      return 0
-    endif
-    if match(getline(i + 1), '^\s*finish$') == -1
-      return 0
-    endif
-    let global_var_name = m[1]
-    if !exists(global_var_name)
-      return 0
-    endif
-    let cmd = "unlet " . global_var_name
-    echom cmd
-    execute cmd
-    return global_var_name
-  endfor
-  return 0
-endfunction
-
 function! s:VimscriptMappings() abort
-  nnoremap <buffer> <leader>ss :silent update <bar> call <sid>DisarmPluginGuard() <bar> source %<cr>
-endfunction
-
-" Adapted version of :GoDoc from vim-go:
-" - When the popup is already open, close it
-" - Set the popup to close with any cursor move
-function! s:GoDocToggle() abort
-  if empty(popup_list())
-    GoDoc
-    let popup_ids = popup_list()
-    if empty(popup_ids)
-      return
-    endif
-    call popup_setoptions(popup_ids[0], {'moved': 'any'})
-  else
-    call popup_clear()
-  endif
-endfunction
-
-function! s:GolangMappings() abort
-  nnoremap <buffer> <silent> K :call <sid>GoDocToggle()<cr>
-  " vim-go
-  " Remove :GoPlay command, as it uploads code to the internet
-  " One could accidentally leak sensitive information
-  if exists(':GoPlay')
-    delcommand GoPlay
-  endif
+  nnoremap <buffer> <leader>ss :silent update <bar> call vimutil#DisarmPluginGuard() <bar> source %<cr>
 endfunction
 
 function! s:SplitFromCount(count) abort
@@ -756,42 +693,6 @@ function! s:CaptureMessages()
 endfunction
 command! CaptureMessages call s:CaptureMessages()
 
-function! s:VerboseToQfItems(cmd, text) abort
-  let out = util#capture('verbose ' . a:cmd)
-  let lines = split(out, '\n')
-  let items = []
-  for line in lines
-    let m = matchlist(line, '.*Last set from \(.*\) line \(\d\+\)')
-    if !len(m)
-      continue
-    endif
-    let filename = fnamemodify(m[1], ':p')
-    let lnum = m[2]
-    call add(items, {'text': a:text, 'filename': filename, 'lnum': lnum})
-  endfor
-  if empty(items)
-    return [{'text': a:text}]
-  endif
-  return items
-endfunction
-
-" Based on zS mapping from scriptease.vim
-" scriptease#synnames()
-function! s:DebugSynStack() abort
-  let elems = reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")'))
-  if empty(elems)
-    return util#error_msg('DebugSynStack: no elements found in current line')
-  endif
-  let all_qf_items = []
-  for elem in elems
-    let qf_items = s:VerboseToQfItems('highlight ' . elem, elem)
-    let all_qf_items += qf_items
-  endfor
-  call setqflist(all_qf_items)
-  botright copen
-endfunction
-nnoremap <silent> <leader>zS :call <sid>DebugSynStack()<cr>
-
 " Based on eunuch.vim :Delete
 function! s:DeleteCurrentFile() abort
   let absolute_path = expand('%:p')
@@ -968,58 +869,6 @@ function! s:QuickfixFilenames()
   return join(values(buffer_numbers))
 endfunction
 command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
-
-" Wrap :TsuReferences (from tsuquyomi)
-" Use quickfix list instead of location list
-function! s:TsuReferences() abort
-  TsuReferences
-  lclose
-  let items = getloclist(winnr())
-  for item in items
-    " Fix references to files outside of cwd().
-    "
-    " For some reason, when references are outside of cwd(), the
-    " quickfix/location list does not jump properly.
-    "
-    " When this happens, the listed file paths contain ~ instead of a full
-    " reference to $HOME. Maybe this could be the reason.
-    "
-    " To work around this problem, unset 'bufnr' and use the 'filename' feature
-    " instead.
-    "
-    " :h setqflist
-    "
-    let item['filename'] = fnamemodify(bufname(item['bufnr']), ':p')
-    unlet item['bufnr']
-  endfor
-  call setqflist(items, 'r')
-  copen
-  wincmd J
-  wincmd p
-endfunction
-
-function! s:ListReferences() abort
-  if index(['typescript', 'typescript.tsx'], &ft) != -1
-    return s:TsuReferences()
-  elseif &ft == 'go'
-    GoReferrers
-    return
-  else
-    return util#error_msg(printf('ListReferences: unsupported filetype: %s', &ft))
-  endif
-endfunction
-
-function! s:ImportSymbol() abort
-  if index(['typescript', 'typescript.tsx'], &ft) != -1
-    TsuImport
-    return
-  elseif &ft == 'go'
-    GoImports
-    return
-  else
-    return util#error_msg(printf('ImportSymbol: unsupported filetype: %s', &ft))
-  endif
-endfunction
 
 function! s:TrimWhitespace()
   if &modifiable == 0
@@ -1434,70 +1283,6 @@ function! s:FilterBufferOrFail(cmd) abort
   return output
 endfunction
 
-function! s:Prettier(mode) abort
-  let prettier_parsers={
-  \ 'json': 'json',
-  \ 'javascript': 'babel',
-  \ 'typescript': 'typescript',
-  \ 'typescript.tsx': 'typescript',
-  \ 'markdown': 'markdown',
-  \ 'html': 'html',
-  \ 'css': 'css',
-  \ 'yaml': 'yaml'
-  \}
-  let adhoc_fts = ['xml', 'go', 'sql']
-  let supported_ft = has_key(prettier_parsers, &ft) || index(adhoc_fts, &ft) >= 0
-
-  if !supported_ft
-    return util#error_msg('Prettier: Unsupported filetype: ' . &ft)
-  endif
-
-  let save_pos = getpos('.')
-  silent! update
-
-  if has_key(prettier_parsers, &ft)
-    let parser = prettier_parsers[&ft]
-    let opts = ''
-    " Try to find .prettierrc.json upwards until the git root.
-    " This would be an evidence that the project uses prettier.
-    let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
-    if empty(prettierrc_json)
-      " Use global prettier config for example in sketch buffers or
-      " projects that don't have prettier installed.
-      let opts = "--config=" . $DOTFILES_PRIVATE . "/.prettierrc "
-    endif
-    execute "%!npx prettier " . opts . "--parser=" . parser
-  else
-    if &ft == 'xml'
-      " https://stackoverflow.com/a/16090892
-      let cmd = "python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'"
-      call s:FilterBufferOrFail(cmd)
-    elseif &ft == 'go'
-      call system('go fmt ' . expand('%:p'))
-      silent checktime
-      return
-    elseif &ft == 'sql'
-      if a:mode == 'V'
-        let range = "'<,'>"
-      else
-        let range = '%'
-      endif
-      " https://github.com/zeroturnaround/sql-formatter
-      let cmd = 'sql-formatter --lines-between-queries=2'
-      if exists('b:sql_language')
-        let cmd .= ' --language=' . b:sql_language
-      endif
-      execute range . '!' . cmd
-    else
-      return util#error_msg('Unimplemented filetype: ' . &ft)
-    endif
-  endif
-
-  call setpos('.', save_pos)
-  silent! update
-endfunction
-command! Prettier call s:Prettier('')
-
 function! s:HighestWinnr()
   let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
   return wins[-1]['winnr']
@@ -1822,27 +1607,6 @@ function! s:VSplitLeft(path) abort
   endif
 endfunction
 command! -nargs=? -complete=file VSplitLeft :call s:VSplitLeft(<q-args>)
-
-" Based on https://stackoverflow.com/a/38735392/2277505
-function! s:ListCtrlMappings() abort
-  let out = util#capture('map')
-  vnew
-  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-  silent put =out
-  silent v/^.  <C-/d
-  sort
-endfunction
-command! ListCtrlMappings :call <sid>ListCtrlMappings()
-
-function! s:CaptureRuntime() abort
-  " &rtp with removed leading \n
-  let rtp = util#capture('echo &rtp')[1:]
-  let paths = split(rtp, ',')
-  let items = map(paths, "{'filename': v:val}")
-  call setqflist(items)
-  botright copen
-endfunction
-command! CaptureRuntime :call <sid>CaptureRuntime()
 
 function! s:CopyCursorReference() abort
   let path = fnameescape(expand("%:~"))
@@ -2324,6 +2088,7 @@ nnoremap <leader>ym :Ym<cr>
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
 nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
+nnoremap <silent> <leader>zS :call vimutil#DebugSynStack()<cr>
 " capture :messages in a file
 nnoremap <space>z :CaptureMessages<cr>
 " explore syntax files for the current filetype
@@ -2404,15 +2169,15 @@ nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
 nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
-nnoremap <leader>ge :call <sid>ListReferences()<cr>
+nnoremap <leader>ge :call proglang#ListReferences()<cr>
 nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
 " account for YouCompleteMe getting stuck with Golang
 nnoremap <leader>yf :YcmForceCompileAndDiagnostics<cr>
 nnoremap <leader>yr :YcmRestartServer<cr>
 
 " Formatting
-nnoremap <leader>gp :call <sid>Prettier('')<cr>
-vnoremap <leader>gp :<c-u>call <sid>Prettier(visualmode())<cr>
+nnoremap <leader>gp :call proglang#Prettier('')<cr>
+vnoremap <leader>gp :<c-u>call proglang#Prettier(visualmode())<cr>
 " Format paragraph
 nnoremap <space>\ :call <sid>FormatParagraph()<cr>
 
