@@ -20,6 +20,44 @@ function! vimutil#GetScriptFunc(scriptpath, funcname)
   endtry
 endfunction
 
+" :GoToDefinition map <cr>
+" :GoToDefinition function fzf#run
+" :GoToDefinition hi typescriptFuncKeyword
+function! vimutil#GoToDefinition(cmd)
+  " Sample verbose output:
+  "
+  " :verbose command TsuReload
+  "     Name              Args Address Complete    Definition
+  " b   TsuReload         *            buffer      :call tsuquyomi#reload(<f-args>)
+  "         Last set from ~/work/tsuquyomi/autoload/tsuquyomi/config.vim line 185
+  "     TsuReloadProject  0                        : call tsuquyomi#reloadProject()
+  "         Last set from ~/work/tsuquyomi/plugin/tsuquyomi.vim line 91
+  "
+  let out = util#capture('verbose ' . a:cmd)
+  let lines = split(out, '\n')
+  for line in lines
+    let m = matchlist(line, '.*Last set from \(.*\) line \(\d\+\)')
+    if !len(m)
+      continue
+    endif
+    let filename = m[1]
+    let line_num = m[2]
+    silent execute 'edit ' . filename
+    execute line_num
+    return
+  endfor
+  echo substitute(out, '\n', '', '')
+endfunction
+
+" :GoToCommandDefinition AbortDispatch
+function! vimutil#GoToCommandDefinition(cmd)
+  if a:cmd =~ '\s'
+    echo 'Not a *command*: ' . a:cmd
+    return
+  endif
+  call vimutil#GoToDefinition('command ' . a:cmd)
+endfunction
+
 " Unlets the guard variable of the current plugin file.
 "
 " Example:
@@ -103,6 +141,28 @@ function! vimutil#DebugSynStack() abort
   endfor
   call setqflist(all_qf_items)
   botright copen
+endfunction
+
+function! vimutil#ExploreSyntaxFiles() abort
+  let script_paths = s:GetScriptPaths()
+  let paths = []
+  for script_path in script_paths
+    if match(script_path, 'syntax/' . &syntax . '.vim') >= 0
+      call add(paths, script_path)
+    endif
+  endfor
+  if empty(paths)
+    return util#error_msg('ExploreSyntaxFiles: no syntax files found')
+  endif
+  let items = map(paths, "{'filename': v:val}")
+  call setqflist(items)
+  call window#MaybeSplit()
+  cfirst
+endfunction
+
+" Get full paths from :scriptnames
+function! s:GetScriptPaths() abort
+   return map(split(execute('scriptnames'), "\n"), 'fnamemodify(substitute(v:val, ''^\s*\d*: '', "", ""), '':p'')')
 endfunction
 
 " Based on https://stackoverflow.com/a/38735392/2277505

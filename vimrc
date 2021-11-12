@@ -531,161 +531,10 @@ function! s:SplitFromCount(count) abort
   return 0
 endfunction
 
-function! s:MaybeSplit() abort
-  if v:count == 1
-    silent split
-    return 1
-  elseif v:count == 2
-    silent vsplit
-    return 1
-  elseif v:count == 3
-    silent tab split
-    return 1
-  endif
-  return 0
-endfunction
-
-function! s:YankLastMessage() abort
-  let @* = util#messages()[0]
-endfunction
-command! Ym :call <sid>YankLastMessage()
-
-" :Log {expr}
-"
-" Based on :PPmsg from scriptease
-" ~/.vim/bundle/vim-scriptease/plugin/scriptease.vim:41:11
-"
-" Pretty print the value of {expr} using :echomsg
-" Extended to also:
-" - log to a special file
-" - yank {expr} and result
-"
-" Example:
-" :Log
-" :Log 2 + 2
-" :Log range(1, 5)
-" :Log b:
-"
-" It has to be implemented inline in order for eval(<q-args>) and expand('<sfile>')
-" to work properly.
-"
-" Variables inside the expression below are prefixed with underscore
-" to avoid polluting the other function's scope.
-" e.g. if the other function has a variable named 'lines', this could be a problem:
-" Log lines
-" == (expression is expanded) ==>
-" let lines = []
-" eval('lines')
-"
-command! -complete=expression -nargs=? Log
-      \ let _lines = [] |
-      \ let _is_error = 0 |
-      \ try |
-      \   if !empty(<q-args>) |
-      \     let _lines = <sid>LogExprResult(eval(<q-args>)) |
-      \   elseif !empty(expand('<sfile>')) |
-      \     let _lines = [expand('<sfile>') . ', line ' . expand('<slnum>')] |
-      \   endif |
-      \ catch |
-      \   let _lines = [matchstr(v:exception, 'Vim.*:\zsE\d\+: .*')] |
-      \   let _is_error = 1 |
-      \ endtry |
-      \ call s:LogLines(_lines, {'qargs': <q-args>, 'sfile': expand('<sfile>'), 'is_error': _is_error})
-
-function! s:LogExprResult(result) abort
-  return split(scriptease#dump(a:result, {'width': &columns - 1}), "\n")
-endfunction
-
-function! s:LogLines(lines, opts) abort
-  if empty(a:lines)
-    " :Log on cmd-line without args
-    return
-  endif
-  let qargs = get(a:opts, 'qargs', 0)
-  let sfile = get(a:opts, 'sfile', 0)
-  let is_error = get(a:opts, 'is_error', 0)
-  for line in a:lines
-    if is_error
-      echohl ErrorMsg
-      echomsg line
-      echohl NONE
-    else
-      echomsg line
-    endif
-  endfor
-  if empty(sfile)
-    " Copy to clipboard, but only if :Log was called from cmd-line
-    " (and not within a script).
-    let @* = qargs . "\n> " . join(a:lines, "\n")
-  endif
-  let a:lines[0] = printf('[%s] %s', strftime('%H:%M:%S'), a:lines[0])
-  call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
-  call s:RefreshBuffer("/var/tmp/vim-messages.txt")
-endfunction
-
-function! s:RefreshBuffer(path) abort
-  try
-    " 'noautocmd' avoids:
-    " "E218: autocommand nesting too deep"
-    " when calling s:RefreshBuffer() from certain autocmds.
-    " (more specifically, autocmd => :Log => s:RefreshBuffer())
-    "
-    execute 'noautocmd silent checktime ' . a:path
-  catch /E93\|E94\|E523/
-    " E93: More than one match for /some/path/
-    "
-    " E94: No matching buffer for /some/path/
-    " Could happen with Dirvish buffers (a:path is a directory),
-    "
-    " E523: May not be allowed, when executing code in the context of autocmd.
-    " For example, running :Log inside of statusline#set().
-  endtry
-endfunction
-
-" :GoToDefinition map <cr>
-" :GoToDefinition function fzf#run
-" :GoToDefinition hi typescriptFuncKeyword
-function! s:GoToDefinition(cmd)
-  " Sample verbose output:
-  "
-  " :verbose command TsuReload
-  "     Name              Args Address Complete    Definition
-  " b   TsuReload         *            buffer      :call tsuquyomi#reload(<f-args>)
-  "         Last set from ~/work/tsuquyomi/autoload/tsuquyomi/config.vim line 185
-  "     TsuReloadProject  0                        : call tsuquyomi#reloadProject()
-  "         Last set from ~/work/tsuquyomi/plugin/tsuquyomi.vim line 91
-  "
-  let out = util#capture('verbose ' . a:cmd)
-  let lines = split(out, '\n')
-  for line in lines
-    let m = matchlist(line, '.*Last set from \(.*\) line \(\d\+\)')
-    if !len(m)
-      continue
-    endif
-    let filename = m[1]
-    let line_num = m[2]
-    silent execute 'edit ' . filename
-    execute line_num
-    return
-  endfor
-  echo substitute(out, '\n', '', '')
-endfunction
-command! -nargs=1 GoToDefinition :call s:GoToDefinition(<q-args>)
-
-" :GoToCommandDefinition AbortDispatch
-function! s:GoToCommandDefinition(cmd)
-  if a:cmd =~ '\s'
-    echo 'Not a *command*: ' . a:cmd
-    return
-  endif
-  call s:GoToDefinition('command ' . a:cmd)
-endfunction
-command! -nargs=1 -complete=command GoToCommandDefinition :call s:GoToCommandDefinition(<q-args>)
-
 function! s:CaptureMessages()
   let messages = util#messages()
   silent call writefile(messages, '/var/tmp/test-results.txt')
-  call s:RefreshBuffer('/var/tmp/test-results.txt')
+  call fs#RefreshBuffer('/var/tmp/test-results.txt')
   " open test-results.txt
   let a = util#OpenWindowInTab('/var/tmp/test-results.txt', 'vs')
   wincmd L
@@ -1474,28 +1323,6 @@ function! s:WrapCommand(cmd)
 endfunction
 command! -nargs=1 -complete=command WrapCommand call s:WrapCommand(<q-args>)
 
-function! s:ExploreSyntaxFiles() abort
-  let script_paths = s:GetScriptPaths()
-  let paths = []
-  for script_path in script_paths
-    if match(script_path, 'syntax/' . &syntax . '.vim') >= 0
-      call add(paths, script_path)
-    endif
-  endfor
-  if empty(paths)
-    return util#error_msg('ExploreSyntaxFiles: no syntax files found')
-  endif
-  let items = map(paths, "{'filename': v:val}")
-  call setqflist(items)
-  call s:MaybeSplit()
-  cfirst
-endfunction
-
-" Get full paths from :scriptnames
-function! s:GetScriptPaths() abort
-   return map(split(execute('scriptnames'), "\n"), 'fnamemodify(substitute(v:val, ''^\s*\d*: '', "", ""), '':p'')')
-endfunction
-
 function! s:ResetFoldLevel()
   if index(['ntx', 'pem'], &ft) >= 0
     setlocal foldlevel=0
@@ -1619,7 +1446,7 @@ function! s:GoToCursorReference() abort
   let line = getline('.')
   let cursor = getpos('.')
   try
-    let did_split = s:MaybeSplit()
+    let did_split = window#MaybeSplit()
     normal! gf
   catch /E447/
     if did_split
@@ -2082,8 +1909,6 @@ nnoremap <leader>et :call <sid>EditTestFile()<cr>
 nnoremap <leader>ev :<c-u>call util#EditFile(resolve($MYVIMRC))<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
-" yank last message
-nnoremap <leader>ym :Ym<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
@@ -2092,7 +1917,7 @@ nnoremap <silent> <leader>zS :call vimutil#DebugSynStack()<cr>
 " capture :messages in a file
 nnoremap <space>z :CaptureMessages<cr>
 " explore syntax files for the current filetype
-nnoremap <leader>ey :<c-u>call <sid>ExploreSyntaxFiles()<cr>
+nnoremap <leader>ey :<c-u>call vimutil#ExploreSyntaxFiles()<cr>
 
 " File handling
 nnoremap <space>n :e <c-r>=expand("%:h"). "/" <cr>
