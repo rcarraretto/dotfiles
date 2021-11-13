@@ -61,6 +61,33 @@ function! proglang#Prettier(mode) abort
   silent! update
 endfunction
 
+function! proglang#EditSketchBuffer(ft) abort
+  let configs = {
+  \  'typescript': {
+  \    'path': $DOTFILES_PRIVATE . '/src/sketch.ts',
+  \    'cmd': 'ts-node --project $DOTFILES_PRIVATE/tsconfig.json %'
+  \  },
+  \  'javascript': {
+  \    'path': $DOTFILES_PRIVATE . '/src/sketch.js',
+  \    'cmd': 'node %'
+  \  },
+  \  'go': {
+  \    'path': $DOTFILES_PRIVATE . '/src/sketch.go',
+  \    'cmd': 'go run %'
+  \  },
+  \  'applescript': {
+  \    'path': $DOTFILES_PRIVATE . '/bin/sketch.applescript',
+  \    'cmd': '%'
+  \  }
+  \}
+  if !has_key(configs, a:ft)
+    return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
+  endif
+  let config = configs[a:ft]
+  call util#EditFile(config['path'])
+  execute "nnoremap <buffer> <space>t :update <bar> call <sid>DispatchAndLogOutput('" . config['cmd'] . "')<cr>"
+endfunction
+
 " Wrap :TsuReferences (from tsuquyomi)
 " Use quickfix list instead of location list
 function! s:TsuReferences() abort
@@ -137,4 +164,46 @@ function! proglang#GolangMappings() abort
   if exists(':GoPlay')
     delcommand GoPlay
   endif
+endfunction
+
+function! proglang#EditTestFile() abort
+  if index(['javascript', 'typescript', 'typescript.tsx', 'go'], &ft) == -1
+    return util#error_msg('EditTestFile: unsupported file type: ' . &ft)
+  endif
+  " %     = 'path/to/file.ts'
+  " %:r   = 'path/to/file'
+  " %:r:r = 'path/to/file'
+  " %:e   = 'ts'
+  " %:e:e = 'ts'
+  "
+  " %     = 'path/to/file.test.ts'
+  " %:r   = 'path/to/file.test'
+  " %:r:r = 'path/to/file'
+  " %:e   = 'ts'
+  " %:e:e = 'test.ts'
+  "
+  let root = expand('%:r')
+  let ext = expand('%:e')
+  if root =~ '[\._]test$'
+    let is_test = 1
+    if &ft == 'go'
+      let candidate_path = substitute(expand('%:r:r'), '_test$', '', 'g') . '.' . ext
+    else
+      let candidate_path = expand('%:r:r') . '.' . ext
+    endif
+  else
+    let is_test = 0
+    if &ft == 'go'
+      let test_file_prefix = '_test'
+    else
+      let test_file_prefix = '.test'
+    endif
+    let candidate_path = root . test_file_prefix . '.' . ext
+  endif
+  if !filereadable(candidate_path)
+    let candidate_type = is_test ? 'source' : 'test'
+    return util#error_msg('EditTestFile: ' . candidate_type . ' file not found: ' . candidate_path)
+  endif
+  let split_type = is_test ? "rightbelow" : "leftabove"
+  call util#OpenWindowInTab(candidate_path, split_type . " vsplit")
 endfunction
