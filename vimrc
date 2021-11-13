@@ -390,22 +390,6 @@ if exists('$TMUX')
   augroup END
 endif
 
-augroup DisableE211
-  " Vim sends a warning when a file was initially opened, but then deleted outside of vim.
-  "
-  " This happpens to me every once in a while
-  " when switching git branches while having many buffers open.
-  "
-  " I find this a bit disrupting when I'm moving back and forth from vim
-  " and I have to see this warning every time I come back to it.
-  " At the end, I'm forced to break my flow and close the buffers.
-  "
-  " So just do a hack to disable this behavior.
-  " https://stackoverflow.com/a/52781365/2277505
-  autocmd!
-  autocmd FileChangedShell * call s:FileChangedShell(expand("<afile>:p"))
-augroup END
-
 " }}}
 
 " AutoCd {{{
@@ -500,10 +484,6 @@ function! s:VimEnter()
     iunmap <M-d>
   endif
 
-  " Overwrite eunuch.vim :Delete and :Remove
-  command! Delete call s:DeleteCurrentFile()
-  command! Remove Delete
-
   call writefile([], "/var/tmp/vim-messages.txt")
 endfunction
 
@@ -535,32 +515,6 @@ function! s:CaptureMessages()
   wincmd p
 endfunction
 command! CaptureMessages call s:CaptureMessages()
-
-" Based on eunuch.vim :Delete
-function! s:DeleteCurrentFile() abort
-  let absolute_path = expand('%:p')
-  if empty(absolute_path)
-    " e.g. :new
-    return util#error_msg('DeleteCurrentFile: Buffer does not have a path')
-  endif
-  if isdirectory(absolute_path)
-    " e.g. dirvish buffer
-    return util#error_msg('DeleteCurrentFile: Buffer cannot be a directory')
-  endif
-  if !filereadable(absolute_path)
-    " e.g.
-    " :new path/to/file
-    " :Remove
-    return util#error_msg('DeleteCurrentFile: Buffer is not associated to a file in disk')
-  endif
-  " Use bwipeout instead of bdelete.
-  " This way, another file can be renamed to have the name of the deleted file.
-  " Else s:RenameFile() causes 'A buffer with that name already exists'.
-  bwipeout
-  if delete(absolute_path)
-    return util#error_msg('DeleteCurrentFile: Failed to delete "' . absolute_path . '"')
-  endif
-endfunction
 
 function! s:AgitConfig()
   let mapping = maparg("<cr>", "n", 0, 1)
@@ -734,17 +688,6 @@ function! s:MoveToNextParagraph()
   normal! }+
 endfunction
 
-function! s:OpenInSourceTree()
-  let output = util#GetGitRoot()
-  if empty(output)
-    echohl ErrorMsg
-    echom "OpenInSourceTree: couldn't find git root"
-    echohl NONE
-    return
-  endif
-  call system('open -a SourceTree ' . fnameescape(output))
-endfunction
-
 " Remove views.
 " Usually call this because folding is buggy.
 function! s:RemoveViews()
@@ -852,43 +795,6 @@ endfunction
 
 command! BufOnly :call s:BufOnly()
 
-" Adapted from:
-" https://github.com/vim-scripts/Rename
-function! s:RenameFile(name)
-  let oldfile = expand('%:p')
-  let newfile = fnamemodify(a:name, ':p')
-  if oldfile == newfile
-    return util#error_msg('RenameFile: renaming to the same file')
-  endif
-  if bufexists(newfile)
-    return util#error_msg('RenameFile: A buffer with that name already exists')
-  endif
-
-  let v:errmsg = ''
-  silent! execute 'saveas ' . a:name
-  if v:errmsg !~# '^$\|^E329'
-    echoerr v:errmsg
-    return
-  endif
-
-  if expand('%:p') == oldfile || !filewritable(expand('%:p'))
-    return util#error_msg('RenameFile: Rename failed for some reason')
-  endif
-
-  let lastbufnr = bufnr('$')
-  if fnamemodify(bufname(lastbufnr), ':p') == oldfile
-    silent execute lastbufnr . 'bwipe!'
-  else
-    return util#error_msg('RenameFile: Could not wipe out the old buffer for some reason')
-  endif
-
-  if delete(oldfile) != 0
-    return util#error_msg('RenameFile: Could not delete the old file: ' . oldfile)
-  endif
-endfunction
-
-command! -nargs=1 -complete=file RenameFile call s:RenameFile(<q-args>)
-
 function! s:CloseAuxiliaryBuffers() abort
   cclose
   lclose
@@ -976,78 +882,6 @@ function! s:EditTestFile() abort
   let split_type = is_test ? "rightbelow" : "leftabove"
   call util#OpenWindowInTab(candidate_path, split_type . " vsplit")
 endfunction
-
-" Adapted from:
-" https://vim.fandom.com/wiki/File_no_longer_available_-_mark_buffer_modified
-function s:FileChangedShell(name)
-  let msg = 'File "'.a:name.'"'
-  let v:fcs_choice = ''
-  if v:fcs_reason == "deleted"
-    " Set the buffer as 'readonly', instead of displaying E211.
-    " By doing this, we can prevent the file from being accidentally saved in vim
-    " and thus inadvertently put back into the file system.
-    call setbufvar(expand(a:name), '&readonly', '1')
-    " Set the buffer as 'modified', so if we quit vim,
-    " we're aware that changes will be lost, if we don't save it.
-    call setbufvar(expand(a:name), '&modified', '1')
-  elseif v:fcs_reason == "time"
-    let msg .= " timestamp changed"
-  elseif v:fcs_reason == "mode"
-    let msg .= " permissions changed"
-  elseif v:fcs_reason == "changed"
-    let msg .= " contents changed"
-    let v:fcs_choice = "ask"
-  elseif v:fcs_reason == "conflict"
-    let msg .= " CONFLICT --"
-    let msg .= " is modified, but"
-    let msg .= " was changed outside Vim"
-    let v:fcs_choice = "ask"
-    echohl ErrorMsg
-  else  " unknown values (future Vim versions?)
-    let msg .= " FileChangedShell reason="
-    let msg .= v:fcs_reason
-    let v:fcs_choice = "ask"
-    echohl ErrorMsg
-  endif
-  redraw!
-  echomsg msg
-  echohl None
-endfunction
-
-function! s:SysOpen(filename)
-  let filename = a:filename
-  if empty(a:filename)
-    if &ft == 'dirvish'
-      let filename = fnameescape(getline('.'))
-    else
-      let filename = expand('%')
-    endif
-  endif
-  if isdirectory(filename)
-    return util#error_msg('SysOpen: selected path cannot be a directory')
-  endif
-  let ext = fnamemodify(filename, ':e')
-  if index(['sh'], ext) != -1
-    echo 'SysOpen: unsupported extension: ' . ext
-    return
-  endif
-  let output = system('open ' . filename)
-  if v:shell_error
-    echo 'Error: ' . substitute(output, '\n', ' ', 'g')
-    return
-  endif
-endfunction
-command! -nargs=? -complete=file SysOpen call s:SysOpen(<q-args>)
-
-function! s:OpenFolderInFinder() abort
-  let dir = expand('%:p:h')
-  if !isdirectory(dir)
-    return util#error_msg('OpenFolderInFinder: not a folder: ' . dir)
-  endif
-  echom "OpenFolderInFinder: " . dir
-  call system("open -a Finder " . fnameescape(dir))
-endfunction
-command! OpenFolderInFinder call s:OpenFolderInFinder()
 
 function! s:JsonFormat()
   if &ft !=# 'json'
@@ -1888,7 +1722,7 @@ nnoremap <leader>gf :<c-u>call <sid>GoToCursorReference()<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :SysOpen<cr>
 " open folder of current file in Finder
-nnoremap <leader>oF :OpenFolderInFinder<cr>
+nnoremap <leader>oF :call fs#OpenFolderInFinder()<cr>
 
 " Search in file
 " ---
@@ -1936,7 +1770,7 @@ nnoremap <leader>go :Git commit<cr>
 nnoremap <leader>gh :<c-r>=line('.')<cr>GBrowse<cr>
 vnoremap <leader>gh :GBrowse<cr>
 " open repo in SourceTree
-nnoremap <leader>gs :call <sid>OpenInSourceTree()<cr>
+nnoremap <leader>gs :call fs#OpenInSourceTree()<cr>
 
 " Tags / symbols
 nnoremap <space>[ :Tags <c-r><c-w><cr>
