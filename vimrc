@@ -707,29 +707,6 @@ function! s:RemoveViews()
 endfunction
 command! RemoveViews :call s:RemoveViews()
 
-function! s:ToggleFolding()
-  if foldclosed(line('.')) == -1
-    " Fold is open.
-    " Close one level
-    try
-      normal! za
-    catch /E490/
-      echo 'Fold not found'
-      return
-    endtry
-    if foldclosed(line('.')) == -1
-      " Fold is still open.
-      " This seems to happen when the line is the only line
-      " with that fold level.
-      normal! za
-    endif
-  else
-    " Fold is closed.
-    " Open folds recursively
-    normal! zA
-  endif
-endfunction
-
 function! RefreshChrome()
   silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
   redraw!
@@ -912,15 +889,6 @@ function! s:WrapCommand(cmd)
   endtry
 endfunction
 command! -nargs=1 -complete=command WrapCommand call s:WrapCommand(<q-args>)
-
-function! s:ResetFoldLevel()
-  if index(['ntx', 'pem'], &ft) >= 0
-    setlocal foldlevel=0
-  else
-    setlocal foldlevel=1
-  endif
-  normal! zz
-endfunction
 
 function! s:PrintCurrentFuncNameGolang() abort
   let winview = winsaveview()
@@ -1244,23 +1212,6 @@ function! s:BufferFromClipboard(ft, split_count) abort
 endfunction
 command! -nargs=1 -count=3 BufferFromClipboard call s:BufferFromClipboard(<q-args>, <count>)
 
-" Based on:
-" https://stackoverflow.com/a/3264176
-" https://vim.fandom.com/wiki/Search_only_over_a_visual_range
-function! s:SearchInFold() abort
-  let pos = getpos('.')
-  normal! [z
-  let start = line('.')
-  normal! ]z
-  let end = line('.')
-  call setpos('.', pos)
-  " :help \%>l
-  " :help \%<l
-  let after_start = '\%>' . start . 'l'
-  let before_end = '\%<' . end . 'l'
-  call feedkeys('/' . after_start . before_end)
-endfunction
-
 function! s:YankNpm() abort
   let matches = matchlist(getline('.'), '^\s*"\([^"]*\)": "^\?\([^"]*\)",')
   if empty(matches)
@@ -1338,11 +1289,11 @@ nnoremap zk zk[z
 " 'Use F1, F2, etc. keys as standard function keys'
 "
 " Taken from https://github.com/wincent/wincent
-nnoremap <silent> <tab> :call <sid>ToggleFolding()<cr>
+nnoremap <silent> <tab> :call folding#Toggle()<cr>
 nnoremap <f6> <c-i>
 
 " Reset foldlevel to 1
-nnoremap <silent> zf :call <sid>ResetFoldLevel()<cr>
+nnoremap <silent> zf :call folding#ResetFoldLevel()<cr>
 " Print the name of the current function
 nnoremap <silent> zp :call <sid>PrintCurrentFuncName()<cr>
 
@@ -1539,7 +1490,7 @@ nnoremap <leader>oF :call fs#OpenFolderInFinder()<cr>
 "   https://stackoverflow.com/a/24717020
 nnoremap <space>/f :BLines {{{$<cr>| " }}}
 " search in fold
-nnoremap <space>/z :call <sid>SearchInFold()<cr>
+nnoremap <space>/z :call folding#SearchInFold()<cr>
 " search in file with Ag
 nnoremap <leader>af :SearchInFile<space>
 " fzf lines in buffer (via fzf.vim plugin)
