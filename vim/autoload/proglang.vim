@@ -61,6 +61,10 @@ function! proglang#Prettier(mode) abort
   silent! update
 endfunction
 
+function! s:DispatchAndLogOutput(cmd) abort
+  silent execute printf("Dispatch! %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
+endfunction
+
 function! proglang#EditSketchBuffer(ft) abort
   let configs = {
   \  'typescript': {

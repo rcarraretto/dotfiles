@@ -772,10 +772,6 @@ function! s:CloseAuxiliaryBuffers() abort
   endfor
 endfunction
 
-function! s:DispatchAndLogOutput(cmd) abort
-  silent execute printf("Dispatch! %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
-endfunction
-
 " Similar to :%!cmd (:h :range!)
 " but do not replace the contents of buffer in case of error
 function! s:FilterBufferOrFail(cmd) abort
