@@ -916,130 +916,6 @@ function! s:FilterBufferOrFail(cmd) abort
   return output
 endfunction
 
-function! s:HighestWinnr()
-  let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
-  return wins[-1]['winnr']
-endfunction
-
-function! s:CycleWinDownOrNext() abort
-  let prev_winnr = winnr()
-  wincmd j
-  if prev_winnr == winnr()
-    " Can move from B to C
-    "   A  |  C
-    " -----|
-    "  *B* |
-    "
-    wincmd w
-  endif
-endfunction
-
-function! s:CycleWinUpOrPrev() abort
-  let prev_winnr = winnr()
-  wincmd k
-  if prev_winnr == winnr()
-    " Can move from C to B
-    " ('wincmd h' will move from C to A sometimes, depending on
-    "  where you are on C)
-    "   A  | *C*
-    " -----|
-    "   B  |
-    "
-    wincmd W
-  endif
-endfunction
-
-function! s:CycleWinLeft()
-  if winnr() == 1
-    " This is the first window.
-    " Go to the last window.
-    " (i.e., cycle instead of moving left)
-    "
-    " This is a possible layout:
-    "  *A* |  B
-    " -----------
-    "   C  |  D
-    "
-    " In this case, it moves from A to D.
-    execute s:HighestWinnr() . "wincmd w"
-  else
-    " Move left
-    let prev_winnr = winnr()
-    execute "normal! \<c-w>h"
-    if winnr() == prev_winnr
-      " Couldn't move left.
-      " This is likely the layout:
-      "   A  |  B
-      " -----------
-      "  *C* |  D
-      "
-      " In this case, move from C to B.
-      execute "normal! \<c-w>w"
-    endif
-  endif
-endfunction
-
-function! s:CycleWinRight()
-  if winnr() == s:HighestWinnr()
-    " This is the last 'normal' window.
-    " Go back to window #1.
-    " (i.e., cycle instead of moving right)
-    1 wincmd w
-  else
-    let prev_winnr = winnr()
-    " Move right
-    execute "normal! \<c-w>l"
-    if winnr() == prev_winnr
-      " Couldn't move right.
-      " This is likely the layout:
-      "   A  | *B*
-      " -----------
-      "   C  |  D
-      "
-      " In this case, move from B to C.
-      execute "normal! \<c-w>W"
-    endif
-  endif
-endfunction
-
-function! s:ToggleWindowSize() abort
-  if &columns - winwidth(0) < 10
-    " if the size of the current window is close enough to the size of the
-    " terminal, make window sizes even.
-    "
-    " Note: The size of the current window and the terminal will not exactly
-    " match when other windows were pushed away via 'wincmd _' and 'wincmd |'.
-    " The other windows are shrinked to be ~1 column long.
-    wincmd =
-  else
-    " maximize size of current window
-    wincmd _
-    wincmd |
-  endif
-endfunction
-
-" Similar to :quit but try to land on the previous window.
-" https://vi.stackexchange.com/a/9232
-function! s:CloseWindow() abort
-  let prev_win_nr = winnr()
-  wincmd p
-  execute prev_win_nr . "wincmd q"
-endfunction
-
-" Similar to :tabclose but land on the last accessed tab.
-function! s:CloseTab() abort
-  let prev_tab_nr = tabpagenr()
-  " Go to last accessed tab
-  execute "normal! g\<tab>"
-  try
-    execute 'tabclose ' . prev_tab_nr
-  catch
-    echohl ErrorMsg
-    echom v:exception
-    echohl NONE
-  endtry
-endfunction
-
 function! GetSubstituteTerm()
   let str = GetSubstituteTerm2()
   " Make first char lower case,
@@ -1571,21 +1447,21 @@ command! ToggleConceal :call util#ToggleBufVar('&conceallevel', {'print': 1, 'of
 
 " Windows
 " window navigation
-nnoremap <silent> <space>j :call <sid>CycleWinDownOrNext()<cr>
-nnoremap <silent> <space>k :call <sid>CycleWinUpOrPrev()<cr>
-nnoremap <silent> <space>h :call <sid>CycleWinLeft()<cr>
-nnoremap <silent> <space>l :call <sid>CycleWinRight()<cr>
+nnoremap <silent> <space>j :call window#CycleWinDownOrNext()<cr>
+nnoremap <silent> <space>k :call window#CycleWinUpOrPrev()<cr>
+nnoremap <silent> <space>h :call window#CycleWinLeft()<cr>
+nnoremap <silent> <space>l :call window#CycleWinRight()<cr>
 nnoremap <space>; <c-w>p
 nnoremap <space>w <c-w><c-w>
 " close window
-nnoremap <space>q :call <sid>CloseWindow()<cr>
+nnoremap <space>q :call window#CloseWindow()<cr>
 nnoremap <space>Q :bd!<cr>
 " decrease window size
 nnoremap <space>, :20wincmd <<cr>
 " increase window size
 nnoremap <space>. :20wincmd ><cr>
 " toggle window size (maximize / make even)
-nnoremap <leader>ww :call <sid>ToggleWindowSize()<cr>
+nnoremap <leader>ww :call window#ToggleWindowSize()<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
@@ -1598,7 +1474,7 @@ nnoremap <leader>da :AbortDispatch<cr>
 nnoremap <silent> [r :tabprevious<cr>
 nnoremap <silent> ]r :tabnext<cr>
 nnoremap <leader>tn :tabnew<cr>
-nnoremap <leader>tc :call <sid>CloseTab()<cr>
+nnoremap <leader>tc :call window#CloseTab()<cr>
 nnoremap <leader>th :tabm -1<cr>
 nnoremap <leader>tl :tabm +1<cr>
 
