@@ -890,67 +890,6 @@ function! s:WrapCommand(cmd)
 endfunction
 command! -nargs=1 -complete=command WrapCommand call s:WrapCommand(<q-args>)
 
-function! s:PrintCurrentFuncNameGolang() abort
-  let winview = winsaveview()
-  " go to top of function (vim-go)
-  noautocmd normal [[
-  let line = getline('.')
-  noautocmd execute "normal \<c-o>"
-  " fix scroll position that was changed by <c-o>
-  call winrestview(winview)
-  " Delay the echo.
-  " Else calling this function right after switching lines has the side effect
-  " of the echo being erased by some other code.
-  " Maybe this is related to some plugin using a Cursor autocmd.
-  call util#delayed_echo(line)
-endfunction
-
-function! s:PrintCurrentFuncNameCpp() abort
-  let winview = winsaveview()
-  " go to top of method. cursor will be on {
-  noautocmd normal [m
-  if match(getline('.'), '^\s*{') >= 0
-    " {'s are on a dedicated line
-    normal! k
-  endif
-  if stridx(getline('.'), '(') == -1
-    " method definition too long
-    if stridx(getline('.'), ')') >= 0
-      normal! f)
-      normal! %
-    endif
-  endif
-  let line = getline('.')
-  noautocmd execute "normal \<c-o>"
-  " fix scroll position that was changed by <c-o>
-  call winrestview(winview)
-  " Extract method name only (no return value or args)
-  let method_name = matchstr(trim(line), '.* \zs[^(]\+\ze(')
-  if len(method_name)
-    echo method_name
-    return
-  endif
-  " Couldn't find it via [m, so maybe it is inside a function.
-  "
-  " The [{ motion will only work if the current line is an expression
-  " directly inside the function (not nested in an if, switch, etc).
-  " Therefore, better to jump to a candidate location, then to print
-  " inaccurate info.
-  call util#error_msg("Method not found. Jumping to block...")
-  normal! [{
-  normal! zz
-endfunction
-
-function! s:PrintCurrentFuncName() abort
-  if &ft == 'go'
-    call s:PrintCurrentFuncNameGolang()
-  elseif &ft == 'cpp'
-    call s:PrintCurrentFuncNameCpp()
-  else
-    call util#error_msg("PrintCurrentFuncName: unimplemented for filetype: " . &ft)
-  endif
-endfunction
-
 function! s:FormatParagraph() abort
   if getline('.')[0] == '|'
     " table (using easy-align)
@@ -1295,7 +1234,7 @@ nnoremap <f6> <c-i>
 " Reset foldlevel to 1
 nnoremap <silent> zf :call folding#ResetFoldLevel()<cr>
 " Print the name of the current function
-nnoremap <silent> zp :call <sid>PrintCurrentFuncName()<cr>
+nnoremap <silent> zp :call proglang#PrintCurrentFuncName()<cr>
 
 " Swap single quote and backtick
 nnoremap ' `
