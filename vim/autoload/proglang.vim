@@ -1,3 +1,16 @@
+" Similar to :%!cmd (:h :range!)
+" but do not replace the contents of buffer in case of error
+function! s:FilterBufferOrFail(cmd) abort
+  let input = join(getline(0, '$'), "\n")
+  let output = system(a:cmd, input)
+  if v:shell_error
+    call util#error_msg(printf("FilterBufferOrFail: %s\n%s", a:cmd, output))
+  else
+    call setline(1, split(output, "\n"))
+  endif
+  return output
+endfunction
+
 function! proglang#Prettier(mode) abort
   let prettier_parsers={
   \ 'json': 'json',
