@@ -12,6 +12,20 @@ function! window#MaybeSplit() abort
   return 0
 endfunction
 
+function! window#SplitFromCount(count) abort
+  if a:count == 1
+    silent new
+    return 1
+  elseif a:count == 2
+    silent vnew
+    return 1
+  elseif a:count == 3
+    tabnew
+    return 1
+  endif
+  return 0
+endfunction
+
 function! s:HighestWinnr()
   let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
   return wins[-1]['winnr']
@@ -134,4 +148,14 @@ function! window#CloseTab() abort
     echom v:exception
     echohl NONE
   endtry
+endfunction
+
+function! window#CloseUnlistedBuffersInTab() abort
+  let wins = filter(getwininfo(), '!v:val.quickfix && v:val.tabnr == tabpagenr()')
+  for win in wins
+    if getbufinfo(win['bufnr'])[0]['listed'] == 0
+      call win_gotoid(win['winid'])
+      noautocmd wincmd c
+    endif
+  endfor
 endfunction
