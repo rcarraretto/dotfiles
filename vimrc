@@ -453,18 +453,6 @@ endfunction
 " Functions ---------------------- {{{
 
 function! s:VimEnter()
-  " Remove arguments from arglist.
-  "
-  " The arglist can be used by dirvish to select files,
-  " so I prefer to start vim with an emtpy list.
-  "
-  " On startup, the arglist is populated with the path arguments.
-  " So when starting vim with `vim .`, it's populated with the path
-  " of the current directory.
-  if argc() > 0
-    argdelete *
-  endif
-
   " Revert plugin side effects
   " rsi.vim
   if !empty(maparg("<c-f>", "c", 0, 1))
@@ -579,16 +567,6 @@ function! s:DisableSyntaxForLargeFiles()
     syntax clear
   endif
 endfunction
-
-function! s:QuickfixFilenames()
-  " Building a hash ensures we get each buffer only once
-  let buffer_numbers = {}
-  for quickfix_item in getqflist()
-    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
-  endfor
-  return join(values(buffer_numbers))
-endfunction
-command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 
 function! s:TrimWhitespace()
   if &modifiable == 0
@@ -705,40 +683,6 @@ function! s:VisualStar(cmdtype)
   let @s = temp
 endfunction
 
-" Adapted from:
-" https://github.com/vim-scripts/BufOnly.vim
-function! s:BufOnly()
-  let buf_nr = bufnr('%')
-  let last_buf_nr = bufnr('$')
-
-  let delete_count = 0
-  let n = 1
-  while n <= last_buf_nr
-    if n != buf_nr && buflisted(n)
-      if getbufvar(n, '&modified')
-        echohl ErrorMsg
-        echomsg 'No write since last change for buffer'
-              \ n '(add ! to override)'
-        echohl None
-      else
-        silent execute 'bdel ' . n
-        if !buflisted(n)
-          let delete_count = delete_count + 1
-        endif
-      endif
-    endif
-    let n = n + 1
-  endwhile
-
-  if delete_count == 1
-    echomsg delete_count "buffer deleted"
-  elseif delete_count > 1
-    echomsg delete_count "buffers deleted"
-  endif
-endfunction
-
-command! BufOnly :call s:BufOnly()
-
 function! GetSubstituteTerm()
   let str = GetSubstituteTerm2()
   " Make first char lower case,
@@ -817,36 +761,6 @@ function! s:FormatParagraph() abort
     normal! gqip
   endif
 endfunction
-
-function! s:VSplitRight(path) abort
-  " backup
-  let prev = &splitright
-  " split
-  if prev == 0
-    set splitright
-  endif
-  execute "vsplit " . a:path
-  " restore
-  if prev == 0
-    set nosplitright
-  endif
-endfunction
-command! -nargs=? -complete=file VSplitRight :call s:VSplitRight(<q-args>)
-
-function! s:VSplitLeft(path) abort
-  " backup
-  let prev = &splitright
-  " split
-  if prev == 1
-    set nosplitright
-  endif
-  execute "vsplit " . a:path
-  " restore
-  if prev == 1
-    set splitright
-  endif
-endfunction
-command! -nargs=? -complete=file VSplitLeft :call s:VSplitLeft(<q-args>)
 
 function! s:CopyCursorReference() abort
   let path = fnameescape(expand("%:~"))

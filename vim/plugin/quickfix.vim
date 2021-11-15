@@ -173,3 +173,6 @@ function! ToggleLocationList()
   exec prevwinnr . "wincmd w"
   exec winnr . "wincmd w"
 endfunction
+
+" Populate the arglist with the filenames from the quickfix list
+command! -nargs=0 -bar Qargs execute 'args ' . quickfix#QuickfixFilenames()

@@ -194,4 +194,13 @@ endfunction
 augroup DirvishConfig
   autocmd!
   autocmd FileType dirvish call s:DirvishConfig()
+  " Remove arguments from arglist.
+  "
+  " The arglist can be used by dirvish to select files,
+  " so I prefer to start vim with an emtpy list.
+  "
+  " On startup, the arglist is populated with the path arguments.
+  " So when starting vim with `vim .`, it's populated with the path
+  " of the current directory.
+  autocmd VimEnter * if argc() > 0 | argdelete * | endif
 augroup END
