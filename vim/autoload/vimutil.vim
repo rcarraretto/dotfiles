@@ -51,6 +51,16 @@ function! vimutil#CaptureMessages()
   wincmd p
 endfunction
 
+function! vimutil#CopyCmdline() abort
+  " If it's a :Log command, then don't include the 'Log ' part.
+  " For example:
+  " > Log strftime('%H:%M:%S')
+  " copies
+  " > strftime('%H:%M:%S')
+  let @* = matchstr(getcmdline(), '^\(Log \)\?\zs.*')
+  return ""
+endfunction
+
 " Access script-scope function
 " https://stackoverflow.com/a/39216373/2277505
 function! vimutil#GetScriptFunc(scriptpath, funcname)

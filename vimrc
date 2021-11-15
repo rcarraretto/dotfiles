@@ -667,76 +667,6 @@ function! ToggleGStatus()
   endif
 endfunction
 
-" Similar to star (*) but for arbitrary motions,
-" instead of just the word under cursor.
-function! s:SearchOperator(type)
-  let @/ = util#YankOperatorTarget(a:type)
-  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
-endfunction
-
-" Make * and # work on visual mode.
-" From https://github.com/nelstrom/vim-visual-star-search
-function! s:VisualStar(cmdtype)
-  let temp = @s
-  normal! gv"sy
-  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
-  let @s = temp
-endfunction
-
-function! GetSubstituteTerm()
-  let str = GetSubstituteTerm2()
-  " Make first char lower case,
-  " so that the :Subvert replace is always case-aware.
-  return tolower(str[0]) . str[1:]
-endfunction
-
-function! GetSubstituteTerm2()
-  " Handle VisualStar.
-  "
-  " "\Vbatata" => "batata"
-  "
-  " Note: \V has a special meaning in vim regex,
-  " therefore we need to write \\V to match "\V".
-  if match(@/, '^\\V\(.*\)') != -1
-    return matchlist(@/, '^\\V\(.*\)')[1]
-  endif
-
-  " Remove the word boundary atoms
-  " that will be present when searching with * and #.
-  "
-  " "\<batata\>" => "batata"
-  "
-  " Note: \< and \> have a special meaning in vim regex (word boundary),
-  " therefore we need to write \\< and \\> to match "\<" and "\>".
-  if match(@/, '^\\<\(.*\)\\>$') != -1
-    return matchlist(@/, '^\\<\(.*\)\\>$')[1]
-  endif
-
-  return @/
-endfunction
-
-" :SW command.
-" (Wrapper for :Subvert from abolish.vim)
-" :Subvert changes the search register when called directly.
-" By using this wrap, this can be avoided.
-function! s:SubvertWrap(line1, line2, count, args)
-  let save_cursor = getpos('.')
-  try
-    if a:count == 0
-      execute "Subvert" . a:args
-    else
-      execute a:line1 . "," . a:line2 . "Subvert" . a:args
-    endif
-  catch
-    echohl ErrorMsg
-    echo v:errmsg
-    echohl NONE
-  endtry
-  call setpos('.', save_cursor)
-  return ""
-endfunction
-command! -nargs=1 -bar -range=0 SW execute s:SubvertWrap(<line1>, <line2>, <count>, <q-args>)
-
 function! s:WrapCommand(cmd)
   try
     execute a:cmd
@@ -802,35 +732,6 @@ function! s:GoToCursorReference() abort
   endtry
 endfunction
 
-function! s:CopyCmdline() abort
-  " If it's a :Log command, then don't include the 'Log ' part.
-  " For example:
-  " > Log strftime('%H:%M:%S')
-  " copies
-  " > strftime('%H:%M:%S')
-  let @* = matchstr(getcmdline(), '^\(Log \)\?\zs.*')
-  return ""
-endfunction
-
-" Given the current search term, show the uniques matches.
-" Based on https://vi.stackexchange.com/a/8914
-function! s:ShowUniqueSearchMatches() abort
-  let matches = []
-  silent execute '%s//\=add(matches, submatch(0))/nge'
-  if empty(matches)
-    return util#error_msg('ShowUniqueSearchMatches: no matches: ' . @/)
-  endif
-  call uniq(sort(matches))
-  let str = join(matches, "\n")
-  " Open buffer with results
-  new
-  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-  noautocmd silent! 1put= str
-  noautocmd silent! 1delete _
-  call feedkeys(":nohlsearch\<cr>")
-endfunction
-command! ShowUniqueSearchMatches :call <sid>ShowUniqueSearchMatches()
-
 function! s:YankNpm() abort
   let matches = matchlist(getline('.'), '^\s*"\([^"]*\)": "^\?\([^"]*\)",')
   if empty(matches)
@@ -883,8 +784,8 @@ nnoremap c* *Ncgn
 nnoremap c# #NcgN
 
 " Search in file (from visual mode)
-xnoremap * :<c-u>call <sid>VisualStar('/')<cr>/<c-r>=@/<cr><cr>
-xnoremap # :<c-u>call <sid>VisualStar('?')<cr>?<c-r>=@/<cr><cr>
+xnoremap * :<c-u>call search#VisualStar('/')<cr>/<c-r>=@/<cr><cr>
+xnoremap # :<c-u>call search#VisualStar('?')<cr>?<c-r>=@/<cr><cr>
 
 " Show output of last command
 nnoremap K :!<cr>
@@ -984,7 +885,7 @@ cnoremap <c-n> <down>
 cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
 " Copy current command-line
-cnoremap <expr> <c-x>y <sid>CopyCmdline()
+cnoremap <expr> <c-x>y vimutil#CopyCmdline()
 
 " Browse files/folders & global search
 " ---
@@ -1115,7 +1016,7 @@ nnoremap <leader>af :SearchInFile<space>
 " fzf lines in buffer (via fzf.vim plugin)
 nnoremap <space>/b :BLines<cr>
 " search operator
-nnoremap g/ :set operatorfunc=<sid>SearchOperator<cr>g@
+nnoremap g/ :set operatorfunc=search#SearchOperator<cr>g@
 
 " Find and Replace / Find and Bulk Change
 "
@@ -1125,16 +1026,16 @@ nnoremap g/ :set operatorfunc=<sid>SearchOperator<cr>g@
 " :h :Subvert
 "
 " - replace within file (with confirmation)
-nnoremap <leader>rw :%SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/gc<left><left><left>
+nnoremap <leader>rw :%SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/gc<left><left><left>
 " - replace within file (no confirmation)
-nnoremap <leader>rn :%SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
-vnoremap <leader>rn :SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
-nnoremap <leader>rN :%s/<c-r>=GetSubstituteTerm2()<cr>/<c-r>=GetSubstituteTerm2()<cr>/g<left><left>
+nnoremap <leader>rn :%SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
+vnoremap <leader>rn :SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
+nnoremap <leader>rN :%s/<c-r>=search#Term()<cr>/<c-r>=search#Term()<cr>/g<left><left>
 " - replace within line
-nnoremap <leader>rl :SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
+nnoremap <leader>rl :SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
 " - replace within paragraph
-nnoremap <leader>rp :'{,'}SW/<c-r>=GetSubstituteTerm()<cr>/<c-r>=GetSubstituteTerm()<cr>/g<left><left>
-nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>=GetSubstituteTerm2()<cr>//g <Bar> update<c-f>F/<c-c>
+nnoremap <leader>rp :'{,'}SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
+nnoremap <leader>rr :Qargs <Bar> argdo %s/<c-r>=search#Term()<cr>//g <Bar> update<c-f>F/<c-c>
 nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
@@ -1178,7 +1079,7 @@ cnoremap <c-g>f <c-r>=expand('%:t')<cr>
 
 " Paste escaped content from clipboard in command-line (search) mode.
 " Useful when pasting a path for search.
-" Based on s:VisualStar
+" Based on search#VisualStar
 cnoremap <c-g>e \V<c-r>=substitute(escape(getreg('*'), '/\'), '\n', '\\n', 'g')<cr>
 
 nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
