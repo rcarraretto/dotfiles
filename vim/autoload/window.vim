@@ -26,6 +26,20 @@ function! window#SplitFromCount(count) abort
   return 0
 endfunction
 
+function! window#VSplitRight(path) abort
+  " backup
+  let prev = &splitright
+  " split
+  if prev == 0
+    set splitright
+  endif
+  execute "vsplit " . a:path
+  " restore
+  if prev == 0
+    set nosplitright
+  endif
+endfunction
+
 function! window#VSplitLeft(path) abort
   " backup
   let prev = &splitright
