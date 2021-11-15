@@ -75,3 +75,14 @@ function! s:LogLines(lines, opts) abort
   call writefile(a:lines, "/var/tmp/vim-messages.txt", "a")
   call fs#RefreshBuffer("/var/tmp/vim-messages.txt")
 endfunction
+
+augroup AuxiliaryBuffersConfig
+  autocmd!
+  autocmd VimEnter * call writefile([], "/var/tmp/vim-messages.txt")
+  autocmd BufRead /var/tmp/vim-messages.txt,/private/var/tmp/vim-messages.txt set ft=vim_log
+    \| let b:skip_color_column=1
+    \| let b:skip_cursor_line=1
+    \| let b:parenmatch=0
+    \| setlocal nonumber norelativenumber
+  autocmd BufRead /var/tmp/test-results.txt let b:skip_trim_whitespace = 1
+augroup END

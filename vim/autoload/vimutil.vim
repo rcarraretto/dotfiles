@@ -1,3 +1,56 @@
+" Open/close a log window on the right side of the current tab
+" and keep all other log windows closed.
+function! vimutil#ToggleLogWindow(target_path) abort
+  let paths = [
+        \'/var/tmp/test-console.txt',
+        \'/var/tmp/test-results.txt',
+        \'/var/tmp/vim-messages.txt'
+        \]
+  let oldwinnr = winnr()
+  let opened = util#ToggleWindowInTab(a:target_path)
+  if opened == 1
+    " Window was opened.
+    " Keep window on the right side.
+    wincmd L
+    setlocal wrap
+    setlocal foldlevel=20
+    " Close all the other log windows.
+    for path in paths
+      if path != a:target_path
+        call util#CloseWindowInTab(path)
+      endif
+    endfor
+  endif
+  " Go back to original window
+  if winbufnr(oldwinnr) != -1
+    execute oldwinnr . "wincmd w"
+  endif
+endfunction
+
+function! vimutil#CloseAuxiliaryBuffers() abort
+  cclose
+  lclose
+  " close buffers in /var/tmp:
+  " - test-results.txt
+  " - test-console.txt
+  " - vim-messages.txt
+  let bufs = filter(getbufinfo(), {idx, val -> val['listed'] && val['name'] =~ '^/private/var/tmp'})
+  let bufnrs = map(bufs, 'v:val.bufnr')
+  for bufnr in bufnrs
+    execute "bdelete " . bufnr
+  endfor
+endfunction
+
+function! vimutil#CaptureMessages()
+  let messages = util#messages()
+  silent call writefile(messages, '/var/tmp/test-results.txt')
+  call fs#RefreshBuffer('/var/tmp/test-results.txt')
+  " open test-results.txt
+  let a = util#OpenWindowInTab('/var/tmp/test-results.txt', 'vs')
+  wincmd L
+  wincmd p
+endfunction
+
 " Access script-scope function
 " https://stackoverflow.com/a/39216373/2277505
 function! vimutil#GetScriptFunc(scriptpath, funcname)

@@ -333,12 +333,6 @@ augroup END
 
 augroup SpecialFiles
   autocmd!
-  autocmd BufRead /var/tmp/vim-messages.txt,/private/var/tmp/vim-messages.txt set ft=vim_log
-    \| let b:skip_color_column=1
-    \| let b:skip_cursor_line=1
-    \| let b:parenmatch=0
-    \| setlocal nonumber norelativenumber
-  autocmd BufRead /var/tmp/test-results.txt let b:skip_trim_whitespace = 1
   " Apparently Karabiner likes to save this file without an EOL
   autocmd BufRead ~/.config/karabiner/karabiner.json setlocal nofixendofline
   autocmd BufRead ~/work/dotfiles/karabiner/*/karabiner.json setlocal nofixendofline
@@ -483,24 +477,11 @@ function! s:VimEnter()
   if !empty(maparg("<M-d>", "i", 0, 1))
     iunmap <M-d>
   endif
-
-  call writefile([], "/var/tmp/vim-messages.txt")
 endfunction
 
 function! s:VimscriptMappings() abort
   nnoremap <buffer> <leader>ss :silent update <bar> call vimutil#DisarmPluginGuard() <bar> source %<cr>
 endfunction
-
-function! s:CaptureMessages()
-  let messages = util#messages()
-  silent call writefile(messages, '/var/tmp/test-results.txt')
-  call fs#RefreshBuffer('/var/tmp/test-results.txt')
-  " open test-results.txt
-  let a = util#OpenWindowInTab('/var/tmp/test-results.txt', 'vs')
-  wincmd L
-  wincmd p
-endfunction
-command! CaptureMessages call s:CaptureMessages()
 
 function! s:AgitConfig()
   let mapping = maparg("<cr>", "n", 0, 1)
@@ -758,20 +739,6 @@ endfunction
 
 command! BufOnly :call s:BufOnly()
 
-function! s:CloseAuxiliaryBuffers() abort
-  cclose
-  lclose
-  " close buffers in /var/tmp:
-  " - test-results.txt
-  " - test-console.txt
-  " - vim-messages.txt
-  let bufs = filter(getbufinfo(), {idx, val -> val['listed'] && val['name'] =~ '^/private/var/tmp'})
-  let bufnrs = map(bufs, 'v:val.bufnr')
-  for bufnr in bufnrs
-    execute "bdelete " . bufnr
-  endfor
-endfunction
-
 function! GetSubstituteTerm()
   let str = GetSubstituteTerm2()
   " Make first char lower case,
@@ -929,35 +896,6 @@ function! s:CopyCmdline() abort
   " > strftime('%H:%M:%S')
   let @* = matchstr(getcmdline(), '^\(Log \)\?\zs.*')
   return ""
-endfunction
-
-" Open/close a log window on the right side of the current tab
-" and keep all other log windows closed.
-function! s:ToggleLogWindow(target_path) abort
-  let paths = [
-        \'/var/tmp/test-console.txt',
-        \'/var/tmp/test-results.txt',
-        \'/var/tmp/vim-messages.txt'
-        \]
-  let oldwinnr = winnr()
-  let opened = util#ToggleWindowInTab(a:target_path)
-  if opened == 1
-    " Window was opened.
-    " Keep window on the right side.
-    wincmd L
-    setlocal wrap
-    setlocal foldlevel=20
-    " Close all the other log windows.
-    for path in paths
-      if path != a:target_path
-        call util#CloseWindowInTab(path)
-      endif
-    endfor
-  endif
-  " Go back to original window
-  if winbufnr(oldwinnr) != -1
-    execute oldwinnr . "wincmd w"
-  endif
 endfunction
 
 " Given the current search term, show the uniques matches.
@@ -1194,11 +1132,11 @@ if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
   nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
 endif
 " toggle log windows
-nnoremap <leader>2 :call <sid>ToggleLogWindow('/var/tmp/test-console.txt')<cr>
-nnoremap <leader>3 :call <sid>ToggleLogWindow('/var/tmp/test-results.txt')<cr>
-nnoremap <leader>4 :call <sid>ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
+nnoremap <leader>2 :call vimutil#ToggleLogWindow('/var/tmp/test-console.txt')<cr>
+nnoremap <leader>3 :call vimutil#ToggleLogWindow('/var/tmp/test-results.txt')<cr>
+nnoremap <leader>4 :call vimutil#ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
 " close auxiliary buffers
-nnoremap <leader>ca :call <sid>CloseAuxiliaryBuffers()<cr>
+nnoremap <leader>ca :call vimutil#CloseAuxiliaryBuffers()<cr>
 "
 nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
 nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
@@ -1221,7 +1159,7 @@ nnoremap <space>v :Log<space>
 nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
 nnoremap <silent> <leader>zS :call vimutil#DebugSynStack()<cr>
 " capture :messages in a file
-nnoremap <space>z :CaptureMessages<cr>
+nnoremap <space>z :call vimutil#CaptureMessages()<cr>
 " explore syntax files for the current filetype
 nnoremap <leader>ey :<c-u>call vimutil#ExploreSyntaxFiles()<cr>
 
