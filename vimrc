@@ -375,70 +375,6 @@ endif
 
 " }}}
 
-" AutoCd {{{
-
-function! s:AutoCd() abort
-  let git_root = util#GetGitRoot({'full_path': 1})
-  if git_root == $HOME . '/work/dotfiles/vim/bundle/YouCompleteMe/third_party/ycmd'
-    " Do not :cd to ycm when jumping to NodeJS standard lib
-    return
-  endif
-  if empty(git_root)
-    return
-  endif
-  let dotfiles = [
-        \ $DOTFILES_PUBLIC,
-        \ $DOTFILES_PRIVATE,
-        \ $DOTFILES_HOME,
-        \ $DOTFILES_WORK
-        \ ]
-  if index(dotfiles, git_root) >= 0 && get(g:, 'AUTO_CD_DOTFILES', 1) == 0
-    " Log printf('AutoCd: skip dotfiles: %s', expand('%:p'))
-    return
-  endif
-  " Log printf("AutoCd: lcd to %s (from %s) / file: %s", git_root, getcwd(), expand('%:p'))
-  execute "lcd " . git_root
-endfunction
-
-augroup AutoCd
-  autocmd!
-  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/*,$DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/*,$DOTFILES_HOME/*,$DOTFILES_WORK/* :call s:AutoCd()
-augroup END
-
-function! s:Cd(cd_cmd, cd_dir) abort
-  let cmd = a:cd_cmd . ' ' . a:cd_dir
-  execute cmd
-  echo cmd
-endfunction
-
-function! s:CdToGitRoot(cd_cmd)
-  let path = util#GetGitRoot()
-  if empty(path)
-    return util#error_msg("CdToGitRoot: couldn't find git root")
-  endif
-  call s:Cd(a:cd_cmd, path)
-endfunction
-
-function! s:CdToNodeJsRoot(cd_cmd) abort
-  let path = util#GetNodeJsRoot()
-  if empty(path)
-    return util#error_msg("CdToNodeJsRoot: couldn't find package.json")
-  endif
-  call s:Cd(a:cd_cmd, path)
-endfunction
-
-function! s:CdToBufferDir(cd_cmd) abort
-  " Expand to full path (:~) for better logs,
-  " then get the directory (:h).
-  let path = expand('%:~:h')
-  if empty(path)
-    return util#error_msg("CdToBufferDir: buffer doesn't have a disk path")
-  endif
-  call s:Cd(a:cd_cmd, path)
-endfunction
-
-" }}}
-
 " Functions ---------------------- {{{
 
 function! s:OverridePluginMappings()
@@ -685,12 +621,12 @@ nnoremap <leader>eM :call fzfutil#FzfExploreNodeModules()<cr>
 nnoremap <leader>ob :Files ~/.vim/bundle<cr>
 
 " Change directory
-nnoremap <silent> <leader>cg :call <sid>CdToGitRoot('lcd')<cr>
-nnoremap <silent> <leader>cG :call <sid>CdToGitRoot('cd')<cr>
-nnoremap <silent> <leader>cn :call <sid>CdToNodeJsRoot('lcd')<cr>
-nnoremap <silent> <leader>cN :call <sid>CdToNodeJsRoot('cd')<cr>
-nnoremap <silent> <leader>cb :call <sid>CdToBufferDir('lcd')<cr>
-nnoremap <silent> <leader>cB :call <sid>CdToBufferDir('cd')<cr>
+nnoremap <silent> <leader>cg :call cwd#CdToGitRoot('lcd')<cr>
+nnoremap <silent> <leader>cG :call cwd#CdToGitRoot('cd')<cr>
+nnoremap <silent> <leader>cn :call cwd#CdToNodeJsRoot('lcd')<cr>
+nnoremap <silent> <leader>cN :call cwd#CdToNodeJsRoot('cd')<cr>
+nnoremap <silent> <leader>cb :call cwd#CdToBufferDir('lcd')<cr>
+nnoremap <silent> <leader>cB :call cwd#CdToBufferDir('cd')<cr>
 " change to previous current directory
 nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
 
