@@ -656,7 +656,7 @@ nnoremap <leader>et :call proglang#EditTestFile()<cr>
 " Vimscript, vim debug
 nnoremap <leader>ev :<c-u>call window#EditFile(resolve($MYVIMRC))<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>el :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
+nnoremap <leader>el :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/vim/plugin/private.vim')<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
@@ -870,13 +870,5 @@ let g:go_list_type = "quickfix"
 " Colorizer
 " keep buffer colorized when you leave it
 let g:colorizer_disable_bufleave = 1
-
-" }}}
-
-" vimrc override ---------------------- {{{
-
-if exists('$DOTFILES_PRIVATE') && filereadable($DOTFILES_PRIVATE . '/vimrc.local')
-  execute 'source ' . $DOTFILES_PRIVATE . '/vimrc.local'
-endif
 
 " }}}
