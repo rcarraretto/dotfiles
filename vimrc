@@ -408,12 +408,6 @@ function! s:FugitiveMappings()
   nunmap <buffer> <cr>
 endfunction
 
-function! RefreshChrome()
-  silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
-  redraw!
-  return 0
-endfunction
-
 "}}}
 
 " Mappings ---------------------- {{{
@@ -749,8 +743,6 @@ cnoremap <c-g>f <c-r>=expand('%:t')<cr>
 " Useful when pasting a path for search.
 " Based on search#VisualStar
 cnoremap <c-g>e \V<c-r>=substitute(escape(getreg('*'), '/\'), '\n', '\\n', 'g')<cr>
-
-nnoremap <space>r :w<cr>:call RefreshChrome()<cr>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
