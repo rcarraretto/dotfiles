@@ -255,3 +255,15 @@ function! window#BufOnly()
     echomsg delete_count "buffers deleted"
   endif
 endfunction
+
+" Executes callback function for all windows.
+"
+" based on https://vi.stackexchange.com/a/12068
+"
+function! window#GlobalWinDo(callback) abort
+  for t in range(1, tabpagenr('$'))
+    for w in range(1, tabpagewinnr(t, '$'))
+      call function(a:callback)(t, w)
+    endfor
+  endfor
+endfunction

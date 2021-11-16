@@ -340,16 +340,6 @@ augroup SpecialFiles
   autocmd BufRead ~/.aws/credentials,~/.aws/config set filetype=dosini | setlocal commentstring=#\ %s
 augroup END
 
-augroup DisableSyntaxForLargeFiles
-  autocmd!
-  autocmd BufWinEnter * call s:DisableSyntaxForLargeFiles()
-augroup END
-
-augroup TrimWhitespace
-  autocmd!
-  autocmd BufWritePre * :call s:TrimWhitespace()
-augroup END
-
 augroup CmdlineWinMapping
   autocmd!
   " Because I remapped <cr> in normal mode (nnoremap <cr> :),
@@ -369,9 +359,9 @@ augroup FugitiveMapping
   autocmd BufEnter * call s:FugitiveMappings()
 augroup END
 
-augroup VimEnterCustom
+augroup OverridePluginMappings
   autocmd!
-  autocmd VimEnter * call s:VimEnter()
+  autocmd VimEnter * call s:OverridePluginMappings()
 augroup END
 
 if exists('$TMUX')
@@ -451,13 +441,12 @@ endfunction
 
 " Functions ---------------------- {{{
 
-function! s:VimEnter()
+function! s:OverridePluginMappings()
   " Revert plugin side effects
   " rsi.vim
   if !empty(maparg("<c-f>", "c", 0, 1))
     cunmap <c-f>
   endif
-
   " rsi.vim
   " ä ('a' umlaut)
   " https://github.com/tpope/vim-rsi/issues/14
@@ -504,231 +493,10 @@ function! s:FugitiveMappings()
   nunmap <buffer> <cr>
 endfunction
 
-" Executes callback function for all windows.
-"
-" based on https://vi.stackexchange.com/a/12068
-"
-function! s:GlobalWinDo(callback) abort
-  for t in range(1, tabpagenr('$'))
-    for w in range(1, tabpagewinnr(t, '$'))
-      call function(a:callback)(t, w)
-    endfor
-  endfor
-endfunction
-
-function! s:ToggleRelativeNumber() abort
-  " buffers that don't have 'number' set won't be touched
-  " (e.g., dirvish, fugitive, agit)
-
-  function! s:SetNoRelativeNumber(t, w) abort
-    if gettabwinvar(a:t, a:w, '&number') == 1
-      call settabwinvar(a:t, a:w, '&relativenumber', 0)
-    endif
-  endfunction
-
-  function! s:SetRelativeNumber(t, w) abort
-    if gettabwinvar(a:t, a:w, '&number') == 1
-      call settabwinvar(a:t, a:w, '&relativenumber', 1)
-    endif
-  endfunction
-
-  if &number == 0
-    echohl ErrorMsg
-    echom "ToggleRelativeNumber: can only be triggered when 'number' is set"
-    echohl NONE
-    return
-  endif
-
-  if &relativenumber
-    call s:GlobalWinDo('s:SetNoRelativeNumber')
-    " update setting globally for new buffers
-    set norelativenumber
-  else
-    call s:GlobalWinDo('s:SetRelativeNumber')
-    " update setting globally for new buffers
-    set relativenumber
-  endif
-endfunction
-
-function! s:ToggleListChars()
-  if &list
-    setlocal nolist
-  else
-    setlocal list
-  endif
-endfunction
-
-function! s:DisableSyntaxForLargeFiles()
-  if index(['help'], &filetype) >= 0
-    return
-  endif
-  if line("$") > 10000
-    syntax clear
-  endif
-endfunction
-
-function! s:TrimWhitespace()
-  if &modifiable == 0
-    return
-  endif
-  if get(b:, 'skip_trim_whitespace')
-    return
-  endif
-  let save_cursor = getpos('.')
-  if &ft == 'markdown'
-    " Keep 2 trailing whitespaces.
-    "
-    " https://daringfireball.net/projects/markdown/syntax#p
-    "
-    " "When you do want to insert a <br /> break tag using Markdown, you end a line
-    " with two or more spaces, then type return."
-    "
-    %s/\(^\s\+$\|\S\zs\s$\|\S\zs\s\{3,\}$\)//e
-  else
-    %s/\s\+$//e
-  endif
-  call setpos('.', save_cursor)
-endfunction
-
-function! s:MoveToPrevParagraph()
-  let former_line = line('.')
-  " if in the middle of paragraph
-  if len(getline(line('.') - 1))
-    normal! {
-    if line('.') == 1
-      return
-    endif
-    normal! +
-    " Sometimes doing {+ makes it go back to
-    " the same line, when using folding and when
-    " there are paragraphs inside the fold.
-    if line('.') == former_line
-      normal! {
-    endif
-    return
-  end
-  " if current line is empty
-  if len(getline('.')) == 0
-    normal! {
-    if line('.') == 1
-      return
-    endif
-    normal! +
-    return
-  end
-  " if on the beginning of paragraph
-  normal! {{
-  if line('.') == 1
-    return
-  endif
-  normal! +
-endfunction
-
-function! s:MoveToNextParagraph()
-  if len(getline('.')) == 0
-    normal! +
-    return
-  end
-  normal! }+
-endfunction
-
-" Remove views.
-" Usually call this because folding is buggy.
-function! s:RemoveViews()
-  if !util#prompt('Delete all buffers and remove views?')
-    return
-  endif
-  " Delete all buffers first.
-  " Else buffers with buggy views will save their buggy info once they unload.
-  " (see AutoSaveFolds augroup)
-  %bd
-  let output = system('rm -rf ~/.vim/view/*')
-  if v:shell_error
-    echom 'RemoveViews: Error: ' . output
-  else
-    echom 'Views removed'
-  endif
-endfunction
-command! RemoveViews :call s:RemoveViews()
-
 function! RefreshChrome()
   silent exec "!osascript $HOME/.applescript/refresh-chrome.applescript"
   redraw!
   return 0
-endfunction
-
-function! ToggleGStatus()
-  if buflisted(bufname('.git/index'))
-    bd .git/index
-  else
-    Gstatus
-    wincmd T
-  endif
-endfunction
-
-function! s:WrapCommand(cmd)
-  try
-    execute a:cmd
-  catch /E363/
-    " if the command edits a file (e.g. fzf :Files), the file may be too large.
-    " E363 will be displayed along with a trace.
-    " Also, the status line will not be rendered properly.
-    " Ignore E363 and redraw the status line.
-    call statusline#set()
-  endtry
-endfunction
-command! -nargs=1 -complete=command WrapCommand call s:WrapCommand(<q-args>)
-
-function! s:FormatParagraph() abort
-  if getline('.')[0] == '|'
-    " table (using easy-align)
-    let save_pos = getpos('.')
-    normal gaip*|
-    call setpos('.', save_pos)
-  else
-    " paragraph
-    normal! gqip
-  endif
-endfunction
-
-function! s:CopyCursorReference() abort
-  let path = fnameescape(expand("%:~"))
-  let line_num = line('.')
-  let col_num = col('.')
-  let @* = printf('%s:%s:%s', path, line_num, col_num)
-endfunction
-
-function! s:GoToCursorReference() abort
-  let line = getline('.')
-  let cursor = getpos('.')
-  try
-    let did_split = window#MaybeSplit()
-    normal! gf
-  catch /E447/
-    if did_split
-      quit
-    endif
-    let msg = 'GoToCursorReference: ' . matchstr(v:exception, 'Vim(normal):E447: \zs\(.*\)')
-    return util#error_msg(msg)
-  endtry
-  let jumped_filename = expand('%:t')
-  " [Note]
-  " Use 'very nomagic' (\V) so that the filename is not interpreted as a regex
-  " https://stackoverflow.com/a/11311701/2277505
-  let regex = '\V' . jumped_filename . ':\(\d\+\)\(:\(\d\+\)\)\?'
-  let matches = matchlist(line, regex)
-  if empty(matches)
-    return
-  endif
-  let target_line = matches[1]
-  let target_col = matches[3]
-  call cursor(target_line, target_col)
-  try
-    " Open folds
-    normal! zO
-  catch /E490/
-    " No fold found
-  endtry
 endfunction
 
 "}}}
@@ -778,8 +546,8 @@ nnoremap K :!<cr>
 " Move between paragraphs.
 " Similar to vim's { and }, but jumps to the first line of paragraph,
 " instead of to an empty line.
-nnoremap <silent> { :call <sid>MoveToPrevParagraph()<cr>
-nnoremap <silent> } :call <sid>MoveToNextParagraph()<cr>
+nnoremap <silent> { :call viewing#MoveToPrevParagraph()<cr>
+nnoremap <silent> } :call viewing#MoveToNextParagraph()<cr>
 
 " Move between folds
 " 'zj' moves downwards to the start of the next fold
@@ -817,9 +585,9 @@ nnoremap <leader><leader> <c-^>
 omap q iq
 
 " Toggle relative number
-nnoremap <silent> con :call <sid>ToggleRelativeNumber()<cr>
+nnoremap <silent> con :call viewing#ToggleRelativeNumber()<cr>
 " Toggle showing whitespace
-nnoremap <silent> col :call <sid>ToggleListChars()<cr>
+nnoremap <silent> col :call viewing#ToggleListChars()<cr>
 " Toggle showing extended info in statusline
 nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
 " Toggle color column
@@ -978,9 +746,9 @@ nnoremap <leader>cp :let @* = fnameescape(expand("%"))<cr>
 " copy full path (with ~) to clipboard
 nnoremap <leader>cP :let @* = fnameescape(expand("%:~"))<cr>
 " copy full path, line and column number
-nnoremap <leader>cr :call <sid>CopyCursorReference()<cr>
+nnoremap <leader>cr :call viewing#CopyCursorReference()<cr>
 " go to file path (like vim's gf mapping), but also line and column number
-nnoremap <leader>gf :<c-u>call <sid>GoToCursorReference()<cr>
+nnoremap <leader>gf :<c-u>call viewing#GoToCursorReference()<cr>
 " open file in system view (e.g., pdf, image, csv)
 nnoremap <leader>oS :SysOpen<cr>
 " open folder of current file in Finder
@@ -1025,7 +793,7 @@ nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
 " Git
-nnoremap <space>u :call ToggleGStatus()<cr>
+nnoremap <space>u :call viewing#ToggleGStatus()<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>go :Git commit<cr>
@@ -1048,7 +816,7 @@ nnoremap <leader>yr :YcmRestartServer<cr>
 nnoremap <leader>gp :call proglang#Prettier('')<cr>
 vnoremap <leader>gp :<c-u>call proglang#Prettier(visualmode())<cr>
 " Format paragraph
-nnoremap <space>\ :call <sid>FormatParagraph()<cr>
+nnoremap <space>\ :call editing#FormatParagraph()<cr>
 
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<cr>
