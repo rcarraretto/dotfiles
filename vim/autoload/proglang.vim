@@ -101,7 +101,7 @@ function! proglang#EditSketchBuffer(ft) abort
     return util#error_msg(printf('EditSketchBuffer: unsupported filetype: %s', a:ft))
   endif
   let config = configs[a:ft]
-  call util#EditFile(config['path'])
+  call window#EditFile(config['path'])
   execute "nnoremap <buffer> <space>t :update <bar> call <sid>DispatchAndLogOutput('" . config['cmd'] . "')<cr>"
 endfunction
 

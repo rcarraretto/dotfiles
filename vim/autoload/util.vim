@@ -168,55 +168,6 @@ function! util#messages() abort
   return reverse(filter(split(messages, '\n'), '!empty(v:val)'))
 endfunction
 
-function! s:GetOpenCmdFromCount() abort
-  if v:count == 1 || v:count == 6
-    return 'new'
-  elseif v:count == 2 || v:count == 7
-    return 'vnew'
-  elseif v:count == 3 || v:count == 8
-    return 'edit'
-  endif
-  return 'tabnew'
-endfunction
-
-function! util#EditFile(path) abort
-  let opencmd = s:GetOpenCmdFromCount()
-  if bufnr(a:path) == -1
-    silent execute opencmd . ' ' . a:path
-  else
-    let wins = getbufinfo(a:path)[0]['windows']
-    if empty(wins)
-      silent execute opencmd . ' ' . a:path
-    else
-      call win_gotoid(wins[0])
-    endif
-  endif
-endfunction
-
-function! util#EditFileUpwards(filename) abort
-  if filereadable(a:filename)
-    " When exploring the root folder with Dirvish and
-    " the file is at the root.
-    " findfile() does not seem to work with Dirvish in that case.
-    call util#EditFile(a:filename)
-    return
-  endif
-  " Search from the directory of the current file upwards, until the home folder
-  let path = findfile(a:filename, '.;' . $HOME)
-  if !empty(path)
-    call util#EditFile(path)
-    return
-  endif
-  " Search from cwd upwards, until the home folder.
-  " This might help in case the current file is outside of cwd (e.g. a Dropbox note).
-  let path = findfile(a:filename, getcwd() . ';' . $HOME)
-  if !empty(path)
-    call util#EditFile(path)
-    return
-  endif
-  echo 'File not found: ' . a:filename
-endfunction
-
 " Open/close window, depending on whether the file is opened in the current tab.
 function! util#ToggleWindowInTab(path, ...) abort
   let wincmd = get(a:, 1, 'vsplit')

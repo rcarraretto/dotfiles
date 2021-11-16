@@ -1,11 +1,11 @@
 function! window#MaybeSplit() abort
-  if v:count == 1
+  if v:count == 1 || v:count == 6
     silent split
     return 1
-  elseif v:count == 2
+  elseif v:count == 2 || v:count == 7
     silent vsplit
     return 1
-  elseif v:count == 3
+  elseif v:count == 3 || v:count == 8
     silent tab split
     return 1
   endif
@@ -24,6 +24,44 @@ function! window#SplitFromCount(count) abort
     return 1
   endif
   return 0
+endfunction
+
+function! window#EditFile(path) abort
+  call window#MaybeSplit()
+  if bufnr(a:path) == -1
+    silent execute 'edit ' . a:path
+  else
+    let wins = getbufinfo(a:path)[0]['windows']
+    if empty(wins)
+      silent execute 'edit ' . a:path
+    else
+      call win_gotoid(wins[0])
+    endif
+  endif
+endfunction
+
+function! window#EditFileUpwards(filename) abort
+  if filereadable(a:filename)
+    " When exploring the root folder with Dirvish and
+    " the file is at the root.
+    " findfile() does not seem to work with Dirvish in that case.
+    call window#EditFile(a:filename)
+    return
+  endif
+  " Search from the directory of the current file upwards, until the home folder
+  let path = findfile(a:filename, '.;' . $HOME)
+  if !empty(path)
+    call window#EditFile(path)
+    return
+  endif
+  " Search from cwd upwards, until the home folder.
+  " This might help in case the current file is outside of cwd (e.g. a Dropbox note).
+  let path = findfile(a:filename, getcwd() . ';' . $HOME)
+  if !empty(path)
+    call window#EditFile(path)
+    return
+  endif
+  echo 'File not found: ' . a:filename
 endfunction
 
 function! window#VSplitRight(path) abort

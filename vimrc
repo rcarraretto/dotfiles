@@ -942,9 +942,9 @@ nnoremap <silent> <leader>cB :call <sid>CdToBufferDir('cd')<cr>
 nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
 
 " Edit special files
-nnoremap <leader>ei :<c-u>call util#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
+nnoremap <leader>ei :<c-u>call window#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
 if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
-  nnoremap <leader>ew :<c-u>call util#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
+  nnoremap <leader>ew :<c-u>call window#EditFile($NOTES_WORK . "/work-backlog.txt")<cr>
 endif
 " toggle log windows
 nnoremap <leader>2 :call vimutil#ToggleLogWindow('/var/tmp/test-console.txt')<cr>
@@ -956,18 +956,18 @@ nnoremap <leader>ca :call vimutil#CloseAuxiliaryBuffers()<cr>
 nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
 nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
-nnoremap <leader>eo :<c-u>call util#EditFileUpwards(".todo")<cr>
-nnoremap <leader>em :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
-nnoremap <leader>eb :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/bashrc.private')<cr>
+nnoremap <leader>eo :<c-u>call window#EditFileUpwards(".todo")<cr>
+nnoremap <leader>em :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/README.md')<cr>
+nnoremap <leader>eb :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/bashrc.private')<cr>
 " open sketch buffer for current programming language
 nnoremap <leader>ek :call proglang#EditSketchBuffer(&ft)<cr>
 " edit corresponding test or source file
 nnoremap <leader>et :call proglang#EditTestFile()<cr>
 
 " Vimscript, vim debug
-nnoremap <leader>ev :<c-u>call util#EditFile(resolve($MYVIMRC))<cr>
+nnoremap <leader>ev :<c-u>call window#EditFile(resolve($MYVIMRC))<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>el :<c-u>call util#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
+nnoremap <leader>el :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/vimrc.local')<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
