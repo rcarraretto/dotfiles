@@ -2,6 +2,13 @@ function! mapping#VimscriptMappings() abort
   nnoremap <buffer> <leader>ss :silent update <bar> call vimutil#DisarmPluginGuard() <bar> source %<cr>
 endfunction
 
+function! mapping#JavascriptMappings() abort
+  nnoremap <buffer> <leader>cl :call proglang#JavascriptLogVariable('cl')<cr>
+  nnoremap <buffer> <leader>co :call proglang#JavascriptLogVariable('co')<cr>
+  nnoremap <buffer> <leader>tv :call proglang#ToggleVariable()<cr>
+  call mochajs#AddMappings()
+endfunction
+
 function! mapping#TypescriptMappings() abort
   nnoremap <leader>re :call proglang#TypescriptReload()<cr>
 endfunction

@@ -164,6 +164,11 @@ function! proglang#TypescriptReload()
   call tsuquyomi#reload()
 endfunction
 
+function! proglang#JavascriptConfig()
+  command! -buffer JsMethodToFunc call proglang#JavascriptMethodToFunc()
+  command! -buffer ShowTsError echo getloclist(0)[0]['text']
+endfunction
+
 " Adapted version of :GoDoc from vim-go:
 " - When the popup is already open, close it
 " - Set the popup to close with any cursor move
@@ -290,4 +295,67 @@ function! proglang#EditTestFile() abort
   endif
   let split_type = is_test ? "rightbelow" : "leftabove"
   call util#OpenWindowInTab(candidate_path, split_type . " vsplit")
+endfunction
+
+" Logs the last variable that was declared or assigned
+function! proglang#JavascriptLogVariable(snippet)
+  let save_pos = getpos('.')
+  normal ^
+  " e.g.
+  " x.y = new Date();
+  " const x = a[a.length - 1];
+  " const x: Module.Struct = {
+  " let response = await admin.api.post(`/api/entities/${id}`);
+  let pattern = '^\s*\(const \|let \|\)\([[:alnum:]\.]\+\)\(: [[:alnum:]\.]\+\)\? ='
+  call search(pattern, 'b')
+  let matches = matchlist(getline('.'), pattern)
+  if len(matches)
+    let @" = matches[2]
+  endif
+  call setpos('.', save_pos)
+  if len(matches)
+    silent execute "normal o" . a:snippet . "\<tab>\<c-r>\"\<esc>"
+    " Transform change into a single undo item
+    silent execute "normal! yyu"
+    silent execute "normal! up"
+  endif
+endfunction
+
+function! proglang#JavascriptMethodToFunc() abort
+  " Case 1 (no args)
+  " public async someMethod(): Promise<Response> {
+  " const someMethod = async (): Promise<Response> => {
+  "
+  " Case 2 (with args)
+  " public async someMethod(request: object): Promise<object> {
+  " const someMethod = async (request: object): Promise<object> {
+  "
+  let matches = matchlist(getline('.'), '^\(\s*\)\(public\|private\)\s\?\(async\)\?\s\?\([^(]*\)(\([^)]*\)): \(.*\) {')
+  if empty(matches)
+    return util#error_msg('JsMethodToFunc: line does not match')
+  endif
+  let indent = matches[1]
+  let asyncToken = matches[3]
+  if !empty(asyncToken)
+    let asyncToken .= ' '
+  endif
+  let methodName = matches[4]
+  let args = matches[5]
+  let returnType = matches[6]
+  let line = printf("%sconst %s = %s(%s): %s => {", indent, methodName, asyncToken, args, returnType)
+  call setline('.', line)
+endfunction
+
+" const s = parse('batata');
+" ->
+" parse('batata');
+function! proglang#ToggleVariable()
+  let regex = '\(^\s*\)\([a-zA-Z0-9 \{}]* = \)'
+  if getline('.') =~ regex
+    call setline('.', substitute(getline('.'), regex, '\1', ''))
+  else
+    call setline('.', substitute(getline('.'), '\(^\s*\)\(.*\)', '\1a = \2', ''))
+    normal! ^
+    call feedkeys('cw')
+  endif
 endfunction

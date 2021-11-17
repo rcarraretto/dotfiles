@@ -91,6 +91,34 @@ function! s:ResetOnlysAndSkips() abort
   silent! write
 endfunction
 
+" After running a test and having the error message on the qf list,
+" attempts to insert update the assertion.
+" Limitations:
+" - does not support multiline
+" - does not support jest
+function! s:FixTestAssertion() abort
+  if len(getqflist()) == 0
+    echohl ErrorMsg
+    echom 'FixTestAssertion: quickfix list is empty'
+    echohl NONE
+    return
+  endif
+  let qf_text = getqflist()[0].text
+  " AssertionError: expected 'batata' to equal 'arroz'
+  let ae_matches = matchlist(qf_text, 'expected \(.*\) to equal \(.*\)')
+  if len(ae_matches) == 0
+    echohl ErrorMsg
+    echom 'FixTestAssertion: could not parse assertion error'
+    echohl NONE
+    return
+  endif
+  let new_assertion = ae_matches[1]
+  " expect(result).to.equal('arroz');
+  let new_text = substitute(getline('.'), 'expect(\(.*\))\.to\.equal(\(.*\))', 'expect(\1).to.equal(' . new_assertion . ')', '')
+  call setline('.', new_text)
+  silent! write
+endfunction
+
 function! mochajs#AddMappings() abort
   nnoremap <buffer> <leader>to :call <sid>ToggleTestCase('only')<cr>
   nnoremap <buffer> <leader>tdo :call <sid>ToggleTestDescribe('only')<cr>
@@ -98,5 +126,6 @@ function! mochajs#AddMappings() abort
   nnoremap <buffer> <leader>tk :call <sid>ToggleTestCase('skip')<cr>
   nnoremap <buffer> <leader>tr :call <sid>ResetOnlys()<cr>
   nnoremap <buffer> <leader>tR :call <sid>ResetOnlysAndSkips()<cr>
+  nnoremap <buffer> <leader>tfa :call <sid>FixTestAssertion()<cr>
   nnoremap <buffer> g/t /^\s*\zs\(describe\<bar>it\<bar>test\)\(\.only\<bar>\.skip\<bar>(\)<cr>
 endfunction
