@@ -32,3 +32,21 @@ function! editing#FormatParagraph() abort
     normal! gqip
   endif
 endfunction
+
+function! editing#ChangeQuotes()
+  let line = getline('.')
+  let sline = line
+  if match(sline, "`") >= 0
+    let sline = substitute(sline, "`", "'", 'g')
+  elseif match(sline, "'") != -1
+    let sline = substitute(sline, "'", '"', 'g')
+  elseif match(sline, '"') != -1
+    let sline = substitute(sline, '"', "'", 'g')
+  endif
+  let sline = substitute(sline, "[“”„]", '"', 'g')
+  if line == sline
+    echom "no changes"
+    return
+  endif
+  call setline('.', sline)
+endfunction

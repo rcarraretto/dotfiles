@@ -312,6 +312,8 @@ nnoremap <leader>gp :call proglang#Prettier('')<cr>
 vnoremap <leader>gp :<c-u>call proglang#Prettier(visualmode())<cr>
 " Format paragraph
 nnoremap <space>\ :call editing#FormatParagraph()<cr>
+" Change between different styles of quotes
+nnoremap <leader>' :call editing#ChangeQuotes()<cr>
 
 " Count number of matches for current search
 nnoremap <leader>co :%s///gn<cr>
