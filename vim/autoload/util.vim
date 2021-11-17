@@ -322,6 +322,26 @@ function! util#YankOperatorTarget(type) abort
   return @@
 endfunction
 
+" Like matchlist() but return all matches
+"
+" Equivalent to javascript's String.prototype.match with the global flag 'g'
+"
+" "1 a 2 b 3".match(/(\d)/g)
+" > (3) ["1", "2", "3"]
+"
+" echo util#MatchlistAll('1 2 3', '\(\d\)')
+" ['1', '2', '3']
+"
+" https://vi.stackexchange.com/a/16491/24815
+"
+" _Note: It probably only works when you have 1 capture group
+"
+function! util#MatchlistAll(str, pat)
+  let l:res = []
+  call substitute(a:str, a:pat, '\=add(l:res, submatch(0))', 'g')
+  return l:res
+endfunction
+
 function! util#GetDotfilesDirs() abort
   let dirs = [$DOTFILES_PUBLIC, $DOTFILES_PRIVATE]
   if exists('$DOTFILES_HOME') && isdirectory($DOTFILES_HOME)
