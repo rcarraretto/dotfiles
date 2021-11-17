@@ -2,6 +2,10 @@ function! mapping#VimscriptMappings() abort
   nnoremap <buffer> <leader>ss :silent update <bar> call vimutil#DisarmPluginGuard() <bar> source %<cr>
 endfunction
 
+function! mapping#TypescriptMappings() abort
+  nnoremap <leader>re :call proglang#TypescriptReload()<cr>
+endfunction
+
 function! mapping#GolangMappings() abort
   nnoremap <buffer> <silent> K :call proglang#GoDocToggle()<cr>
 endfunction

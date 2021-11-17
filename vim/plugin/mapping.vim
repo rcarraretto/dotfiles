@@ -364,4 +364,5 @@ augroup OverrideMappings
   autocmd FileType go call mapping#GolangMappings()
   autocmd FileType agit call mapping#AgitMappings()
   autocmd BufEnter * call mapping#FugitiveMappings()
+  autocmd FileType typescript,typescript.tsx call mapping#TypescriptMappings()
 augroup END

@@ -157,6 +157,13 @@ function! s:ImportSymbol() abort
   endif
 endfunction
 
+function! proglang#TypescriptReload()
+  " TsReloadProject
+  call tsuquyomi#reloadProject()
+  " TsReload
+  call tsuquyomi#reload()
+endfunction
+
 " Adapted version of :GoDoc from vim-go:
 " - When the popup is already open, close it
 " - Set the popup to close with any cursor move
