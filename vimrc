@@ -615,7 +615,7 @@ nnoremap <leader>4 :call vimutil#ToggleLogWindow('/var/tmp/vim-messages.txt')<cr
 " close auxiliary buffers
 nnoremap <leader>ca :call vimutil#CloseAuxiliaryBuffers()<cr>
 "
-nnoremap <leader>ess :<c-u>call <sid>MaybeSplit() <bar> UltiSnipsEdit<cr>
+nnoremap <leader>ess :<c-u>call window#MaybeSplit() <bar> UltiSnipsEdit<cr>
 nnoremap <leader>esp :e $DOTFILES_PRIVATE/vim/UltiSnips/<c-r>=&filetype<cr>.snippets<cr>
 nnoremap <leader>eag :e ./.ignore<cr>
 nnoremap <leader>eo :<c-u>call window#EditFileUpwards(".todo")<cr>
@@ -714,7 +714,7 @@ nnoremap <leader>gs :call fs#OpenInSourceTree()<cr>
 " Tags / symbols
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
-nnoremap <space>e :<c-u>call <sid>MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
+nnoremap <space>e :<c-u>call window#MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
 nnoremap <leader>ge :call proglang#ListReferences()<cr>
 nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
 " account for YouCompleteMe getting stuck with Golang
