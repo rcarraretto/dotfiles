@@ -359,3 +359,29 @@ function! proglang#ToggleVariable()
     call feedkeys('cw')
   endif
 endfunction
+
+" Helps extract a hard-coded value into a variable.
+"
+" Given some code like:
+" index(['apples', 'bananas'], 'apples')
+"
+" Change the array with c% and type the name of variable:
+" index(fruits, 'apples')
+"
+" Then call proglang#InsertVariable():
+" let fruits = ['apples', 'bananas']
+" index(fruits, 'apples')
+"
+function! proglang#InsertVariable() abort
+  if index(['javascript', 'typescript', 'typescript.tsx'], &ft) >= 0
+    execute "normal! Oconst\<space>\<c-a>\<space>=\<space>\<c-r>\";"
+    normal! =`[
+  elseif &ft == 'vim'
+    execute "normal! Olet\<space>\<c-a>\<space>=\<space>\<c-r>\""
+    normal! =`[
+  else
+    echohl Statement
+    echom 'InsertVariable: no support for filetype: ' . &ft
+    echohl NONE
+  endif
+endfunction
