@@ -160,7 +160,7 @@ endfunction
 " Adapted version of :GoDoc from vim-go:
 " - When the popup is already open, close it
 " - Set the popup to close with any cursor move
-function! s:GoDocToggle() abort
+function! proglang#GoDocToggle() abort
   if empty(popup_list())
     GoDoc
     let popup_ids = popup_list()
@@ -173,8 +173,7 @@ function! s:GoDocToggle() abort
   endif
 endfunction
 
-function! proglang#GolangMappings() abort
-  nnoremap <buffer> <silent> K :call <sid>GoDocToggle()<cr>
+function! proglang#GolangConfig() abort
   " vim-go
   " Remove :GoPlay command, as it uploads code to the internet
   " One could accidentally leak sensitive information
