@@ -1,0 +1,6 @@
+--languages=vim
+--exclude=bin
+--exclude=karabiner
+--exclude=hammerspoon
+--exclude=vim/bundle
+--exclude=vim/.netrwhist
