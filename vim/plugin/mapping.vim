@@ -304,7 +304,7 @@ nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
 nnoremap <space>e :<c-u>call window#MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
 nnoremap <leader>ge :call proglang#ListReferences()<cr>
-nnoremap <leader>ti :call <sid>ImportSymbol()<cr>
+nnoremap <leader>ti :call proglang#ImportSymbol()<cr>
 " account for YouCompleteMe getting stuck with Golang
 nnoremap <leader>yf :YcmForceCompileAndDiagnostics<cr>
 nnoremap <leader>yr :YcmRestartServer<cr>

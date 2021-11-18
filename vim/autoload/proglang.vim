@@ -145,7 +145,7 @@ function! proglang#ListReferences() abort
   endif
 endfunction
 
-function! s:ImportSymbol() abort
+function! proglang#ImportSymbol() abort
   if index(['typescript', 'typescript.tsx'], &ft) != -1
     TsuImport
     return
