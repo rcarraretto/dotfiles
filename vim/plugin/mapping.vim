@@ -300,6 +300,12 @@ vnoremap <leader>gh :GBrowse<cr>
 nnoremap <leader>gs :call fs#OpenInSourceTree()<cr>
 
 " Tags / symbols
+"
+" Fix CTRL-] for vim files.
+" For vim files, keyword is set elsewhere as iskeyword-=#.
+" This means a keyword in 'someplugin#somefunc' is equal to 'someplugin'.
+" Therefore the regular CTRL-] would not jump to the proper tag.
+nnoremap <c-]> :tag <c-r>=expand("<cfile>")<cr><cr>
 nnoremap <space>[ :Tags <c-r><c-w><cr>
 nnoremap <space>] :Tags<cr>
 nnoremap <space>e :<c-u>call window#MaybeSplit() <bar> YcmCompleter GoToDefinition<cr>
