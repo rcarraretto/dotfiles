@@ -226,6 +226,17 @@ function! window#CloseUnlistedBuffersInTab() abort
   endfor
 endfunction
 
+function! window#ListUnsavedBuffers()
+  let bufs = filter(getbufinfo(), {idx, val -> val['changed']})
+  let bufitems = map(bufs, '{"filename": v:val.name, "lnum": v:val.lnum}')
+  if empty(bufitems)
+    echo 'No unsaved buffers'
+    return
+  endif
+  call setqflist(bufitems)
+  botright copen
+endfunction
+
 " Adapted from:
 " https://github.com/vim-scripts/BufOnly.vim
 function! window#BufOnly()

@@ -123,3 +123,27 @@ function! ag#GrepOperatorInGitRoot(type)
   let target = util#YankOperatorTarget(a:type)
   call ag#SearchInGitRoot(target)
 endfunction
+
+" Adapted from Cfind from enuch.vim
+" ~/.vim/bundle/vim-eunuch/plugin/eunuch.vim
+"
+" Cfind! . -type f -name '*.spec.ts'
+" =>
+" SearchExtension .spec.ts
+"
+" Adapted to:
+" - use 'ag' (grepprg) instead of 'find'
+" - open quickfix but not focus on it
+"
+function! ag#SearchExtension(ext)
+  try
+    let grepformat = &l:grepformat
+    setlocal grepformat=%f
+    silent execute 'grep! -g "\.' . a:ext . '"'
+    redraw!
+    botright copen
+    wincmd p
+  finally
+    let &l:grepformat = grepformat
+  endtry
+endfunction
