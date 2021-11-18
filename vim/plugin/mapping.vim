@@ -186,6 +186,8 @@ nnoremap <silent> <leader>cn :call cwd#CdToNodeJsRoot('lcd')<cr>
 nnoremap <silent> <leader>cN :call cwd#CdToNodeJsRoot('cd')<cr>
 nnoremap <silent> <leader>cb :call cwd#CdToBufferDir('lcd')<cr>
 nnoremap <silent> <leader>cB :call cwd#CdToBufferDir('cd')<cr>
+nnoremap <silent> <leader>cw :call cwd#ToggleCwd('lcd')<cr>
+nnoremap <silent> <leader>cW :call cwd#ToggleCwd('cd')<cr>
 " change to previous current directory
 nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
 

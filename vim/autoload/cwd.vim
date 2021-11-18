@@ -52,3 +52,41 @@ function! cwd#CdToBufferDir(cd_cmd) abort
   endif
   call s:Cd(a:cd_cmd, path)
 endfunction
+
+function! cwd#ToggleCwd(cd_cmd) abort
+  let buf_dir = fnamemodify(getcwd(), ':~')
+  let matched_projects = filter(keys(g:toggle_cwd_dirs), 'stridx(buf_dir, v:val) == 0')
+  if empty(matched_projects)
+    return util#error_msg('ToggleCwd: cwd is not a known project: ' . buf_dir)
+  endif
+  let project = matched_projects[0]
+  let rel_path = strpart(buf_dir, len(project) + 1)
+  let rel_paths = g:toggle_cwd_dirs[project]
+  let matched_paths = filter(copy(rel_paths), 'stridx(rel_path, v:val) == 0')
+  if empty(matched_paths)
+    " e.g. when on git root, switch to first relative path
+    let next_rel_path = rel_paths[0]
+  else
+    if len(rel_paths) == 1
+      try
+        " if rel_paths is e.g. ['some/path'],
+        " toggle between 'some/path' and whatever was the previous path
+        execute a:cd_cmd . ' -'
+        echom a:cd_cmd . ' ' . getcwd()
+        return
+      catch /E186/
+        return util#error_msg('ToggleCwd: no previous directory')
+      endtry
+    endif
+    let idx = index(rel_paths, matched_paths[0])
+    " PPmsg [rel_path, rel_paths, matched_paths[0], idx]
+    if idx + 1 < len(rel_paths)
+      let next_rel_path = rel_paths[idx + 1]
+    else
+      let next_rel_path = rel_paths[0]
+    endif
+  endif
+  let next_path = project . '/' . next_rel_path
+  execute a:cd_cmd . ' ' . next_path
+  echom a:cd_cmd . ' ' . getcwd()
+endfunction
