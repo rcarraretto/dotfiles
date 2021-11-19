@@ -1,6 +1,5 @@
-"# vim: set foldmethod=marker:
-
 " Plugins ---------------------- {{{
+
 set rtp+=/usr/local/opt/fzf
 
 if exists('$DOTFILES_PRIVATE') && isdirectory($DOTFILES_PRIVATE . '/vim')
@@ -120,6 +119,7 @@ Plug 'vim-scripts/applescript.vim', {
 " Plug 'elixir-lang/vim-elixir'
 
 call plug#end()
+
 " }}}
 
 " Settings ---------------------- {{{
@@ -272,6 +272,7 @@ augroup FTOptions
   autocmd!
   " iskeyword => easier search in 'someplugin#somefunc'
   autocmd FileType vim setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent
+        \| setlocal foldlevel=20
         \| setlocal textwidth=0
         \| setlocal iskeyword-=#
   autocmd FileType sh setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab | setlocal foldmethod=indent | setlocal foldlevel=20
@@ -418,3 +419,5 @@ let g:go_list_type = "quickfix"
 let g:colorizer_disable_bufleave = 1
 
 " }}}
+
+" vim: set foldmethod=marker foldlevel=0:
