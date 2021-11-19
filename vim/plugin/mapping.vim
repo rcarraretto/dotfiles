@@ -65,14 +65,6 @@ nnoremap <silent> zf :call folding#ResetFoldLevel()<cr>
 " Print the name of the current function
 nnoremap <silent> zp :call proglang#PrintCurrentFuncName()<cr>
 
-" Swap single quote and backtick
-nnoremap ' `
-vnoremap ' `
-onoremap ' `
-nnoremap ` '
-vnoremap ` '
-onoremap ` '
-
 " Edit the alternate file
 nnoremap <leader><leader> <c-^>
 
