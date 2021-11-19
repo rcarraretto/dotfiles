@@ -31,7 +31,7 @@ function! s:AgSetHighlight(ag_args) abort
   " Escape forward slash, so @/ can be used later with :substitute
   " (e.g. GetSubstituteTerm())
   let @/ = escape(ag_pattern, '/')
-  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
+  call search#Highlight()
 endfunction
 
 function! s:AgSearchFromSearchReg() abort

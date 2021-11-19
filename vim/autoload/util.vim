@@ -49,6 +49,17 @@ function! util#error_msg(msg) abort
   echohl NONE
 endfunction
 
+function! util#echo_exception() abort
+  let exception_short = matchstr(v:exception, 'Vim([^)]\+):\zsE\d\+: \(.*\)')
+  echohl ErrorMsg
+  if empty(exception_short)
+    echom v:exception
+  else
+    echom exception_short
+  endif
+  echohl NONE
+endfunction
+
 function! util#prompt(msg, ...) abort
   let opts = a:0 > 0 ? a:1 : {'type': 'danger'}
   if get(opts, 'type') == 'info'

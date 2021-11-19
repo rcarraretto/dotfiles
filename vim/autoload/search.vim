@@ -1,3 +1,7 @@
+function! search#Highlight() abort
+  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
+endfunction
+
 " Make * and # work on visual mode.
 " From https://github.com/nelstrom/vim-visual-star-search
 function! search#VisualStar(cmdtype)
@@ -11,7 +15,7 @@ endfunction
 " instead of just the word under cursor.
 function! search#SearchOperator(type)
   let @/ = util#YankOperatorTarget(a:type)
-  call feedkeys(":let &hlsearch=1 \| echo\<cr>", "n")
+  call search#Highlight()
 endfunction
 
 " :SW command.

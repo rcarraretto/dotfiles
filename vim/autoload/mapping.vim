@@ -17,6 +17,10 @@ function! mapping#GolangMappings() abort
   nnoremap <buffer> <silent> K :call proglang#GoDocToggle()<cr>
 endfunction
 
+function! mapping#TerraformMappings() abort
+  nnoremap <buffer> <space>/r :call proglang#SearchTerraformResource()<cr>
+endfunction
+
 function! mapping#FugitiveMappings()
   if !exists('b:fugitive_type')
     return

@@ -372,9 +372,10 @@ augroup OverrideMappings
   autocmd BufReadPost quickfix nnoremap <buffer> o <cr>
   autocmd VimEnter * call s:OverridePluginMappings()
   autocmd FileType vim call mapping#VimscriptMappings()
-  autocmd FileType go call mapping#GolangMappings()
-  autocmd FileType agit call mapping#AgitMappings()
-  autocmd BufEnter * call mapping#FugitiveMappings()
   autocmd FileType javascript,typescript,typescript.tsx call mapping#JavascriptMappings()
   autocmd FileType typescript,typescript.tsx call mapping#TypescriptMappings()
+  autocmd FileType go call mapping#GolangMappings()
+  autocmd FileType terraform call mapping#TerraformMappings()
+  autocmd BufEnter * call mapping#FugitiveMappings()
+  autocmd FileType agit call mapping#AgitMappings()
 augroup END
