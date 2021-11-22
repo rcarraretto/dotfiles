@@ -109,6 +109,11 @@ Plug 'vim-scripts/applescript.vim', {
       \'commit': '00840b4059c7884120913907f4778092edb006f7' }
 
 " >>> Used occasionally <<<
+if $USE_VIM_BOOKMARKS
+  " Add bookmarks to buffer via 'signs' feature
+  Plug 'MattesGroeger/vim-bookmarks', {
+        \'commit': '9cc5fa7ecc23b052bd524d07c85356c64b92aeef' }
+endif
 " Git log viewer
 " Plug 'cohama/agit.vim'
 " Handlebars
@@ -226,6 +231,10 @@ function! s:SetHighlight() abort
 
   " Customize YouCompleteMe highlight of warnings (e.g., java)
   highlight YcmWarningSection cterm=undercurl ctermbg=none
+
+  " Customize vim-bookmarks
+  highlight BookmarkSign ctermbg=18 ctermfg=8
+  highlight BookmarkAnnotationSign ctermbg=18 ctermfg=8
 endfunction
 
 " Custom highlights are lost when :colorscheme is executed.
@@ -417,6 +426,12 @@ let g:go_list_type = "quickfix"
 " Colorizer
 " keep buffer colorized when you leave it
 let g:colorizer_disable_bufleave = 1
+
+" vim-bookmarks
+let g:bookmark_no_default_key_mappings = 1
+let g:bookmark_sign = '•'
+" perf: add on demand as it uses a CursorMoved autocmd
+" let g:bookmark_display_annotation = 1
 
 " }}}
 

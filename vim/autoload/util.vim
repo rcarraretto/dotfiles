@@ -476,3 +476,13 @@ function! util#GolangResetOnlyTestCase() abort
   unlet! g:test_case_target
   echom "unlet g:test_case_target"
 endfunction
+
+" Workaround for vim-bookmarks plugin.
+" 'util' namespace clash:
+" https://github.com/MattesGroeger/vim-bookmarks/blob/9cc5fa7ecc23b052bd524d07c85356c64b92aeef/autoload/util.vim
+if $USE_VIM_BOOKMARKS
+  let vimbookmarks_path = $HOME . '/.vim/bundle/vim-bookmarks/autoload/util.vim'
+  if filereadable(vimbookmarks_path)
+    execute 'source ' . vimbookmarks_path
+  endif
+endif

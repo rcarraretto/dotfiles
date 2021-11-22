@@ -340,6 +340,16 @@ nmap ga <Plug>(EasyAlign)
 " Go align Elixir paragraph
 nmap gae gaipe
 
+if $USE_VIM_BOOKMARKS
+  " vim-bookmarks plugin
+  nmap mm <Plug>BookmarkToggle
+  nmap ma <Plug>BookmarkShowAll
+  nmap mn <Plug>BookmarkNext
+  nmap mp <Plug>BookmarkPrev
+  nmap mC <Plug>BookmarkClear
+  nmap mX <Plug>BookmarkClearAll
+endif
+
 function! s:OverridePluginMappings()
   " Revert plugin side effects
   " rsi.vim
