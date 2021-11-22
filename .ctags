@@ -1,5 +1,6 @@
 --languages=vim
 --exclude=bin
+--exclude=git-hooks
 --exclude=karabiner
 --exclude=hammerspoon
 --exclude=vim/bundle
