@@ -1,2 +1,8 @@
 #!/bin/sh
+
+set -e
+
+# important for Sourcetree to use Exuberant Ctags instead of macOS ctags
+PATH="/usr/local/bin:$PATH"
+
 ctags -R .
