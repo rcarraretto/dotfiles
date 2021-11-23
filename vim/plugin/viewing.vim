@@ -1,5 +1,6 @@
 command! -nargs=1 -complete=command WrapCommand call viewing#WrapCommand(<q-args>)
 command! RemoveViews call viewing#RemoveViews()
+command! TagsGen call viewing#TagsGen()
 
 augroup StartAtLastCursorPosition
   autocmd!

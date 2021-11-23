@@ -293,6 +293,7 @@ nnoremap <leader>gs :call fs#OpenInSourceTree()<cr>
 
 " Tags / symbols
 "
+nnoremap <leader>tg :TagsGen<cr>
 " Fix CTRL-] for vim files.
 " For vim files, keyword is set elsewhere as iskeyword-=#.
 " This means a keyword in 'someplugin#somefunc' is equal to 'someplugin'.

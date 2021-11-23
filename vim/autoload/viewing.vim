@@ -161,6 +161,15 @@ function! viewing#RemoveViews()
   endif
 endfunction
 
+function! viewing#TagsGen() abort
+  let ok = util#prompt('Generate tags for ' . getcwd() . '?', {'type': 'info'})
+  if !ok
+    return
+  endif
+  call system('ctags -R .')
+  echo "Done"
+endfunction
+
 " fugitive.vim
 function! viewing#ToggleGStatus()
   if buflisted(bufname('.git/index'))
