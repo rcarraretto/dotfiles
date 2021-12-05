@@ -134,56 +134,6 @@
                                 "type": "basic"
                             }
                         ]
-                    },
-                    {
-                        "description": "Dota 2: backspace as mouse right-click",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "com.valvesoftware.dota2"
-                                        ],
-                                        "type": "frontmost_application_if"
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "delete_or_backspace"
-                                },
-                                "to": {
-                                    "pointing_button": "button2"
-                                },
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Dota 2: shift + backspace to backspace",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "com.valvesoftware.dota2"
-                                        ],
-                                        "type": "frontmost_application_if"
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "delete_or_backspace",
-                                    "modifiers": {
-                                        "mandatory": "right_shift",
-                                        "optional": [
-                                            "any"
-                                        ]
-                                    }
-                                },
-                                "to": {
-                                    "key_code": "delete_or_backspace"
-                                },
-                                "type": "basic"
-                            }
-                        ]
                     }
                 ]
             },
