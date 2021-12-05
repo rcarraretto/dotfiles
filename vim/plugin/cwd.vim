@@ -4,6 +4,9 @@ augroup AutoCd
 augroup END
 
 function! s:ProjectSpecificSetup() abort
+  if !exists('g:project_specific_configs")')
+    return
+  endif
   let path = expand('%:~')
   for config in g:project_configs
     if stridx(path, config['cwd']) == 0
