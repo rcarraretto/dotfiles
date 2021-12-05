@@ -207,7 +207,7 @@ nnoremap <leader>ek :call proglang#EditSketchBuffer(&ft)<cr>
 nnoremap <leader>et :call proglang#EditTestFile()<cr>
 
 " Vimscript, vim debug
-nnoremap <leader>ev :<c-u>call window#EditFile(resolve($MYVIMRC))<cr>
+nnoremap <leader>ev :<c-u>call window#EditFile('~/.vimrc')<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>el :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/vim/plugin/private.vim')<cr>
 " :Log {expr}

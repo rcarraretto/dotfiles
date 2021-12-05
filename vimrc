@@ -27,7 +27,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
-Plug 'Valloric/YouCompleteMe', { 'commit': '4df6f35f0c9f9aec21a3f567397496b5dee6acc7' }
+if !has('nvim')
+  Plug 'Valloric/YouCompleteMe', { 'commit': '4df6f35f0c9f9aec21a3f567397496b5dee6acc7' }
+endif
 Plug 'AndrewRadev/splitjoin.vim'
 
 " >>> Support <<<
@@ -339,6 +341,10 @@ augroup END
 " }}}
 
 " Plugin settings ---------------------- {{{
+
+if has('nvim')
+  let g:python3_host_prog = '/usr/local/bin/python3'
+endif
 
 " fzf
 " extend actions with mapping to open in system editor
