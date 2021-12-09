@@ -34,16 +34,27 @@ function! proglang#Prettier(mode) abort
 
   if has_key(prettier_parsers, &ft)
     let parser = prettier_parsers[&ft]
-    let opts = ''
+    let opts = '--write --parser=' . parser
     " Try to find .prettierrc.json upwards until the git root.
     " This would be an evidence that the project uses prettier.
     let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
     if empty(prettierrc_json)
       " Use global prettier config for example in sketch buffers or
       " projects that don't have prettier installed.
-      let opts = "--config=" . $DOTFILES_PRIVATE . "/.prettierrc "
+      let opts .= " --config=" . $DOTFILES_PRIVATE . "/.prettierrc"
     endif
-    execute "%!npx prettier " . opts . "--parser=" . parser
+    let path = expand('%:p')
+    if !empty(path)
+      " Pass path to prettier, so it can honor prettierrc overrides related to
+      " file extension
+      let cmd = printf("npx prettier %s %s", opts, path)
+      call system(cmd)
+      noautocmd silent checktime
+    else
+      " No file in disk. Pass buffer content to stdin.
+      let cmd = printf("npx prettier %s", opts)
+      execute "%!" . cmd
+    endif
   else
     if &ft == 'xml'
       " https://stackoverflow.com/a/16090892
@@ -51,7 +62,7 @@ function! proglang#Prettier(mode) abort
       call s:FilterBufferOrFail(cmd)
     elseif &ft == 'go'
       call system('go fmt ' . expand('%:p'))
-      silent checktime
+      noautocmd silent checktime
       return
     elseif &ft == 'sql'
       if a:mode == 'V'
