@@ -93,7 +93,7 @@ Plug 'Quramy/tsuquyomi', {
       \'commit': '785af7476e0db2522372ef585c86947fc5625c81' }
 Plug 'peitalin/vim-jsx-typescript', {
       \'for': ['javascript', 'typescript', 'typescript.tsx'],
-      \'commit': '22df470d92651426f2377e3166488672f7b4b4ef' }
+      \'commit': '07370d48c605ec027543b52762930165b1b27779' }
 " Python
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 " Golang
