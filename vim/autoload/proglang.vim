@@ -48,7 +48,10 @@ function! proglang#Prettier(mode) abort
       " Pass path to prettier, so it can honor prettierrc overrides related to
       " file extension
       let cmd = printf("npx prettier %s %s", opts, path)
-      call system(cmd)
+      let output = system(cmd)
+      if v:shell_error
+        call util#error_msg(output)
+      endif
       noautocmd silent checktime
     else
       " No file in disk. Pass buffer content to stdin.
