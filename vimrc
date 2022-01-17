@@ -390,6 +390,12 @@ let g:ycm_always_populate_location_list = 1
 " disable documentation popup
 " (used by Golang)
 let g:ycm_auto_hover = ''
+" disable Golang warning
+let g:ycm_filter_diagnostics = {
+\   "go": {
+\     "regex": ["composite literal uses unkeyed fields"],
+\   }
+\ }
 
 " EasyAlign
 " e: elixir
