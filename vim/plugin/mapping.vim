@@ -282,7 +282,6 @@ nnoremap <leader>rq :cdo s/<c-r>///g <bar> update<c-f>F/<c-c>
 nnoremap <leader>rg :g//exec "normal zR@q"<left>
 
 " Git
-nnoremap <space>u :call viewing#ToggleGStatus()<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>go :Git commit<cr>

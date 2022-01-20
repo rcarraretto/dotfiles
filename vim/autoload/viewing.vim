@@ -169,13 +169,3 @@ function! viewing#TagsGen() abort
   call system('ctags -R .')
   echo "Done"
 endfunction
-
-" fugitive.vim
-function! viewing#ToggleGStatus()
-  if buflisted(bufname('.git/index'))
-    bd .git/index
-  else
-    Git
-    wincmd T
-  endif
-endfunction
