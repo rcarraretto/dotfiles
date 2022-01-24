@@ -4,7 +4,7 @@ augroup AutoCd
 augroup END
 
 function! s:ProjectSpecificSetup() abort
-  if !exists('g:project_specific_configs")')
+  if !exists('g:project_configs')
     return
   endif
   let path = expand('%:~')
