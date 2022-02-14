@@ -89,9 +89,12 @@ function! ag#SearchNotes(input) abort
 endfunction
 
 function! s:GetNoteDirs() abort
-  let dirs = ['~/Dropbox/notes/']
-  if isdirectory($HOME . '/Dropbox/notes-home')
-    call add(dirs, '~/Dropbox/notes-home')
+  let dirs = []
+  if exists('$NOTES_SHARED') && isdirectory($NOTES_SHARED)
+    call add(dirs, fnameescape($NOTES_SHARED))
+  endif
+  if exists('$NOTES_HOME') && isdirectory($NOTES_HOME)
+    call add(dirs, fnameescape($NOTES_HOME))
   endif
   if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
     call add(dirs, fnameescape($NOTES_WORK))

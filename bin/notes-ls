@@ -24,13 +24,13 @@ for i in "$@"; do
 done
 
 dirs=()
-if [ -d "$HOME/Dropbox/notes-home" ]; then
-  dirs+=("$HOME/Dropbox/notes-home")
+if [ -d "$NOTES_HOME" ]; then
+  dirs+=("$NOTES_HOME")
 fi
 if [ -d "$NOTES_WORK" ]; then
   dirs+=("$NOTES_WORK")
 fi
-dirs+=("$HOME/Dropbox/notes")
+dirs+=("$NOTES_SHARED")
 
 args=()
 if [ $opt_all -eq 0 ]; then
