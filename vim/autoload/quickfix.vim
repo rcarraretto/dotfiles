@@ -11,6 +11,7 @@ function! quickfix#QfConfig()
   nnoremap <buffer> <silent> go <cr><c-w>j
   nnoremap <buffer> <silent> x <c-w><cr><c-w>K
   nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
+  nnoremap <buffer> dp :QfDeletePattern<cr>
   nnoremap <buffer> <silent> d :set operatorfunc=<sid>DeleteOperator<cr>g@
   command! -buffer QfDeletePattern call s:QfDeletePattern()
   command! -buffer QfFilterPattern call s:QfFilterPattern()
