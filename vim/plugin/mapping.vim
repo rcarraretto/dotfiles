@@ -105,8 +105,8 @@ nnoremap <space>. :20wincmd ><cr>
 nnoremap <leader>ww :call window#ToggleWindowSize()<cr>
 
 " Quickfix
-nnoremap <silent> <space>i :call ToggleQuickfixList()<cr>
-nnoremap <silent> <space>I :call ToggleLocationList()<cr>
+nnoremap <silent> <space>i :call quickfix#ToggleQuickfixList()<cr>
+nnoremap <silent> <space>I :call quickfix#ToggleLocationList()<cr>
 nnoremap [g :colder<cr>
 nnoremap ]g :cnewer<cr>
 nnoremap <leader>da :AbortDispatch<cr>
