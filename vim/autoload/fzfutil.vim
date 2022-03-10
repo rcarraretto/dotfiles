@@ -94,3 +94,15 @@ function! fzfutil#FzfCurrentFolderNonRecursive(folder) abort
         \ }
   call s:FzfWithAction({'source': cmd, 'options': ['--prompt', prompt]}, action)
 endfunction
+
+function! fzfutil#FzfArglist() abort
+  if argc() == 0
+    return util#error_msg('FzfArglist: Empty arglist')
+  endif
+  let paths_relative_to_cwd = map(argv(), "fnamemodify(v:val, ':.')")
+  call fzf#run(fzf#wrap('args', {
+        \'source': paths_relative_to_cwd,
+        \'down': '~25%',
+        \'options': ['--prompt', '[arglist] ']
+        \}))
+endfunction

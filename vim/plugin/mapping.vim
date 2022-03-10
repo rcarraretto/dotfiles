@@ -111,6 +111,9 @@ nnoremap [g :colder<cr>
 nnoremap ]g :cnewer<cr>
 nnoremap <leader>da :AbortDispatch<cr>
 
+" Arglist
+nnoremap <leader>at :call arglist#AddOrRemoveCurrentBuffer()<cr>
+
 " Tab navigation
 nnoremap <silent> [r :tabprevious<cr>
 nnoremap <silent> ]r :tabnext<cr>
@@ -155,6 +158,10 @@ nnoremap <leader>eN :<c-u>call fzfutil#FzfNotes(1)<cr>
 nnoremap <leader>ep :call fzfutil#FzfExploreProject()<cr>
 " browse history
 nnoremap <space>m :WrapCommand History<cr>
+" search arglist
+nnoremap <leader>al :SearchArglist<space>
+" browse arglist
+nnoremap <leader>el :<c-u>call fzfutil#FzfArglist()<cr>
 " browse /var/tmp
 nnoremap <leader>ot :Files /var/tmp<cr>
 " browse Downloads, most recent first
@@ -209,7 +216,6 @@ nnoremap <leader>et :call proglang#EditTestFile()<cr>
 " Vimscript, vim debug
 nnoremap <leader>ev :<c-u>call window#EditFile('~/.vimrc')<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>el :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/vim/plugin/private.vim')<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
 " reload syntax highlighting

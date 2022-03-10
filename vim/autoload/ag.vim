@@ -117,6 +117,13 @@ function! ag#SearchInGitRoot(input) abort
   execute printf('Ag --hidden -Q -- %s %s', s:AgBuildPattern(a:input), path)
 endfunction
 
+function! ag#SearchArglist(input) abort
+  if argc() == 0
+    return util#error_msg('SearchArglist: Empty arglist')
+  endif
+  execute printf("Ag --hidden -Q -- %s %s", s:AgBuildPattern(a:input), expand('##'))
+endfunction
+
 function! ag#GrepOperator(type)
   let target = util#YankOperatorTarget(a:type)
   silent execute "Ag -Q --hidden -- " . shellescape(target)
