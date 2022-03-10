@@ -357,6 +357,9 @@ let g:fzf_action = {
 \ 'ctrl-f': 'silent VSplitLeft',
 \ 'ctrl-s': 'SysOpen'
 \ }
+" use a normal window at the bottom
+" (else by default it opens a popup window in the center, which seems more laggy)
+let g:fzf_layout = { 'down': '40%' }
 
 " Dispatch
 let g:dispatch_no_maps = 1
