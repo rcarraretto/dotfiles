@@ -25,6 +25,10 @@ function! s:AgSetHighlight(ag_args) abort
   " Get the last segment that is surrounded by quotes.
   " (does not work if the pattern is not surrounded by quotes)
   let ag_pattern = matchstr(a:ag_args, '\v^.*[''"]\zs.{-}\ze[''"]')
+  if empty(ag_pattern)
+    echom "WARN: AgSetHighlight: could not find search pattern: " . a:ag_args
+    return
+  endif
   " Note: This does not properly translate an 'ag' pattern to a vim regex.
   " e.g. \bbatata\b should become \<batata\>
   "
@@ -66,7 +70,7 @@ function! ag#SearchInFile(input) abort
     return
   endif
   if !empty(a:input)
-    execute printf('Ag -Q -- %s %s', s:AgBuildPattern(a:input), path)
+    execute printf('Ag -Q -- %s %s', shellescape(a:input), path)
   else
     " Use s:AgVimgrep instead of :Ag to bypass calling s:AgSetHighlight,
     " which is buggy.
@@ -75,17 +79,8 @@ function! ag#SearchInFile(input) abort
   cfirst
 endfunction
 
-" It seems like the search pattern should be surrounded with single quotes
-" instead of double quotes.
-"
-" Else the following search terms wouldn't work: "$#" and "$@".
-" I think these would be interpreted by the shell, when in double quotes.
-function! s:AgBuildPattern(input) abort
-  return printf("'%s'", a:input)
-endfunction
-
 function! ag#SearchNotes(input) abort
-  execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', s:AgBuildPattern(a:input), s:GetNoteDirs())
+  execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', shellescape(a:input), s:GetNoteDirs())
 endfunction
 
 function! s:GetNoteDirs() abort
@@ -103,7 +98,7 @@ function! s:GetNoteDirs() abort
 endfunction
 
 function! ag#SearchDotfiles(input) abort
-  execute printf("Ag --hidden -Q -- %s %s", s:AgBuildPattern(a:input), util#GetDotfilesDirs())
+  execute printf("Ag --hidden -Q -- %s %s", shellescape(a:input), util#GetDotfilesDirs())
 endfunction
 
 function! ag#SearchInGitRoot(input) abort
@@ -114,19 +109,40 @@ function! ag#SearchInGitRoot(input) abort
   if empty(path)
     return util#error_msg('SearchInGitRoot: Git root not found')
   endif
-  execute printf('Ag --hidden -Q -- %s %s', s:AgBuildPattern(a:input), path)
+  execute printf('Ag --hidden -Q -- %s %s', shellescape(a:input), path)
 endfunction
 
 function! ag#SearchArglist(input) abort
   if argc() == 0
     return util#error_msg('SearchArglist: Empty arglist')
   endif
-  execute printf("Ag --hidden -Q -- %s %s", s:AgBuildPattern(a:input), expand('##'))
+  execute printf("Ag --hidden -Q -- %s %s", shellescape(a:input), expand('##'))
 endfunction
 
 function! ag#GrepOperator(type)
   let target = util#YankOperatorTarget(a:type)
-  silent execute "Ag -Q --hidden -- " . shellescape(target)
+  let ctx = get(g:, 'grep_operator_ctx', 'cwd')
+  if ctx != 'cwd'
+    " echo needs to be delayed because of 'redraw' in StatelessGrep
+    call util#delayed_echo(printf("grep_operator_ctx='%s'", ctx))
+  endif
+  if ctx == 'arglist'
+    call ag#SearchArglist(target)
+  elseif ctx == 'dotfiles'
+    call ag#SearchDotfiles(target)
+  else
+    silent execute printf("Ag -Q --hidden -- %s", shellescape(target))
+  endif
+endfunction
+
+function! ag#SelectGrepOperatorCtx() abort
+  let opts = ['cwd', 'arglist', 'dotfiles']
+  let ctx = util#inputlist(opts, {'intro': 'Select g:grep_operator_ctx:'})
+  if empty(ctx)
+    return
+  endif
+  let g:grep_operator_ctx = ctx
+  echom printf("let g:grep_operator_ctx='%s'", ctx)
 endfunction
 
 function! ag#GrepOperatorInGitRoot(type)

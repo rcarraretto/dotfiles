@@ -145,6 +145,7 @@ nnoremap <space>g :set operatorfunc=ag#GrepOperator<cr>g@
 vnoremap <space>g :<c-u>call ag#GrepOperator(visualmode())<cr>
 nnoremap <space>G :set operatorfunc=ag#GrepOperatorInGitRoot<cr>g@
 vnoremap <space>G :<c-u>call ag#GrepOperatorInGitRoot(visualmode())<cr>
+nnoremap <space><c-g> :call ag#SelectGrepOperatorCtx()<cr>
 " search in dotfiles
 nnoremap <leader>ad :SearchDotfiles<space>
 " browse dotfiles
