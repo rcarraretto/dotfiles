@@ -109,7 +109,7 @@ function! ag#SearchInGitRoot(input) abort
   if empty(path)
     return util#error_msg('SearchInGitRoot: Git root not found')
   endif
-  execute printf('Ag --hidden -Q -- %s %s', shellescape(a:input), path)
+  execute printf('Ag --hidden -Q -- %s %s', shellescape(a:input), fnameescape(path))
 endfunction
 
 function! ag#SearchArglist(input) abort
