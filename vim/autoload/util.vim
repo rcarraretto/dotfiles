@@ -323,14 +323,22 @@ function! util#ToggleOption(option_name, ...) abort
 endfunction
 
 function! util#YankOperatorTarget(type) abort
+  if a:type !=# 'v' && a:type !=# 'char'
+    return
+  endif
+  " do not overwrite system clipboard
+  let cb_save = &clipboard
+  set clipboard-=unnamed
+  let reg_save = @"
   if a:type ==# 'v'
     execute "normal! `<v`>y"
   elseif a:type ==# 'char'
     execute "normal! `[v`]y"
-  else
-    return
   endif
-  return @@
+  let target = @"
+  let @" = reg_save
+  let &clipboard = cb_save
+  return target
 endfunction
 
 " Like matchlist() but return all matches
