@@ -127,5 +127,5 @@ function! mochajs#AddMappings() abort
   nnoremap <buffer> <leader>tr :call <sid>ResetOnlys()<cr>
   nnoremap <buffer> <leader>tR :call <sid>ResetOnlysAndSkips()<cr>
   nnoremap <buffer> <leader>tfa :call <sid>FixTestAssertion()<cr>
-  nnoremap <buffer> g/t /^\s*\zs\(describe\<bar>it\<bar>test\)\(\.only\<bar>\.skip\<bar>(\)<cr>
+  nnoremap <buffer> <space>/t /^\s*\zs\(describe\<bar>it\<bar>test\)\(\.only\<bar>\.skip\<bar>(\)<cr>
 endfunction
