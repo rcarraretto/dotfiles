@@ -14,7 +14,11 @@ endfunction
 " Similar to star (*) but for arbitrary motions,
 " instead of just the word under cursor.
 function! search#SearchOperator(type)
-  let @/ = util#YankOperatorTarget(a:type)
+  let [target, error] = util#YankOperatorTarget(a:type)
+  if !empty(error)
+    return util#error_msg('SearchOperator: ' . error)
+  endif
+  let @/ = escape(target, '\')
   call search#Highlight()
 endfunction
 

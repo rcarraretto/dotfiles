@@ -119,8 +119,11 @@ function! ag#SearchArglist(input) abort
   execute printf("Ag --hidden -Q -- %s %s", shellescape(a:input), expand('##'))
 endfunction
 
-function! ag#GrepOperator(type)
-  let target = util#YankOperatorTarget(a:type)
+function! ag#GrepOperator(type) abort
+  let [target, error] = util#YankOperatorTarget(a:type)
+  if !empty(error)
+    return util#error_msg('GrepOperator: ' . error)
+  endif
   let ctx = get(g:, 'grep_operator_ctx', 'cwd')
   if ctx != 'cwd'
     " echo needs to be delayed because of 'redraw' in StatelessGrep
@@ -146,7 +149,10 @@ function! ag#SelectGrepOperatorCtx() abort
 endfunction
 
 function! ag#GrepOperatorInGitRoot(type)
-  let target = util#YankOperatorTarget(a:type)
+  let [target, error] = util#YankOperatorTarget(a:type)
+  if !empty(error)
+    return util#error_msg('GrepOperatorInGitRoot: ' . error)
+  endif
   call ag#SearchInGitRoot(target)
 endfunction
 

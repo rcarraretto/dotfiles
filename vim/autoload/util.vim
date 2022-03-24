@@ -324,21 +324,24 @@ endfunction
 
 function! util#YankOperatorTarget(type) abort
   if a:type !=# 'v' && a:type !=# 'char'
-    return
+    return [0, 'YankOperatorTarget: unsupported type: ' . a:type]
   endif
   " do not overwrite system clipboard
   let cb_save = &clipboard
   set clipboard-=unnamed
   let reg_save = @"
   if a:type ==# 'v'
-    execute "normal! `<v`>y"
+    silent execute "normal! `<v`>y"
   elseif a:type ==# 'char'
-    execute "normal! `[v`]y"
+    silent execute "normal! `[v`]y"
   endif
   let target = @"
   let @" = reg_save
   let &clipboard = cb_save
-  return target
+  if stridx(target, "\n") != -1
+    return [0, 'YankOperatorTarget: cannot search multiline']
+  endif
+  return [target, 0]
 endfunction
 
 " Like matchlist() but return all matches
