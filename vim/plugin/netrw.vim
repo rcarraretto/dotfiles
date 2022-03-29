@@ -1,20 +1,6 @@
 if !$USE_NETRW
   " cancel netrw altogether
   let g:loaded_netrwPlugin = 1
-
-  " Replacement for netrw 'gx',
-  " but just for urls
-  function! s:OpenUrl()
-    let url = expand('<cfile>')
-    if url !~ 'http\(s\)\?:\/\/'
-      echo 'Not a url: ' . url
-      return
-    endif
-    call system("open " . shellescape(url))
-    redraw!
-  endfunction
-  nnoremap gx :call <sid>OpenUrl()<cr>
-
   finish
 endif
 

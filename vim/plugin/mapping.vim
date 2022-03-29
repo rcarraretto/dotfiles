@@ -314,6 +314,12 @@ nnoremap <leader>ti :call proglang#ImportSymbol()<cr>
 nnoremap <leader>yf :YcmForceCompileAndDiagnostics<cr>
 nnoremap <leader>yr :YcmRestartServer<cr>
 
+" URL
+if !$USE_NETRW
+  nnoremap gx :call url#OpenUrl()<cr>
+endif
+nnoremap gX :<c-u>call url#ParseUrlQs()<cr>
+
 " Formatting
 nnoremap <leader>gp :call proglang#Prettier('')<cr>
 vnoremap <leader>gp :<c-u>call proglang#Prettier(visualmode())<cr>
