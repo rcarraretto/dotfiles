@@ -78,6 +78,10 @@ function! fzfutil#FzfExploreNodeModules() abort
   call s:FzfExplorePaths(cmd)
 endfunction
 
+function! fzfutil#FzfExploreVimBundle() abort
+  call s:FzfExplorePaths('find ~/.vim/bundle -mindepth 1 -maxdepth 1')
+endfunction
+
 function! fzfutil#FzfCurrentFolderNonRecursive(folder) abort
   " https://unix.stackexchange.com/a/104803
   let cmd = '(cd ' . fnameescape(a:folder) . ' && find . -mindepth 1 -maxdepth 1 -type f | cut -c 3-)'

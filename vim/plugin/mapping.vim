@@ -177,7 +177,7 @@ nnoremap <leader>of :call fzfutil#FzfCurrentFolderNonRecursive(expand("%:h"))<cr
 " browse node_modules
 nnoremap <leader>eM :call fzfutil#FzfExploreNodeModules()<cr>
 " browse source code of vim plugins
-nnoremap <leader>ob :Files ~/.vim/bundle<cr>
+nnoremap <leader>ob :call fzfutil#FzfExploreVimBundle()<cr>
 
 " Change directory
 nnoremap <silent> <leader>cg :call cwd#CdToGitRoot('lcd')<cr>
