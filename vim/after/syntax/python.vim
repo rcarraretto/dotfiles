@@ -11,14 +11,18 @@ hi link pythonException Keyword
 hi link pythonCoding Comment
 
 " don't highlight class name
-syn clear pythonClass
+hi link pythonClass Normal
 " don't highlight function name
-syn clear pythonFunction
-" don't highlight %s in
-" e.g. "Key '%s' must be an ISO date" % key
-syn clear pythonStrFormatting
+hi link pythonFunction Normal
 " highlight {var} in f'hello, {var}' as blank
-hi link pythonStrFormat Operator
+hi link pythonStrFormat Normal
+
+" don't highlight %s differently in
+" e.g. "Key '%s' must be an ISO date" % key
+"
+" Else %d, %f may show as false positives e.g. in a date formatting string
+" "%Y-%m-%dT%H:%M:%S.%f%z"
+hi link pythonStrFormatting String
 
 " split pythonBuiltinObj into 2 different groups with different highlighting
 syn clear pythonBuiltinObj
