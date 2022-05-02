@@ -19,6 +19,7 @@ function! proglang#Prettier(mode) abort
   \ 'typescript.tsx': 'typescript',
   \ 'markdown': 'markdown',
   \ 'html': 'html',
+  \ 'xhtml': 'html',
   \ 'css': 'css',
   \ 'yaml': 'yaml'
   \}

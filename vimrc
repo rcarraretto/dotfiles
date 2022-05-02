@@ -297,6 +297,7 @@ augroup FTOptions
     \| setlocal conceallevel=2 concealcursor=nvc
   autocmd FileType javascript,typescript,typescript.tsx setlocal foldmethod=indent | setlocal foldlevel=20 | setlocal formatoptions-=cro
   autocmd FileType typescript.tsx setlocal commentstring=//\ %s
+  autocmd FileType html,xhtml setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType json setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType yaml setlocal foldmethod=indent | setlocal foldlevel=20
   autocmd FileType xml setlocal foldmethod=indent | setlocal foldlevel=20
