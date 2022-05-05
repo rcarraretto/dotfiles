@@ -165,8 +165,8 @@ nnoremap <leader>al :SearchArglist<space>
 nnoremap <leader>el :<c-u>call fzfutil#FzfArglist()<cr>
 " browse /var/tmp
 nnoremap <leader>ot :Files /var/tmp<cr>
-" browse Downloads, most recent first
-nnoremap <leader>ol :call fzf#run(fzf#wrap({'source': 'ls -dt ~/Downloads/*'}))<cr>
+" browse Downloads
+nnoremap <leader>ol :Files ~/Downloads<cr>
 " browse commands
 " (<c-x> executes the command directly)
 nnoremap <space>c :Commands<cr>
