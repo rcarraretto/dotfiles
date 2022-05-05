@@ -82,7 +82,8 @@ function! s:DirvishRm() abort
     return
   endif
   if isdirectory(path)
-    let output = system('rm -r ' . fnameescape(path))
+    let rm_cmd = printf("rm -r '%s'", fnameescape(path))
+    let output = system(rm_cmd)
     if v:shell_error
       echohl Error
       echom 'DirvishRm: Error: ' . output
