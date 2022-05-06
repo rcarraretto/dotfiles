@@ -8,17 +8,27 @@ function! s:StatelessGrep(prg, format, args) abort
     " E499: Empty file name for '%' or '#', only works with ":p:h"
     let args = escape(a:args, '|#%')
     silent execute 'grep!' args
+    " fix screen going blank after :grep
+    redraw!
+    botright copen
+    return 0
+  catch
+    " fix screen going blank after :grep
+    redraw!
+    if match(v:exception, 'Vim(grep):E40:') >= 0
+      call util#error_msg('StatelessGrep: Error: possibly malformed args')
+    else
+      call util#error_msg('StatelessGrep: Error: ' . v:exception)
+    endif
+    return 1
   finally
     let &l:grepprg = prg_back
     let &grepformat = format_back
   endtry
-  " fix screen going blank after :grep
-  redraw!
-  botright copen
 endfunction
 
 function! s:AgVimgrep(args) abort
-  call s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
+  return s:StatelessGrep('ag --vimgrep', '%f:%l:%c:%m,%f:%l:%m', a:args)
 endfunction
 
 function! s:AgSetHighlight(ag_args) abort
@@ -51,8 +61,10 @@ function! ag#Ag(args) abort
   if empty(a:args)
     return s:AgVimgrep(s:AgSearchFromSearchReg())
   endif
-  call s:AgVimgrep(a:args)
-  call s:AgSetHighlight(a:args)
+  let error = s:AgVimgrep(a:args)
+  if !error
+    call s:AgSetHighlight(a:args)
+  endif
 endfunction
 
 function! ag#SearchInFile(input) abort
