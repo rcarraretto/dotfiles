@@ -387,10 +387,12 @@ let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 
 " YouCompleteMe
 let g:ycm_key_list_select_completion = ['<Enter>']
-let g:ycm_filetype_specific_completion_to_disable = {
-\ 'c': 1,
-\ 'cpp': 1
-\ }
+if exists('$DISABLE_YCM_C_LANG')
+  let g:ycm_filetype_specific_completion_to_disable = {
+  \ 'c': 1,
+  \ 'cpp': 1
+  \ }
+endif
 let g:ycm_always_populate_location_list = 1
 " disable documentation popup
 " (used by Golang)

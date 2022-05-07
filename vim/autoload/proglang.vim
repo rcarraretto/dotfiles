@@ -23,7 +23,7 @@ function! proglang#Prettier(mode) abort
   \ 'css': 'css',
   \ 'yaml': 'yaml'
   \}
-  let adhoc_fts = ['xml', 'go', 'sql']
+  let adhoc_fts = ['c', 'xml', 'go', 'sql']
   let supported_ft = has_key(prettier_parsers, &ft) || index(adhoc_fts, &ft) >= 0
 
   if !supported_ft
@@ -60,7 +60,15 @@ function! proglang#Prettier(mode) abort
       execute "%!" . cmd
     endif
   else
-    if &ft == 'xml'
+    if &ft == 'c'
+      let cmd = printf("clang-format --style=Chromium -i '%s'", fnameescape(expand('%:p')))
+      let output = system(cmd)
+      noautocmd silent checktime
+      if v:shell_error
+        return util#error_msg('Prettier: Error: clang-format: ' . output)
+      endif
+      return
+    elseif &ft == 'xml'
       " https://stackoverflow.com/a/16090892
       let cmd = "python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'"
       call s:FilterBufferOrFail(cmd)
