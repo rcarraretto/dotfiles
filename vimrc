@@ -327,7 +327,7 @@ augroup SetFiletype
   " filetype 'dosini' seems to highlight better than 'conf',
   " as it highlights keys and values differently.
   autocmd BufNewFile,BufRead *.conf set filetype=dosini | setlocal commentstring=#\ %s
-  autocmd BufNewFile,BufRead $NOTES_SHARED/*.txt,$NOTES_HOME/*.txt,$NOTES_WORK/*.txt set ft=ntx
+  autocmd BufNewFile,BufRead $NOTES_SHARED/*.txt,$NOTES_HOME/*.txt,$NOTES_WORK/*.txt,.todo set ft=ntx
 augroup END
 
 augroup SpecialFiles
