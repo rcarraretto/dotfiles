@@ -35,12 +35,27 @@ function! cwd#CdToGitRoot(cd_cmd)
   call s:Cd(a:cd_cmd, path)
 endfunction
 
-function! cwd#CdToNodeJsRoot(cd_cmd) abort
-  let path = util#GetNodeJsRoot()
+function! cwd#CdToProgLangRoot(cd_cmd) abort
+  if &ft == 'go'
+    let filename = 'go.mod'
+  else
+    let filename = 'package.json'
+  endif
+  let path = cwd#FindFileUpwards(filename)
   if empty(path)
-    return util#error_msg("CdToNodeJsRoot: couldn't find package.json")
+    return util#error_msg("CdToProgLangRoot: couldn't find file: " . filename)
   endif
   call s:Cd(a:cd_cmd, path)
+endfunction
+
+function! cwd#FindFileUpwards(filename) abort
+  let path = findfile(a:filename, '.;' . $HOME . '/work')
+  if empty(path)
+    return 0
+  endif
+  " Expand to full path (:~) for better logs,
+  " then get the directory (:h).
+  return fnamemodify(path, ':~:h')
 endfunction
 
 function! cwd#CdToBufferDir(cd_cmd) abort

@@ -182,8 +182,8 @@ nnoremap <leader>ob :call fzfutil#FzfExploreVimBundle()<cr>
 " Change directory
 nnoremap <silent> <leader>cg :call cwd#CdToGitRoot('lcd')<cr>
 nnoremap <silent> <leader>cG :call cwd#CdToGitRoot('cd')<cr>
-nnoremap <silent> <leader>cn :call cwd#CdToNodeJsRoot('lcd')<cr>
-nnoremap <silent> <leader>cN :call cwd#CdToNodeJsRoot('cd')<cr>
+nnoremap <silent> <leader>cn :call cwd#CdToProgLangRoot('lcd')<cr>
+nnoremap <silent> <leader>cN :call cwd#CdToProgLangRoot('cd')<cr>
 nnoremap <silent> <leader>cb :call cwd#CdToBufferDir('lcd')<cr>
 nnoremap <silent> <leader>cB :call cwd#CdToBufferDir('cd')<cr>
 nnoremap <silent> <leader>cw :call cwd#ToggleCwd('lcd')<cr>
