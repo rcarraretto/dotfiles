@@ -102,18 +102,23 @@ function! s:DispatchAndLogOutput(cmd) abort
 endfunction
 
 function! proglang#EditSketchBuffer(ft) abort
+  let clang_bin = $DOTFILES_PRIVATE . '/sketch/sketch-clang'
   let configs = {
   \  'typescript': {
-  \    'path': $DOTFILES_PRIVATE . '/src/sketch.ts',
+  \    'path': $DOTFILES_PRIVATE . '/sketch/sketch.ts',
   \    'cmd': 'ts-node --project $DOTFILES_PRIVATE/tsconfig.json %'
   \  },
   \  'javascript': {
-  \    'path': $DOTFILES_PRIVATE . '/src/sketch.js',
+  \    'path': $DOTFILES_PRIVATE . '/sketch/sketch.js',
   \    'cmd': 'node %'
   \  },
   \  'go': {
-  \    'path': $DOTFILES_PRIVATE . '/src/sketch.go',
+  \    'path': $DOTFILES_PRIVATE . '/sketch/sketch.go',
   \    'cmd': 'go run %'
+  \  },
+  \  'c': {
+  \    'path': $DOTFILES_PRIVATE . '/sketch/sketch.c',
+  \    'cmd': printf('gcc -o %s %% && %s', clang_bin, clang_bin)
   \  },
   \  'applescript': {
   \    'path': $DOTFILES_PRIVATE . '/bin/sketch.applescript',
