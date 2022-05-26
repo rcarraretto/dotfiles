@@ -18,3 +18,5 @@ hi link cFormat String
 hi link cSpecial String
 " NULL, true, stdin, EXIT_FAILURE
 hi link cConstant Special
+" #define
+hi link cDefine Function
