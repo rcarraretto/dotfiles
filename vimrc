@@ -120,8 +120,6 @@ endif
 " Plug 'cohama/agit.vim'
 " Handlebars
 " Plug 'mustache/vim-mustache-handlebars'
-" Kotlin
-" Plug 'udalov/kotlin-vim'
 " Elixir
 " Plug 'elixir-lang/vim-elixir'
 
