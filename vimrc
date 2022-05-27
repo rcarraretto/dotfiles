@@ -222,6 +222,22 @@ function! s:SetHighlight() abort
   " e.g., typescript syntax error
   highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
+  " Change base syntax highlighting
+  "
+  " e.g., vim 'highlight', 'endif', etc.
+  " in base16-ocean, change from red to purple
+  highlight Statement ctermfg=5
+  "
+  " e.g., vim variables
+  " in base16-ocean, change from red to white
+  highlight Identifier none
+  "
+  " e.g., vim parentheses
+  " in base16-ocean, change from brown to white
+  highlight Delimiter none
+  " unlink Delimiter from Special
+  highlight link Delimiter NONE
+
   " Customize highlight from 'parenmatch' plugin.
   " Basically copy MatchParen highlight from the standard 'matchparen' plugin.
   highlight ParenMatch term=reverse ctermbg=8
