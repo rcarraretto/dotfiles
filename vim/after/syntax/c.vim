@@ -1,7 +1,7 @@
 " int, char
 hi link cType Function
 " const
-hi link cStorageClass Function
+hi link cStorageClass Keyword
 " e.g. sizeof()
 hi! link cOperator Function
 " while
@@ -19,4 +19,4 @@ hi link cSpecial String
 " NULL, true, stdin, EXIT_FAILURE
 hi link cConstant Special
 " #define
-hi link cDefine Function
+hi link cDefine Special
