@@ -6,6 +6,10 @@ if exists('$DOTFILES_PRIVATE') && isdirectory($DOTFILES_PRIVATE . '/vim')
   set rtp+=$DOTFILES_PRIVATE/vim
 endif
 
+if exists('$DOTFILES_HOME') && isdirectory($DOTFILES_HOME . '/vim')
+  set rtp+=$DOTFILES_HOME/vim
+endif
+
 if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK . '/vim')
   set rtp+=$DOTFILES_WORK/vim
 endif
