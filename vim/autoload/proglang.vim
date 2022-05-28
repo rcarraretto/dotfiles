@@ -98,7 +98,7 @@ function! proglang#Prettier(mode) abort
 endfunction
 
 function! s:DispatchAndLogOutput(cmd) abort
-  silent execute printf("Dispatch! %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
+  silent execute printf("Dispatch! set -o pipefail; %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
 endfunction
 
 function! proglang#EditSketchBuffer(ft) abort
