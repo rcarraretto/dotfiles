@@ -37,7 +37,7 @@ endif
 Plug 'AndrewRadev/splitjoin.vim'
 
 " >>> Support <<<
-Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-dispatch', { 'commit': '00e77d90452e3c710014b26dc61ea919bc895e92' }
 " focus reporting
 Plug 'wincent/terminus', { 'commit': '340ea44dfec58c9d48e46c97c90896ed04e2a264' }
 " file system commands
