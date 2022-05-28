@@ -56,7 +56,7 @@ function! util#prompt(msg, ...) abort
   if get(opts, 'type') == 'info'
     echohl Function
   elseif get(opts, 'type') == 'danger'
-    echohl Statement
+    echohl ErrorMsg
   endif
   let ok = input(a:msg . ' ')
   echohl NONE

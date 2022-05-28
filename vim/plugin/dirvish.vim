@@ -72,13 +72,8 @@ endfunction
 
 function! s:DirvishRm() abort
   let path = getline('.')
-  echohl Statement
-  let ok = input('Remove ' . path . '? ')
-  echohl NONE
-  " clear input
-  normal! :<esc>
-  if ok !=# 'y'
-    echo 'skipped'
+  let ok = util#prompt('Remove ' . path . '?')
+  if !ok
     return
   endif
   if isdirectory(path)
@@ -104,19 +99,11 @@ endfunction
 function s:DirvishImplode() abort
   let path = getline('.')
   if !isdirectory(path)
-    echohl Statement
-    echom 'DirvishImplode: not a directory: ' . path
-    echohl NONE
-    return
+    return util#error_msg('DirvishImplode: not a directory: ' . path)
   endif
   let dirname = fnamemodify(path[:-2], ':t')
-  echohl Statement
-  let ok = input("Implode directory '" . dirname . "'? ")
-  echohl NONE
-  " clear input
-  normal! :<esc>
-  if ok !=# 'y'
-    echo 'skipped'
+  let ok = util#prompt("Implode directory '" . dirname . "'?")
+  if !ok
     return
   endif
   let cmd = 'mv ' . fnameescape(path) . '* ' . fnameescape(@%) . ' && rmdir ' . fnameescape(path)

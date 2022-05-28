@@ -408,9 +408,7 @@ function! proglang#InsertVariable() abort
     execute "normal! Olet\<space>\<c-a>\<space>=\<space>\<c-r>\""
     normal! =`[
   else
-    echohl Statement
-    echom 'InsertVariable: no support for filetype: ' . &ft
-    echohl NONE
+    return util#error_msg('InsertVariable: no support for filetype: ' . &ft)
   endif
 endfunction
 
