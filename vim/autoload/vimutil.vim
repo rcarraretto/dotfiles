@@ -190,20 +190,34 @@ function! s:VerboseToQfItems(cmd, text) abort
   return items
 endfunction
 
-" Based on zS mapping from scriptease.vim
-" scriptease#synnames()
-function! vimutil#DebugSynStack() abort
-  let elems = reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")'))
-  if empty(elems)
-    return util#error_msg('DebugSynStack: no elements found in current line')
+function! vimutil#CursorSynStackToQf() abort
+  let names = s:SynStackNamesOnCursor()
+  if empty(names)
+    return util#error_msg('CursorSynStackToQf: no syntax items found on cursor position')
   endif
   let all_qf_items = []
-  for elem in elems
-    let qf_items = s:VerboseToQfItems('highlight ' . elem, elem)
+  for name in names
+    let qf_items = s:VerboseToQfItems('highlight ' . name, name)
     let all_qf_items += qf_items
   endfor
   call setqflist(all_qf_items)
   botright copen
+endfunction
+
+function! vimutil#HiCursorSynStack() abort
+  let names = s:SynStackNamesOnCursor()
+  if empty(names)
+    return util#error_msg('HiCursorSynStack: no syntax items found on cursor position')
+  endif
+  for name in names
+    execute 'highlight ' . name
+  endfor
+endfunction
+
+" Based on zS mapping from scriptease.vim
+" scriptease#synnames()
+function! s:SynStackNamesOnCursor() abort
+  return reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")'))
 endfunction
 
 function! vimutil#ExploreSyntaxFiles() abort

@@ -221,7 +221,8 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
 nnoremap <leader>sy :syntax clear <bar> syntax on<cr>
-nnoremap <silent> <leader>zS :call vimutil#DebugSynStack()<cr>
+nnoremap <silent> <leader>zS :call vimutil#HiCursorSynStack()<cr>
+nnoremap <silent> <leader>z<c-s> :call vimutil#CursorSynStackToQf()<cr>
 " capture :messages in a file
 nnoremap <space>z :call vimutil#CaptureMessages()<cr>
 " explore syntax files for the current filetype
