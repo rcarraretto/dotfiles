@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-/usr/local/bin/tmux refresh-client -S
+"$BREW_PREFIX/bin/tmux" refresh-client -S

@@ -40,7 +40,7 @@ function! s:FzfWithAction(opts, action) abort
   endif
   call add(opts.options, '--expect')
   call add(opts.options, join(keys(opts._action), ','))
-  let CommonSink = vimutil#GetScriptFunc('/usr/local/Cellar/fzf/.*/plugin/fzf.vim', 'common_sink')
+  let CommonSink = vimutil#GetScriptFunc($BREW_PREFIX . '/Cellar/fzf/.*/plugin/fzf.vim', "common_sink")
   function! opts.sink(lines) abort closure
     " Example of a:lines
     " [] (when ctrl-c was pressed)

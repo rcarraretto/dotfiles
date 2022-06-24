@@ -1,6 +1,6 @@
 " Plugins ---------------------- {{{
 
-set rtp+=/usr/local/opt/fzf
+set rtp+=$BREW_PREFIX/opt/fzf
 
 if exists('$DOTFILES_PRIVATE') && isdirectory($DOTFILES_PRIVATE . '/vim')
   set rtp+=$DOTFILES_PRIVATE/vim
@@ -363,7 +363,7 @@ augroup END
 " Plugin settings ---------------------- {{{
 
 if has('nvim')
-  let g:python3_host_prog = '/usr/local/bin/python3'
+  let g:python3_host_prog = $BREW_PREFIX . '/bin/python3'
 endif
 
 " fzf

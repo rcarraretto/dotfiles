@@ -78,6 +78,13 @@ command-exists() {
   command -v "$1" 1>/dev/null 2>&1
 }
 
+if ! command-exists brew; then
+  # Mac M1 brew
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+# brew prefix changed in Mac M1, so can't hard-code paths to /usr/local anymore
+export BREW_PREFIX=$(brew --prefix)
+
 # Dotfiles bin
 add-to-path "$HOME/work/dotfiles/bin"
 

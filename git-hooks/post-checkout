@@ -3,6 +3,6 @@
 set -e
 
 # important for Sourcetree to use Exuberant Ctags instead of macOS ctags
-PATH="/usr/local/bin:$PATH"
+PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 ctags -R .
