@@ -123,7 +123,6 @@ fi
 # bash-completion
 # used by docker completion
 load-completion() {
-  BREW_PREFIX=$(brew --prefix)
   if [ -f "$BREW_PREFIX/etc/bash_completion" ]; then
     source "$BREW_PREFIX/etc/bash_completion"
   fi
