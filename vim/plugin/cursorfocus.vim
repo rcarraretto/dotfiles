@@ -27,6 +27,9 @@ function! s:ShouldColorColumn()
   if get(b:, 'skip_color_column')
     return 0
   endif
+  if &diff == 1
+    return 0
+  endif
   return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'rc_git_diff', 'fugitive', 'fugitiveblame'], &filetype) == -1
 endfunction
 
