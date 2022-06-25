@@ -1,3 +1,8 @@
+if [ -z "$PS1" ]; then
+  # if shell is non-interactive (e.g., when doing scp), bail
+  return
+fi
+
 PROMPT_COMMAND=__prompt_command
 
 __prompt_command() {
@@ -90,7 +95,7 @@ add-to-path "$HOME/work/dotfiles/bin"
 
 # Base 16
 BASE16_SHELL=$HOME/.config/base16-shell/
-[ -n "$PS1"  ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+[ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
 # Ctrl+S in vim
 stty -ixon -ixoff
