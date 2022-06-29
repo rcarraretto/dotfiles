@@ -345,7 +345,17 @@ augroup SetFiletype
   " filetype 'dosini' seems to highlight better than 'conf',
   " as it highlights keys and values differently.
   autocmd BufNewFile,BufRead *.conf set filetype=dosini | setlocal commentstring=#\ %s
-  autocmd BufNewFile,BufRead $NOTES_SHARED/*.txt,$NOTES_HOME/*.txt,$NOTES_WORK/*.txt,.todo set ft=ntx
+  " The /Volumes/GoogleDrive pattern accounts for GDrive in "stream mode".
+  " If $NOTES starts with "$HOME/Google\ Drive", this is actually a symlink to
+  " /Volumes/GoogleDrive-\d+.
+  " When running :Ag, the quickfix list is populated with the real path, so the
+  " $NOTES autocmd-pattern end up not matching (I think).
+  autocmd BufNewFile,BufRead $NOTES_SHARED/*.txt,
+    \$NOTES_HOME/*.txt,
+    \$NOTES_WORK/*.txt,
+    \/Volumes/GoogleDrive[^/]\\\{0,\}/My\ Drive/notes-*.txt,
+    \.todo
+    \ set ft=ntx
 augroup END
 
 augroup SpecialFiles
