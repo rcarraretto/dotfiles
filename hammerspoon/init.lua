@@ -293,13 +293,6 @@ hs.hotkey.bind(hyper, '.', function()
 end)
 
 
--- Reconnect wifi
-hs.hotkey.bind(shift_hyper, "w", function()
-  hs.execute('networksetup -setairportpower en0 off', true)
-  hs.execute('networksetup -setairportpower en0 on', true)
-end)
-
-
 -- Reload config when any lua file in config directory changes
 local reloadConfig = function(files)
   doReload = false
