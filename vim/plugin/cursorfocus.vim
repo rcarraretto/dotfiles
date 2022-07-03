@@ -16,8 +16,20 @@ function! s:OnWinLeave()
   endif
 endfunction
 
+function! s:OnDiffChange() abort
+  if &diff == 1
+    let &l:colorcolumn='0'
+    setlocal nocursorline
+  else
+    call s:OnWinEnter()
+  endif
+endfunction
+
 function! s:ShouldCursorLine()
   if get(b:, 'skip_cursor_line')
+    return 0
+  endif
+  if &diff == 1
     return 0
   endif
   return index(['agit_diff', 'rc_git_diff'], &filetype) == -1
@@ -37,4 +49,5 @@ augroup CursorFocus
   autocmd!
   autocmd BufEnter,FocusGained,WinEnter * call s:OnWinEnter()
   autocmd FocusLost,WinLeave * call s:OnWinLeave()
+  autocmd OptionSet diff call s:OnDiffChange()
 augroup END
