@@ -1,2 +1,9 @@
 #!/usr/bin/env bash
-"$BREW_PREFIX/bin/tmux" refresh-client -S
+
+# Note: BREW_PREFIX won't be available, as this is called via hs.task.new
+TMUX=/usr/local/bin/tmux
+if ! [ -f "$TMUX" ]; then
+  TMUX=/opt/homebrew/tmux
+fi
+
+"$TMUX" refresh-client -S
