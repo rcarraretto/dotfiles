@@ -168,6 +168,9 @@ function! proglang#ListReferences() abort
   elseif &ft == 'go'
     GoReferrers
     return
+  elseif &ft == 'python'
+    YcmCompleter GoToReferences
+    return
   else
     return util#error_msg(printf('ListReferences: unsupported filetype: %s', &ft))
   endif
