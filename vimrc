@@ -219,8 +219,6 @@ function! s:SetHighlight() abort
   " :h attr-list
   " e.g., error gutter
   highlight Error ctermfg=red ctermbg=00 cterm=reverse
-  " e.g., error in some vim setting
-  highlight vimError ctermfg=red ctermbg=NONE cterm=underline
   " e.g., typescript syntax error
   highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
