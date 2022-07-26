@@ -156,9 +156,8 @@ function! s:TsuReferences() abort
     let item['filename'] = fnamemodify(bufname(item['bufnr']), ':p')
     unlet item['bufnr']
   endfor
-  call setqflist(items, 'r')
-  copen
-  wincmd J
+  call setqflist(items)
+  botright copen
   wincmd p
 endfunction
 
