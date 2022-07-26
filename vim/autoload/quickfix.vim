@@ -171,3 +171,33 @@ function! quickfix#ToggleLocationList()
   exec prevwinnr . "wincmd w"
   exec winnr . "wincmd w"
 endfunction
+
+" Adapted from:
+" https://www.reddit.com/r/vim/comments/9iwr41/comment/e6n0qmi/
+function! quickfix#WriteToFile(path) abort
+  let qflist = getqflist({'all': 1})
+  " important for vim restart
+  call remove(qflist, 'qfbufnr')
+
+  " replace bufnr by filename
+  for idx in range(len(qflist.items))
+    let item = qflist.items[idx]
+    if bufexists(item.bufnr)
+      let item.filename = fnamemodify(bufname(item.bufnr), ':p')
+    endif
+    " important for vim restart
+    call remove(item, 'bufnr')
+  endfor
+
+  call writefile([js_encode(qflist)], a:path)
+endfunction
+
+function! quickfix#ReadFromFile(path) abort
+  let line = get(readfile(a:path), 0, '')
+  if line == ''
+    return util#error_msg('QfReadFromFile: empty content')
+  endif
+  let qflist = js_decode(line)
+  call setqflist([], ' ', qflist)
+  botright copen
+endfunction
