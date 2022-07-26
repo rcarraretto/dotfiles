@@ -156,14 +156,3 @@ function! fs#SysOpen(filename)
     return
   endif
 endfunction
-
-function! fs#OpenInSourceTree()
-  let output = util#GetGitRoot()
-  if empty(output)
-    echohl ErrorMsg
-    echom "OpenInSourceTree: couldn't find git root"
-    echohl NONE
-    return
-  endif
-  call system('open -a SourceTree ' . fnameescape(output))
-endfunction

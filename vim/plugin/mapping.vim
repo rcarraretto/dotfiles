@@ -295,8 +295,8 @@ nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>go :Git commit<cr>
 nnoremap <leader>gh :<c-r>=line('.')<cr>GBrowse<cr>
 vnoremap <leader>gh :GBrowse<cr>
-" open repo in SourceTree
-nnoremap <leader>gs :call fs#OpenInSourceTree()<cr>
+nnoremap <leader>gH :call git#GlogFileHistory()<cr>
+nnoremap <leader>gs :call git#OpenInSourceTree()<cr>
 
 " Tags / symbols
 "
