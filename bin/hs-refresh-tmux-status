@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Note: BREW_PREFIX won't be available, as this is called via hs.task.new
-TMUX=/usr/local/bin/tmux
-if ! [ -f "$TMUX" ]; then
-  TMUX=/opt/homebrew/tmux
+if [ -d /opt/homebrew ]; then
+  # M1 Mac
+  /opt/homebrew/bin/tmux refresh-client -S
+else
+  /usr/local/bin/tmux refresh-client -S
 fi
-
-"$TMUX" refresh-client -S
