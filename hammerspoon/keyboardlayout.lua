@@ -89,7 +89,7 @@ function getKeyboardLayout()
     return method
   end
   local layout = hs.keycodes.currentLayout()
-  if layout == "U.S. International - PC" then
+  if layout:find("U%.S%. International") ~= nil then
     return "US"
   end
   return layout
