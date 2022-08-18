@@ -16,7 +16,8 @@ if [ "$timer" ]; then
 fi
 
 if [ "$branch" ]; then
-  tmux_status="| #[fg=colour13] ⎇ $branch #[fg=colour20] $tmux_status"
+  branch_truncated=$(echo "$branch" | awk -v len=40 '{ if (length($0) > len) print substr($0, 1, len-1) "…"; else print; }')
+  tmux_status="| #[fg=colour13] ⎇ $branch_truncated #[fg=colour20] $tmux_status"
 fi
 
 echo "$tmux_status"
