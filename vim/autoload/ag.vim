@@ -183,7 +183,7 @@ function! ag#SearchExtension(ext)
   try
     let grepformat = &l:grepformat
     setlocal grepformat=%f
-    silent execute 'grep! -g "\.' . a:ext . '"'
+    silent execute 'grep! --hidden -g "\.' . a:ext . '"'
     redraw!
     botright copen
     wincmd p
