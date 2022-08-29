@@ -58,7 +58,7 @@ endif
 " highlight matching parentheses.
 " alternative to the standard 'matchparen' plugin.
 " it offers the ability to toggle highlighting per buffer.
-Plug 'rcarraretto/vim-parenmatch'
+Plug 'itchyny/vim-parenmatch'
 " disable the standard 'matchparen' plugin
 " to use the 'parenmatch' plugin instead
 let g:loaded_matchparen = 1
