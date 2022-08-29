@@ -5,11 +5,10 @@ function! s:UnpackJsonStr(str) abort
   return str
 endfunction
 
-" Opens a scratch buffer with the contents of the clipboard.
+" Opens a buffer with the contents of the clipboard.
 " Formats content if possible.
 function! fromclip#BufferFromClipboard(ft, split_count) abort
   call window#SplitFromCount(a:split_count)
-  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
   let str = trim(getreg('*'))
   if a:ft == 'xml' && str[0] == '"' && str[-1:] == '"'
     let str = s:UnpackJsonStr(str)
