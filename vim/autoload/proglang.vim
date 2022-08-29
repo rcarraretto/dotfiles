@@ -69,9 +69,7 @@ function! proglang#Prettier(mode) abort
       endif
       return
     elseif &ft == 'xml'
-      " https://stackoverflow.com/a/16090892
-      let cmd = "python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'"
-      call s:FilterBufferOrFail(cmd)
+      call s:FilterBufferOrFail('format-xml')
     elseif &ft == 'go'
       call system('go fmt ' . expand('%:p'))
       noautocmd silent checktime

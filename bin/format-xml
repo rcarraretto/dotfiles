@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+# https://stackoverflow.com/a/16090892
+import sys
+import xml.dom.minidom
+
+s = sys.stdin.read()
+try:
+    parsed_xml = xml.dom.minidom.parseString(s)
+except Exception as e:
+    print("Error: could not parse xml:", e)
+    sys.exit(1)
+
+print(parsed_xml.toprettyxml(), end='')
