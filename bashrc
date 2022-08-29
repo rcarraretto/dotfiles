@@ -50,8 +50,6 @@ alias ls='ls -GF'
 # -1: only show file names
 alias ll='ls -GFA1'
 
-source ~/.bash_aliases
-
 # Prevent re-adding the same path to $PATH,
 # when sourcing the bashrc multiple times.
 #
@@ -127,6 +125,8 @@ load-completion() {
     source "$BREW_PREFIX/etc/bash_completion"
   fi
 }
+
+source ~/.bash_aliases
 
 LOCAL_RC="$DOTFILES_PRIVATE/bashrc.private"
 test -f $LOCAL_RC && source $LOCAL_RC
