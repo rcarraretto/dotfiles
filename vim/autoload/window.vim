@@ -197,6 +197,7 @@ endfunction
 " Similar to :quit but try to land on the previous window.
 " https://vi.stackexchange.com/a/9232
 function! window#CloseWindow() abort
+  call undoquit#SaveWindowQuitHistory()
   let prev_win_nr = winnr()
   wincmd p
   execute prev_win_nr . "wincmd q"

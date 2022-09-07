@@ -97,6 +97,8 @@ nnoremap <space>w <c-w><c-w>
 " close window
 nnoremap <space>q :call window#CloseWindow()<cr>
 nnoremap <space>Q :bd!<cr>
+" undo close window
+nnoremap <c-w>u :call undoquit#RestoreWindow()<cr>
 " decrease window size
 nnoremap <space>, :20wincmd <<cr>
 " increase window size
