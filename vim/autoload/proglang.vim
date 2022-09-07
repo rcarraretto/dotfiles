@@ -283,9 +283,34 @@ function! proglang#PrintCurrentFuncName() abort
   endif
 endfunction
 
-function! proglang#EditTestFile() abort
+function! proglang#EditAlternateFileVim() abort
+  let path = expand('%:p')
+  let dir = expand('%:h:t')
+  if dir !=# 'plugin' && dir !=# 'autoload'
+    return util#error_msg('EditAlternateFileVim: file is neither plugin or autoload')
+  endif
+  if dir ==# 'plugin'
+    let alt_dir = 'autoload'
+  else
+    let alt_dir = 'plugin'
+  endif
+  let alt_path = expand('%:h:h') . '/' . alt_dir . '/' . expand('%:t')
+  if !filereadable(alt_path)
+    let ok = util#prompt('Create ' . alt_path . '?', {'type': 'info'})
+    if !ok
+      return
+    endif
+  endif
+  call window#MaybeSplit()
+  silent execute 'edit ' . alt_path
+endfunction
+
+function! proglang#EditAlternateFile() abort
+  if &ft == 'vim'
+    return proglang#EditAlternateFileVim()
+  endif
   if index(['javascript', 'typescript', 'typescript.tsx', 'go'], &ft) == -1
-    return util#error_msg('EditTestFile: unsupported file type: ' . &ft)
+    return util#error_msg('EditAlternateFile: unsupported file type: ' . &ft)
   endif
   " %     = 'path/to/file.ts'
   " %:r   = 'path/to/file'
@@ -319,7 +344,7 @@ function! proglang#EditTestFile() abort
   endif
   if !filereadable(candidate_path)
     let candidate_type = is_test ? 'source' : 'test'
-    return util#error_msg('EditTestFile: ' . candidate_type . ' file not found: ' . candidate_path)
+    return util#error_msg('EditAlternateFile: ' . candidate_type . ' file not found: ' . candidate_path)
   endif
   let split_type = is_test ? "rightbelow" : "leftabove"
   call util#OpenWindowInTab(candidate_path, split_type . " vsplit")

@@ -212,7 +212,7 @@ nnoremap <leader>eb :<c-u>call window#EditFile($DOTFILES_PRIVATE . '/bashrc.priv
 " open sketch buffer for current programming language
 nnoremap <leader>ek :call proglang#EditSketchBuffer(&ft)<cr>
 " edit corresponding test or source file
-nnoremap <leader>et :call proglang#EditTestFile()<cr>
+nnoremap <leader>et :call proglang#EditAlternateFile()<cr>
 
 " Vimscript, vim debug
 nnoremap <leader>ev :<c-u>call window#EditFile('~/.vimrc')<cr>
