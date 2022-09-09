@@ -110,3 +110,14 @@ function! fzfutil#FzfArglist() abort
         \'options': ['--prompt', '[arglist] ']
         \}))
 endfunction
+
+function! fzfutil#FzfCwdFiles() abort
+  if !empty(v:count)
+    call fzf#run(fzf#wrap({
+          \'source': 'fd --type directory --strip-cwd-prefix',
+          \'options': ['--prompt', '[folders] ']
+          \}))
+  else
+    WrapCommand Files
+  endif
+endfunction

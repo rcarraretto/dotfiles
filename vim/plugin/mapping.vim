@@ -135,7 +135,7 @@ cnoremap <expr> <c-x>y vimutil#CopyCmdline()
 " Browse files/folders & global search
 " ---
 " browse files
-nnoremap <space>o :WrapCommand Files<cr>
+nnoremap <space>o :<c-u>call fzfutil#FzfCwdFiles()<cr>
 " browse files under version control
 nnoremap <space>O :GFiles<cr>
 " search in project
