@@ -13,20 +13,8 @@ function! s:FzfExplorePaths(cmd) abort
   call s:FzfWithAction({'source': a:cmd}, action)
 endfunction
 
-function! fzfutil#FzfExploreProject() abort
-  " 1) folders in ~/work and ~/.vim/bundle
-  let cmd1 = 'find ~/work ~/.vim/bundle -mindepth 1 -maxdepth 1 -type d'
-  " 2) folders in the git root that have a package.json
-  "    (to explore backend and frontend node projects that are in the same git repo)
-  let cmd2 = 'git rev-parse --show-toplevel 2> /dev/null '
-  let cmd2 = cmd2 . '| xargs -I GIT_PATH find GIT_PATH -maxdepth 3 -not -path "*/node_modules/*" -name package.json '
-  let cmd2 = cmd2 . '| sed -n "s_/package.json__p"'
-  let cmd = cmd2 . '; ' . cmd1 . ';'
-  " Ability to extend the command on dotfiles-private or dotfiles-work
-  if exists('g:fzf_explore_project_cmd')
-    let cmd = g:fzf_explore_project_cmd . ';' . cmd
-  endif
-  call s:FzfExplorePaths(cmd)
+function! fzfutil#FzfExploreProjects() abort
+  call s:FzfExplorePaths('projects-ls')
 endfunction
 
 function! s:FzfWithAction(opts, action) abort

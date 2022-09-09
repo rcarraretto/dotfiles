@@ -158,7 +158,7 @@ nnoremap <leader>an :SearchNotes<space>
 nnoremap <leader>en :<c-u>call fzfutil#FzfNotes(0)<cr>
 nnoremap <leader>eN :<c-u>call fzfutil#FzfNotes(1)<cr>
 " browse projects
-nnoremap <leader>ep :call fzfutil#FzfExploreProject()<cr>
+nnoremap <leader>ep :call fzfutil#FzfExploreProjects()<cr>
 " browse history
 nnoremap <space>m :WrapCommand History<cr>
 " search arglist

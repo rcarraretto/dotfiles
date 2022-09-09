@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+folders=()
+
+# Folders in $PROJECT_CONF, which is like a bookmarks file and may include
+# paths to subprojects inside git repos
+if [ -f "$PROJECT_CONF" ]; then
+  # Stop after first blank line.
+  # Everything after a blank line can be considered as 'inactive' bookmarks.
+  folders1=$(awk '{if(/./)print;else exit}' "$PROJECT_CONF")
+  folders+=($folders1)
+fi
+
+# Folders in the git root that have a package.json.
+# Use cases:
+# - Explore backend and frontend node projects that are in the same git repo
+# - Explore monorepos
+git_root=$(git rev-parse --show-toplevel 2> /dev/null)
+folders2=$(fd --max-depth=3 --glob 'package.json' "$git_root" \
+  | sed -n "s|/package.json||p")
+folders+=($folders2)
+
+# Folders in ~/work and ~/.vim/bundle
+folders3=$(find ~/work ~/.vim/bundle -mindepth 1 -maxdepth 1 -type d)
+folders+=($folders3)
+
+# Remove duplicates with awk
+# https://stackoverflow.com/a/11532197
+printf "%s\n" "${folders[@]}" | awk '!x[$0]++'
