@@ -202,6 +202,7 @@ endif
 nnoremap <leader>2 :call vimutil#ToggleLogWindow('/var/tmp/test-console.txt')<cr>
 nnoremap <leader>3 :call vimutil#ToggleLogWindow('/var/tmp/test-results.txt')<cr>
 nnoremap <leader>4 :call vimutil#ToggleLogWindow('/var/tmp/vim-messages.txt')<cr>
+nnoremap <leader>5 :call vimutil#ToggleLogWindow('/var/tmp/debug.log')<cr>
 " close auxiliary buffers
 nnoremap <leader>ca :call vimutil#CloseAuxiliaryBuffers()<cr>
 "

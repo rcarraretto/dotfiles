@@ -4,7 +4,8 @@ function! vimutil#ToggleLogWindow(target_path) abort
   let paths = [
         \'/var/tmp/test-console.txt',
         \'/var/tmp/test-results.txt',
-        \'/var/tmp/vim-messages.txt'
+        \'/var/tmp/vim-messages.txt',
+        \'/var/tmp/debug.log'
         \]
   let oldwinnr = winnr()
   let opened = util#ToggleWindowInTab(a:target_path)
