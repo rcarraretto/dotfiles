@@ -10,7 +10,7 @@ function! s:ToggleTestCase() abort
     echom "unskip"
   else
     " skip others (i.e., only)
-    silent %s/@test.*\n/\0  skip\r/g
+    silent %s/^@test.*\n/\0  skip\r/g
     normal! `a
     +1delete
     normal! k
