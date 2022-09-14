@@ -105,8 +105,8 @@ if [ -s "$NVM_DIR/nvm.sh" ] && ! command-exists nvm; then
 fi
 
 # rbenv
-if command-exists rbenv && [ -z $RBENV_SET ]; then
-  eval "$(rbenv init -)" && RBENV_SET=1 # && echo "rbenv set!"
+if command-exists rbenv && ! path-contains "$HOME/.rbenv/shims"; then
+  eval "$(rbenv init -)"
 fi
 
 # fzf
