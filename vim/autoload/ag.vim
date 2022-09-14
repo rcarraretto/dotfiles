@@ -92,6 +92,8 @@ function! ag#SearchInFile(input) abort
 endfunction
 
 function! ag#SearchNotes(input) abort
+  " Note: one can use .ignore in the corresponding note dir to restrict search
+  " scope
   execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', shellescape(a:input), s:GetNoteDirs())
 endfunction
 
