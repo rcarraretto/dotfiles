@@ -218,8 +218,7 @@ nnoremap <leader>ek :call proglang#EditSketchBuffer(&ft)<cr>
 nnoremap <leader>et :call proglang#EditAlternateFile()<cr>
 
 " Vimscript, vim debug
-nnoremap <leader>ev :<c-u>call window#EditFile('~/.vimrc')<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ev :<c-u>call window#EditFile($DOTFILES_PUBLIC . '/vimrc')<cr>
 " :Log {expr}
 nnoremap <space>v :Log<space>
 " reload syntax highlighting
