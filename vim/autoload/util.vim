@@ -4,13 +4,15 @@ function! util#GetGitRoot(...)
   let opts = get(a:, 1, {})
   let path = get(opts, 'path', expand('%:p'))
   " Resolves symbolic links
-  let resolved_path = resolve(path)
-  if isdirectory(resolved_path)
+  if get(opts, 'resolve_symlink', 1)
+    let path = resolve(path)
+  endif
+  if isdirectory(path)
     " dirvish
-    let dir = resolved_path
+    let dir = path
   else
     " dir of current file
-    let dir = fnamemodify(resolved_path, ':h')
+    let dir = fnamemodify(path, ':h')
     if len(dir) == 0
       " e.g. netrw
       return 0
