@@ -20,7 +20,6 @@ function! s:ToggleTestCase() abort
     execute 'normal! ' . delta_line . 'j'
     normal! ^
   endif
-  setlocal foldlevel=20
   silent update
 endfunction
 
