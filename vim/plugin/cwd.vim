@@ -1,6 +1,6 @@
 augroup AutoCd
   autocmd!
-  autocmd BufRead,BufNewFile ~/work/dotfiles/vim/bundle/*,$DOTFILES_PUBLIC/*,$DOTFILES_PRIVATE/*,$DOTFILES_HOME/*,$DOTFILES_WORK/* call cwd#AutoCd()
+  autocmd BufRead,BufNewFile ~/work/dotfiles* call cwd#AutoCd()
 augroup END
 
 function! s:ProjectSpecificSetup() abort

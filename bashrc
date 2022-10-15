@@ -38,7 +38,15 @@ export HISTSIZE=1000
 export DOTFILES_PUBLIC="$HOME/work/dotfiles"
 export DOTFILES_PRIVATE="$HOME/work/dotfiles-private"
 export DOTFILES_HOME="$HOME/work/dotfiles-home"
+export DOTFILES_HOME_FIXTURES="$HOME/work/dotfiles-home-fixtures"
 export DOTFILES_WORK="$HOME/work/dotfiles-work"
+if [ -z "$DOTFILES_DIRS" ]; then
+  export DOTFILES_DIRS="$DOTFILES_PUBLIC"
+  [ -d "$DOTFILES_PRIVATE" ] && DOTFILES_DIRS="$DOTFILES_DIRS:$DOTFILES_PRIVATE"
+  [ -d "$DOTFILES_HOME" ] && DOTFILES_DIRS="$DOTFILES_DIRS:$DOTFILES_HOME"
+  [ -d "$DOTFILES_HOME_FIXTURES" ] && DOTFILES_DIRS="$DOTFILES_DIRS:$DOTFILES_HOME_FIXTURES"
+  [ -d "$DOTFILES_WORK" ] && DOTFILES_DIRS="$DOTFILES_DIRS:$DOTFILES_WORK"
+fi
 
 alias sb='source ~/.bashrc'
 

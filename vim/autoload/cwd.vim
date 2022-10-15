@@ -12,16 +12,6 @@ function! cwd#AutoCd() abort
   if empty(git_root)
     return
   endif
-  let dotfiles = [
-        \ $DOTFILES_PUBLIC,
-        \ $DOTFILES_PRIVATE,
-        \ $DOTFILES_HOME,
-        \ $DOTFILES_WORK
-        \ ]
-  if index(dotfiles, git_root) >= 0 && get(g:, 'AUTO_CD_DOTFILES', 1) == 0
-    " Log printf('AutoCd: skip dotfiles: %s', expand('%:p'))
-    return
-  endif
   " Log printf("AutoCd: lcd to %s (from %s) / file: %s", git_root, getcwd(), expand('%:p'))
   execute "lcd " . git_root
 endfunction

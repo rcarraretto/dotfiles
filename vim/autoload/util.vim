@@ -358,13 +358,7 @@ function! util#MatchlistAll(str, pat)
 endfunction
 
 function! util#GetDotfilesDirs() abort
-  let dirs = [$DOTFILES_PUBLIC, $DOTFILES_PRIVATE]
-  if exists('$DOTFILES_HOME') && isdirectory($DOTFILES_HOME)
-    call add(dirs, fnameescape($DOTFILES_HOME))
-  endif
-  if exists('$DOTFILES_WORK') && isdirectory($DOTFILES_WORK)
-    call add(dirs, fnameescape($DOTFILES_WORK))
-  endif
+  let dirs = map(split($DOTFILES_DIRS, ':'), 'fnameescape(v:val)')
   return join(dirs, ' ')
 endfunction
 
