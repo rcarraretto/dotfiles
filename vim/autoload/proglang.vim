@@ -11,6 +11,54 @@ function! s:FilterBufferOrFail(cmd) abort
   return output
 endfunction
 
+function! s:ExecPrettier(parser) abort
+  let opts = '--write'
+
+  " Try to find .prettierrc.json upwards until the git root.
+  let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
+  if empty(prettierrc_json)
+    " Use global prettier config
+    " (applicable in sketch buffers or projects that don't have prettier
+    " installed)
+    let opts .= " --config=" . $DOTFILES_PRIVATE . "/.prettierrc"
+  endif
+
+  " Check if prettier is installed in the project.
+  "
+  " 'npx --no -- <pkg>' will fail if <pkg> is not installed,
+  " instead of prompting to install <pkg>
+  call system('npx --no -- prettier --help')
+  if v:shell_error
+    " use global prettier
+    let prettier_cmd = 'prettier'
+  else
+    " use local prettier
+    let prettier_cmd = 'npx prettier'
+  endif
+
+  let path = expand('%:p')
+  if empty(path)
+    " No file in disk.
+    " Explicitly specifiy parser, since prettier cannot infer from file
+    " extension.
+    " A parser is not specified in other cases because it could prevent
+    " overrides from being applied (e.g., using "go-template" in html files).
+    let opts .= ' --parser=' . a:parser
+    " Pass buffer content to stdin
+    let cmd = printf("%s %s", prettier_cmd, opts)
+    execute "%!" . cmd
+  endif
+
+  " Pass path to prettier, so it can honor prettierrc overrides related to
+  " file extension
+  let cmd = printf("%s %s %s", prettier_cmd, opts, path)
+  let output = system(cmd)
+  if v:shell_error
+    call util#error_msg(output)
+  endif
+  noautocmd silent checktime
+endfunction
+
 function! proglang#Prettier(mode) abort
   let prettier_parsers={
   \ 'json': 'json',
@@ -34,31 +82,7 @@ function! proglang#Prettier(mode) abort
   silent! update
 
   if has_key(prettier_parsers, &ft)
-    let parser = prettier_parsers[&ft]
-    let opts = '--write --parser=' . parser
-    " Try to find .prettierrc.json upwards until the git root.
-    " This would be an evidence that the project uses prettier.
-    let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
-    if empty(prettierrc_json)
-      " Use global prettier config for example in sketch buffers or
-      " projects that don't have prettier installed.
-      let opts .= " --config=" . $DOTFILES_PRIVATE . "/.prettierrc"
-    endif
-    let path = expand('%:p')
-    if !empty(path)
-      " Pass path to prettier, so it can honor prettierrc overrides related to
-      " file extension
-      let cmd = printf("npx prettier %s %s", opts, path)
-      let output = system(cmd)
-      if v:shell_error
-        call util#error_msg(output)
-      endif
-      noautocmd silent checktime
-    else
-      " No file in disk. Pass buffer content to stdin.
-      let cmd = printf("npx prettier %s", opts)
-      execute "%!" . cmd
-    endif
+    call s:ExecPrettier(prettier_parsers[&ft])
   else
     if &ft == 'c'
       let cmd = printf("clang-format --style=Chromium -i '%s'", fnameescape(expand('%:p')))
