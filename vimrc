@@ -230,13 +230,18 @@ function! s:SetHighlight() abort
   "
   " e.g., vim variables
   " in base16-ocean, change from red to white
-  highlight Identifier none
+  highlight Identifier NONE
   "
   " e.g., vim parentheses
   " in base16-ocean, change from brown to white
-  highlight Delimiter none
+  highlight Delimiter NONE
   " unlink Delimiter from Special
   highlight link Delimiter NONE
+
+  " indirectly change markdownBold
+  " in base16-ocean, change from yellow to green
+  highlight htmlBold NONE
+  highlight link htmlBold Special
 
   " Customize highlight from 'parenmatch' plugin.
   " Basically copy MatchParen highlight from the standard 'matchparen' plugin.
