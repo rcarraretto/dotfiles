@@ -111,7 +111,6 @@ nnoremap <silent> <space>i :call quickfix#ToggleQuickfixList()<cr>
 nnoremap <silent> <space>I :call quickfix#ToggleLocationList()<cr>
 nnoremap [g :colder<cr>
 nnoremap ]g :cnewer<cr>
-nnoremap <leader>da :AbortDispatch<cr>
 
 " Arglist
 nnoremap <leader>at :call arglist#AddOrRemoveCurrentBuffer()<cr>
@@ -131,6 +130,11 @@ cnoremap <c-h> <c-p>
 cnoremap <c-l> <c-n>
 " Copy current command-line
 cnoremap <expr> <c-x>y vimutil#CopyCmdline()
+
+" Dispatch external command
+nnoremap `<cr> :DispatchAndCapture<cr>
+nnoremap `<space> :DispatchAndCapture<space>
+nnoremap <leader>da :AbortDispatch<cr>
 
 " Browse files/folders & global search
 " ---

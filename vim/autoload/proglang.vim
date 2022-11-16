@@ -119,8 +119,29 @@ function! proglang#Prettier(mode) abort
   silent! update
 endfunction
 
-function! s:DispatchAndLogOutput(cmd) abort
-  silent execute printf("Dispatch! set -o pipefail; %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", a:cmd)
+let s:cmd = ''
+function! s:CacheCmd(cmd) abort
+  if empty(a:cmd) && empty(s:cmd)
+    if &ft == 'go'
+      return 'go run %'
+    endif
+    return ''
+  endif
+  if !empty(a:cmd)
+    let s:cmd = a:cmd
+    return s:cmd
+  else
+    return s:cmd
+  endif
+endfunction
+
+function! proglang#DispatchAndCapture(cmd) abort
+  let cmd = s:CacheCmd(a:cmd)
+  if empty(cmd)
+    return util#error_msg('DispatchAndCapture: Empty command')
+  endif
+  update
+  silent execute printf("Dispatch! set -o pipefail; %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", cmd)
 endfunction
 
 function! proglang#EditSketchBuffer(ft) abort
@@ -152,7 +173,7 @@ function! proglang#EditSketchBuffer(ft) abort
   endif
   let config = configs[a:ft]
   call window#EditFile(config['path'])
-  execute "nnoremap <buffer> <space>t :update <bar> call <sid>DispatchAndLogOutput('" . config['cmd'] . "')<cr>"
+  execute "nnoremap <buffer> <space>t :DispatchAndCapture " . config['cmd'] . "<cr>"
 endfunction
 
 " Wrap :TsuReferences (from tsuquyomi)
