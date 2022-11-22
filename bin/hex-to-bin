@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+# Similar to:
+# $ echo "ibase=16; obase=2; 6C49" | bc
+# > 110110001001001
+# But prints byte groups:
+# $ hex-to-bin 6C49
+# > 01101100 01001001
+
+import sys
+
+if len(sys.argv) != 2:
+    print("usage: hex-to-bin <hex_str>")
+    sys.exit(1)
+
+hex_str = sys.argv[1]
+bin_str = ''
+for i, hex_char in enumerate(hex_str):
+    # bin() returns a string prefixed with '0b'
+    # (e.g., bin(8) -> '0b1000')
+    bin_str += bin(int(hex_char, 16))[2:].zfill(4)
+    if i % 2 == 1:
+        bin_str += ' '
+bin_str = bin_str.rstrip()
+
+print(bin_str)
