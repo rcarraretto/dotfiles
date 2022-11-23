@@ -3,22 +3,22 @@ function! mapping#VimscriptMappings() abort
 endfunction
 
 function! mapping#JavascriptMappings() abort
-  nnoremap <buffer> <leader>cl :call proglang#JavascriptLogVariable('cl')<cr>
-  nnoremap <buffer> <leader>co :call proglang#JavascriptLogVariable('co')<cr>
+  nnoremap <buffer> <leader>cl :call proglang#javascript#JavascriptLogVariable('cl')<cr>
+  nnoremap <buffer> <leader>co :call proglang#javascript#JavascriptLogVariable('co')<cr>
   nnoremap <buffer> <leader>tv :call proglang#ToggleVariable()<cr>
   call mochajs#AddMappings()
 endfunction
 
 function! mapping#TypescriptMappings() abort
-  nnoremap <leader>re :call proglang#TypescriptReload()<cr>
+  nnoremap <leader>re :call proglang#javascript#TypescriptReload()<cr>
 endfunction
 
 function! mapping#GolangMappings() abort
-  nnoremap <buffer> <silent> K :call proglang#GoDocToggle()<cr>
+  nnoremap <buffer> <silent> K :call proglang#golang#GoDocToggle()<cr>
 endfunction
 
 function! mapping#TerraformMappings() abort
-  nnoremap <buffer> <space>/r :call proglang#SearchTerraformResource()<cr>
+  nnoremap <buffer> <space>/r :call proglang#terraform#SearchResource()<cr>
 endfunction
 
 function! mapping#FugitiveMappings()

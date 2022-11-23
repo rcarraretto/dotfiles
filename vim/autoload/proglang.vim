@@ -176,37 +176,9 @@ function! proglang#EditSketchBuffer(ft) abort
   execute "nnoremap <buffer> <space>t :DispatchAndCapture " . config['cmd'] . "<cr>"
 endfunction
 
-" Wrap :TsuReferences (from tsuquyomi)
-" Use quickfix list instead of location list
-function! s:TsuReferences() abort
-  TsuReferences
-  lclose
-  let items = getloclist(winnr())
-  for item in items
-    " Fix references to files outside of cwd().
-    "
-    " For some reason, when references are outside of cwd(), the
-    " quickfix/location list does not jump properly.
-    "
-    " When this happens, the listed file paths contain ~ instead of a full
-    " reference to $HOME. Maybe this could be the reason.
-    "
-    " To work around this problem, unset 'bufnr' and use the 'filename' feature
-    " instead.
-    "
-    " :h setqflist
-    "
-    let item['filename'] = fnamemodify(bufname(item['bufnr']), ':p')
-    unlet item['bufnr']
-  endfor
-  call setqflist(items)
-  botright copen
-  wincmd p
-endfunction
-
 function! proglang#ListReferences() abort
   if index(['typescript', 'typescript.tsx'], &ft) != -1
-    return s:TsuReferences()
+    return proglang#javascript#TsuReferences()
   elseif &ft == 'go'
     GoReferrers
     return
@@ -230,129 +202,19 @@ function! proglang#ImportSymbol() abort
   endif
 endfunction
 
-function! proglang#TypescriptReload()
-  " TsReloadProject
-  call tsuquyomi#reloadProject()
-  " TsReload
-  call tsuquyomi#reload()
-endfunction
-
-function! proglang#JavascriptConfig()
-  command! -buffer JsMethodToFunc call proglang#JavascriptMethodToFunc()
-  command! -buffer ShowTsError echo getloclist(0)[0]['text']
-endfunction
-
-" Adapted version of :GoDoc from vim-go:
-" - When the popup is already open, close it
-" - Set the popup to close with any cursor move
-function! proglang#GoDocToggle() abort
-  if empty(popup_list())
-    GoDoc
-    let popup_ids = popup_list()
-    if empty(popup_ids)
-      return
-    endif
-    call popup_setoptions(popup_ids[0], {'moved': 'any'})
-  else
-    call popup_clear()
-  endif
-endfunction
-
-function! proglang#GolangConfig() abort
-  " vim-go
-  " Remove :GoPlay command, as it uploads code to the internet
-  " One could accidentally leak sensitive information
-  if exists(':GoPlay')
-    delcommand GoPlay
-  endif
-endfunction
-
-function! s:PrintCurrentFuncNameGolang() abort
-  let winview = winsaveview()
-  " go to top of function (vim-go)
-  noautocmd normal [[
-  let line = getline('.')
-  noautocmd execute "normal \<c-o>"
-  " fix scroll position that was changed by <c-o>
-  call winrestview(winview)
-  " Delay the echo.
-  " Else calling this function right after switching lines has the side effect
-  " of the echo being erased by some other code.
-  " Maybe this is related to some plugin using a Cursor autocmd.
-  call util#delayed_echo(line)
-endfunction
-
-function! s:PrintCurrentFuncNameCpp() abort
-  let winview = winsaveview()
-  " go to top of method. cursor will be on {
-  noautocmd normal [m
-  if match(getline('.'), '^\s*{') >= 0
-    " {'s are on a dedicated line
-    normal! k
-  endif
-  if stridx(getline('.'), '(') == -1
-    " method definition too long
-    if stridx(getline('.'), ')') >= 0
-      normal! f)
-      normal! %
-    endif
-  endif
-  let line = getline('.')
-  noautocmd execute "normal \<c-o>"
-  " fix scroll position that was changed by <c-o>
-  call winrestview(winview)
-  " Extract method name only (no return value or args)
-  let method_name = matchstr(trim(line), '.* \zs[^(]\+\ze(')
-  if len(method_name)
-    echo method_name
-    return
-  endif
-  " Couldn't find it via [m, so maybe it is inside a function.
-  "
-  " The [{ motion will only work if the current line is an expression
-  " directly inside the function (not nested in an if, switch, etc).
-  " Therefore, better to jump to a candidate location, then to print
-  " inaccurate info.
-  call util#error_msg("Method not found. Jumping to block...")
-  normal! [{
-  normal! zz
-endfunction
-
 function! proglang#PrintCurrentFuncName() abort
   if &ft == 'go'
-    call s:PrintCurrentFuncNameGolang()
+    call proglang#golang#PrintCurrentFuncNameGolang()
   elseif &ft == 'cpp'
-    call s:PrintCurrentFuncNameCpp()
+    call proglang#cpp#PrintCurrentFuncNameCpp()
   else
     call util#error_msg("PrintCurrentFuncName: unimplemented for filetype: " . &ft)
   endif
 endfunction
 
-function! proglang#EditAlternateFileVim() abort
-  let path = expand('%:p')
-  let dir = expand('%:h:t')
-  if dir !=# 'plugin' && dir !=# 'autoload'
-    return util#error_msg('EditAlternateFileVim: file is neither plugin or autoload')
-  endif
-  if dir ==# 'plugin'
-    let alt_dir = 'autoload'
-  else
-    let alt_dir = 'plugin'
-  endif
-  let alt_path = expand('%:h:h') . '/' . alt_dir . '/' . expand('%:t')
-  if !filereadable(alt_path)
-    let ok = util#prompt('Create ' . alt_path . '?', {'type': 'info'})
-    if !ok
-      return
-    endif
-  endif
-  call window#MaybeSplit()
-  silent execute 'edit ' . alt_path
-endfunction
-
 function! proglang#EditAlternateFile() abort
   if &ft == 'vim'
-    return proglang#EditAlternateFileVim()
+    return proglang#vimscript#EditAlternateFile()
   endif
   if index(['javascript', 'typescript', 'typescript.tsx', 'go'], &ft) == -1
     return util#error_msg('EditAlternateFile: unsupported file type: ' . &ft)
@@ -395,55 +257,6 @@ function! proglang#EditAlternateFile() abort
   call util#OpenWindowInTab(candidate_path, split_type . " vsplit")
 endfunction
 
-" Logs the last variable that was declared or assigned
-function! proglang#JavascriptLogVariable(snippet)
-  let save_pos = getpos('.')
-  normal ^
-  " e.g.
-  " x.y = new Date();
-  " const x = a[a.length - 1];
-  " const x: Module.Struct = {
-  " let response = await admin.api.post(`/api/entities/${id}`);
-  let pattern = '^\s*\(const \|let \|\)\([[:alnum:]\.]\+\)\(: [[:alnum:]\.]\+\)\? ='
-  call search(pattern, 'b')
-  let matches = matchlist(getline('.'), pattern)
-  if len(matches)
-    let @" = matches[2]
-  endif
-  call setpos('.', save_pos)
-  if len(matches)
-    silent execute "normal o" . a:snippet . "\<tab>\<c-r>\"\<esc>"
-    " Transform change into a single undo item
-    silent execute "normal! yyu"
-    silent execute "normal! up"
-  endif
-endfunction
-
-function! proglang#JavascriptMethodToFunc() abort
-  " Case 1 (no args)
-  " public async someMethod(): Promise<Response> {
-  " const someMethod = async (): Promise<Response> => {
-  "
-  " Case 2 (with args)
-  " public async someMethod(request: object): Promise<object> {
-  " const someMethod = async (request: object): Promise<object> {
-  "
-  let matches = matchlist(getline('.'), '^\(\s*\)\(public\|private\)\s\?\(async\)\?\s\?\([^(]*\)(\([^)]*\)): \(.*\) {')
-  if empty(matches)
-    return util#error_msg('JsMethodToFunc: line does not match')
-  endif
-  let indent = matches[1]
-  let asyncToken = matches[3]
-  if !empty(asyncToken)
-    let asyncToken .= ' '
-  endif
-  let methodName = matches[4]
-  let args = matches[5]
-  let returnType = matches[6]
-  let line = printf("%sconst %s = %s(%s): %s => {", indent, methodName, asyncToken, args, returnType)
-  call setline('.', line)
-endfunction
-
 " const s = parse('batata');
 " ->
 " parse('batata');
@@ -480,22 +293,4 @@ function! proglang#InsertVariable() abort
   else
     return util#error_msg('InsertVariable: no support for filetype: ' . &ft)
   endif
-endfunction
-
-function! proglang#SearchTerraformResource() abort
-  let matches = matchlist(getline('.'), '\(resource\|data\) "\([^"]\+\)" "\([^"]\+\)"')
-  if len(matches) == 0
-    return util#error_msg('SearchTerraformResource: cursor not on resource|data')
-  endif
-  let resource_type = matches[2]
-  let local_name = matches[3]
-  let @/ = resource_type . '.' . local_name
-  try
-    normal! n
-    normal! zz
-  catch /E486/
-    return util#echo_exception()
-  endtry
-  " needs to be last, else exception message is overwritten
-  call search#Highlight()
 endfunction
