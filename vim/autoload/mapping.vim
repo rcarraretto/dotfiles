@@ -21,6 +21,10 @@ function! mapping#TerraformMappings() abort
   nnoremap <buffer> <space>/r :call proglang#terraform#SearchResource()<cr>
 endfunction
 
+function! mapping#PEMMappings() abort
+  nnoremap <buffer> K :call proglang#pem#ShowCertInfo()<cr>
+endfunction
+
 function! mapping#FugitiveMappings()
   if !exists('b:fugitive_type')
     return

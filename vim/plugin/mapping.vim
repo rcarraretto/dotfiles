@@ -398,6 +398,7 @@ augroup OverrideMappings
   autocmd FileType typescript,typescript.tsx call mapping#TypescriptMappings()
   autocmd FileType go call mapping#GolangMappings()
   autocmd FileType terraform call mapping#TerraformMappings()
+  autocmd FileType pem call mapping#PEMMappings()
   autocmd BufEnter * call mapping#FugitiveMappings()
   autocmd FileType agit call mapping#AgitMappings()
 augroup END
