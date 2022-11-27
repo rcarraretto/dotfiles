@@ -243,6 +243,10 @@ function! s:SetHighlight() abort
   highlight htmlBold NONE
   highlight link htmlBold Special
 
+  " e.g., Golang rune and byte
+  " in base16-ocean, change from red to green
+  highlight! def link Character Special
+
   " Customize highlight from 'parenmatch' plugin.
   " Basically copy MatchParen highlight from the standard 'matchparen' plugin.
   highlight ParenMatch term=reverse ctermbg=8
