@@ -32,7 +32,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
 if !has('nvim')
-  Plug 'Valloric/YouCompleteMe', { 'commit': '4df6f35f0c9f9aec21a3f567397496b5dee6acc7' }
+  Plug 'Valloric/YouCompleteMe', { 'commit': '2d1de481a94a3be428c87ab0404c38e58b386813' }
 endif
 Plug 'AndrewRadev/splitjoin.vim'
 
@@ -104,7 +104,7 @@ Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'fatih/vim-go', {
       \'for': 'go',
       \'do': ':GoUpdateBinaries',
-      \'commit': '2855115efb1dd8a5f4436a80138633a1cb5d9f0c' }
+      \'commit': '8d7677947e0be1eecfa1bcf2c1148804963ec4f6' }
 " Terraform
 Plug 'hashivim/vim-terraform', {
       \'for': 'terraform',
