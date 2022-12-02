@@ -463,8 +463,6 @@ let g:tsuquyomi_shortest_import_path = 1
 let g:go_highlight_trailing_whitespace_error = 0
 
 " vim-go
-" don't call :GoFmt on save
-let g:go_fmt_autosave = 0
 " fix imports on save
 let g:go_imports_autosave = 1
 " use popup for :GoDoc
