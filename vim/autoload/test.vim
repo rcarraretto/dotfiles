@@ -28,9 +28,18 @@ function! test#ExecTest(target, opts) abort
           \ case_flag
           \)
   endif
+  call s:Dispatch(core_cmd, a:opts['parser'])
+endfunction
+
+function! test#Dispatch(cmd, parser) abort
+  update
+  call s:Dispatch(a:cmd, a:parser)
+endfunction
+
+function! s:Dispatch(cmd, parser) abort
   let test_cmd = printf("set -o pipefail; %s |& tovimqf --parser=%s --cwd=%s",
-        \ core_cmd,
-        \ a:opts['parser'],
+        \ a:cmd,
+        \ a:parser,
         \ getcwd()
         \)
   execute printf('Dispatch -compiler=rc_compiler %s', test_cmd)
