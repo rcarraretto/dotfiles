@@ -18,6 +18,8 @@ hi! def link javaScriptStatement Keyword
 hi! def link javaScriptException Keyword
 " case, default
 hi! def link javaScriptLabel Keyword
+" for, while
+hi! def link javaScriptRepeat Keyword
 
 " Object, RegExp, etc.
 hi! def link javaScriptType Function
