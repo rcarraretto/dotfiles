@@ -360,6 +360,7 @@ augroup SetFiletype
   autocmd BufNewFile,BufRead $NOTES_SHARED/*.txt,
     \$NOTES_HOME/*.txt,
     \$NOTES_WORK/*.txt,
+    \$HOME/Library/CloudStorage/Dropbox/notes*.txt,
     \/Volumes/GoogleDrive[^/]\\\{0,\}/My\ Drive/notes-*.txt,
     \.todo
     \ set ft=ntx
