@@ -71,7 +71,7 @@ function! proglang#Prettier(mode) abort
   \ 'css': 'css',
   \ 'yaml': 'yaml'
   \}
-  let adhoc_fts = ['c', 'xml', 'go', 'sql']
+  let adhoc_fts = ['c', 'cpp', 'xml', 'go', 'sql']
   let supported_ft = has_key(prettier_parsers, &ft) || index(adhoc_fts, &ft) >= 0
 
   if !supported_ft
@@ -84,7 +84,7 @@ function! proglang#Prettier(mode) abort
   if has_key(prettier_parsers, &ft)
     call s:ExecPrettier(prettier_parsers[&ft])
   else
-    if &ft == 'c'
+    if &ft == 'c' || &ft == 'cpp'
       let cmd = printf("clang-format --style=Chromium -i '%s'", fnameescape(expand('%:p')))
       let output = system(cmd)
       noautocmd silent checktime
