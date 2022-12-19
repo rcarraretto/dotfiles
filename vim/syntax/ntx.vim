@@ -5,7 +5,7 @@ endif
 let b:current_syntax = "ntx"
 
 syn match ntxDivider "^\s*---.*"
-syn match ntxLineComment "^#.*$"
+syn match ntxLineComment "^#\(\s.\+\)\?$"
 syn match ntxHeader "^##.*"
 syn match ntxEndSection "^}}}.*"
 syn region ntxCodeBlock start=/^```$/ end=/^```$/
