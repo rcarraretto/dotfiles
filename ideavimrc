@@ -1,0 +1,6 @@
+nnoremap <leader>ev :edit ~/.ideavimrc<cr>
+nnoremap <leader>sv :source ~/.ideavimrc <bar> echo "~/.ideavimrc sourced"<cr>
+map <leader>gb <Action>(Annotate)
+map <space>e <Action>(GotoDeclaration)
+map <leader>ge <Action>(FindUsages)
+map <leader>dk <Action>(ShowErrorDescription)
