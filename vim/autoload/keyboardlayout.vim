@@ -11,18 +11,52 @@ function! KeyboardLayout#ToggleAutoChange() abort
   call KeyboardLayout#AutoChangeOn()
 endfunction
 
+function! s:InsertEnter() abort
+  " Log 'InsertEnter'
+  let s:in_insert = 1
+  call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
+endfunction
+
+function! s:InsertLeave() abort
+  " Log 'InsertLeave'
+  let s:in_insert = 0
+  call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+endfunction
+
+function! s:CmdlineEnter(afile) abort
+  " Log 'CmdlineEnter ' . a:afile
+  let s:in_search = 1
+  if s:in_insert == 0
+    " During insert mode, a mapping may trigger a CmdlineEnter + CmdlineLeave.
+    " In that case, there should be no keyboard layout switch.
+    " Example is 'auto-pairs' plugin which contains 'inoremap's of <cr> and
+    " <bs> of form '<c-r>=Func()<cr>'.
+    call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
+  endif
+endfunction
+
+function! s:CmdlineLeave(afile) abort
+  " Log 'CmdlineLeave ' . a:afile
+  let s:in_search = 0
+  if s:in_insert == 0
+    " See comment on s:CmdlineEnter()
+    call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+  endif
+endfunction
+
 function! KeyboardLayout#AutoChangeOn() abort
   augroup AutoChangeKeyboardLayout
-    let s:is_insert_or_search = 0
+    let s:in_insert = 0
+    let s:in_search = 0
     autocmd!
-    autocmd FocusGained  * if s:is_insert_or_search == 0 | call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | endif
-    autocmd FocusLost    * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
-    autocmd InsertEnter  * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-    autocmd InsertLeave  * call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-  "   autocmd CmdlineEnter / call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-  "   autocmd CmdlineLeave / call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
-  "   autocmd CmdlineEnter ? call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout') | let s:is_insert_or_search = 1
-  "   autocmd CmdlineLeave ? call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | let s:is_insert_or_search = 0
+    " autocmd FocusGained  * if s:in_insert == 0 && s:in_search == 0 | call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout') | endif
+    " autocmd FocusLost    * call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
+    autocmd InsertEnter  * call s:InsertEnter()
+    autocmd InsertLeave  * call s:InsertLeave()
+    autocmd CmdlineEnter / call s:CmdlineEnter(expand('<afile>'))
+    autocmd CmdlineLeave / call s:CmdlineLeave(expand('<afile>'))
+    autocmd CmdlineEnter \? call s:CmdlineEnter(expand('<afile>'))
+    autocmd CmdlineLeave \? call s:CmdlineLeave(expand('<afile>'))
   augroup END
 endfunction
 
