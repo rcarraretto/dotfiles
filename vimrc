@@ -169,6 +169,11 @@ set nowrap
 " Use system clipboard as vim's default clipboard
 set clipboard=unnamed
 
+" 'autoread' and 'ttimeoutlen' are also set by 'terminus' plugin.
+" They are also kept here in case the 'terminus' is disabled during debugging.
+set autoread
+set ttimeoutlen=10
+
 " when the last line is too large (may happen when using 'wrap'),
 " show as much as possible, instead of showing @'s
 " https://vi.stackexchange.com/a/103
