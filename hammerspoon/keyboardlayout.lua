@@ -15,6 +15,7 @@ local showAlert = function(msg, notify)
   if notify then
     hs.alert.closeAll()
     hs.alert.show(msg)
+    print(msg)
   end
 end
 
