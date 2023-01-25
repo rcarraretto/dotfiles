@@ -1,4 +1,4 @@
-local NOTIFY_ON_AUTO_CHANGE = true
+local NOTIFY_ON_AUTO_CHANGE = false
 local STD_SOURCE_ID = "com.apple.keylayout.ABC"
 
 local refreshTmuxStatus = function()
@@ -68,8 +68,8 @@ local addHotkeys = function(hyper, shift_hyper)
     setSourceId(next_source_id)
   end)
 
-  -- Toggle Hiragana and Katakana (hyper + shift + `)
-  hs.hotkey.bind(shift_hyper, "`", function()
+  -- Toggle Hiragana and Katakana (hyper + a)
+  hs.hotkey.bind(hyper, "a", function()
     -- hs.keycodes.methods() without "Romaji"
     local methods = {"Hiragana", "Katakana"}
     local method = hs.keycodes.currentMethod()
