@@ -69,13 +69,13 @@ local addHotkeys = function(hyper, shift_hyper)
     setSourceId(next_source_id)
   end)
 
-  -- Toggle Hiragana and Katakana (hyper + a)
+  -- Toggle between Hiragana and ABC (hyper + a)
   hs.hotkey.bind(hyper, "a", function()
-    -- hs.keycodes.methods() without "Romaji"
-    local methods = {"Hiragana", "Katakana"}
-    local method = hs.keycodes.currentMethod()
-    local next_method = cycle_list(methods, method)
-    setMethod(next_method)
+    if hs.keycodes.currentMethod() ~= "Hiragana" then
+      setMethod("Hiragana")
+    else
+      setSourceId(STD_SOURCE_ID)
+    end
   end)
 end
 
