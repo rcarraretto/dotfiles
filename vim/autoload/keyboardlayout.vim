@@ -18,13 +18,13 @@ endfunction
 function! s:InsertEnter() abort
   call s:Log('InsertEnter')
   let s:in_insert = 1
-  call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
+  call s:ToggleKeyboardLayout('keyboardLayoutInsertEnter')
 endfunction
 
 function! s:InsertLeave() abort
   call s:Log('InsertLeave')
   let s:in_insert = 0
-  call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+  call s:ToggleKeyboardLayout('keyboardLayoutInsertLeave')
 endfunction
 
 function! s:CmdlineEnter(afile) abort
@@ -35,7 +35,7 @@ function! s:CmdlineEnter(afile) abort
     " In that case, there should be no keyboard layout switch.
     " Example is 'auto-pairs' plugin which contains 'inoremap's of <cr> and
     " <bs> of form '<c-r>=Func()<cr>'.
-    call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
+    call s:ToggleKeyboardLayout('keyboardLayoutInsertEnter')
   endif
 endfunction
 
@@ -44,10 +44,18 @@ function! s:CmdlineLeave(afile) abort
   let s:in_search = 0
   if s:in_insert == 0
     " See comment on s:CmdlineEnter()
-    call s:ToggleKeyboardLayout('switchToStandardKeyboardLayout')
+    call s:ToggleKeyboardLayout('keyboardLayoutInsertLeave')
   endif
 endfunction
 
+" Due to 'terminus', if in insert mode, a cmd+tab will trigger:
+" InsertLeave
+" FocusLost
+" When coming back to vim:
+" InsertEnter
+" InsertLeave
+" FocusGained
+" InsertEnter
 function! s:FocusGained() abort
   call s:Log('FocusGained')
   if s:in_insert == 0 && s:in_search == 0
@@ -55,20 +63,12 @@ function! s:FocusGained() abort
   endif
 endfunction
 
-function! s:FocusLost() abort
-  call s:Log('FocusLost')
-  call s:ToggleKeyboardLayout('switchToPreviousKeyboardLayout')
-endfunction
-
 function! KeyboardLayout#AutoChangeOn() abort
   augroup AutoChangeKeyboardLayout
     let s:in_insert = 0
     let s:in_search = 0
     autocmd!
-    " FocusGained and FocusLost are commented out due to an issue where
-    " 'terminus' causes InsertLeave/InsertEnter after focus is gained or lost.
-    " autocmd FocusGained  * call s:FocusGained()
-    " autocmd FocusLost    * call s:FocusLost()
+    autocmd FocusGained  * call s:FocusGained()
     autocmd InsertEnter  * call s:InsertEnter()
     autocmd InsertLeave  * call s:InsertLeave()
     autocmd CmdlineEnter / call s:CmdlineEnter(expand('<afile>'))

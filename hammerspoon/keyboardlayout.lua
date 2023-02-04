@@ -15,7 +15,6 @@ local showAlert = function(msg, notify)
   if notify then
     hs.alert.closeAll()
     hs.alert.show(msg)
-    print(msg)
   end
 end
 
@@ -24,6 +23,7 @@ local setSourceId = function(source_id, notify)
   if ret then
     refreshTmuxStatus()
     showAlert(hs.keycodes.currentLayout(), notify)
+    print(hs.keycodes.currentLayout())
   end
 end
 
@@ -32,6 +32,7 @@ local setMethod = function(method, notify)
   if ret then
     refreshTmuxStatus()
     showAlert(hs.keycodes.currentMethod(), notify)
+    print(hs.keycodes.currentMethod())
   end
 end
 
@@ -96,7 +97,7 @@ function getKeyboardLayout()
   return layout
 end
 
-function switchToPreviousKeyboardLayout()
+function keyboardLayoutInsertEnter()
   if prev_method then
     return setMethod(prev_method, NOTIFY_ON_AUTO_CHANGE)
   end
@@ -105,7 +106,7 @@ function switchToPreviousKeyboardLayout()
   end
 end
 
-function switchToStandardKeyboardLayout()
+function keyboardLayoutInsertLeave()
   if hs.keycodes.currentSourceID() == STD_SOURCE_ID then
     prev_method = nil
     prev_source_id = nil
@@ -113,6 +114,13 @@ function switchToStandardKeyboardLayout()
   end
   prev_method = hs.keycodes.currentMethod()
   prev_source_id = hs.keycodes.currentSourceID()
+  setSourceId(STD_SOURCE_ID, NOTIFY_ON_AUTO_CHANGE)
+end
+
+function switchToStandardKeyboardLayout()
+  if hs.keycodes.currentSourceID() == STD_SOURCE_ID then
+    return
+  end
   setSourceId(STD_SOURCE_ID, NOTIFY_ON_AUTO_CHANGE)
 end
 
