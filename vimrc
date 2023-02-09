@@ -32,7 +32,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
 if !has('nvim')
-  Plug 'Valloric/YouCompleteMe', { 'commit': '2d1de481a94a3be428c87ab0404c38e58b386813' }
+  Plug 'Valloric/YouCompleteMe', { 'commit': '9a5eb4443e8a990698daa99da512d0fd7aed0f32' }
 endif
 Plug 'AndrewRadev/splitjoin.vim'
 
