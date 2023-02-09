@@ -367,6 +367,7 @@ augroup SetFiletype
     \$NOTES_HOME/*.txt,
     \$NOTES_WORK/*.txt,
     \$HOME/Library/CloudStorage/Dropbox/notes*.txt,
+    \$HOME/Library/CloudStorage/GoogleDrive-[^/]\\\{0,\}/My\ Drive/notes-*.txt,
     \/Volumes/GoogleDrive[^/]\\\{0,\}/My\ Drive/notes-*.txt,
     \.todo
     \ set ft=ntx
