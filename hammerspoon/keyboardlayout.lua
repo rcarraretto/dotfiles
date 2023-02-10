@@ -56,29 +56,6 @@ local cycle_list = function(list, current)
   return list[next_key]
 end
 
-local addHotkeys = function(hyper, shift_hyper)
-  -- Toggle input source (hyper + `)
-  hs.hotkey.bind(hyper, "`", function()
-    -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
-    -- But this source_id is not listed in source_ids.
-    local source_ids = hs.keycodes.layouts(true)
-    local source_id = hs.keycodes.currentSourceID()
-    -- Reverse list, so ABC layout is the default layout,
-    -- when coming from Japanese layout.
-    local next_source_id = cycle_list(reverse(source_ids), source_id)
-    setSourceId(next_source_id)
-  end)
-
-  -- Toggle between Hiragana and ABC (hyper + a)
-  hs.hotkey.bind(hyper, "a", function()
-    if hs.keycodes.currentMethod() ~= "Hiragana" then
-      setMethod("Hiragana")
-    else
-      setSourceId(STD_SOURCE_ID)
-    end
-  end)
-end
-
 function getKeyboardLayout()
   local method = hs.keycodes.currentMethod()
   if method then
@@ -124,6 +101,23 @@ function switchToStandardKeyboardLayout()
   setSourceId(STD_SOURCE_ID, NOTIFY_ON_AUTO_CHANGE)
 end
 
-return {
-  addHotkeys = addHotkeys
-}
+-- Toggle input source (hyper + `)
+hs.hotkey.bind(hyper, "`", function()
+  -- When on Japanese keyboard, source_id is "com.apple.inputmethod.Kotoeri.Japanese".
+  -- But this source_id is not listed in source_ids.
+  local source_ids = hs.keycodes.layouts(true)
+  local source_id = hs.keycodes.currentSourceID()
+  -- Reverse list, so ABC layout is the default layout,
+  -- when coming from Japanese layout.
+  local next_source_id = cycle_list(reverse(source_ids), source_id)
+  setSourceId(next_source_id)
+end)
+
+-- Toggle between Hiragana and ABC (hyper + a)
+hs.hotkey.bind(hyper, "a", function()
+  if hs.keycodes.currentMethod() ~= "Hiragana" then
+    setMethod("Hiragana")
+  else
+    setSourceId(STD_SOURCE_ID)
+  end
+end)

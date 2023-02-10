@@ -1,51 +1,14 @@
 -- Enable 'hs' command line tool
 -- https://www.hammerspoon.org/docs/hs.ipc.html
 require("hs.ipc")
-local keyboardlayout = require 'keyboardlayout'
 
+-- Globals
+hyper = {'cmd', 'alt', 'ctrl'}
+shift_hyper = {'cmd', 'alt', 'ctrl', 'shift'}
+
+require("apphotkeys")
+require("keyboardlayout")
 local fnutils = require("hs.fnutils")
-local hyper = {'cmd', 'alt', 'ctrl'}
-local shift_hyper = {'cmd', 'alt', 'ctrl', 'shift'}
-
-keyboardlayout.addHotkeys(hyper, shift_hyper)
-
---- App hotkeys
-local app_hotkeys = {
-  {key = "1", app = "iTerm"},
-  {key = "2", app = "Google Chrome"},
-  {key = "3", app = "SourceTree"},
-  {key = "4", app = "com.apple.iCal"},
-  {key = "5", app = "Slack"},
-  {key = "6", app = "Spotify"},
-}
-hs.application.enableSpotlightForNameSearches(true)
-local bind_app_hotkey = function(hotkey)
-  hs.hotkey.bind(hyper, hotkey.key, function()
-    local app = hs.application.find(hotkey.app)
-    if not app then
-      print('app not found: ', hotkey.app)
-      return
-    end
-    local fm = hs.application.frontmostApplication();
-    if app:isFrontmost() then
-      -- If already focused on the app, go to the previous one
-      -- (trying to be equivalent to alt+tab)
-      -- Based on https://github.com/AWildDevAppears/hammerspoon-config/blob/master/alttab.lua
-      local windows = hs.window.orderedWindows()
-      if #windows >= 2 then
-        if app:name() == 'Google Chrome' then
-          windows[3]:focus()
-        else
-          windows[2]:focus()
-        end
-      end
-    else
-      hs.application.launchOrFocusByBundleID(app:bundleID())
-    end
-  end)
-end
-fnutils.each(app_hotkeys, bind_app_hotkey)
-
 
 -- Utility functions
 -- print table
@@ -88,16 +51,6 @@ local bind_window_hotkey = function(hotkey)
   end)
 end
 fnutils.each(window_hotkeys, bind_window_hotkey)
-
-
--- Toggle iTerm and Chrome
-hs.hotkey.bind(hyper, "t", function()
-  if hs.application.frontmostApplication():title() == "iTerm2" then
-    hs.application.launchOrFocus("Google Chrome")
-  else
-    hs.application.launchOrFocus("iTerm")
-  end
-end)
 
 
 -- Lock screen
