@@ -1,7 +1,24 @@
 nnoremap <leader>ev :edit ~/.ideavimrc<cr>
 nnoremap <leader>sv :source ~/.ideavimrc <bar> echo "~/.ideavimrc sourced"<cr>
-map <leader>gb <Action>(Annotate)
+
+imap jk <esc>
+
+" Window management
+map <leader>ww <Action>(HideAllWindows)
+map <leader>wo <Action>(CloseAllEditorsButActive)
+map <space>W <Action>(ToggleDistractionFreeMode)
+
+" Search
+map <space>o <Action>(GotoFile)
+map <space>] <Action>(GotoSymbol)
+map <space>a <Action>(FindInPath)
+
+" Code navigation
+nmap <c-o> <Action>(Back)
+nmap <c-i> <Action>(Forward)
 map <space>e <Action>(GotoDeclaration)
 map <leader>ge <Action>(FindUsages)
 map <leader>dk <Action>(ShowErrorDescription)
-map <leader>ww <Action>(HideAllWindows)
+
+" git blame
+map <leader>gb <Action>(Annotate)
