@@ -88,6 +88,16 @@ function! test#ResetOnlyTestCase(f, regex) abort
   call function(a:f)()
 endfunction
 
+function! test#AddTestMappingsGolang() abort
+  call test#AddTestMappings({
+        \'test_file_regex': '_test\.go$',
+        \'toggle_only_test_case_f': 'test#GolangToggleOnlyTestCase',
+        \'reset_only_test_case_f': 'test#GolangResetOnlyTestCase',
+        \'parser': 'go-test',
+        \'test_cmd': 'run-golang-test-vim',
+        \})
+endfunction
+
 function! test#GolangToggleOnlyTestCase() abort
   let save_pos = getpos('.')
   " account for being exactly on the line of func definition

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+usage="usage: $(basename "$0") [--file=<file>] [--case=<case>]"
+
+set -eo pipefail
+
+file=""
+case=""
+for i in "$@"; do
+  case $i in
+    --file=*)
+      file="${i#*=}"
+      shift
+      ;;
+    --case=*)
+      case="${i#*=}"
+      shift
+      ;;
+    *)
+      echo "Error: unknown option: $i"
+      echo "$usage"
+      exit 1
+      ;;
+  esac
+done
+
+args=()
+if [ -n "$file" ]; then
+  args+=($file)
+else
+  args+=('./...')
+fi
+
+if [ -n "$case" ]; then
+  args+=(-run $case)
+fi
+
+go test -v "${args[@]}" -nocolor
