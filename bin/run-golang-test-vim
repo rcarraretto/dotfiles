@@ -26,7 +26,10 @@ done
 
 args=()
 if [ -n "$file" ]; then
-  args+=($file)
+  # this arg is probably still not accurate in all cases.
+  # needs to be a "package import path".
+  # https://stackoverflow.com/a/28153553/2277505
+  args+=(`dirname $file`)
 else
   args+=('./...')
 fi
