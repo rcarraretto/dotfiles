@@ -1,5 +1,6 @@
 set number
 set relativenumber
+set hlsearch
 
 nnoremap <leader>ev :edit ~/.ideavimrc<cr>
 nnoremap <leader>sv :source ~/.ideavimrc <bar> echo "~/.ideavimrc sourced"<cr>
@@ -13,17 +14,24 @@ map <space>W <Action>(ToggleDistractionFreeMode)
 
 " Search
 map <space>o <Action>(GotoFile)
+map <space>[ <Action>(GotoClass)
 map <space>] <Action>(GotoSymbol)
 map <space>a <Action>(FindInPath)
 nmap [q <Action>(PreviousOccurence)
 nmap ]q <Action>(NextOccurence)
+nnoremap gh :nohlsearch<cr>
 
 " Code navigation
 nmap <c-o> <Action>(Back)
 nmap <c-i> <Action>(Forward)
 map <space>e <Action>(GotoDeclaration)
 map <leader>ge <Action>(FindUsages)
+map <leader>gi <Action>(GotoImplementation)
 map <leader>dk <Action>(ShowErrorDescription)
+map - <Action>(SelectInProjectView)
 
 " git blame
 map <leader>gb <Action>(Annotate)
+
+" edit common files
+nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
