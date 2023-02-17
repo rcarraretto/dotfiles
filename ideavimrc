@@ -11,6 +11,7 @@ imap jk <esc>
 map <leader>ww <Action>(HideAllWindows)
 map <leader>wo <Action>(CloseAllEditorsButActive)
 map <space>W <Action>(ToggleDistractionFreeMode)
+nnoremap <leader><leader> <c-6>
 
 " Search
 map <space>o <Action>(GotoFile)
@@ -28,10 +29,13 @@ map <space>e <Action>(GotoDeclaration)
 map <leader>ge <Action>(FindUsages)
 map <leader>gi <Action>(GotoImplementation)
 map <leader>dk <Action>(ShowErrorDescription)
+" show file in Project view (use cmd+1 to close Project view)
 map - <Action>(SelectInProjectView)
 
 " git blame
 map <leader>gb <Action>(Annotate)
+" open current line in GitHub, GitLab, etc. (via GitLink plugin)
+map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
 
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
