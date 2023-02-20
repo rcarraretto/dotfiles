@@ -1,6 +1,8 @@
 set number
 set relativenumber
 set hlsearch
+set smartcase
+set ignorecase
 
 nnoremap <leader>ev :edit ~/.ideavimrc<cr>
 nnoremap <leader>sv :source ~/.ideavimrc <bar> echo "~/.ideavimrc sourced"<cr>
