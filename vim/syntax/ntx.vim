@@ -14,3 +14,4 @@ hi def link ntxLineComment Function
 hi def link ntxDivider Comment
 hi def link ntxHeader Keyword
 hi def link ntxEndSection Keyword
+hi def link ntxCodeBlock Special
