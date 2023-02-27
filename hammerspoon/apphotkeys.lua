@@ -6,6 +6,8 @@ local app_hotkeys = {
   {key = "2", app = "Google Chrome"},
   {key = "3", app = "SourceTree"},
   {key = "4", app = "com.apple.iCal"},
+  {key = "5", app = "Slack"},
+  {key = "6", app = "Spotify"},
 }
 hs.application.enableSpotlightForNameSearches(true)
 local bind_app_hotkey = function(hotkey)
