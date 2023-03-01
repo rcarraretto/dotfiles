@@ -36,7 +36,7 @@ function! s:ExecPrettier(parser) abort
     let prettier_cmd = 'npx prettier'
   endif
 
-  let path = expand('%:p')
+  let path = fnameescape(expand('%:p'))
   if empty(path)
     " No file in disk.
     " Explicitly specifiy parser, since prettier cannot infer from file
