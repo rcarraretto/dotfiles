@@ -1,3 +1,5 @@
+Plug 'vim-scripts/ReplaceWithRegister'
+
 set number
 set relativenumber
 set hlsearch
@@ -12,10 +14,13 @@ imap jk <esc>
 " Window management
 map <leader>ww <Action>(HideAllWindows)
 map <leader>wo <Action>(CloseAllEditorsButActive)
-map <space>W <Action>(ToggleDistractionFreeMode)
+map <leader>ca <Action>(ToggleDistractionFreeMode)
 nnoremap <leader><leader> <c-6>
 nnoremap [r :tabprevious<cr>
 nnoremap ]r :tabnext<cr>
+nnoremap <space>h <c-w>h
+nnoremap <space>l <c-w>l
+map <space>q <Action>(CloseContent)
 
 " Search
 map <space>o <Action>(GotoFile)
@@ -40,6 +45,9 @@ map - <Action>(SelectInProjectView)
 map <leader>gb <Action>(Annotate)
 " open current line in GitHub, GitLab, etc. (via GitLink plugin)
 map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
+
+" Text editing
+map <leader>gp <Action>(ReformatCode)
 
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
