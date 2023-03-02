@@ -24,7 +24,8 @@ imap jk <esc>
 map <leader>ww <Action>(MaximizeEditorInSplit)
 map <leader>wo <Action>(CloseAllEditorsButActive)
 map <leader>ca <Action>(ToggleDistractionFreeMode)
-map <leader>cA <Action>(HideAllWindows)
+map <leader>cz <Action>(HideAllWindows)
+map <space>; <Action>(JumpToLastWindow)
 nnoremap <leader><leader> <c-6>
 nnoremap [r :tabprevious<cr>
 nnoremap ]r :tabnext<cr>
