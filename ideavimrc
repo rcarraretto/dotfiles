@@ -1,26 +1,44 @@
-Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'ReplaceWithRegister'
+Plug 'vim-commentary'
+Plug 'vim-surround'
 
+" don't hide error if there is a bug in IdeaVim
+" https://github.com/JetBrains/ideavim/discussions/303#discussioncomment-655607
+set ideastrictmode
 set number
 set relativenumber
 set hlsearch
 set smartcase
 set ignorecase
+" use system clipboard
+set clipboard=unnamed,ideaput
 
 nnoremap <leader>ev :edit ~/.ideavimrc<cr>
-nnoremap <leader>sv :source ~/.ideavimrc <bar> echo "~/.ideavimrc sourced"<cr>
+nnoremap <leader>sv :w <bar> action IdeaVim.ReloadVimRc.reload <bar> echo "~/.ideavimrc sourced"<cr>
+" track actions
+map <leader>tv <Action>(VimFindActionIdAction)
 
 imap jk <esc>
 
 " Window management
-map <leader>ww <Action>(HideAllWindows)
+map <leader>ww <Action>(MaximizeEditorInSplit)
 map <leader>wo <Action>(CloseAllEditorsButActive)
 map <leader>ca <Action>(ToggleDistractionFreeMode)
+map <leader>cA <Action>(HideAllWindows)
 nnoremap <leader><leader> <c-6>
 nnoremap [r :tabprevious<cr>
 nnoremap ]r :tabnext<cr>
 nnoremap <space>h <c-w>h
 nnoremap <space>l <c-w>l
 map <space>q <Action>(CloseContent)
+map <space>, <Action>(StretchSplitToLeft)
+map <space>. <Action>(StretchSplitToRight)
+" make splits have the same size
+function! WinEq() abort
+  action MaximizeEditorInSplit
+  action MaximizeEditorInSplit
+endfunction
+map <c-w>= :call WinEq()<cr>
 
 " Search
 map <space>o <Action>(GotoFile)
@@ -41,6 +59,10 @@ map <leader>dk <Action>(ShowErrorDescription)
 " show file in Project view (use cmd+1 to close Project view)
 map - <Action>(SelectInProjectView)
 
+" folding
+map <tab> <Action>(CollapseRegion)
+map <s-tab> <Action>(ExpandRegion)
+
 " git blame
 map <leader>gb <Action>(Annotate)
 " open current line in GitHub, GitLab, etc. (via GitLink plugin)
@@ -48,6 +70,9 @@ map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
 
 " Text editing
 map <leader>gp <Action>(ReformatCode)
+nnoremap =p o<esc>p
+map [e <Action>(MoveLineUp)
+map ]e <Action>(MoveLineDown)
 
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
