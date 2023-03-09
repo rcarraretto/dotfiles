@@ -60,6 +60,15 @@ map <leader>dk <Action>(ShowErrorDescription)
 " show file in Project view (use cmd+1 to close Project view)
 map - <Action>(SelectInProjectView)
 
+function! ToggleRelativeNumber() abort
+  if &relativenumber
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunction
+nnoremap con :call ToggleRelativeNumber()<cr>
+
 " folding
 map <tab> <Action>(CollapseRegion)
 map <s-tab> <Action>(ExpandRegion)
