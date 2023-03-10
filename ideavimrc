@@ -12,6 +12,9 @@ set smartcase
 set ignorecase
 " use system clipboard
 set clipboard=unnamed,ideaput
+" stay in normal mode when triggering RenameElement action
+" https://github.com/JetBrains/ideavim/wiki/set-commands
+set idearefactormode=keep
 
 nnoremap <leader>ev :edit ~/.ideavimrc<cr>
 nnoremap <leader>sv :w <bar> action IdeaVim.ReloadVimRc.reload <bar> echo "~/.ideavimrc sourced"<cr>
@@ -80,6 +83,7 @@ map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
 
 " Text editing
 map <leader>gp <Action>(ReformatCode)
+map <leader>re <Action>(RenameElement)
 nnoremap =p o<esc>p
 map [e <Action>(MoveLineUp)
 map ]e <Action>(MoveLineDown)
