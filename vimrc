@@ -305,6 +305,11 @@ if !exists('g:colors_name')
   endtry
 endif
 
+" arrow up: ꜛ
+digraph au 42779
+" arrow down: ꜜ
+digraph ad 42780
+
 " }}}
 
 " Auto commands ---------------------- {{{
