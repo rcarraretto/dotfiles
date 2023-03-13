@@ -62,6 +62,7 @@ map <leader>gi <Action>(GotoImplementation)
 map <leader>dk <Action>(ShowErrorDescription)
 " show file in Project view (use cmd+1 to close Project view)
 map - <Action>(SelectInProjectView)
+map <leader>et <Action>(GotoTest)
 
 function! ToggleRelativeNumber() abort
   if &relativenumber
@@ -87,6 +88,11 @@ map <leader>re <Action>(RenameElement)
 nnoremap =p o<esc>p
 map [e <Action>(MoveLineUp)
 map ]e <Action>(MoveLineDown)
+
+" Run last test
+map <space>t <Action>(Run)
+" Run test under cursor
+map <leader>st <Action>(RunClass)
 
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
