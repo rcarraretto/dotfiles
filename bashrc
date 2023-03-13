@@ -16,6 +16,10 @@ __prompt_command() {
     # https://tldp.org/LDP/abs/html/exitcodes.html
     PS1+="${RED}${EXIT_CODE}${NC} "
   fi
+  profile="${AWS_PROFILE:-$AWS_DEFAULT_PROFILE}"
+  if [ -n "$profile" ]; then
+    PS1+="[$profile] "
+  fi
   PS1+='\W $ '
   # After each command, refresh tmux status bar,
   # since the current git branch is being displayed on it.
