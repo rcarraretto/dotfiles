@@ -39,6 +39,10 @@ nnoremap ]r :tabnext<cr>
 nnoremap <space>h <c-w>h
 nnoremap <space>l <c-w>l
 map <space>q <Action>(CloseContent)
+" close split
+map <leader>qq <Action>(CloseAllEditors)
+map <c-w>H <Action>(MoveEditorToOppositeTabGroup)
+map <c-w>L <Action>(MoveEditorToOppositeTabGroup)
 map <space>, <Action>(StretchSplitToLeft)
 map <space>. <Action>(StretchSplitToRight)
 " make splits have the same size
