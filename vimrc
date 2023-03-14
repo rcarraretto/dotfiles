@@ -107,8 +107,8 @@ Plug 'fatih/vim-go', {
       \'commit': '8d7677947e0be1eecfa1bcf2c1148804963ec4f6' }
 " Terraform
 Plug 'hashivim/vim-terraform', {
-      \'for': 'terraform',
-      \'commit': '9166d42e5dc9bc0ef7e1b9e93d52bb4c5b923560' }
+      \'for': ['terraform', 'hcl'],
+      \'commit': 'd00503de9bed3a1da7206090cb148c6a1acce870' }
 " Applescript
 Plug 'vim-scripts/applescript.vim', {
       \'for': 'applescript',
