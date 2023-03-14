@@ -35,7 +35,9 @@ function! s:DirvishMappings()
   " implode
   nnoremap <buffer> <silent> I :<c-u>call <sid>DirvishImplode()<cr>
   " mv
-  nnoremap <buffer> <silent> mv :<c-u>call <sid>DirvishMv()<cr>
+  nnoremap <buffer> <silent> mv :<c-u>call <sid>DirvishMv(0)<cr>
+  " cp
+  nnoremap <buffer> <silent> cp :<c-u>call <sid>DirvishMv(1)<cr>
   " opendiff
   command! -buffer DirvishOpenDiff :call <sid>DirvishOpenDiff()
 endfunction
@@ -133,7 +135,7 @@ function! s:dirvish_path_shortname(path)
   return "'" . fnamemodify(a:path, ':t') . "'"
 endfunction
 
-function! s:DirvishMv() abort
+function! s:DirvishMv(copy) abort
   let dirpath = getline('.')
   if !isdirectory(dirpath)
     let dirpath = fnamemodify(dirpath, ':h') . '/'
@@ -148,10 +150,22 @@ function! s:DirvishMv() abort
   endif
   let filenames = map(copy(filepaths), 's:dirvish_path_shortname(v:val)')
   let dirname = s:dirvish_path_shortname(dirpath)
-  if !util#prompt("Move " . join(filenames, ', ') . " to directory " . dirname . "? ")
+  if a:copy
+    let action_name = 'Copy'
+    let program = 'gcp -R'
+  else
+    let action_name = 'Move'
+    let program = 'mv'
+  endif
+  let prompt_msg = printf('%s %s to directory %s? ', action_name, join(filenames, ', '), dirname)
+  if !util#prompt(prompt_msg)
     return
   endif
-  let cmd = 'mv ' . join(map(filepaths, 'fnameescape(v:val)'), ' ') . ' ' . fnameescape(dirpath)
+  let cmd = printf('%s %s %s',
+        \ program,
+        \ join(map(filepaths, 'fnameescape(v:val)'), ' '),
+        \ fnameescape(dirpath)
+        \)
   let output = system(cmd)
   if v:shell_error
     call util#error_msg('DirvishMv: Error: ' . output)
