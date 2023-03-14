@@ -24,6 +24,8 @@ nnoremap <leader>sv :w <bar> action IdeaVim.ReloadVimRc.reload <bar> echo "~/.id
 map <leader>tv <Action>(VimFindActionIdAction)
 
 imap jk <esc>
+" revert Y to standard vim behavior
+nnoremap Y y$
 
 " Window management
 map <leader>ww <Action>(MaximizeEditorInSplit)
