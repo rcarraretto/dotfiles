@@ -34,8 +34,6 @@ map <leader>ca <Action>(ToggleDistractionFreeMode)
 map <leader>cz <Action>(HideAllWindows)
 map <space>; <Action>(JumpToLastWindow)
 nnoremap <leader><leader> <c-6>
-nnoremap [r :tabprevious<cr>
-nnoremap ]r :tabnext<cr>
 nnoremap <space>h <c-w>h
 nnoremap <space>l <c-w>l
 map <space>q <Action>(CloseContent)
@@ -51,6 +49,12 @@ function! WinEq() abort
   action MaximizeEditorInSplit
 endfunction
 map <c-w>= :call WinEq()<cr>
+
+" Tab navigation
+nnoremap [r :tabprevious<cr>
+nnoremap ]r :tabnext<cr>
+nnoremap <leader>th :tabm -1<cr>
+nnoremap <leader>tl :tabm +1<cr>
 
 " Project Windows
 map [` <Action>(PreviousProjectWindow)
@@ -99,6 +103,7 @@ map <leader>gb <Action>(Annotate)
 map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
 
 " Text editing
+map <c-l> <Action>(SaveAll)
 map <leader>gp <Action>(ReformatCode)
 map <leader>re <Action>(RenameElement)
 nnoremap =p o<esc>p
