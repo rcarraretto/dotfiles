@@ -52,6 +52,13 @@ function! WinEq() abort
 endfunction
 map <c-w>= :call WinEq()<cr>
 
+" Project Windows
+map [` <Action>(PreviousProjectWindow)
+map ]` <Action>(NextProjectWindow)
+map <space>` <Action>(OpenProjectWindows)
+map <leader>ep <Action>(ManageRecentProjects)
+map <leader>`q <Action>(CloseProject)
+
 " Search
 map <space>o <Action>(GotoFile)
 map <space>[ <Action>(GotoClass)
@@ -97,6 +104,10 @@ map <leader>re <Action>(RenameElement)
 nnoremap =p o<esc>p
 map [e <Action>(MoveLineUp)
 map ]e <Action>(MoveLineDown)
+" insert blank line above
+nnoremap [<space> mzO<esc>`z
+" insert blank line below
+nnoremap ]<space> mzo<esc>`z
 
 " Run last test
 map <space>t <Action>(Run)
