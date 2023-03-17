@@ -256,6 +256,8 @@ nnoremap <leader>gf :<c-u>call viewing#GoToCursorReference()<cr>
 nnoremap <leader>oS :SysOpen<cr>
 " open folder of current file in Finder
 nnoremap <leader>oF :call fs#OpenFolderInFinder()<cr>
+" open in Intellij
+nnoremap <leader>gj :call fs#OpenInIntellij()<cr>
 
 " Search in file
 " ---

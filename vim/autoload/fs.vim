@@ -156,3 +156,22 @@ function! fs#SysOpen(filename)
     return
   endif
 endfunction
+
+" https://www.jetbrains.com/help/idea/opening-files-from-command-line.html#707b1604
+function! fs#OpenInIntellij() abort
+  let path = expand('%:p')
+  " -n is required for Intellij to focus on the Project Window or File/line.
+  " Without -n, it works more like a cmd+tab.
+  let cmd_prefix = 'open -na "IntelliJ IDEA.app" --args'
+  if isdirectory(path)
+    let cmd = printf('%s %s',
+          \ cmd_prefix,
+          \ fnameescape(path))
+  else
+    let cmd = printf('%s --line %d %s',
+          \ cmd_prefix,
+          \ line('.'),
+          \ fnameescape(path))
+  endif
+  call system(cmd)
+endfunction
