@@ -97,11 +97,6 @@ nnoremap con :call ToggleRelativeNumber()<cr>
 map <tab> <Action>(CollapseRegion)
 map <s-tab> <Action>(ExpandRegion)
 
-" git blame
-map <leader>gb <Action>(Annotate)
-" open current line in GitHub, GitLab, etc. (via GitLink plugin)
-map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
-
 " Text editing
 map <c-l> <Action>(SaveAll)
 map <leader>gp <Action>(ReformatCode)
@@ -121,3 +116,9 @@ map <leader>st <Action>(RunClass)
 
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
+
+" git blame
+map <leader>gb <Action>(Annotate)
+" open current line in GitHub, GitLab, etc. (via GitLink plugin)
+map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
+map <leader>gs :!"$HOME/work/dotfiles/bin/open-in-source-tree"<cr>
