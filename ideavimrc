@@ -70,8 +70,8 @@ map <space>o <Action>(GotoFile)
 map <space>[ <Action>(GotoClass)
 map <space>] <Action>(GotoSymbol)
 map <space>a <Action>(FindInPath)
-nmap [q <Action>(PreviousOccurence)
-nmap ]q <Action>(NextOccurence)
+map [q <Action>(PreviousOccurence)
+map ]q <Action>(NextOccurence)
 nnoremap gh :nohlsearch<cr>
 
 " Code navigation
@@ -81,6 +81,8 @@ map <space>e <Action>(GotoDeclaration)
 map <leader>ge <Action>(FindUsages)
 map <leader>gi <Action>(GotoImplementation)
 map <leader>dk <Action>(ShowErrorDescription)
+map [w <Action>(GotoPreviousError)
+map ]w <Action>(GotoNextError)
 " show file in Project view (use 'q' to close Project view)
 nnoremap - :NERDTreeFind<cr>
 nnoremap <leader>tq :NERDTreeClose<cr>
