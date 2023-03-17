@@ -22,6 +22,8 @@ nnoremap <leader>ev :edit ~/.ideavimrc<cr>
 nnoremap <leader>sv :w <bar> action IdeaVim.ReloadVimRc.reload <bar> echo "~/.ideavimrc sourced"<cr>
 " track actions
 map <leader>tv <Action>(VimFindActionIdAction)
+" push to Intellij Settings Repository
+map <leader>p, <Action>(MergeSettings)
 
 imap jk <esc>
 " revert Y to standard vim behavior
