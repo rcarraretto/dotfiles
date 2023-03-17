@@ -73,6 +73,9 @@ map <space>a <Action>(FindInPath)
 map [q <Action>(PreviousOccurence)
 map ]q <Action>(NextOccurence)
 nnoremap gh :nohlsearch<cr>
+" visual star
+xnoremap * <esc>gvy/<c-r>"<cr>
+xnoremap # <esc>gvy?<c-r>"<cr>
 
 " Code navigation
 nmap <c-o> <Action>(Back)
