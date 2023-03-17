@@ -82,7 +82,7 @@ map <leader>ge <Action>(FindUsages)
 map <leader>gi <Action>(GotoImplementation)
 map <leader>dk <Action>(ShowErrorDescription)
 " show file in Project view (use 'q' to close Project view)
-nnoremap - :NERDTree<cr>
+nnoremap - :NERDTreeFind<cr>
 nnoremap <leader>tq :NERDTreeClose<cr>
 map <leader>et <Action>(GotoTest)
 
