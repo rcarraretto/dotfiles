@@ -95,6 +95,8 @@ function! ToggleRelativeNumber() abort
 endfunction
 nnoremap con :call ToggleRelativeNumber()<cr>
 
+" Text visualization
+map cow <Action>(EditorToggleUseSoftWraps)
 " folding
 map <tab> <Action>(CollapseRegion)
 map <s-tab> <Action>(ExpandRegion)
@@ -111,11 +113,17 @@ nnoremap [<space> mzO<esc>`z
 " insert blank line below
 nnoremap ]<space> mzo<esc>`z
 
+" Find and replace
+nnoremap <leader>rn :%s///g<left><left>
+
 " Run last test
 map <space>t <Action>(Run)
 " Run test under cursor
 map <leader>st <Action>(RunClass)
 
+" File system
+map <leader>mv <Action>(RenameFile)
+map <leader>mV <Action>(Move)
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
 
