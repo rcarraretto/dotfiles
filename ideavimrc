@@ -17,9 +17,11 @@ set clipboard=unnamed,ideaput
 " stay in normal mode when triggering RenameElement action
 " https://github.com/JetBrains/ideavim/wiki/set-commands
 set idearefactormode=keep
+" normal mode J uses IDE
+set ideajoin
 
 nnoremap <leader>ev :edit ~/.ideavimrc<cr>
-nnoremap <leader>sv :w <bar> action IdeaVim.ReloadVimRc.reload <bar> echo "~/.ideavimrc sourced"<cr>
+nnoremap <leader>sv :action SaveAll <bar> action IdeaVim.ReloadVimRc.reload <bar> echo "~/.ideavimrc sourced"<cr>
 " track actions
 map <leader>tv <Action>(VimFindActionIdAction)
 " push to Intellij Settings Repository
@@ -57,6 +59,8 @@ nnoremap [r :tabprevious<cr>
 nnoremap ]r :tabnext<cr>
 nnoremap <leader>th :tabm -1<cr>
 nnoremap <leader>tl :tabm +1<cr>
+map <space>b <Action>(Switcher)
+map <space>m <Action>(RecentLocations)
 
 " Project Windows
 map [` <Action>(PreviousProjectWindow)
@@ -120,11 +124,15 @@ nnoremap ]<space> mzo<esc>`z
 
 " Find and replace
 nnoremap <leader>rn :%s///g<left><left>
+" easier interactive change of word in file with:
+" [c*, perform change, n, ., n, ., etc.]
+nnoremap c* *Ncgn
+nnoremap c# #NcgN
 
 " Run last test
-map <space>t <Action>(Run)
+map <space>t <Action>(Debug)
 " Run test under cursor
-map <leader>st <Action>(RunClass)
+map <leader>st <Action>(DebugClass)
 
 " File system
 map <leader>mv <Action>(RenameFile)
