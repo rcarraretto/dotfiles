@@ -45,6 +45,7 @@ map <space>q <Action>(CloseContent)
 map <leader>qq <Action>(CloseAllEditors)
 map <c-w>H <Action>(MoveEditorToOppositeTabGroup)
 map <c-w>L <Action>(MoveEditorToOppositeTabGroup)
+map <c-w>v <Action>(MoveTabRight)
 map <space>, <Action>(StretchSplitToLeft)
 map <space>. <Action>(StretchSplitToRight)
 " make splits have the same size
@@ -106,6 +107,7 @@ nnoremap con :call ToggleRelativeNumber()<cr>
 
 " Text visualization
 map cow <Action>(EditorToggleUseSoftWraps)
+map cos <Action>(ViewNavigationBar)
 " folding
 map <tab> <Action>(CollapseRegion)
 map <s-tab> <Action>(ExpandRegion)
@@ -133,6 +135,7 @@ nnoremap c# #NcgN
 map <space>t <Action>(Debug)
 " Run test under cursor
 map <leader>st <Action>(DebugClass)
+map <leader>da <Action>(Stop)
 
 " File system
 map <leader>mv <Action>(RenameFile)
