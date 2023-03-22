@@ -146,32 +146,32 @@ function! fs#SysOpen(filename)
     return util#error_msg('SysOpen: selected path cannot be a directory')
   endif
   let ext = fnamemodify(filename, ':e')
+  if empty(ext)
+    return util#error_msg('SysOpen: empty extension')
+  endif
   if index(['sh'], ext) != -1
-    echo 'SysOpen: unsupported extension: ' . ext
-    return
+    return util#error_msg('SysOpen: unsupported extension: ' . ext)
   endif
   let output = system('open ' . filename)
   if v:shell_error
-    echo 'Error: ' . substitute(output, '\n', ' ', 'g')
-    return
+    return util#error_msg('Error: ' . substitute(output, '\n', ' ', 'g'))
   endif
 endfunction
 
 " https://www.jetbrains.com/help/idea/opening-files-from-command-line.html#707b1604
-function! fs#OpenInIntellij() abort
-  let path = expand('%:p')
+function! fs#OpenInIntellij(path, lnum) abort
   " -n is required for Intellij to focus on the Project Window or File/line.
   " Without -n, it works more like a cmd+tab.
   let cmd_prefix = 'open -na "IntelliJ IDEA.app" --args'
-  if isdirectory(path)
+  if isdirectory(a:path)
     let cmd = printf('%s %s',
           \ cmd_prefix,
-          \ fnameescape(path))
+          \ fnameescape(a:path))
   else
     let cmd = printf('%s --line %d %s',
           \ cmd_prefix,
-          \ line('.'),
-          \ fnameescape(path))
+          \ a:lnum,
+          \ fnameescape(a:path))
   endif
   call system(cmd)
 endfunction

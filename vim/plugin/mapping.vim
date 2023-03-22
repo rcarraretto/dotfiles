@@ -257,7 +257,7 @@ nnoremap <leader>oS :SysOpen<cr>
 " open folder of current file in Finder
 nnoremap <leader>oF :call fs#OpenFolderInFinder()<cr>
 " open in Intellij
-nnoremap <leader>gj :call fs#OpenInIntellij()<cr>
+nnoremap <leader>gj :call fs#OpenInIntellij(expand('%:p'), line('.'))<cr>
 
 " Search in file
 " ---

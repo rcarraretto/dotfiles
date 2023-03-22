@@ -13,6 +13,7 @@ function! quickfix#QfConfig()
   nnoremap <buffer> <silent> dd :call <sid>DeleteCurrentLine()<cr>
   nnoremap <buffer> dp :QfDeletePattern<cr>
   nnoremap <buffer> dP :QfFilterPattern<cr>
+  nnoremap <buffer> gj :call <sid>OpenInIntellij()<cr>
   nnoremap <buffer> <silent> d :set operatorfunc=<sid>DeleteOperator<cr>g@
   command! -buffer QfDeletePattern call s:QfDeletePattern()
   command! -buffer QfFilterPattern call s:QfFilterPattern()
@@ -200,4 +201,12 @@ function! quickfix#ReadFromFile(path) abort
   let qflist = js_decode(line)
   call setqflist([], ' ', qflist)
   botright copen
+endfunction
+
+function! s:OpenInIntellij() abort
+  let qfitem = getqflist()[line('.')-1]
+  let filename = bufname(qfitem['bufnr'])
+  let lnum = qfitem['lnum']
+  let path = fnamemodify(filename, ':p')
+  call fs#OpenInIntellij(path, lnum)
 endfunction
