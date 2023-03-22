@@ -143,8 +143,10 @@ map <leader>mV <Action>(Move)
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
 
+" Git
 " git blame
 map <leader>gb <Action>(Annotate)
 " open current line in GitHub, GitLab, etc. (via GitLink plugin)
 map <leader>gh <Action>(uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction)
 map <leader>gs :!"$HOME/work/dotfiles/bin/open-in-source-tree"<cr>
+map 3<leader>gg <Action>(Vcs.UpdateProject)
