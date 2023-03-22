@@ -205,6 +205,12 @@ set shortmess+=A " no warning for existing swap file
 " :h viminfo-!
 set viminfo+=!
 
+if !exists('$COLORTERM')
+  " fix base16 colors when inside Intellij terminal
+  " https://github.com/chriskempson/base16-vim#troubleshooting
+  set termguicolors
+endif
+
 " Load aliases for executing shell commands within vim
 " https://stackoverflow.com/a/18901595
 let $BASH_ENV = "~/.bash_aliases"
