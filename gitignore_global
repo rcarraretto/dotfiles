@@ -34,6 +34,9 @@ __pycache__/
 
 profile.log
 
+# Java profiling
+*.hprof
+
 # IntelliJ
 .idea
 *.iml
