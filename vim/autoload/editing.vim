@@ -43,7 +43,7 @@ function! editing#ChangeQuotes()
   elseif match(sline, '"') != -1
     let sline = substitute(sline, '"', "'", 'g')
   endif
-  let sline = substitute(sline, "[“”„]", '"', 'g')
+  let sline = substitute(sline, "[“”„‘’]", '"', 'g')
   if line == sline
     echom "no changes"
     return
