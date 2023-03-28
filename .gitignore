@@ -1,3 +1,5 @@
+/typescript/node_modules
+/typescript/dist
 vim/.netrwhist
 vim/autoload/plug.vim
 vim/bundle

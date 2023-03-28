@@ -102,6 +102,7 @@ export BREW_PREFIX=$(brew --prefix)
 
 # Dotfiles bin
 add-to-path "$HOME/work/dotfiles/bin"
+add-to-path "$HOME/work/dotfiles/typescript/bin"
 
 # Base 16
 BASE16_SHELL=$HOME/.config/base16-shell/
