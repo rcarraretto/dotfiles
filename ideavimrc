@@ -136,8 +136,10 @@ nnoremap c# #NcgN
 
 " Run last test
 map <space>t <Action>(Debug)
+map <space>T <Action>(Run)
 " Run test under cursor
 map <leader>st <Action>(DebugClass)
+map <leader>sT <Action>(RunClass)
 map <leader>da <Action>(Stop)
 
 " File system
