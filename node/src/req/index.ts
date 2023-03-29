@@ -1,9 +1,16 @@
 import { AppError } from './common';
 import { getReqDetails } from './config';
 import { httpRequest, HttpResponse } from './http';
-import { parseArgs } from './args';
+import { parseArgs, ArgError, usage } from './args';
 
 const errorMsg = (e: any): string => {
+  if (e instanceof ArgError) {
+    let msg = '';
+    if (e.message) {
+      msg = `Error: ${e.message}\n\n`;
+    }
+    return msg + usage;
+  }
   if (e instanceof AppError) {
     const msg = `Error: ${e.message}`;
     if (!e.info || !e.info.length) {

@@ -1,4 +1,7 @@
-import { AppError } from './common';
+export class ArgError extends Error {}
+
+export const usage = `Usage: req <app_name> <endpoint_name> [options]
+ --var <key=value>`;
 
 export interface Var {
   key: string;
@@ -14,7 +17,7 @@ export interface Args {
 
 export const parseArgs = (argv: string[]): Args => {
   if (argv.length <= 2) {
-    throw new AppError('not enough args');
+    throw new ArgError();
   }
   argv = argv.slice(2);
   const positional: string[] = [];
@@ -26,11 +29,11 @@ export const parseArgs = (argv: string[]): Args => {
     }
     if (argv[i] === '--var') {
       if (i === argv.length - 1) {
-        throw new AppError(`invalid --var`);
+        throw new ArgError(`invalid --var`);
       }
       const kv = argv[++i].split('=', 2);
       if (kv.length !== 2) {
-        throw new AppError(`invalid --var: ${argv[i]}`);
+        throw new ArgError(`invalid --var: ${argv[i]}`);
       }
       vars.push({
         key: kv[0],
@@ -38,10 +41,10 @@ export const parseArgs = (argv: string[]): Args => {
       });
       continue;
     }
-    throw new AppError(`unknown arg: ${argv[i]}`);
+    throw new ArgError(`unknown arg: ${argv[i]}`);
   }
   if (positional.length !== 1 && positional.length !== 2) {
-    throw new AppError('wrong number of positional args');
+    throw new ArgError('wrong number of positional args');
   }
   return {
     appName: positional[0],
