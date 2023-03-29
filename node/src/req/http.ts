@@ -4,6 +4,7 @@ export interface ReqDetails {
   url: string;
   method: string;
   data?: any;
+  headers?: Record<string, string>;
 }
 
 export interface HttpResponse {
@@ -17,6 +18,7 @@ export const httpRequest = async (details: ReqDetails): Promise<HttpResponse> =>
       method: details.method,
       headers: {
         'Content-Type': 'application/json',
+        ...details.headers,
       },
     };
     const req = https.request(details.url, options, (res) => {

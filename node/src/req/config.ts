@@ -18,6 +18,7 @@ interface EndpointConfig {
   method: string;
   endpoint: string;
   request: any;
+  headers?: Record<string, string>;
 }
 
 const pathExists = async (path: string): Promise<boolean> => {
@@ -45,6 +46,7 @@ const assembleReqDetails = (
     url,
     method: endpointConfig.method,
     data: endpointConfig.request,
+    headers: endpointConfig.headers,
   };
 };
 
