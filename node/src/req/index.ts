@@ -1,16 +1,7 @@
-import { AppError, Args } from './common';
+import { AppError } from './common';
 import { getReqDetails } from './config';
 import { httpRequest, HttpResponse } from './http';
-
-const parseArgs = (argv: string[]): Args => {
-  if (argv.length <= 3) {
-    throw new AppError('not enough args');
-  }
-  return {
-    appName: argv[2],
-    endpointName: argv[3],
-  };
-};
+import { parseArgs } from './args';
 
 const errorMsg = (e: any): string => {
   if (e instanceof AppError) {
@@ -23,13 +14,13 @@ const errorMsg = (e: any): string => {
 };
 
 const printRes = (res: HttpResponse): number => {
-  const bodyLine = `${res.body.toString()}\n`;
+  const bodyLine = res.body.toString();
   if (res.statusCode < 200 || res.statusCode > 299) {
-    process.stderr.write(`HTTP status code ${res.statusCode}\n`);
-    process.stdout.write(bodyLine);
+    console.error(`HTTP status code: ${res.statusCode}`);
+    console.log(bodyLine);
     return 1;
   }
-  process.stdout.write(bodyLine);
+  console.log(bodyLine);
   return 0;
 };
 
@@ -37,11 +28,12 @@ export const main = async () => {
   try {
     const args = parseArgs(process.argv);
     const reqDetails = await getReqDetails(args);
+    console.error(`${reqDetails.method} ${reqDetails.url}`);
     const res = await httpRequest(reqDetails);
     const exitCode = printRes(res);
     process.exit(exitCode);
   } catch (e) {
-    process.stderr.write(`${errorMsg(e)}\n`);
+    console.error(errorMsg(e));
     process.exit(1);
   }
 };

@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as os from 'os';
-import { AppError, Args } from './common';
+import { AppError } from './common';
 import { ReqDetails } from './http';
+import { Var, Args } from './args';
 
 interface EnvConfig {
   name: string;
@@ -24,6 +25,27 @@ const pathExists = async (path: string): Promise<boolean> => {
     .access(path, fs.constants.F_OK)
     .then(() => true)
     .catch(() => false);
+};
+
+const replaceVars = (s: string, vars: Var[]): string => {
+  for (const v of vars) {
+    s = s.replace(`{${v.key}}`, v.value);
+  }
+  return s;
+};
+
+const assembleReqDetails = (
+  args: Args,
+  envConfig: EnvConfig,
+  endpointConfig: EndpointConfig,
+): ReqDetails => {
+  const rawUrl = envConfig.url + endpointConfig.endpoint;
+  const url = replaceVars(rawUrl, args.vars);
+  return {
+    url,
+    method: endpointConfig.method,
+    data: endpointConfig.request,
+  };
 };
 
 export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
@@ -55,10 +77,5 @@ export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
   }
   const endpointStr = await fs.promises.readFile(endpointConfigPath, 'utf8');
   const endpointConfig: EndpointConfig = JSON.parse(endpointStr);
-  const url = `${envConfig.url}${endpointConfig.endpoint}`;
-  return {
-    url,
-    method: endpointConfig.method,
-    data: endpointConfig.request,
-  };
+  return assembleReqDetails(args, envConfig, endpointConfig);
 };
