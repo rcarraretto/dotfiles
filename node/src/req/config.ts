@@ -48,6 +48,15 @@ const assembleReqDetails = (
   };
 };
 
+const listAvailableApps = async (configDir: string): Promise<string[]> => {
+  const dirents = await fs.promises.readdir(configDir, { withFileTypes: true });
+  const appNames = dirents.filter((d) => d.isDirectory()).map((d) => '- ' + d.name);
+  if (!appNames.length) {
+    return;
+  }
+  return ['Available apps:', ...appNames];
+};
+
 const listAvailableEndpoints = async (appPath: string): Promise<string[]> => {
   const fnames = await fs.promises.readdir(appPath);
   const endpointNames = fnames.map((fn) => '- ' + fn.replace('.json', ''));
@@ -68,7 +77,8 @@ export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
   const appConfigs: AppConfig[] = JSON.parse(configStr);
   const appConfig = appConfigs.find((c) => c.name === args.appName);
   if (!appConfig) {
-    throw new AppError(`app not found: ${args.appName}`);
+    const availableApps = ['Available apps:', ...appConfigs.map((c) => '- ' + c.name)];
+    throw new AppError(`app not found in config file: ${args.appName}`, availableApps);
   }
   let envConfig: EnvConfig;
   if (!args.envName && appConfig.envs.length === 1) {
@@ -82,7 +92,8 @@ export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
   const appPath = `${configDir}/${appConfig.name}`;
   exists = await pathExists(appPath);
   if (!exists) {
-    throw new AppError(`app config dir not found: ${appPath}`);
+    const availableApps = await listAvailableApps(configDir);
+    throw new AppError(`app config dir not found: ${appPath}`, availableApps);
   }
   if (!args.endpointName) {
     const availableEndpoints = await listAvailableEndpoints(appPath);
