@@ -98,6 +98,10 @@ map ]w <Action>(GotoNextError)
 nnoremap - :NERDTreeFind<cr>
 nnoremap <leader>tq :NERDTreeClose<cr>
 map <leader>et <Action>(GotoTest)
+" copy relative path
+map <leader>cp <Action>(CopyPathFromRepositoryRootProvider)
+" copy absolute path
+map <leader>cP <Action>(CopyPaths)
 
 function! ToggleRelativeNumber() abort
   if &relativenumber
