@@ -29,8 +29,17 @@ const pathExists = async (path: string): Promise<boolean> => {
 };
 
 const replaceVars = (s: string, vars: Var[]): string => {
-  for (const v of vars) {
-    s = s.replace(`{${v.key}}`, v.value);
+  const interpolations = s.match(/\{[a-z]+\}/g);
+  if (!interpolations) {
+    return s;
+  }
+  for (const ip of interpolations) {
+    const key = ip.slice(1, ip.length - 1);
+    const tv = vars.find((v) => v.key === key);
+    if (!tv) {
+      throw new AppError(`unresolved variable ${ip} in: ${s}`);
+    }
+    s = s.replace(ip, tv.value);
   }
   return s;
 };

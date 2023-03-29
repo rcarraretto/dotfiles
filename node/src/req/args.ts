@@ -25,6 +25,9 @@ export const parseArgs = (argv: string[]): Args => {
       continue;
     }
     if (argv[i] === '--var') {
+      if (i === argv.length - 1) {
+        throw new AppError(`invalid --var`);
+      }
       const kv = argv[++i].split('=', 2);
       if (kv.length !== 2) {
         throw new AppError(`invalid --var: ${argv[i]}`);
