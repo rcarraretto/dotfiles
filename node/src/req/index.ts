@@ -5,7 +5,11 @@ import { parseArgs } from './args';
 
 const errorMsg = (e: any): string => {
   if (e instanceof AppError) {
-    return `Error: ${e.message}`;
+    const msg = `Error: ${e.message}`;
+    if (!e.info || !e.info.length) {
+      return msg;
+    }
+    return [msg].concat(e.info).join('\n');
   }
   if (e instanceof Error) {
     return e.stack;

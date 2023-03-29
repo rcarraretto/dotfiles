@@ -48,6 +48,15 @@ const assembleReqDetails = (
   };
 };
 
+const listAvailableEndpoints = async (appPath: string): Promise<string[]> => {
+  const fnames = await fs.promises.readdir(appPath);
+  const endpointNames = fnames.map((fn) => '- ' + fn.replace('.json', ''));
+  if (!endpointNames.length) {
+    return;
+  }
+  return ['Available endpoints:', ...endpointNames];
+};
+
 export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
   const configDir = `${os.homedir()}/.config/req`;
   const configPath = `${configDir}/apps.json`;
@@ -70,10 +79,20 @@ export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
   if (!envConfig) {
     throw new AppError(`no env config found`);
   }
-  const endpointConfigPath = `${configDir}/${appConfig.name}/${args.endpointName}.json`;
+  const appPath = `${configDir}/${appConfig.name}`;
+  exists = await pathExists(appPath);
+  if (!exists) {
+    throw new AppError(`app config dir not found: ${appPath}`);
+  }
+  if (!args.endpointName) {
+    const availableEndpoints = await listAvailableEndpoints(appPath);
+    throw new AppError(`no endpoint provided`, availableEndpoints);
+  }
+  const endpointConfigPath = `${appPath}/${args.endpointName}.json`;
   exists = await pathExists(endpointConfigPath);
   if (!exists) {
-    throw new AppError(`endpoint config not found: ${endpointConfigPath}`);
+    const availableEndpoints = await listAvailableEndpoints(appPath);
+    throw new AppError(`endpoint config not found: ${endpointConfigPath}`, availableEndpoints);
   }
   const endpointStr = await fs.promises.readFile(endpointConfigPath, 'utf8');
   const endpointConfig: EndpointConfig = JSON.parse(endpointStr);

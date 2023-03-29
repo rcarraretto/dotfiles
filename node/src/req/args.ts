@@ -13,7 +13,7 @@ export interface Args {
 }
 
 export const parseArgs = (argv: string[]): Args => {
-  if (argv.length <= 3) {
+  if (argv.length <= 2) {
     throw new AppError('not enough args');
   }
   argv = argv.slice(2);
@@ -37,7 +37,7 @@ export const parseArgs = (argv: string[]): Args => {
     }
     throw new AppError(`unknown arg: ${argv[i]}`);
   }
-  if (positional.length !== 2) {
+  if (positional.length !== 1 && positional.length !== 2) {
     throw new AppError('wrong number of positional args');
   }
   return {
