@@ -22,7 +22,7 @@ export const httpRequest = async (details: ReqDetails): Promise<HttpResponse> =>
       },
     };
     const req = https.request(details.url, options, (res) => {
-      const body = [];
+      const body: any[] = [];
       res.on('data', (chunk) => body.push(chunk));
       res.on('end', () => {
         const resString = Buffer.concat(body).toString();
