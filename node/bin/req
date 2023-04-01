@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../dist/index').main();
+require('../dist/req/index').main();

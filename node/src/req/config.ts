@@ -3,6 +3,7 @@ import * as os from 'os';
 import { AppError } from './common';
 import { ReqDetails } from './http';
 import { Var, Args } from './args';
+import { pathExists } from '../common/fs';
 
 interface EnvConfig {
   name: string;
@@ -20,13 +21,6 @@ interface EndpointConfig {
   request: any;
   headers?: Record<string, string>;
 }
-
-const pathExists = async (path: string): Promise<boolean> => {
-  return fs.promises
-    .access(path, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false);
-};
 
 const replaceVars = (s: string, vars: Var[]): string => {
   const interpolations = s.match(/\{[a-z]+\}/g);
