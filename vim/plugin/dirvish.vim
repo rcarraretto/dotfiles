@@ -21,9 +21,9 @@ function! s:DirvishMappings()
   " keep <cr> as it normally is (nnoremap <cr> :)
   nunmap <buffer> <cr>
   " map 'o' to what <cr> is in dirvish (open file)
-  nnoremap <buffer> <silent> o :<c-u>silent call dirvish#open("edit", 0)<cr>
+  nnoremap <buffer> <silent> o :<c-u>call dirvish#open("edit", 0)<cr>
   " map 's' to what 'o' is in dirvish (open file in a horizontal split)
-  nnoremap <buffer> <silent> s :<c-u>silent call dirvish#open("split", 1)<cr>
+  nnoremap <buffer> <silent> s :<c-u>call dirvish#open("split", 1)<cr>
   " rename
   nnoremap <buffer> <silent> R :<c-u>call <sid>DirvishRename()<cr>
   " mkdir
@@ -43,7 +43,7 @@ function! s:DirvishMappings()
 endfunction
 
 function! s:DirvishRefresh() abort
-  silent edit
+  edit
   try
     " restore cursor position
     " :h `"

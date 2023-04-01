@@ -12,6 +12,11 @@ function! cwd#AutoCd() abort
   if empty(git_root)
     return
   endif
+  if stridx(getcwd(), git_root) != -1
+    " If cwd is already correct, no need to set it.
+    " If cwd is a subdirectory, do not reset it to git root.
+    return
+  endif
   " Log printf("AutoCd: lcd to %s (from %s) / file: %s", git_root, getcwd(), expand('%:p'))
   execute "lcd " . git_root
 endfunction

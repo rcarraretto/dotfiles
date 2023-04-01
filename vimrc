@@ -405,11 +405,10 @@ endif
 " fzf
 " extend actions with mapping to open in system editor
 let g:fzf_action = {
-\ '': 'silent edit ',
-\ 'ctrl-t': 'silent tab split',
-\ 'ctrl-x': 'silent split',
-\ 'ctrl-v': 'silent vsplit',
-\ 'ctrl-f': 'silent VSplitLeft',
+\ 'ctrl-t': 'tab split',
+\ 'ctrl-x': 'split',
+\ 'ctrl-v': 'vsplit',
+\ 'ctrl-f': 'VSplitLeft',
 \ 'ctrl-s': 'SysOpen'
 \ }
 " use a normal window at the bottom
