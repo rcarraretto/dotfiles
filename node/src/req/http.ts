@@ -1,4 +1,5 @@
 import * as https from 'https';
+import * as http from 'http';
 
 export interface ReqDetails {
   url: string;
@@ -21,7 +22,8 @@ export const httpRequest = async (details: ReqDetails): Promise<HttpResponse> =>
         ...details.headers,
       },
     };
-    const req = https.request(details.url, options, (res) => {
+    const httpLib = details.url.startsWith('https:') ? https : http;
+    const req = httpLib.request(details.url, options, (res) => {
       const body: any[] = [];
       res.on('data', (chunk) => body.push(chunk));
       res.on('end', () => {

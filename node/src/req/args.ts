@@ -1,6 +1,7 @@
-export class ArgError extends Error {}
+import { ArgError, parseRawArgs } from '../common/args';
 
 export const usage = `Usage: req <app_name> <endpoint_name> [options]
+ --env <env_name>
  --var <key=value>`;
 
 export interface Var {
@@ -19,36 +20,30 @@ export const parseArgs = (argv: string[]): Args => {
   if (argv.length <= 2) {
     throw new ArgError();
   }
-  argv = argv.slice(2);
-  const positional: string[] = [];
+  const { positional, named } = parseRawArgs(argv, [
+    { name: 'env', kind: 'single' },
+    { name: 'var', kind: 'multi' },
+  ]);
+  if (positional.length !== 1 && positional.length !== 2) {
+    throw new ArgError('wrong number of positional args');
+  }
   const vars: Var[] = [];
-  for (let i = 0; i < argv.length; i++) {
-    if (!argv[i].startsWith('-')) {
-      positional.push(argv[i]);
-      continue;
-    }
-    if (argv[i] === '--var') {
-      if (i === argv.length - 1) {
-        throw new ArgError(`invalid --var`);
-      }
-      const kv = argv[++i].split('=', 2);
+  if (named['var']) {
+    for (const varArg of named['var']) {
+      const kv = varArg.split('=', 2);
       if (kv.length !== 2) {
-        throw new ArgError(`invalid --var: ${argv[i]}`);
+        throw new ArgError(`invalid --var: ${varArg}`);
       }
       vars.push({
         key: kv[0],
         value: kv[1],
       });
-      continue;
     }
-    throw new ArgError(`unknown arg: ${argv[i]}`);
-  }
-  if (positional.length !== 1 && positional.length !== 2) {
-    throw new ArgError('wrong number of positional args');
   }
   return {
     appName: positional[0],
     endpointName: positional[1],
+    envName: named['env'] as string,
     vars,
   };
 };

@@ -1,7 +1,8 @@
 import { AppError } from './common';
 import { getReqDetails } from './config';
 import { httpRequest, HttpResponse } from './http';
-import { parseArgs, ArgError, usage } from './args';
+import { parseArgs, usage } from './args';
+import { ArgError } from '../common/args';
 
 const errorMsg = (e: any): string => {
   if (e instanceof ArgError) {
