@@ -91,7 +91,6 @@ nmap <c-i> <Action>(Forward)
 map <space>e <Action>(GotoDeclaration)
 map <leader>ge <Action>(FindUsages)
 map <leader>gi <Action>(GotoImplementation)
-map <leader>dk <Action>(ShowErrorDescription)
 map [w <Action>(GotoPreviousError)
 map ]w <Action>(GotoNextError)
 " show file in Project view (use 'q' to close Project view)
@@ -113,6 +112,8 @@ endfunction
 nnoremap con :call ToggleRelativeNumber()<cr>
 
 " Text visualization
+map K <Action>(ShowErrorDescription)
+map <leader>dk <Action>(QuickJavaDoc)
 map cow <Action>(EditorToggleUseSoftWraps)
 map cos <Action>(ViewNavigationBar)
 " folding
@@ -151,6 +152,7 @@ map <leader>mv <Action>(RenameFile)
 map <leader>mV <Action>(Move)
 " edit common files
 nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
+map <leader>eo <Action>(ActivateTODOToolWindow)
 
 " Git
 " git blame
