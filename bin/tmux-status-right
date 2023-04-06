@@ -11,17 +11,17 @@ if command -v hs 1>/dev/null 2>&1; then
   # Use -a to exit instead.
   keyboard_layout=$(hs -q -a -c 'getKeyboardLayout()')
   if [ -n "$keyboard_layout" ]; then
-    tmux_status="|#[fg=colour20]  $keyboard_layout  #[fg=colour20]$tmux_status"
+    tmux_status="|  $keyboard_layout  $tmux_status"
   fi
 fi
 
 if [ "$timer" ]; then
-  tmux_status="|#[fg=colour20] $(timer) $tmux_status"
+  tmux_status="| $(timer) $tmux_status"
 fi
 
 if [ "$branch" ]; then
   branch_truncated=$(echo "$branch" | awk -v len=40 '{ if (length($0) > len) print substr($0, 1, len-1) "…"; else print; }')
-  tmux_status="| #[fg=colour13] ⎇ $branch_truncated #[fg=colour20] $tmux_status"
+  tmux_status="|  ⎇ $branch_truncated  $tmux_status"
 fi
 
 echo "$tmux_status"
