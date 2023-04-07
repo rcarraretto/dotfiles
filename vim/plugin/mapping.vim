@@ -286,9 +286,9 @@ nnoremap g/ :set operatorfunc=search#SearchOperator<cr>g@
 " - replace within file (with confirmation)
 nnoremap <leader>rw :%SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/gc<left><left><left>
 " - replace within file (no confirmation)
-nnoremap <leader>rn :%SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
-vnoremap <leader>rn :SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
-nnoremap <leader>rN :%s/<c-r>=search#Term()<cr>/<c-r>=search#Term()<cr>/g<left><left>
+nnoremap <leader>rn :%s/<c-r>=search#Term()<cr>/<c-r>=search#Term()<cr>/g<left><left>
+nnoremap <leader>rN :%SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
+vnoremap <leader>rN :SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
 " - replace within line
 nnoremap <leader>rl :SW/<c-r>=search#SubvertTerm()<cr>/<c-r>=search#SubvertTerm()<cr>/g<left><left>
 " - replace within paragraph
