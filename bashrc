@@ -62,6 +62,9 @@ alias ls='ls -GF'
 # -1: only show file names
 alias ll='ls -GFA1'
 
+# Ctrl+S in vim
+stty -ixon -ixoff
+
 # Prevent re-adding the same path to $PATH,
 # when sourcing the bashrc multiple times.
 #
@@ -104,18 +107,24 @@ export BREW_PREFIX=$(brew --prefix)
 add-to-path "$HOME/work/dotfiles/bin"
 add-to-path "$HOME/work/dotfiles/node/bin"
 
-# Base 16
-BASE16_SHELL=$HOME/.config/base16-shell/
-[ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+# this function prevents variables from leaking to all shells
+# https://stackoverflow.com/q/27777826/2277505
+__private_scope() {
+  # Base 16
+  BASE16_SHELL=$HOME/.config/base16-shell/
+  [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
-# Ctrl+S in vim
-stty -ixon -ixoff
-
-# Nvm
-export NVM_DIR="$HOME/.nvm"
-if [ -s "$NVM_DIR/nvm.sh" ] && ! command-exists nvm; then
-  source "$NVM_DIR/nvm.sh" # && echo "nvm set!"
-fi
+  # Node.js
+  if [ -f "$DOTFILES_WORK/.nvmrc" ]; then
+    TARGET_NODE_VERSION=$(head -n 1 "$DOTFILES_WORK/.nvmrc")
+  elif [ -f "$DOTFILES_PRIVATE/.nvmrc" ]; then
+    TARGET_NODE_VERSION=$(head -n 1 "$DOTFILES_PRIVATE/.nvmrc")
+  fi
+  if [ -n "$TARGET_NODE_VERSION" ]; then
+    add-to-path "$HOME/.nvm/versions/node/$TARGET_NODE_VERSION/bin"
+  fi
+}
+__private_scope
 
 # rbenv
 if command-exists rbenv && ! path-contains "$HOME/.rbenv/shims"; then
@@ -171,5 +180,6 @@ bind -x '"\C-xc":_fzf_script_functions'
 
 source ~/.bash_aliases
 
-LOCAL_RC="$DOTFILES_PRIVATE/bashrc.private"
-test -f $LOCAL_RC && source $LOCAL_RC
+if [ -f "$DOTFILES_PRIVATE/bashrc.private" ]; then
+  source "$DOTFILES_PRIVATE/bashrc.private"
+fi
