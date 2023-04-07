@@ -178,6 +178,15 @@ bind -x '"\C-xc":_fzf_script_functions'
 
 source ~/.bash_aliases
 
+source "$DOTFILES_PUBLIC/bash/tmux_startup.sh"
+
 if [ -f "$DOTFILES_PRIVATE/bashrc.private" ]; then
   source "$DOTFILES_PRIVATE/bashrc.private"
 fi
+if [ -f "$DOTFILES_HOME/bashrc.home" ]; then
+  source "$DOTFILES_HOME/bashrc.home"
+elif [ -f "$DOTFILES_WORK/bashrc.work" ]; then
+  source "$DOTFILES_WORK/bashrc.work"
+fi
+
+__tmux_startup
