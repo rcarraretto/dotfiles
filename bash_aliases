@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# The aliases below can be used in vim (:!{cmd}, e.g., !python),
-# because of this line in vimrc:
-# let $BASH_ENV = "~/.bash_aliases"
-# https://stackoverflow.com/a/18901595
-
-shopt -s expand_aliases
-
 alias sb='source ~/.bashrc'
 
 # ls

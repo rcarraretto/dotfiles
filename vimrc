@@ -211,10 +211,6 @@ if !exists('$COLORTERM')
   set termguicolors
 endif
 
-" Load aliases for executing shell commands within vim
-" https://stackoverflow.com/a/18901595
-let $BASH_ENV = "~/.bash_aliases"
-
 function! s:SetHighlight() abort
   " Remove underline from cursor line number
   " https://stackoverflow.com/a/58181112/2277505
