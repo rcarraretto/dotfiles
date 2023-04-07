@@ -132,6 +132,13 @@ __private_scope() {
   if [ -n "$node_version" ]; then
     add-to-path "$HOME/.nvm/versions/node/$node_version/bin"
   fi
+
+  # Python binaries (like AWS CLI)
+  if [ -f "$BREW_PREFIX/bin/python3" ] \
+    && ! path-contains "$HOME/Library/Python/[0-9.]+/bin"; then
+    local python_user_base=$(python3 -m site --user-base)
+    add-to-path "$python_user_base/bin" after
+  fi
 }
 __private_scope
 
