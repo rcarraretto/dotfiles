@@ -107,6 +107,15 @@ export BREW_PREFIX=$(brew --prefix)
 add-to-path "$HOME/work/dotfiles/bin"
 add-to-path "$HOME/work/dotfiles/node/bin"
 
+# if brew 'findutils' is installed, add it to $PATH
+# so 'xargs' and 'man xargs' point to 'gxargs'
+if command-exists gxargs; then
+  add-to-path "$BREW_PREFIX/opt/findutils/libexec/gnubin"
+fi
+
+# ruby
+add-to-path "$HOME/.rbenv/shims"
+
 # this function prevents variables from leaking to all shells
 # https://stackoverflow.com/q/27777826/2277505
 __private_scope() {
@@ -126,20 +135,9 @@ __private_scope() {
 }
 __private_scope
 
-# rbenv
-if command-exists rbenv && ! path-contains "$HOME/.rbenv/shims"; then
-  eval "$(rbenv init -)"
-fi
-
 # fzf
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-# if brew 'findutils' is installed, add it to $PATH
-# so 'xargs' and 'man xargs' point to 'gxargs'
-if command-exists gxargs; then
-  add-to-path "$BREW_PREFIX/opt/findutils/libexec/gnubin"
-fi
 
 # git completion
 if [ -f ~/.git-completion.bash ]; then
