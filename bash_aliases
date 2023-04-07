@@ -7,6 +7,16 @@
 
 shopt -s expand_aliases
 
+alias sb='source ~/.bashrc'
+
+# ls
+# -G: color
+# -F: append '/' to directories, '*' to executables, etc.
+alias ls='ls -GF'
+# -A: show everything, but don't show '.' and '..'
+# -1: only show file names
+alias ll='ls -GFA1'
+
 # Make 'python' refer to 'python3' (from homebrew)
 if [ -f "$BREW_PREFIX/bin/python3" ]; then
   alias python="$BREW_PREFIX/bin/python3"
