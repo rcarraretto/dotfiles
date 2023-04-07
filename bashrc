@@ -120,17 +120,17 @@ add-to-path "$HOME/.rbenv/shims"
 # https://stackoverflow.com/q/27777826/2277505
 __private_scope() {
   # Base 16
-  BASE16_SHELL=$HOME/.config/base16-shell/
-  [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+  local base16_shell="$HOME/.config/base16-shell"
+  [ -s "$base16_shell/profile_helper.sh" ] && eval "$($base16_shell/profile_helper.sh)"
 
   # Node.js
   if [ -f "$DOTFILES_WORK/.nvmrc" ]; then
-    TARGET_NODE_VERSION=$(head -n 1 "$DOTFILES_WORK/.nvmrc")
+    local node_version=$(head -n 1 "$DOTFILES_WORK/.nvmrc")
   elif [ -f "$DOTFILES_PRIVATE/.nvmrc" ]; then
-    TARGET_NODE_VERSION=$(head -n 1 "$DOTFILES_PRIVATE/.nvmrc")
+    local node_version=$(head -n 1 "$DOTFILES_PRIVATE/.nvmrc")
   fi
-  if [ -n "$TARGET_NODE_VERSION" ]; then
-    add-to-path "$HOME/.nvm/versions/node/$TARGET_NODE_VERSION/bin"
+  if [ -n "$node_version" ]; then
+    add-to-path "$HOME/.nvm/versions/node/$node_version/bin"
   fi
 }
 __private_scope
