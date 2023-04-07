@@ -16,12 +16,3 @@ alias ls='ls -GF'
 # -A: show everything, but don't show '.' and '..'
 # -1: only show file names
 alias ll='ls -GFA1'
-
-# Make 'python' refer to 'python3' (from homebrew)
-if [ -f "$BREW_PREFIX/bin/python3" ]; then
-  alias python="$BREW_PREFIX/bin/python3"
-fi
-# Make 'pip' refer to 'pip3' (from python homebrew)
-if [ -f "$BREW_PREFIX/bin/pip3" ]; then
-  alias pip="$BREW_PREFIX/bin/pip3"
-fi
