@@ -163,9 +163,11 @@ cw() {
 copyline() {
   printf %s "$READLINE_LINE" | pbcopy
 }
-if [ -n "$PS1" ]; then
-  bind -x '"\C-xy":copyline'
-fi
+bind -x '"\C-xy":copyline'
+
+# <c-x>c: Fzf personal bins and functions
+source "$DOTFILES_PUBLIC/bash/fzf-script-functions.sh"
+bind -x '"\C-xc":_fzf_script_functions'
 
 source ~/.bash_aliases
 
