@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+
+# https://askubuntu.com/a/803316
+if [[ $# < 1 ]]; then
+  colors=22
+else
+  colors=$1
+fi
+echo "showing $colors ansi colors:"
+for (( n=0; n < $colors; n++ )) do
+  printf " [%d] $(tput setaf $n)%s$(tput sgr0)" $n "wMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMw
+"
+done

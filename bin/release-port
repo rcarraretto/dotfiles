@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+# https://serverfault.com/a/847104
+if [ $# -ne 1 ]; then
+  echo "Error: release_port <port>"
+  exit 1
+fi
+port="$1"
+pid=$(lsof -i:"$port" | awk 'NR > 1 {print $2}' | head -1)
+if [ -z "$pid" ]; then
+  echo "No process on port $port"
+  exit 0
+fi
+prompt "Kill pid $pid?" || exit 1
+kill -9 "$pid"

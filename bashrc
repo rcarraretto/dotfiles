@@ -126,6 +126,12 @@ fi
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+# if brew 'findutils' is installed, add it to $PATH
+# so 'xargs' and 'man xargs' point to 'gxargs'
+if command-exists gxargs; then
+  add-to-path "$BREW_PREFIX/opt/findutils/libexec/gnubin"
+fi
+
 # git completion
 if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
@@ -138,6 +144,28 @@ load-completion() {
     source "$BREW_PREFIX/etc/bash_completion"
   fi
 }
+
+# `cd` with fzf on ~/work
+cw() {
+  local dirs=$(find "$HOME/work" -mindepth 1 -maxdepth 1 -type d)
+  if [ $# -eq 0 ]; then
+    local dir=$(echo "$dirs" | fzf)
+  else
+    local dir=$(echo "$dirs" | ag "$1" | head -n 1)
+  fi
+  if [ -z "$dir" ]; then
+    return 1
+  fi
+  cd "$dir" && pwd
+}
+
+# <c-x>y: Copy current line to clipboard
+copyline() {
+  printf %s "$READLINE_LINE" | pbcopy
+}
+if [ -n "$PS1" ]; then
+  bind -x '"\C-xy":copyline'
+fi
 
 source ~/.bash_aliases
 
