@@ -32,7 +32,7 @@ function! s:ShouldCursorLine()
   if &diff == 1
     return 0
   endif
-  return index(['agit_diff', 'rc_git_diff'], &filetype) == -1
+  return index(['agit_diff'], &filetype) == -1
 endfunction
 
 function! s:ShouldColorColumn()
@@ -42,7 +42,7 @@ function! s:ShouldColorColumn()
   if &diff == 1
     return 0
   endif
-  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'rc_git_log', 'rc_git_branches', 'rc_git_diff', 'fugitive', 'fugitiveblame'], &filetype) == -1
+  return index(['qf', 'diff', 'undotree', 'agit', 'agit_stat', 'agit_diff', 'fugitive', 'fugitiveblame'], &filetype) == -1
 endfunction
 
 augroup CursorFocus
