@@ -86,13 +86,14 @@ export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
     throw new AppError(`app not found in config file: ${args.appName}`, availableApps);
   }
   let envConfig: EnvConfig;
-  if (!args.envName && appConfig.envs.length === 1) {
+  if (!args.envName) {
     envConfig = appConfig.envs[0];
   } else {
     envConfig = appConfig.envs.find((e) => e.name === args.envName);
   }
   if (!envConfig) {
-    throw new AppError(`no env config found`);
+    const availableEnvs = ['Available envs:', ...appConfig.envs.map((e) => '- ' + e.name)];
+    throw new AppError(`no env config found`, availableEnvs);
   }
   const appPath = `${configDir}/${appConfig.name}`;
   exists = await pathExists(appPath);
