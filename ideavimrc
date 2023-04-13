@@ -71,7 +71,7 @@ map [` <Action>(PreviousProjectWindow)
 map ]` <Action>(NextProjectWindow)
 map <space>` <Action>(OpenProjectWindows)
 map <leader>ep <Action>(ManageRecentProjects)
-map <leader>`q <Action>(CloseProject)
+map <leader>q` <Action>(CloseProject)
 
 " Search
 map <space>o <Action>(GotoFile)
