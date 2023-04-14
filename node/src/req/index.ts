@@ -20,6 +20,9 @@ const errorMsg = (e: any): string => {
     return [msg].concat(e.info).join('\n');
   }
   if (e instanceof Error) {
+    if ((e as any).code === 'ECONNREFUSED') {
+      return e.message;
+    }
     return e.stack;
   }
   return e.toString();
