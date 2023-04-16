@@ -346,6 +346,7 @@ augroup FTOptions
   autocmd FileType php setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal foldmethod=indent | setlocal foldlevel=1
   autocmd FileType graphql setlocal shiftwidth=4 | setlocal tabstop=4 | setlocal expandtab | setlocal foldmethod=indent
   autocmd FileType applescript setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal commentstring=--\ %s
+  autocmd FileType awk setlocal shiftwidth=2 | setlocal tabstop=2 | setlocal expandtab
   " Avoid "crontab: temp file must be edited in place".
   " https://vi.stackexchange.com/a/138/24815
   autocmd FileType crontab setlocal backupcopy=yes
