@@ -23,7 +23,7 @@ interface EndpointConfig {
 }
 
 const replaceVars = (s: string, vars: Var[]): string => {
-  const interpolations = s.match(/\{[a-z]+\}/g);
+  const interpolations = s.match(/\{[A-Za-z]+\}/g);
   if (!interpolations) {
     return s;
   }
