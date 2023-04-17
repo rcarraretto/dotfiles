@@ -111,6 +111,8 @@ function! ToggleRelativeNumber() abort
 endfunction
 nnoremap con :call ToggleRelativeNumber()<cr>
 
+map col <Action>(EditorToggleShowWhitespaces)
+
 " Text visualization
 map K <Action>(ShowErrorDescription)
 map <leader>dk <Action>(QuickJavaDoc)
