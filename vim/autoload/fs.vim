@@ -167,11 +167,13 @@ function! fs#OpenInIntellij(path, lnum) abort
     let cmd = printf('%s %s',
           \ cmd_prefix,
           \ fnameescape(a:path))
-  else
+  elseif filereadable(a:path)
     let cmd = printf('%s --line %d %s',
           \ cmd_prefix,
           \ a:lnum,
           \ fnameescape(a:path))
+  else
+    return util#error_msg('fs#OpenInIntellij: invalid path: ' . a:path)
   endif
   call system(cmd)
 endfunction
