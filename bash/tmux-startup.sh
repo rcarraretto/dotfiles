@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# To re-test:
+# rm /var/tmp/session_timestamp.txt; tmux kill-server
 __tmux_startup() {
   if [ -n "$MAC_BOOTED" ]; then
     # this is for skipping the checks in new panes in a tmux session
@@ -22,6 +24,8 @@ __tmux_startup() {
   # Note: Reattach is possible when logging out and in again
   # But vim * register doesn't work. Vim has to be restarted.
   echo "$(date "+%Y-%m-%d %H:%M") tmux $previous_timestamp $session_timestamp" >> /var/tmp/tmux_startup_log.txt
+  # To see the output of dot_pull when already inside tmux, detach tmux (prefix + d)
+  dot_pull
   __tmux_default_session
   # After this line, we are already in tmux, so apparently commands don't get executed.
 }
@@ -43,17 +47,8 @@ __tmux_default_session() {
       local working_dir="$project_path"
     fi
   fi
-  # dot_pull and vim are separate commands,
-  # so in case vim needs to be restarted,
-  # one can re-issue the previous command (`vim .`).
-  tmux new-session -s $session -c "$working_dir" \; \
-    send-keys 'dot_pull' C-m '__tmux_pre_vim' C-m 'vim .' C-m \; \
+  tmux new-session -s $session -c "$working_dir" -d 'vim .' \; \
     new-window -t $session \; \
     select-window -t $session:1 \;
   tmux attach -t $session
-}
-
-# can be overwritten in other dotfiles
-__tmux_pre_vim() {
-  :
 }
