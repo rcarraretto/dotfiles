@@ -47,7 +47,11 @@ __tmux_default_session() {
       local working_dir="$project_path"
     fi
   fi
-  tmux new-session -s $session -c "$working_dir" -d 'vim .' \; \
+  # To start 'vim', use 'send-keys' instead of 'new-session [shell-command]'
+  # so vim can be quit and restarted on the same window.
+  # With '[shell-command]' the window is closed after quitting vim.
+  tmux new-session -s $session -c "$working_dir" \; \
+    send-keys 'vim .' C-m \; \
     new-window -t $session \; \
     select-window -t $session:1 \;
   tmux attach -t $session
