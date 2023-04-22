@@ -43,7 +43,7 @@ Plug 'wincent/terminus', { 'commit': '340ea44dfec58c9d48e46c97c90896ed04e2a264' 
 " file system commands
 Plug 'tpope/vim-eunuch'
 " git
-Plug 'tpope/vim-fugitive', { 'commit': 'f809dde0e719f89a6fb5cb80f3be65f5cbc1d1fe' }
+Plug 'tpope/vim-fugitive', { 'commit': 'e6651a79facf5cc2b7c554fdc19eb8a9fe89602c' }
 " github support for fugitive
 Plug 'tpope/vim-rhubarb'
 " gitlab support for fugitive
