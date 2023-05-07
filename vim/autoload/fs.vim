@@ -142,15 +142,14 @@ function! fs#SysOpen(filename)
       let filename = expand('%')
     endif
   endif
-  if isdirectory(filename)
-    return util#error_msg('SysOpen: selected path cannot be a directory')
-  endif
-  let ext = fnamemodify(filename, ':e')
-  if empty(ext)
-    return util#error_msg('SysOpen: empty extension')
-  endif
-  if index(['sh'], ext) != -1
-    return util#error_msg('SysOpen: unsupported extension: ' . ext)
+  if !isdirectory(filename)
+    let ext = fnamemodify(filename, ':e')
+    if empty(ext)
+      return util#error_msg('SysOpen: empty extension')
+    endif
+    if index(['sh'], ext) != -1
+      return util#error_msg('SysOpen: unsupported extension: ' . ext)
+    endif
   endif
   let output = system('open ' . shellescape(filename))
   if v:shell_error
