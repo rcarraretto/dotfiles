@@ -109,3 +109,15 @@ function! fzfutil#FzfCwdFiles() abort
     WrapCommand Files
   endif
 endfunction
+
+function! fzfutil#FzfDirsOnly(dir) abort
+  if !isdirectory(a:dir)
+    return util#error_msg('FzfDirsOnly: invalid directory: ' . a:dir)
+  endif
+  let cmd = 'fd --type directory . ' . shellescape(a:dir)
+  let prompt = printf('[%s] ', a:dir)
+  call fzf#run(fzf#wrap({
+        \'source': cmd,
+        \'options': ['--prompt', prompt]
+        \}))
+endfunction
