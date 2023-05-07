@@ -137,7 +137,7 @@ function! fs#SysOpen(filename)
   let filename = a:filename
   if empty(a:filename)
     if &ft == 'dirvish'
-      let filename = fnameescape(getline('.'))
+      let filename = getline('.')
     else
       let filename = expand('%')
     endif
@@ -152,7 +152,7 @@ function! fs#SysOpen(filename)
   if index(['sh'], ext) != -1
     return util#error_msg('SysOpen: unsupported extension: ' . ext)
   endif
-  let output = system('open ' . filename)
+  let output = system('open ' . shellescape(filename))
   if v:shell_error
     return util#error_msg('Error: ' . substitute(output, '\n', ' ', 'g'))
   endif
