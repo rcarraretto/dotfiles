@@ -20,7 +20,7 @@ function! s:ExecPrettier(parser) abort
     " Use global prettier config
     " (applicable in sketch buffers or projects that don't have prettier
     " installed)
-    let opts .= " --config=" . $DOTFILES_PRIVATE . "/.prettierrc"
+    let opts .= " --config=" . $DOTFILES_PRIVATE . "/.prettierrc.json"
   endif
 
   " Check if prettier is installed in the project.
