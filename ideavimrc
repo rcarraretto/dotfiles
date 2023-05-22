@@ -45,6 +45,7 @@ nnoremap <space>l <c-w>l
 map <space>q <Action>(CloseContent)
 " close split
 map <space>Q <Action>(CloseAllEditors)
+map <c-w>u <Action>(ReopenClosedTab)
 map <c-w>H <Action>(MoveEditorToOppositeTabGroup)
 map <c-w>L <Action>(MoveEditorToOppositeTabGroup)
 map <c-w>V <Action>(MoveTabRight)
