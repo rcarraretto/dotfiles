@@ -256,8 +256,10 @@ nnoremap <leader>gf :<c-u>call viewing#GoToCursorReference()<cr>
 nnoremap <leader>oS :SysOpen<cr>
 " open folder of current file in Finder
 nnoremap <leader>oF :call fs#OpenFolderInFinder()<cr>
-" open in Intellij
-nnoremap <leader>gj :call fs#OpenInIntellij(expand('%:p'), line('.'))<cr>
+" open current buffer in Intellij
+nnoremap <leader>oj :call fs#OpenInIntellij(expand('%:p'), line('.'))<cr>
+" open file under cursor in Intellij
+nnoremap gj :call fs#OpenInIntellij(expand('<cfile>'), 0)<cr>
 
 " Search in file
 " ---
