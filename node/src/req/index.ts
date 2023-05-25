@@ -1,5 +1,6 @@
+import * as child_process from 'child_process';
 import { AppError } from './common';
-import { getReqDetails } from './config';
+import { resolveEndpointConfig } from './config';
 import { httpRequest, HttpResponse } from './http';
 import { parseArgs, usage } from './args';
 import { ArgError } from '../common/args';
@@ -28,24 +29,36 @@ const errorMsg = (e: any): string => {
   return e.toString();
 };
 
-const printRes = (res: HttpResponse): number => {
+const printRes = (res: HttpResponse, jqFilter: string): number => {
   const bodyLine = res.body.toString();
   if (res.statusCode < 200 || res.statusCode > 299) {
     console.error(`HTTP status code: ${res.statusCode}`);
     console.log(bodyLine);
     return 1;
   }
-  console.log(bodyLine);
-  return 0;
+  if (!jqFilter) {
+    console.log(bodyLine);
+    return 0;
+  }
+  const jqRes = child_process.spawnSync('jq', ['--color-output', jqFilter], {
+    input: bodyLine,
+  });
+  if (jqRes.stderr.length) {
+    process.stderr.write(jqRes.stderr.toString());
+  }
+  if (jqRes.stdout.length) {
+    process.stdout.write(jqRes.stdout.toString());
+  }
+  return jqRes.status;
 };
 
 export const main = async () => {
   try {
     const args = parseArgs(process.argv);
-    const reqDetails = await getReqDetails(args);
-    console.error(`${reqDetails.method} ${reqDetails.url}`);
-    const res = await httpRequest(reqDetails);
-    const exitCode = printRes(res);
+    const c = await resolveEndpointConfig(args);
+    console.error(`${c.req.method} ${c.req.url}`);
+    const res = await httpRequest(c.req);
+    const exitCode = printRes(res, c.jqFilter);
     process.exit(exitCode);
   } catch (e) {
     console.error(errorMsg(e));

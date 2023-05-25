@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import { AppError } from './common';
-import { ReqDetails } from './http';
+import { HttpRequest } from './http';
 import { Var, Args } from './args';
 import { pathExists } from '../common/fs';
 
@@ -20,6 +20,12 @@ interface EndpointConfig {
   endpoint: string;
   request: any;
   headers?: Record<string, string>;
+  jqFilter?: string;
+}
+
+interface ResolvedEndpointConfig {
+  req: HttpRequest;
+  jqFilter?: string;
 }
 
 const replaceVars = (s: string, vars: Var[]): string => {
@@ -38,11 +44,11 @@ const replaceVars = (s: string, vars: Var[]): string => {
   return s;
 };
 
-const assembleReqDetails = (
+const assembleHttpRequest = (
   args: Args,
   envConfig: EnvConfig,
   endpointConfig: EndpointConfig,
-): ReqDetails => {
+): HttpRequest => {
   const rawUrl = envConfig.url + endpointConfig.endpoint;
   const url = replaceVars(rawUrl, args.vars);
   return {
@@ -71,7 +77,7 @@ const listAvailableEndpoints = async (appPath: string): Promise<string[]> => {
   return ['Available endpoints:', ...endpointNames];
 };
 
-export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
+export const resolveEndpointConfig = async (args: Args): Promise<ResolvedEndpointConfig> => {
   const configDir = `${os.homedir()}/.config/req`;
   const configPath = `${configDir}/apps.json`;
   let exists = await pathExists(configPath);
@@ -113,5 +119,9 @@ export const getReqDetails = async (args: Args): Promise<ReqDetails> => {
   }
   const endpointStr = await fs.promises.readFile(endpointConfigPath, 'utf8');
   const endpointConfig: EndpointConfig = JSON.parse(endpointStr);
-  return assembleReqDetails(args, envConfig, endpointConfig);
+  const req = assembleHttpRequest(args, envConfig, endpointConfig);
+  return {
+    req,
+    jqFilter: endpointConfig.jqFilter,
+  };
 };

@@ -1,7 +1,7 @@
 import * as https from 'https';
 import * as http from 'http';
 
-export interface ReqDetails {
+export interface HttpRequest {
   url: string;
   method: string;
   data?: any;
@@ -13,17 +13,17 @@ export interface HttpResponse {
   body: any;
 }
 
-export const httpRequest = async (details: ReqDetails): Promise<HttpResponse> => {
+export const httpRequest = async (req: HttpRequest): Promise<HttpResponse> => {
   return new Promise((resolve, reject) => {
     const options: https.RequestOptions = {
-      method: details.method,
+      method: req.method,
       headers: {
         'Content-Type': 'application/json',
-        ...details.headers,
+        ...req.headers,
       },
     };
-    const httpLib = details.url.startsWith('https:') ? https : http;
-    const req = httpLib.request(details.url, options, (res) => {
+    const httpLib = req.url.startsWith('https:') ? https : http;
+    const httpReq = httpLib.request(req.url, options, (res) => {
       const body: any[] = [];
       res.on('data', (chunk) => body.push(chunk));
       res.on('end', () => {
@@ -35,18 +35,18 @@ export const httpRequest = async (details: ReqDetails): Promise<HttpResponse> =>
       });
     });
 
-    req.on('error', (err) => {
+    httpReq.on('error', (err) => {
       reject(err);
     });
 
-    req.on('timeout', () => {
-      req.destroy();
+    httpReq.on('timeout', () => {
+      httpReq.destroy();
       reject(new Error('Request timed out'));
     });
 
-    if (details.data) {
-      req.write(JSON.stringify(details.data));
+    if (req.data) {
+      httpReq.write(JSON.stringify(req.data));
     }
-    req.end();
+    httpReq.end();
   });
 };
