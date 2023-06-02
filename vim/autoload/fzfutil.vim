@@ -3,12 +3,18 @@ function! s:ExploreProject(edit_cmd, selection) abort
   execute a:edit_cmd . ' ' . path . " | lcd " . path
 endfunction
 
+function! s:ToxLog(selection) abort
+  let path = a:selection[0]
+  execute 'ToxLog ' . path
+endfunction
+
 function! s:FzfExplorePaths(cmd) abort
   let action = {
         \ '': function('s:ExploreProject', ['edit']),
         \ 'ctrl-t': function('s:ExploreProject', ['tabedit']),
         \ 'ctrl-x': function('s:ExploreProject', ['split']),
         \ 'ctrl-v': function('s:ExploreProject', ['vsplit']),
+        \ 'ctrl-l': function('s:ToxLog'),
         \ }
   call s:FzfWithAction({'source': a:cmd}, action)
 endfunction
