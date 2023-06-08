@@ -64,6 +64,7 @@ function! s:FocusGained() abort
 endfunction
 
 function! KeyboardLayout#AutoChangeOn() abort
+  let s:num_hs_errors = 0
   augroup AutoChangeKeyboardLayout
     let s:in_insert = 0
     let s:in_search = 0
@@ -96,8 +97,17 @@ function! s:ToggleKeyboardLayout(hsFuncName) abort
   let out = system(printf("hs -c '%s()'", a:hsFuncName))
   call s:Log(a:hsFuncName . ' ' . out)
   if v:shell_error
-    echoerr printf('%s: %s', a:hsFuncName, out)
-    return
+    let s:num_hs_errors = s:num_hs_errors + 1
+    " Be forgiving of "ipc port is no longer valid" for X times
+    " https://github.com/Hammerspoon/hammerspoon/issues/2974
+    if s:num_hs_errors > 7
+      echoerr printf('%d: %s: %s', s:num_hs_errors, a:hsFuncName, out)
+      return
+    else
+      echom s:num_hs_errors
+    endif
+  else
+    let s:num_hs_errors = 0
   endif
   let g:AUTO_CHANGE_KEYBOARD_LAYOUT = 1
 endfunction
