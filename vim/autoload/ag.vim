@@ -94,21 +94,12 @@ endfunction
 function! ag#SearchNotes(input) abort
   " Note: one can use .ignore in the corresponding note dir to restrict search
   " scope
-  execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', shellescape(a:input), s:GetNoteDirs())
-endfunction
-
-function! s:GetNoteDirs() abort
-  let dirs = []
-  if exists('$NOTES_SHARED') && isdirectory($NOTES_SHARED)
-    call add(dirs, fnameescape($NOTES_SHARED))
-  endif
-  if exists('$NOTES_HOME') && isdirectory($NOTES_HOME)
-    call add(dirs, fnameescape($NOTES_HOME))
-  endif
-  if exists('$NOTES_WORK') && isdirectory($NOTES_WORK)
-    call add(dirs, fnameescape($NOTES_WORK))
-  endif
-  return join(dirs, ' ')
+  execute printf('Ag --hidden -Q -G "\.txt$" -- %s %s', shellescape(a:input), notes#GetNoteDirs())
+  " Alias Dropbox and Google Drive paths since they occupy a significant part
+  " of the qflist
+  call setqflist([], 'r', {'quickfixtextfunc': 'quickfix#TextFuncNotes'})
+  " need to re-open qf to trigger quickfixtextfunc
+  botright copen
 endfunction
 
 function! ag#SearchDotfiles(input) abort

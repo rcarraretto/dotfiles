@@ -18,6 +18,7 @@ function! quickfix#QfConfig()
   command! -buffer QfDeletePattern call s:QfDeletePattern()
   command! -buffer QfFilterPattern call s:QfFilterPattern()
   call s:AdjustWinHeight(3, 10)
+  let b:parenmatch = 0
   let b:qf_configured = 1
 endfunction
 
@@ -116,6 +117,24 @@ function! quickfix#QuickfixFilenames()
     let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
   endfor
   return join(values(buffer_numbers))
+endfunction
+
+function! quickfix#TextFuncNotes(info) abort
+  let items = getqflist({'id': a:info.id, 'items': 1}).items
+  let qflines = []
+  for idx in range(a:info.start_idx - 1, a:info.end_idx - 1)
+    let item = items[idx]
+    let fpath = notes#AliasNotePath(bufname(item.bufnr))
+    let qfline = printf('%s|%d col %d|%s| %s',
+          \fpath,
+          \item.lnum,
+          \item.col,
+          \matchstr(item.text, '@\zs\u\+'),
+          \item.text
+          \)
+    call add(qflines, qfline)
+  endfor
+  return qflines
 endfunction
 
 " Adapted from
