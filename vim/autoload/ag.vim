@@ -82,11 +82,11 @@ function! ag#SearchInFile(input) abort
     return
   endif
   if !empty(a:input)
-    execute printf('Ag -Q -- %s %s', shellescape(a:input), fnameescape(path))
+    execute printf('Ag -Q -- %s %s', shellescape(a:input), shellescape(path))
   else
     " Use s:AgVimgrep instead of :Ag to bypass calling s:AgSetHighlight,
     " which is buggy.
-    call s:AgVimgrep(printf('%s %s', s:AgSearchFromSearchReg(), fnameescape(path)))
+    call s:AgVimgrep(printf('%s %s', s:AgSearchFromSearchReg(), shellescape(path)))
   endif
   cfirst
 endfunction
