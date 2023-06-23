@@ -2,18 +2,20 @@ export class ArgError extends Error {}
 
 interface ArgOpt {
   name: string;
-  kind: 'single' | 'multi';
+  kind: 'flag' | 'single' | 'multi';
 }
+
+type ArgValue = boolean | string | string[];
 
 interface RawArgs {
   positional: string[];
-  named: Record<string, string | string[]>;
+  named: Record<string, ArgValue>;
 }
 
 export const parseRawArgs = (argv: string[], opts: ArgOpt[]): RawArgs => {
   argv = argv.slice(2);
   const positional: string[] = [];
-  const named: Record<string, string | string[]> = {};
+  const named: Record<string, ArgValue> = {};
   for (let i = 0; i < argv.length; i++) {
     if (!argv[i].startsWith('-')) {
       positional.push(argv[i]);
@@ -29,6 +31,10 @@ export const parseRawArgs = (argv: string[], opts: ArgOpt[]): RawArgs => {
     const opt = opts.find((o) => o.name === k);
     if (!opt) {
       throw new ArgError(`unknown option: ${k}`);
+    }
+    if (opt.kind === 'flag') {
+      named[k] = true;
+      continue;
     }
     if (opt.kind === 'multi') {
       if (named[k]) {

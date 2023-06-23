@@ -29,18 +29,23 @@ const errorMsg = (e: any): string => {
   return e.toString();
 };
 
-const printRes = (res: HttpResponse, jqFilter: string): number => {
+interface PrintOpts {
+  jqFilter: string;
+  noFilter: boolean;
+}
+
+const printRes = (res: HttpResponse, opts: PrintOpts): number => {
   const bodyLine = res.body.toString();
   if (res.statusCode < 200 || res.statusCode > 299) {
     console.error(`HTTP status code: ${res.statusCode}`);
     console.log(bodyLine);
     return 1;
   }
-  if (!jqFilter) {
+  if (!opts.jqFilter || opts.noFilter) {
     console.log(bodyLine);
     return 0;
   }
-  const jqRes = child_process.spawnSync('jq', ['--color-output', jqFilter], {
+  const jqRes = child_process.spawnSync('jq', ['--compact-output', opts.jqFilter], {
     input: bodyLine,
   });
   if (jqRes.stderr.length) {
@@ -58,7 +63,10 @@ export const main = async () => {
     const c = await resolveEndpointConfig(args);
     console.error(`${c.req.method} ${c.req.url}`);
     const res = await httpRequest(c.req);
-    const exitCode = printRes(res, c.jqFilter);
+    const exitCode = printRes(res, {
+      jqFilter: c.jqFilter,
+      noFilter: args.noFilter,
+    });
     process.exit(exitCode);
   } catch (e) {
     console.error(errorMsg(e));
