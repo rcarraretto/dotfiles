@@ -15,7 +15,8 @@ function! s:ExecPrettier(parser) abort
   let opts = '--write'
 
   " Try to find .prettierrc.json upwards until the git root.
-  let prettierrc_json = findfile('.prettierrc.json', '.;' . util#GetGitRoot())
+  let root_dir = util#GetGitRoot()
+  let prettierrc_json = findfile('.prettierrc.json', '.;' . root_dir)
   if empty(prettierrc_json)
     " Use global prettier config
     " (applicable in sketch buffers or projects that don't have prettier
@@ -24,16 +25,10 @@ function! s:ExecPrettier(parser) abort
   endif
 
   " Check if prettier is installed in the project.
-  "
-  " 'npx --no -- <pkg>' will fail if <pkg> is not installed,
-  " instead of prompting to install <pkg>
-  call system('npx --no -- prettier --help')
-  if v:shell_error
+  let prettier_cmd = expand(root_dir . '/node_modules/.bin/prettier')
+  if !filereadable(prettier_cmd)
     " use global prettier
     let prettier_cmd = 'prettier'
-  else
-    " use local prettier
-    let prettier_cmd = 'npx prettier'
   endif
 
   let path = fnameescape(expand('%:p'))
