@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+# https://stackoverflow.com/a/21693459
+import sys
+from urllib.parse import unquote
+
+if len(sys.argv) != 2:
+    print("usage: urldecode <string>")
+    sys.exit(1)
+print(unquote(sys.argv[1]))
