@@ -115,8 +115,8 @@ nnoremap con :call ToggleRelativeNumber()<cr>
 map col <Action>(EditorToggleShowWhitespaces)
 
 " Text visualization
-map K <Action>(ShowErrorDescription)
-map <leader>dk <Action>(QuickJavaDoc)
+map <bar> <Action>(ShowErrorDescription)
+map K <Action>(QuickJavaDoc)
 map cow <Action>(EditorToggleUseSoftWraps)
 map cos <Action>(ViewNavigationBar)
 " folding
