@@ -277,6 +277,7 @@ nnoremap <leader>af :SearchInFile<space>
 nnoremap <space>/b :BLines<cr>
 " search operator
 nnoremap g/ :set operatorfunc=search#SearchOperator<cr>g@
+nnoremap g// :call search#SearchLine()<cr>
 
 " Find and Replace / Find and Bulk Change
 "

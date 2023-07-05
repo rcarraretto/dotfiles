@@ -22,6 +22,11 @@ function! search#SearchOperator(type)
   call search#Highlight()
 endfunction
 
+function! search#SearchLine() abort
+  let @/ = escape(getline('.'), '\')
+  call search#Highlight()
+endfunction
+
 " :SW command.
 " (Wrapper for :Subvert from abolish.vim)
 " :Subvert changes the search register when called directly.
