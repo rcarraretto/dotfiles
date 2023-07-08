@@ -122,6 +122,10 @@ map cos <Action>(ViewNavigationBar)
 " folding
 map <tab> <Action>(CollapseRegion)
 map <s-tab> <Action>(ExpandRegion)
+map 0zf <Action>(CollapseAllRegions)
+map 6zf <Action>(ExpandAllToLevel1)
+map 7zf <Action>(ExpandAllToLevel2)
+map zF <Action>(ExpandAllRegions)
 
 " Text editing
 map <c-l> <Action>(SaveAll)
