@@ -98,6 +98,8 @@ map ]w <Action>(GotoNextError)
 nnoremap - :NERDTreeFind<cr>
 nnoremap <leader>tq :NERDTreeClose<cr>
 map <leader>et <Action>(GotoTest)
+" CLion: toggle between C header and source files
+map <leader>eh <Action>(CIDR.Lang.SwitchHeaderSource)
 " copy relative path
 map <leader>cp <Action>(CopyPathFromRepositoryRootProvider)
 " copy absolute path
