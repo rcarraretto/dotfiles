@@ -23,7 +23,7 @@ function! search#SearchOperator(type)
 endfunction
 
 function! search#SearchLine() abort
-  let @/ = escape(getline('.'), '\')
+  let @/ = '\V' . escape(getline('.'), '\')
   call search#Highlight()
 endfunction
 
