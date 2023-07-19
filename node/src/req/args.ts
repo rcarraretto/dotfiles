@@ -2,7 +2,8 @@ import { ArgError, parseRawArgs } from '../common/args';
 
 export const usage = `Usage: req <app_name> <endpoint_name> [options]
  --env <env_name>
- --var <key=value>`;
+ --var <key=value>
+ --no-filter           Skips a jqFilter`;
 
 export interface Var {
   key: string;
