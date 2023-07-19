@@ -48,6 +48,25 @@ const replaceVars = (s: string, vars: Var[]): string => {
   return s;
 };
 
+const replaceDataVars = (data: any, vars: Var[]) => {
+  for (const [dkey, dvalue] of Object.entries(data)) {
+    if (typeof dvalue !== 'string') {
+      continue;
+    }
+    const matches = dvalue.match(/^\{([A-Za-z]+)\}$/);
+    if (!matches) {
+      continue;
+    }
+    const varKey = matches[1];
+    const tv = vars.find((v) => v.key === varKey);
+    if (!tv) {
+      throw new AppError(`unresolved variable ${dvalue} in: ${dkey}`);
+    }
+    data[dkey] = tv.value;
+  }
+  return data;
+};
+
 const assembleHttpRequest = (
   args: Args,
   appConfig: AppConfig,
@@ -56,6 +75,7 @@ const assembleHttpRequest = (
 ): HttpRequest => {
   const rawUrl = envConfig.url + endpointConfig.endpoint;
   const url = replaceVars(rawUrl, args.vars);
+  const data = replaceDataVars(endpointConfig.request, args.vars);
   const headers = {
     ...appConfig.headers,
     ...endpointConfig.headers,
@@ -63,7 +83,7 @@ const assembleHttpRequest = (
   const req: HttpRequest = {
     url,
     method: endpointConfig.method,
-    data: endpointConfig.request,
+    data,
     headers,
   };
   if (envConfig.ca) {
