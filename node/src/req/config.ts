@@ -8,11 +8,15 @@ import { pathExists } from '../common/fs';
 interface EnvConfig {
   name: string;
   url: string;
+  ca: string;
+  cert: string;
+  key: string;
 }
 
 interface AppConfig {
   name: string;
   envs: EnvConfig[];
+  headers?: Record<string, string>;
 }
 
 interface EndpointConfig {
@@ -46,17 +50,32 @@ const replaceVars = (s: string, vars: Var[]): string => {
 
 const assembleHttpRequest = (
   args: Args,
+  appConfig: AppConfig,
   envConfig: EnvConfig,
   endpointConfig: EndpointConfig,
 ): HttpRequest => {
   const rawUrl = envConfig.url + endpointConfig.endpoint;
   const url = replaceVars(rawUrl, args.vars);
-  return {
+  const headers = {
+    ...appConfig.headers,
+    ...endpointConfig.headers,
+  };
+  const req: HttpRequest = {
     url,
     method: endpointConfig.method,
     data: endpointConfig.request,
-    headers: endpointConfig.headers,
+    headers,
   };
+  if (envConfig.ca) {
+    req.ca = fs.readFileSync(envConfig.ca);
+  }
+  if (envConfig.cert) {
+    req.cert = fs.readFileSync(envConfig.cert);
+  }
+  if (envConfig.key) {
+    req.key = fs.readFileSync(envConfig.key);
+  }
+  return req;
 };
 
 const listAvailableApps = async (configDir: string): Promise<string[]> => {
@@ -119,7 +138,7 @@ export const resolveEndpointConfig = async (args: Args): Promise<ResolvedEndpoin
   }
   const endpointStr = await fs.promises.readFile(endpointConfigPath, 'utf8');
   const endpointConfig: EndpointConfig = JSON.parse(endpointStr);
-  const req = assembleHttpRequest(args, envConfig, endpointConfig);
+  const req = assembleHttpRequest(args, appConfig, envConfig, endpointConfig);
   return {
     req,
     jqFilter: endpointConfig.jqFilter,
