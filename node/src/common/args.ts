@@ -37,6 +37,9 @@ export const parseRawArgs = (argv: string[], opts: ArgOpt[]): RawArgs => {
       continue;
     }
     if (opt.kind === 'multi') {
+      if (v === undefined) {
+        throw new ArgError(`missing value for option '${opt.name}'`);
+      }
       if (named[k]) {
         (named[k] as string[]).push(v);
       } else {
