@@ -211,6 +211,16 @@ function! proglang#EditAlternateFile() abort
   if &ft == 'vim'
     return proglang#vimscript#EditAlternateFile()
   endif
+  if &ft == 'cpp'
+    let alt_path = join([
+          \'%:p',
+          \':s/.h$/.@/',
+          \':s/.cpp$/.h/',
+          \':s/.@$/.cpp/'
+          \], '')
+    execute 'edit ' . alt_path
+    return
+  endif
   if index(['javascript', 'typescript', 'typescript.tsx', 'go'], &ft) == -1
     return util#error_msg('EditAlternateFile: unsupported file type: ' . &ft)
   endif
