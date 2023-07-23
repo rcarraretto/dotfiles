@@ -123,12 +123,7 @@ hs.hotkey.bind(shift_hyper, '[', decVolumeSoft)
 
 
 -- Spotify track control
-local showTrack = function()
-  hs.alert.closeAll()
-  hs.alert.show(hs.spotify.getCurrentTrack())
-end
-
--- Play/pause
+-- play/pause
 hs.hotkey.bind(hyper, 'k', function()
   if hs.spotify.isRunning() then
     hs.spotify.playpause()
@@ -139,14 +134,13 @@ hs.hotkey.bind(hyper, 'k', function()
     hs.eventtap.event.newSystemKeyEvent('PLAY', false):post()
   end
 end)
-
+-- rewind
 hs.hotkey.bind(hyper, ',', function()
-  hs.spotify.previous()
-  showTrack()
+  hs.spotify.rw()
 end)
+-- fast forward
 hs.hotkey.bind(hyper, '.', function()
-  hs.spotify.next()
-  showTrack()
+  hs.spotify.ff()
 end)
 
 
