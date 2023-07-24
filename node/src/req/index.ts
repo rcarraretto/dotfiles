@@ -1,7 +1,7 @@
 import * as child_process from 'child_process';
 import { AppError } from './common';
 import { resolveEndpointConfig } from './config';
-import { httpRequest, HttpResponse } from './http';
+import { httpRequest, HttpRequest, HttpResponse } from './http';
 import { parseArgs, usage } from './args';
 import { ArgError } from '../common/args';
 
@@ -34,6 +34,17 @@ interface PrintOpts {
   noFilter: boolean;
 }
 
+const printReq = (req: HttpRequest, dryRun: boolean): void => {
+  if (dryRun) {
+    console.error('-- DRY RUN --');
+  }
+  console.error(`${req.method} ${req.url}`);
+  if (dryRun) {
+    console.error('headers', req.headers);
+    console.error('request', req.data);
+  }
+};
+
 const printRes = (res: HttpResponse, opts: PrintOpts): number => {
   const bodyLine = res.body.toString();
   if (res.statusCode < 200 || res.statusCode > 299) {
@@ -61,7 +72,10 @@ export const main = async () => {
   try {
     const args = parseArgs(process.argv);
     const c = await resolveEndpointConfig(args);
-    console.error(`${c.req.method} ${c.req.url}`);
+    printReq(c.req, args.dryRun);
+    if (args.dryRun) {
+      process.exit(0);
+    }
     const res = await httpRequest(c.req);
     const exitCode = printRes(res, {
       jqFilter: c.jqFilter,
