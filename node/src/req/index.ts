@@ -41,7 +41,9 @@ const printReq = (req: HttpRequest, dryRun: boolean): void => {
   console.error(`${req.method} ${req.url}`);
   if (dryRun) {
     console.error('headers', req.headers);
-    console.error('request', req.data);
+    if (req.data) {
+      console.error('request', req.data);
+    }
   }
 };
 

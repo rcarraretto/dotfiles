@@ -2,15 +2,16 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { AppError } from './common';
 import { HttpRequest } from './http';
-import { Var, Args } from './args';
+import { Args } from './args';
 import { pathExists } from '../common/fs';
 
 interface EnvConfig {
   name: string;
   url: string;
-  ca: string;
-  cert: string;
-  key: string;
+  ca?: string;
+  cert?: string;
+  key?: string;
+  vars?: Record<string, string>;
 }
 
 interface AppConfig {
@@ -32,23 +33,34 @@ interface ResolvedEndpointConfig {
   jqFilter?: string;
 }
 
-const replaceVars = (s: string, vars: Var[]): string => {
+const replaceVars = (s: string, vars: Record<string, string>): string => {
   const interpolations = s.match(/\{[A-Za-z]+\}/g);
   if (!interpolations) {
     return s;
   }
   for (const ip of interpolations) {
     const key = ip.slice(1, ip.length - 1);
-    const tv = vars.find((v) => v.key === key);
-    if (!tv) {
+    const value = vars[key];
+    if (!value) {
       throw new AppError(`unresolved variable ${ip} in: ${s}`);
     }
-    s = s.replace(ip, tv.value);
+    s = s.replace(ip, value);
   }
   return s;
 };
 
-const replaceDataVars = (data: any, vars: Var[]) => {
+const replaceDataVars = (
+  data: any,
+  appEnvVars: Record<string, string>,
+  argVars: Record<string, string>,
+): any => {
+  if (!data) {
+    return;
+  }
+  const vars = {
+    ...appEnvVars,
+    ...argVars,
+  };
   for (const [dkey, dvalue] of Object.entries(data)) {
     if (typeof dvalue !== 'string') {
       continue;
@@ -58,11 +70,11 @@ const replaceDataVars = (data: any, vars: Var[]) => {
       continue;
     }
     const varKey = matches[1];
-    const tv = vars.find((v) => v.key === varKey);
-    if (!tv) {
+    const varValue = vars[varKey];
+    if (!varValue) {
       throw new AppError(`unresolved variable ${dvalue} in: ${dkey}`);
     }
-    data[dkey] = tv.value;
+    data[dkey] = varValue;
   }
   return data;
 };
@@ -75,7 +87,7 @@ const assembleHttpRequest = (
 ): HttpRequest => {
   const rawUrl = envConfig.url + endpointConfig.endpoint;
   const url = replaceVars(rawUrl, args.vars);
-  const data = replaceDataVars(endpointConfig.request, args.vars);
+  const data = replaceDataVars(endpointConfig.request, envConfig.vars, args.vars);
   const headers = {
     ...appConfig.headers,
     ...endpointConfig.headers,
