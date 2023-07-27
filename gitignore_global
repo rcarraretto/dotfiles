@@ -25,9 +25,8 @@ __pycache__/
 # personal todo notes
 .todo
 
-# personal files that need to be at the root of codebase
-# (e.g., a jest config file, because of relative file paths referred in it)
-/rcx-*
+# personal customizations that need to live in the project path
+rcx-*
 
 # vim-projectionist plugin
 .projections.json
