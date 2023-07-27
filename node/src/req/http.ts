@@ -9,6 +9,7 @@ export interface HttpRequest {
   ca?: Buffer;
   cert?: Buffer;
   key?: Buffer;
+  insecure?: boolean;
 }
 
 export interface HttpResponse {
@@ -51,6 +52,7 @@ export const httpRequest = async (req: HttpRequest): Promise<HttpResponse> => {
       ca: req.ca,
       cert: req.cert,
       key: req.key,
+      rejectUnauthorized: req.insecure !== true,
     };
     const contentType = headers['Content-Type'];
     const reqData = serializeReqData(req.data, contentType);

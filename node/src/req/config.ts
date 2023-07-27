@@ -11,6 +11,7 @@ interface EnvConfig {
   ca?: string;
   cert?: string;
   key?: string;
+  insecure?: boolean;
   vars?: Record<string, string>;
 }
 
@@ -97,6 +98,7 @@ const assembleHttpRequest = (
     method: endpointConfig.method,
     data,
     headers,
+    insecure: envConfig.insecure,
   };
   if (envConfig.ca) {
     req.ca = fs.readFileSync(envConfig.ca);

@@ -38,6 +38,9 @@ const printReq = (req: HttpRequest, dryRun: boolean): void => {
   if (dryRun) {
     console.error('-- DRY RUN --');
   }
+  if (req.insecure) {
+    process.stderr.write('[insecure] ');
+  }
   console.error(`${req.method} ${req.url}`);
   if (dryRun) {
     console.error('headers', req.headers);
