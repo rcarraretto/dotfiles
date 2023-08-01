@@ -34,9 +34,10 @@ dirs+=("$NOTES_SHARED")
 
 args=()
 if [ $opt_all -eq 0 ]; then
-  args+=(-not -path '*/archive/*')
-  args+=(\( -name "*.txt" -or -name "*.json" -or -name "*.xml" \))
+  args+=(--extension txt --extension json --extension xml)
+else
+  args+=(--no-ignore)
 fi
 
-find "${dirs[@]}" -type f "${args[@]}" \
+fd --type file "${args[@]}" . "${dirs[@]}" \
   | sed "s|^$HOME|~|"
