@@ -14,5 +14,5 @@ endfunction
 " If dirvish buffer, show git history for folder.
 function! git#GlogFileHistory() abort
   " uses fugitive :Git
-  Git log --pretty=format:"%h | %<(20,trunc)%an | %s" %
+  Git log --date=short --pretty=format:"%h | %<(10,trunc)%ad | %<(20,trunc)%an | %s" %
 endfunction
