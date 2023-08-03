@@ -38,6 +38,8 @@ function! s:DirvishMappings()
   nnoremap <buffer> <silent> mv :<c-u>call <sid>DirvishMv(0)<cr>
   " cp
   nnoremap <buffer> <silent> cp :<c-u>call <sid>DirvishMv(1)<cr>
+  " cp to the same destination
+  nnoremap <buffer> <silent> cP :<c-u>call <sid>DirvishMv(2)<cr>
   " opendiff
   command! -buffer DirvishOpenDiff :call <sid>DirvishOpenDiff()
 endfunction
@@ -130,29 +132,30 @@ endfunction
 
 function! s:dirvish_path_shortname(path)
   if isdirectory(a:path)
-    return "'" . fnamemodify(a:path[:-2], ':t') . "'"
+    return "'" . fnamemodify(substitute(a:path, '/$', '', ''), ':t') . "'"
   endif
   return "'" . fnamemodify(a:path, ':t') . "'"
 endfunction
 
-function! s:DirvishMv(copy) abort
-  let dirpath = getline('.')
+function! s:DirvishMv(mode) abort
+  let dirpath = expand('%')
   if !isdirectory(dirpath)
-    let dirpath = fnamemodify(dirpath, ':h') . '/'
-    if !isdirectory(dirpath)
-      return util#error_msg('DirvishMv: target is not a directory: ' . dirpath)
-    endif
+    return util#error_msg('DirvishMv: target is not a directory: ' . dirpath)
   endif
   let cwd = getcwd() . '/'
   let filepaths = filter(s:ArgList(), 'filereadable(v:val) || (isdirectory(v:val) && v:val != cwd)')
+  let filepaths = map(filepaths, 'fnamemodify(v:val, ":p")')
   if len(filepaths) < 1
     return util#error_msg("DirvishMv: no file has been selected (use 'x' to select a file)")
   endif
   let filenames = map(copy(filepaths), 's:dirvish_path_shortname(v:val)')
   let dirname = s:dirvish_path_shortname(dirpath)
-  if a:copy
+  if a:mode == 1
     let action_name = 'Copy'
     let program = 'gcp -R'
+  elseif a:mode == 2
+    let action_name = 'Duplicate'
+    let program = 'cp-same-dest'
   else
     let action_name = 'Move'
     let program = 'mv'

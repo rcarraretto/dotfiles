@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Partially reproduce what macOS Finder does when copying and pasting to the
+# same directory.
+# It copies the file/directory and appends a number to its name.
+#
+# It seems that 'gcp' cannot copy to the same directory:
+# gcp -R --backup some-dir/ .
+# fails with:
+# "gcp: 'some-dir/' and './some-dir' are the same file"
+
+set -eo pipefail
+[ "${TRACE:-}" ] && set -x
+
+usage() {
+  echo "usage:
+  $(basename "$0") <source> <target>"
+}
+
+if [ $# -ne 2 ]; then
+  usage
+  exit 1
+fi
+
+source_dir=$(dirname "$1")
+target_dir="${2%/}"
+if [ $source_dir != $target_dir ]; then
+  echo "Error: not the same destination: $source_dir $target_dir"
+  exit 1
+fi
+
+source_base=$(basename "$1")
+ts=$(date +%H%M%S)
+gcp -R "$1" "$target_dir/$source_base-$ts"
