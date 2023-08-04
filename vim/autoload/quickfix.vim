@@ -69,7 +69,8 @@ function! s:DeleteOperator(_type) abort
   let saved_cursor = getpos('.')
   let qflist = getqflist()
   call remove(qflist, line("'[") - 1, line("']") - 1)
-  call setqflist(qflist)
+  " use 'r' to preserve 'quickfixtextfunc'
+  call setqflist(qflist, 'r')
   call setpos('.', saved_cursor)
 endfunction
 
@@ -85,7 +86,8 @@ function! s:QfDeletePattern() abort
       call remove(qflist, line_index - 1)
     endif
   endfor
-  call setqflist(qflist)
+  " use 'r' to preserve 'quickfixtextfunc'
+  call setqflist(qflist, 'r')
   call setpos('.', saved_cursor)
 endfunction
 
@@ -101,7 +103,8 @@ function! s:QfFilterPattern() abort
       call remove(qflist, line_index - 1)
     endif
   endfor
-  call setqflist(qflist)
+  " use 'r' to preserve 'quickfixtextfunc'
+  call setqflist(qflist, 'r')
   call setpos('.', saved_cursor)
 endfunction
 
