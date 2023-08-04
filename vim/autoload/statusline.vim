@@ -75,14 +75,6 @@ function! statusline#set(...)
   endif
   let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
   if showRelativeFilename
-    " Apparently %f doesn't always show the relative filename
-    " https://stackoverflow.com/a/45244610/2277505
-    " :h filename-modifiers
-    " :~ => Reduce file name to be relative to the home directory
-    " :. => Reduce file name to be relative to current directory
-    " expand('%:~:.') =>
-    " - expands the name of the current file, but prevents the expansion of the tilde (:~)
-    " - makes the path relative to the current working directory (:.)
     if isActiveWindow
       " truncate file path when window is active and on a vsplit,
       " as the statusline has several other elements in it.
@@ -98,7 +90,21 @@ function! statusline#set(...)
       " and therefore it's OK to display the path without truncating it.
       let max_path_length = ""
     endif
-    execute "setlocal statusline+=%" . max_path_length . "{expand('%:~:.')}"
+    let expansions = '%'
+    " Shorten ~/Library/CloudStorage/... paths
+    for c in notes#GetNoteConfigs()
+      let expansions .= printf(':s?%s/?%s/?', c['path'], c['alias'])
+    endfor
+    " Apparently %f doesn't always show the relative filename
+    " https://stackoverflow.com/a/45244610/2277505
+    " :h filename-modifiers
+    " :~ => Reduce file name to be relative to the home directory
+    " :. => Reduce file name to be relative to current directory
+    " expand('%:~:.') =>
+    " - expands the name of the current file, but prevents the expansion of the tilde (:~)
+    " - makes the path relative to the current working directory (:.)
+    let expansions .= ':~:.'
+    execute "setlocal statusline+=%" . max_path_length . "{expand('" . expansions . "')}"
     setlocal statusline+=\  " separator
   else
     setlocal statusline+=%f\  " filename
@@ -111,8 +117,8 @@ function! statusline#set(...)
   if &ft == 'qf'
     setlocal statusline+=%{Qftitle()}
   endif
-  let showSymLink = index(['help', 'fugitive', 'git'], &filetype) == -1
-  if showSymLink
+  let showSymLinkIcon = index(['help', 'fugitive', 'git'], &filetype) == -1
+  if showSymLinkIcon
     " /path/to/something/ => /path/to/something
     let path = substitute(expand('%'), '\(.*\)/$', '\1', '')
     if path !=# resolve(expand('%'))
