@@ -24,13 +24,17 @@ for i in "$@"; do
 done
 
 dirs=()
+sed_args=()
 if [ -d "$NOTES_HOME" ]; then
   dirs+=("$NOTES_HOME")
+  sed_args+=(-e "s|^$NOTES_HOME/|\$NOTES_HOME/|")
 fi
 if [ -d "$NOTES_WORK" ]; then
   dirs+=("$NOTES_WORK")
+  sed_args+=(-e "s|^$NOTES_WORK/|\$NOTES_WORK/|")
 fi
 dirs+=("$NOTES_SHARED")
+sed_args+=(-e "s|^$NOTES_SHARED/|\$NOTES_SHARED/|")
 
 args=()
 if [ $opt_all -eq 0 ]; then
@@ -40,4 +44,4 @@ else
 fi
 
 fd --type file "${args[@]}" . "${dirs[@]}" \
-  | sed "s|^$HOME|~|"
+  | sed "${sed_args[@]}"

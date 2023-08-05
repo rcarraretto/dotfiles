@@ -45,6 +45,15 @@ function! s:FzfWithAction(opts, action) abort
   call fzf#run(opts)
 endfunction
 
+function! s:FzfActionNote(original_cmd, selection) abort
+  let expansions = ''
+  for c in notes#GetNoteConfigs()
+    let expansions .= printf(':s?%s/?%s/?', c['alias'], c['path'])
+  endfor
+  let path = fnamemodify(a:selection[0], expansions)
+  execute a:original_cmd . ' ' . path
+endfunction
+
 function! fzfutil#FzfNotes(all) abort
   if a:all
     let cmd = 'notes-ls --all'
@@ -53,10 +62,16 @@ function! fzfutil#FzfNotes(all) abort
     let cmd = 'notes-ls'
     let prompt = '[notes] '
   endif
-  call fzf#run(fzf#wrap({
+  let action = {
+        \'': function('s:FzfActionNote', ['edit'])
+        \}
+  for k in keys(g:fzf_action)
+    let action[k] = function('s:FzfActionNote', [g:fzf_action[k]])
+  endfor
+  call s:FzfWithAction({
         \'source': cmd,
         \'options': ['--prompt', prompt]
-        \}))
+        \}, action)
 endfunction
 
 function! fzfutil#FzfDotfiles() abort
