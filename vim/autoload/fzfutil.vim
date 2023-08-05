@@ -14,6 +14,7 @@ function! s:FzfExplorePaths(cmd) abort
         \ 'ctrl-t': function('s:ExploreProject', ['tabedit']),
         \ 'ctrl-x': function('s:ExploreProject', ['split']),
         \ 'ctrl-v': function('s:ExploreProject', ['vsplit']),
+        \ 'ctrl-f': function('fs#FzfSysOpenFolder'),
         \ 'ctrl-l': function('s:ToxLog'),
         \ }
   call s:FzfWithAction({'source': a:cmd}, action)
@@ -49,6 +50,10 @@ endfunction
 
 function! s:FzfActionNote(original_cmd, selection) abort
   let path = fnamemodify(a:selection[0], notes#ExpansionToPath())
+  if type(a:original_cmd) == 2
+    call a:original_cmd([path])
+    return
+  endif
   execute a:original_cmd . ' ' . path
 endfunction
 

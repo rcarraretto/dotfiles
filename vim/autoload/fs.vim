@@ -129,8 +129,16 @@ function! fs#OpenFolderInFinder() abort
   if !isdirectory(dir)
     return util#error_msg('OpenFolderInFinder: not a folder: ' . dir)
   endif
-  echom "OpenFolderInFinder: " . dir
-  call system("open -a Finder " . fnameescape(dir))
+  echom 'OpenFolderInFinder: ' . dir
+  call system('open -a Finder ' . fnameescape(dir))
+endfunction
+
+function! fs#FzfSysOpenFolder(selection) abort
+  let dir = fnamemodify(a:selection[0], ':p:h')
+  if !isdirectory(dir)
+    return util#error_msg('FzfSysOpenFolder: not a folder: ' . dir)
+  endif
+  call system('open -a Finder ' . fnameescape(dir))
 endfunction
 
 function! fs#SysOpen(filename)

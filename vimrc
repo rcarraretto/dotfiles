@@ -403,8 +403,8 @@ let g:fzf_action = {
 \ 'ctrl-t': 'tab split',
 \ 'ctrl-x': 'split',
 \ 'ctrl-v': 'vsplit',
-\ 'ctrl-f': 'VSplitLeft',
-\ 'ctrl-s': 'SysOpen'
+\ 'ctrl-s': 'SysOpen',
+\ 'ctrl-f': function('fs#FzfSysOpenFolder'),
 \ }
 " use a normal window at the bottom
 " (else by default it opens a popup window in the center, which seems more laggy)
