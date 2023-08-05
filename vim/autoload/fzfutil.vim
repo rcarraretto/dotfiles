@@ -23,25 +23,27 @@ function! fzfutil#FzfExploreProjects() abort
   call s:FzfExplorePaths('projects-ls')
 endfunction
 
+" Put custom actions, instead of using g:fzf_action.
+" Based on fzf#wrap().
 function! s:FzfWithAction(opts, action) abort
   let opts = a:opts
   let opts['down'] = '~40%'
-  " Put custom actions, instead of using g:fzf_action.
-  " This is based on fzf#wrap().
-  let opts._action = a:action
   if !has_key(opts, 'options')
     let opts.options = []
   endif
   call add(opts.options, '--expect')
-  call add(opts.options, join(keys(opts._action), ','))
-  let CommonSink = vimutil#GetScriptFunc($BREW_PREFIX . '/Cellar/fzf/.*/plugin/fzf.vim', "common_sink")
-  function! opts.sink(lines) abort closure
+  call add(opts.options, join(keys(a:action), ','))
+  function! opts.sinklist(lines) abort closure
     " Example of a:lines
-    " [] (when ctrl-c was pressed)
-    " ['ctrl-t', '~/work/some-project']
-    return CommonSink(self._action, a:lines)
+    " ['', 'path/to/file'] (when enter was pressed)
+    " ['ctrl-t', 'path/to/file']
+    "
+    " Adapted from fzf.vim s:common_sink
+    " find $BREW_PREFIX/Cellar/fzf -name 'fzf.vim'
+    let key = remove(a:lines, 0)
+    let Cmd = get(a:action, key)
+    return Cmd(a:lines)
   endfunction
-  let opts['sink*'] = remove(opts, 'sink')
   call fzf#run(opts)
 endfunction
 
