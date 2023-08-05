@@ -7,9 +7,9 @@ function! notes#GetNoteConfigs() abort
     return s:note_configs
   endif
   let configs = []
-  call s:AddNoteConfig(configs, $NOTES_SHARED, '$NT_S')
-  call s:AddNoteConfig(configs, $NOTES_HOME, '$NT_H')
-  call s:AddNoteConfig(configs, $NOTES_WORK, '$NT_W')
+  call s:AddNoteConfig(configs, $NOTES_SHARED, '$NOTES_SHARED')
+  call s:AddNoteConfig(configs, $NOTES_HOME, '$NOTES_HOME')
+  call s:AddNoteConfig(configs, $NOTES_WORK, '$NOTES_WORK')
   let s:note_configs = configs
   return s:note_configs
 endfunction
