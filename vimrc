@@ -353,6 +353,7 @@ augroup FTOptions
   autocmd FileType haskell setlocal expandtab
   autocmd FileType matlab setlocal commentstring=%\ %s
   autocmd FileType pem setlocal foldmethod=marker | setlocal foldmarker=-----BEGIN,-----END | setlocal foldlevel=20
+  autocmd FileType fugitive let b:statusline_skip_flags=1
 augroup END
 
 augroup SetFiletype

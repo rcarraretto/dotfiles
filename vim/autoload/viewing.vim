@@ -130,7 +130,7 @@ function! viewing#WrapCommand(cmd)
     " E363 will be displayed along with a trace.
     " Also, the status line will not be rendered properly.
     " Ignore E363 and redraw the status line.
-    call statusline#set()
+    call statusline#Set()
   endtry
 endfunction
 

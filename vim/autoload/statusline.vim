@@ -1,35 +1,56 @@
-function! Qftitle()
-  return getqflist({'title': 1}).title
-endfunction
+let s:expansions = '%'
+" Shorten ~/Library/CloudStorage/... paths
+for c in notes#GetNoteConfigs()
+  let s:expansions .= printf(':s?%s/?%s/?', c['path'], c['alias'])
+endfor
+" Apparently %f doesn't always show the relative filename
+" https://stackoverflow.com/a/45244610/2277505
+" :h filename-modifiers
+" :~ => Reduce file name to be relative to the home directory
+" :. => Reduce file name to be relative to current directory
+" expand('%:~:.') =>
+" - expands the name of the current file, but prevents the expansion of the tilde (:~)
+" - makes the path relative to the current working directory (:.)
+let s:expansions .= ':~:.'
 
-function! s:SetStatuslineSeparator() abort
-  setlocal statusline+=\ \|\ " separator
-endfunction
-
-function! s:SetStatuslineLineNums()
-  let length = len(string(line('$')))
-  if length < 4
-    let length = 4
+function! statusline#CwdContext() abort
+  if win_getid() != g:actual_curwin
+    return ''
   endif
-  let line_min_max = length . "." . length
-  " line number / number of lines
-  " e.g. %4.4l/%-4.4L
-  execute "setlocal statusline+=%" . line_min_max . "l/%-" . line_min_max . "L"
-  setlocal statusline+=\  " separator
-endfunction
-
-function! GetCwdContext() abort
   " show last path component of cwd
   return '[' . fnamemodify(getcwd(), ':t') . '] '
 endfunction
 
-function! GetExtendedFileInfo() abort
+function! statusline#Qftitle()
+  return getqflist({'title': 1}).title
+endfunction
+
+function! statusline#FmtFilepath() abort
+  if win_getid() == g:actual_curwin
+    " truncate file path when window is active and on a vsplit,
+    " as the statusline has several other elements in it.
+    if winwidth('.') <= 92
+      let max_path_length = '.45'
+    elseif winwidth('.') <= 120
+      let max_path_length = '.60'
+    else
+      let max_path_length = ''
+    endif
+  else
+    " when window is inactive, we have less elements in the statusline
+    " and therefore it's OK to display the path without truncating it.
+    let max_path_length = ''
+  endif
+  return '%' . max_path_length . "{expand('" . s:expansions . "')} "
+endfunction
+
+function! statusline#ExtendedFileInfo() abort
   let str = ''
   " <SNR>
   if get(g:, 'statusline_show_ext_info', 0)
     let str .= printf(' | win %s', tabpagewinnr(tabpagenr()))
     let str .= printf(' | buf %s', bufnr())
-    if &ft == 'vim' && &rtp =~ 'scriptease'
+    if &filetype == 'vim' && &rtp =~ 'scriptease'
       let script_id = scriptease#scriptid('%')
       if empty(script_id)
         " e.g. script in autoload folder was not loaded yet
@@ -64,82 +85,70 @@ function! GetExtendedFileInfo() abort
   return str
 endfunction
 
-function! statusline#set(...)
-  if index(['diff', 'undotree'], &filetype) >= 0
-    return
+function! s:FmtLineNums()
+  let length = len(string(line('$')))
+  if length < 4
+    let length = 4
   endif
-  setlocal statusline=
-  let isActiveWindow = get(a:, 1, 1)
-  if isActiveWindow && index(['help'], &filetype) == -1
-    setlocal statusline+=%{GetCwdContext()}
-  endif
-  let showRelativeFilename = index(['qf', 'help'], &filetype) == -1
-  if showRelativeFilename
-    if isActiveWindow
-      " truncate file path when window is active and on a vsplit,
-      " as the statusline has several other elements in it.
-      if winwidth('.') <= 92
-        let max_path_length = ".45"
-      elseif winwidth('.') <= 120
-        let max_path_length = ".60"
-      else
-        let max_path_length = ""
-      endif
-    else
-      " when window is inactive, we have less elements in the statusline
-      " and therefore it's OK to display the path without truncating it.
-      let max_path_length = ""
+  let line_min_max = length . '.' . length
+  " line number / number of lines
+  " e.g. %4.4l/%-4.4L
+  return '%' . line_min_max . 'l/%-' . line_min_max . 'L '
+endfunction
+
+function! statusline#FmtRightmost() abort
+  let fmt='%=' " left/right separator
+  if win_getid() == g:actual_curwin
+    if winwidth('.') > 50
+      let fmt .= '%{statusline#ExtendedFileInfo()} | ' . s:FmtLineNums() . ' | col %-3.v '
     endif
-    let expansions = '%'
-    " Shorten ~/Library/CloudStorage/... paths
-    for c in notes#GetNoteConfigs()
-      let expansions .= printf(':s?%s/?%s/?', c['path'], c['alias'])
-    endfor
-    " Apparently %f doesn't always show the relative filename
-    " https://stackoverflow.com/a/45244610/2277505
-    " :h filename-modifiers
-    " :~ => Reduce file name to be relative to the home directory
-    " :. => Reduce file name to be relative to current directory
-    " expand('%:~:.') =>
-    " - expands the name of the current file, but prevents the expansion of the tilde (:~)
-    " - makes the path relative to the current working directory (:.)
-    let expansions .= ':~:.'
-    execute "setlocal statusline+=%" . max_path_length . "{expand('" . expansions . "')}"
-    setlocal statusline+=\  " separator
   else
-    setlocal statusline+=%f\  " filename
+    if &filetype == 'qf'
+      let fmt .= ' | ' . s:FmtLineNums() . ' | '
+    endif
+    let fmt .= 'win %{tabpagewinnr(tabpagenr())}   ' " window number
   endif
-  let showFlags = (index(['qf', 'help'], &filetype) == -1) && !get(b:, 'statusline_skip_flags')
-  if showFlags
-    setlocal statusline+=%m  " modified flag
-    setlocal statusline+=%r  " read only flag
-  endif
-  if &ft == 'qf'
-    setlocal statusline+=%{Qftitle()}
-  endif
-  let showSymLinkIcon = index(['help', 'fugitive', 'git'], &filetype) == -1
-  if showSymLinkIcon
-    " /path/to/something/ => /path/to/something
-    let path = substitute(expand('%'), '\(.*\)/$', '\1', '')
-    if path !=# resolve(expand('%'))
+  return fmt
+endfunction
+
+function! s:IsSymLink() abort
+  " /path/to/something/ => /path/to/something
+  let path = substitute(expand('%'), '\(.*\)/$', '\1', '')
+  return path != resolve(expand('%'))
+endfunction
+
+function! s:SetHelp() abort
+  setlocal statusline=%f\ %{%statusline#FmtRightmost()%}
+endfunction
+
+function! s:SetQf() abort
+  " %f -> '[Quickfix List]' or '[Location List]'
+  setlocal statusline=%{statusline#CwdContext()}%f\ %{statusline#Qftitle()}%{%statusline#FmtRightmost()%}
+endfunction
+
+function! s:SetStd() abort
+  setlocal statusline=%{statusline#CwdContext()}%{%statusline#FmtFilepath()%}
+  if !get(b:, 'statusline_skip_flags')
+    setlocal statusline+=%m " modified flag [-]
+    setlocal statusline+=%r " readonly flag [RO]
+    if s:IsSymLink()
+      " display [@] for symlinks
+      " (@ is inspired by 'ls' notation)
       setlocal statusline+=[@]
     endif
   endif
-  setlocal statusline+=%=  " left/right separator
-  if isActiveWindow && winwidth('.') > 50
-    setlocal statusline+=%{GetExtendedFileInfo()}
-    call s:SetStatuslineSeparator()
-    call s:SetStatuslineLineNums()  " line number / number of lines
-    call s:SetStatuslineSeparator()
-    setlocal statusline+=col\ %-3.v " column number
-    setlocal statusline+=\  " separator
-  elseif !isActiveWindow
-    if &ft == 'qf'
-      call s:SetStatuslineSeparator()
-      call s:SetStatuslineLineNums()  " line number / number of lines
-      call s:SetStatuslineSeparator()
-    endif
-    setlocal statusline+=win\ %{tabpagewinnr(tabpagenr())} " window number
-    setlocal statusline+=\ \ \  " separator
+  setlocal statusline+=%{%statusline#FmtRightmost()%}
+endfunction
+
+function! statusline#Set()
+  if &filetype == 'diff'
+    return
   endif
+  if &filetype == 'help'
+    return s:SetHelp()
+  endif
+  if &filetype == 'qf'
+    return s:SetQf()
+  endif
+  return s:SetStd()
 endfunction

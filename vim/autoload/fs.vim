@@ -120,7 +120,7 @@ function! fs#RefreshBuffer(path) abort
     " Could happen with Dirvish buffers (a:path is a directory),
     "
     " E523: May not be allowed, when executing code in the context of autocmd.
-    " For example, running :Log inside of statusline#set().
+    " For example, running :Log inside of statusline#Set().
   endtry
 endfunction
 
