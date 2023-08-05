@@ -198,9 +198,9 @@ nnoremap <silent> <leader>cW :call cwd#ToggleCwd('cd')<cr>
 nnoremap <silent> <leader>cc :cd - <bar> pwd<cr>
 
 " Edit special files
-nnoremap <leader>ei :<c-u>call window#EditFile("~/Dropbox/notes/dev/backlog.txt")<cr>
+nnoremap <leader>ei :<c-u>call window#EditFile($NOTES_SHARED . '/dev/backlog.txt')<cr>
 if exists('$NOTES_WORK')
-  nnoremap <leader>ew :<c-u>call window#EditFile($NOTES_WORK . "/work-buffer.txt")<cr>
+  nnoremap <leader>ew :<c-u>call window#EditFile($NOTES_WORK . '/work-buffer.txt')<cr>
 endif
 " toggle log windows
 nnoremap <leader>2 :call vimutil#ToggleLogWindow('/var/tmp/test-console.txt')<cr>
