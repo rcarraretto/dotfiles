@@ -1,5 +1,13 @@
 function! viewing#CopyCursorReference() abort
-  let path = fnameescape(expand("%:~"))
+  let expansions = '%' . notes#ExpansionToAlias()
+  let path = expand(expansions)
+  if path[0] == '$'
+    " cosmetic: do not escape first $
+    " \$NOTES_SHARED -> $NOTES_SHARED
+    let path = fnameescape(path)[1:]
+  else
+    let path = fnameescape(fnamemodify(path, ':~'))
+  endif
   let line_num = line('.')
   let col_num = col('.')
   let @* = printf('%s:%s:%s', path, line_num, col_num)

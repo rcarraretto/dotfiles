@@ -1,8 +1,3 @@
-let s:expansions = '%'
-" Shorten ~/Library/CloudStorage/... paths
-for c in notes#GetNoteConfigs()
-  let s:expansions .= printf(':s?%s/?%s/?', c['path'], c['alias'])
-endfor
 " Apparently %f doesn't always show the relative filename
 " https://stackoverflow.com/a/45244610/2277505
 " :h filename-modifiers
@@ -11,7 +6,7 @@ endfor
 " expand('%:~:.') =>
 " - expands the name of the current file, but prevents the expansion of the tilde (:~)
 " - makes the path relative to the current working directory (:.)
-let s:expansions .= ':~:.'
+let s:expansions = '%' . notes#ExpansionToAlias() . ':~:.'
 
 function! statusline#CwdContext() abort
   if win_getid() != g:actual_curwin

@@ -2,20 +2,8 @@ if exists('s:note_configs')
   unlet s:note_configs
 endif
 
-function! notes#GetNoteConfigs() abort
-  if exists('s:note_configs')
-    return s:note_configs
-  endif
-  let configs = []
-  call s:AddNoteConfig(configs, $NOTES_SHARED, '$NOTES_SHARED')
-  call s:AddNoteConfig(configs, $NOTES_HOME, '$NOTES_HOME')
-  call s:AddNoteConfig(configs, $NOTES_WORK, '$NOTES_WORK')
-  let s:note_configs = configs
-  return s:note_configs
-endfunction
-
 function! s:AddNoteConfig(configs, path, alias) abort
-  if empty(a:path) || !isdirectory(a:path)
+  if empty(a:path)
     return
   endif
   call add(a:configs, {
@@ -25,12 +13,34 @@ function! s:AddNoteConfig(configs, path, alias) abort
         \})
 endfunction
 
+let s:note_configs = []
+call s:AddNoteConfig(s:note_configs, $NOTES_SHARED, '$NOTES_SHARED')
+call s:AddNoteConfig(s:note_configs, $NOTES_HOME, '$NOTES_HOME')
+call s:AddNoteConfig(s:note_configs, $NOTES_WORK, '$NOTES_WORK')
+
+" Shorten ~/Library/CloudStorage/... paths
+function! notes#ExpansionToAlias() abort
+  let expansions = ''
+  for c in s:note_configs
+    let expansions .= printf(':s?%s/?%s/?', c['path'], c['alias'])
+  endfor
+  return expansions
+endfunction
+
+function! notes#ExpansionToPath() abort
+  let expansions = ''
+  for c in s:note_configs
+    let expansions .= printf(':s?%s/?%s/?', c['alias'], c['path'])
+  endfor
+  return expansions
+endfunction
+
 function! notes#GetNoteDirs() abort
-  return join(map(copy(notes#GetNoteConfigs()), 'v:val.epath'), ' ')
+  return join(map(copy(s:note_configs), 'v:val.epath'), ' ')
 endfunction
 
 function! notes#AliasNotePath(fpath) abort
-  for nc in notes#GetNoteConfigs()
+  for nc in s:note_configs
     if a:fpath[0:len(nc.path)] == nc.path . '/'
       return nc.alias . a:fpath[len(nc.path):]
     endif

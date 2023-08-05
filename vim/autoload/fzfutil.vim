@@ -48,11 +48,7 @@ function! s:FzfWithAction(opts, action) abort
 endfunction
 
 function! s:FzfActionNote(original_cmd, selection) abort
-  let expansions = ''
-  for c in notes#GetNoteConfigs()
-    let expansions .= printf(':s?%s/?%s/?', c['alias'], c['path'])
-  endfor
-  let path = fnamemodify(a:selection[0], expansions)
+  let path = fnamemodify(a:selection[0], notes#ExpansionToPath())
   execute a:original_cmd . ' ' . path
 endfunction
 
