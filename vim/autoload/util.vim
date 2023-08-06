@@ -296,6 +296,8 @@ endfunction
 
 " Example:
 " :call util#ToggleOption('cursorlineopt', {'print': 1, 'off_value': 'number', 'on_value': 'both'})
+" {'local': 0} (default) -> set
+" {'local': 1}           -> setlocal
 function! util#ToggleOption(option_name, ...) abort
   let opts = get(a:, 1, {})
   let value = eval('&' . a:option_name)
@@ -306,11 +308,12 @@ function! util#ToggleOption(option_name, ...) abort
   else
     let new_value = off_value
   endif
-  let update_cmd = "set " . a:option_name . "=" . new_value
-  execute update_cmd
+  let set_cmd = get(opts, 'local', 0) ? 'setlocal' : 'set'
+  let set_expr = set_cmd . ' ' . a:option_name . "=" . new_value
+  execute set_expr
   let updated_value = eval('&' . a:option_name)
   if get(opts, 'print') == 1
-    echo update_cmd
+    echo set_expr
   endif
   return updated_value
 endfunction

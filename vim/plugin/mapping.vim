@@ -81,6 +81,8 @@ nnoremap <silent> cos :call util#ToggleGlobalVar('statusline_show_ext_info')<cr>
 nnoremap <silent> coc :call util#ToggleBufVar('&colorcolumn', {'print': 1, 'on_value': '80,100'})<cr>
 " Toggle cursor column
 nnoremap <silent> cox :call util#ToggleBufVar('&cursorcolumn', {'print': 1})<cr>
+" Toggle virtual edit
+nnoremap <silent> cov :call util#ToggleOption('virtualedit', {'local': 1, 'off_value': '', 'on_value': 'all', 'print': 1})<cr>
 " Toggle trim whitespace
 command! ToggleTrimWhitespace :call util#ToggleBufVar('skip_trim_whitespace', {'print': 1})
 " Toggle conceal
