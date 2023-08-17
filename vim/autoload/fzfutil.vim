@@ -94,12 +94,21 @@ function! fzfutil#FzfExploreVimBundle() abort
   call s:FzfExplorePaths('find ~/.vim/bundle -mindepth 1 -maxdepth 1')
 endfunction
 
-function! fzfutil#FzfCurrentFolderNonRecursive(folder) abort
-  " https://unix.stackexchange.com/a/104803
-  let cmd = '(cd ' . fnameescape(a:folder) . ' && find . -mindepth 1 -maxdepth 1 -type f | cut -c 3-)'
-  let prompt = '[CurrentFolder] ' . a:folder . '/'
+function! fzfutil#FzfCurrentFolder() abort
+  let folder = expand('%:h')
+  if empty(v:count)
+    " recursive
+    execute 'Files ' . folder
+    return
+  endif
+  " non-recursive
+  let cmd = printf(
+        \'(cd %s && fd --type file --max-depth 1 --hidden --strip-cwd-prefix .)',
+        \fnameescape(folder)
+        \)
+  let prompt = printf('[CurrentFolder(Depth1)] %s/', folder)
   function! s:FzfCurrentFolderEdit(edit_cmd, selection) abort closure
-    let path = a:folder . '/' . a:selection[0]
+    let path = folder . '/' . a:selection[0]
     execute a:edit_cmd . ' ' . path
   endfunction
   let action = {

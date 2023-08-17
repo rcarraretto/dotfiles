@@ -181,7 +181,7 @@ nnoremap <space>c :Commands<cr>
 " browse command-line history
 nnoremap <space>: :History:<cr>
 " browse current folder (non-recursive)
-nnoremap <leader>of :call fzfutil#FzfCurrentFolderNonRecursive(expand("%:h"))<cr>
+nnoremap <leader>of :<c-u>call fzfutil#FzfCurrentFolder()<cr>
 " browse node_modules
 nnoremap <leader>eM :call fzfutil#FzfExploreNodeModules()<cr>
 " browse source code of vim plugins
