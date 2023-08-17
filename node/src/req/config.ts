@@ -13,6 +13,7 @@ interface EnvConfig {
   key?: string;
   insecure?: boolean;
   vars?: Record<string, string>;
+  headers?: Record<string, string>;
 }
 
 interface AppConfig {
@@ -92,6 +93,7 @@ const assembleHttpRequest = (
   const headers = {
     ...appConfig.headers,
     ...endpointConfig.headers,
+    ...envConfig.headers,
   };
   const req: HttpRequest = {
     url,
