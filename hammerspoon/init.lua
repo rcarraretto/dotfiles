@@ -53,40 +53,15 @@ end
 fnutils.each(window_hotkeys, bind_window_hotkey)
 
 
--- Lock screen
-local lock_screen = function()
-  --[[
-    Lock screen instead of display sleep,
-    so it is faster to get back to work.
-    When using display sleep, one has to wait for the display to "wake up".
-    And besides, when using my Sharp TV as a display,
-    the TV apparently shuts down after not receiving signal for a while.
-
-    Hammerspoon also has a lockScreen() API, but that has a small animation.
-    That's why I favored locking the screen via the screensaver.
-  --]]
-  hs.caffeinate.startScreensaver()
-  if hs.spotify.isRunning() then
-    hs.spotify.pause()
-  end
-end
-
 -- Lock screen (hyper + l)
-hs.hotkey.bind(hyper, "l", lock_screen)
-
--- Display sleep
-local display_sleep = function()
-  hs.execute('pmset displaysleepnow')
+hs.hotkey.bind(hyper, "l", function()
   if hs.spotify.isRunning() then
     hs.spotify.pause()
   end
-end
-
--- Display sleep + clock out (hyper + L)
-hs.hotkey.bind(shift_hyper, "l", function()
-  display_sleep()
   hs.execute('timer -o', true)
+  hs.caffeinate.lockScreen()
 end)
+
 
 --- Volume Control
 local changeVolume = function(delta)
