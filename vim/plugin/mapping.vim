@@ -107,6 +107,8 @@ nnoremap <space>, :20wincmd <<cr>
 nnoremap <space>. :20wincmd ><cr>
 " toggle window size (maximize / make even)
 nnoremap <leader>ww :call window#ToggleWindowSize()<cr>
+" close all windows except the current one
+nnoremap <leader>wo :call window#BufOnly()<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call quickfix#ToggleQuickfixList()<cr>

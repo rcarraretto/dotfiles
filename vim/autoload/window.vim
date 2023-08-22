@@ -238,34 +238,13 @@ function! window#ListUnsavedBuffers()
   botright copen
 endfunction
 
-" Adapted from:
-" https://github.com/vim-scripts/BufOnly.vim
 function! window#BufOnly()
-  let buf_nr = bufnr('%')
-  let last_buf_nr = bufnr('$')
-  let delete_count = 0
-  let n = 1
-  while n <= last_buf_nr
-    if n != buf_nr && buflisted(n)
-      if getbufvar(n, '&modified')
-        echohl ErrorMsg
-        echomsg 'No write since last change for buffer'
-              \ n '(add ! to override)'
-        echohl None
-      else
-        silent execute 'bdel ' . n
-        if !buflisted(n)
-          let delete_count = delete_count + 1
-        endif
-      endif
+  for n in range(1, bufnr('$'))
+    if n == bufnr('%') || !bufexists(n)
+      continue
     endif
-    let n = n + 1
-  endwhile
-  if delete_count == 1
-    echomsg delete_count "buffer deleted"
-  elseif delete_count > 1
-    echomsg delete_count "buffers deleted"
-  endif
+    silent execute 'bwipeout ' . n
+  endfor
 endfunction
 
 " Executes callback function for all windows.
