@@ -9,9 +9,9 @@ function! s:SetHighlight() abort
   " https://stackoverflow.com/a/58181112/2277505
   highlight CursorLineNr cterm=bold
 
-  " Override base16-default-dark Search highlight
+  " Override base16-vim Search highlight
   " Simply add underline, instead of changing fg and bg
-  highlight Search ctermbg=none ctermfg=none cterm=underline,bold
+  highlight Search ctermbg=none ctermfg=none cterm=underline
   " Don't use different bg when Folded
   highlight Folded ctermbg=00
 
