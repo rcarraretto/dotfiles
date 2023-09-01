@@ -19,7 +19,7 @@ call plug#begin('~/.vim/bundle')
 Plug 'junegunn/vim-plug'
 
 " >>> Color scheme <<<
-Plug 'danielwe/base16-vim', { 'commit': '4533d1ccab2483deabc743e51321d29a259a819e' }
+Plug 'chriskempson/base16-vim', { 'commit': '3be3cd82cd31acfcab9a41bad853d9c68d30478d' }
 
 " >>> Search <<<
 Plug 'junegunn/fzf.vim', { 'commit': 'e393108bfae7ab308aa6ea38e0df19253cdc8499' }
