@@ -91,13 +91,15 @@ if !exists('g:colors_name')
   " Else, when re-sourcing the script, syntax highlighting would be reset
   " but 'after/syntax' blocks would not execute,
   " therefore disabling custom 'after/syntax' blocks.
-  try
-    " base16-vim plugin config:
-    " Access colors present in 256 colorspace
-    " https://github.com/chriskempson/base16-vim#256-colorspace
-    let base16colorspace=256
-    colorscheme base16-default-dark
-  catch /^Vim\%((\a\+)\)\=:E185/
-    " Don't fail if base16-vim plugin is not installed
-  endtry
+  if exists('$BASE16_THEME')
+    try
+      " base16-vim plugin config:
+      " Access colors present in 256 colorspace
+      " https://github.com/chriskempson/base16-vim#256-colorspace
+      let base16colorspace=256
+      colorscheme base16-$BASE16_THEME
+    catch /^Vim\%((\a\+)\)\=:E185/
+      " Don't fail if base16-vim plugin is not installed
+    endtry
+  endif
 endif
