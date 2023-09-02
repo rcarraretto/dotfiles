@@ -62,7 +62,6 @@ Plug 'itchyny/vim-parenmatch'
 " disable the standard 'matchparen' plugin
 " to use the 'parenmatch' plugin instead
 let g:loaded_matchparen = 1
-let g:parenmatch_highlight = 0
 
 " >>> Text Objects <<<
 Plug 'kana/vim-textobj-user'

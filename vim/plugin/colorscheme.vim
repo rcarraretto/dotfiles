@@ -56,8 +56,13 @@ function! s:SetHighlight() abort
     highlight Statement ctermfg=5
   endif
 
-  " Customize highlight from 'parenmatch' plugin.
+  " Customize highlight from 'vim-parenmatch' plugin.
   " Basically copy MatchParen highlight from the standard 'matchparen' plugin.
+  "
+  " Add the g: option here instead of in vimrc.
+  " When g:parenmatch_highlight is 0, ParenMatch must be defined, else the
+  " plugin throws an error.
+  let g:parenmatch_highlight = 0
   highlight ParenMatch term=reverse ctermbg=8
 
   " color agit diff similar to vim's git diff syntax
