@@ -2,14 +2,46 @@
 
 set -e
 
+usage() {
+  echo "$(basename "$0") [-c <index>] [total]"
+}
+
 # https://askubuntu.com/a/803316
-if [[ $# < 1 ]]; then
-  colors=22
-else
-  colors=$1
+print_c() {
+  printf \
+    " [%02d] $(tput setaf $c)%s$(tput sgr0)\n" \
+    $c \
+    "wMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMw"
+}
+
+c=""
+for i in "$@"; do
+  case $i in
+    -c)
+      c="$2"
+      shift
+      shift
+      ;;
+    -*)
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+if [ -n "$c" ]; then
+  print_c
+  exit
 fi
-echo "showing $colors ansi colors:"
-for (( n=0; n < $colors; n++ )) do
-  printf " [%d] $(tput setaf $n)%s$(tput sgr0)" $n "wMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMwMw
-"
+
+if [ $# = 0 ]; then
+  total=22
+elif [ $# = 1 ]; then
+  total=$1
+else
+  usage
+  exit 1
+fi
+for (( c=0; c < $total; c++ )) do
+  print_c
 done
