@@ -11,7 +11,7 @@ function! s:SetHighlight() abort
 
   " Override base16-vim Search highlight
   " Simply add underline, instead of changing fg and bg
-  highlight Search ctermbg=none ctermfg=none cterm=underline
+  highlight Search ctermbg=none ctermfg=none cterm=underline,bold
   " Don't use different bg when Folded
   highlight Folded ctermbg=00
 
@@ -23,10 +23,6 @@ function! s:SetHighlight() abort
   highlight SpellBad ctermfg=NONE ctermbg=NONE cterm=underline
 
   " Change base syntax highlighting
-  "
-  " e.g., vim 'highlight', 'endif', etc.
-  " in base16-ocean, change from red to purple
-  highlight Statement ctermfg=5
   "
   " e.g., vim variables
   " in base16-ocean, change from red to white
@@ -46,6 +42,19 @@ function! s:SetHighlight() abort
   " e.g., Golang rune and byte
   " in base16-ocean, change from red to green
   highlight! def link Character Special
+
+  if index(['github', 'ia-light'], $BASE16_THEME) != -1
+    " Apparently bold does white on white, so skip it
+    highlight Search cterm=underline
+    " Apparently on vim terminal fzf displays white on white
+    " :h terminal-size-color
+    highlight Terminal ctermfg=14
+
+  elseif $BASE16_THEME == 'ocean'
+    " e.g., vim 'highlight', 'endif', etc.
+    " in base16-ocean, change from red to purple
+    highlight Statement ctermfg=5
+  endif
 
   " Customize highlight from 'parenmatch' plugin.
   " Basically copy MatchParen highlight from the standard 'matchparen' plugin.
@@ -82,24 +91,29 @@ augroup END
 
 " This block has to come after SetHighlight augroup is defined,
 " so :colorscheme triggers s:SetHighlight().
-if !exists('g:colors_name')
-  " Only set the background on the first load.
-  " Else, when re-sourcing the script, both ':set background' and ':colorscheme'
-  " would trigger the ColorScheme event unnecessarily.
-  set background=dark
+if !exists('g:colors_name') && exists('$BASE16_THEME')
   " Only set :colorscheme on the first load of script.
   " Else, when re-sourcing the script, syntax highlighting would be reset
   " but 'after/syntax' blocks would not execute,
   " therefore disabling custom 'after/syntax' blocks.
-  if exists('$BASE16_THEME')
-    try
-      " base16-vim plugin config:
-      " Access colors present in 256 colorspace
-      " https://github.com/chriskempson/base16-vim#256-colorspace
-      let base16colorspace=256
-      colorscheme base16-$BASE16_THEME
-    catch /^Vim\%((\a\+)\)\=:E185/
-      " Don't fail if base16-vim plugin is not installed
-    endtry
-  endif
+  try
+    " Only set the background on the first load.
+    " Else, when re-sourcing the script, both ':set background' and ':colorscheme'
+    " would trigger the ColorScheme event unnecessarily.
+    "
+    " Set background first as the colorscheme script may do conditionals
+    " based on background.
+    if index(['github', 'ia-light'], $BASE16_THEME) != -1
+      set background=light
+    else
+      set background=dark
+    endif
+    " base16-vim plugin config:
+    " Access colors present in 256 colorspace
+    " https://github.com/chriskempson/base16-vim#256-colorspace
+    let base16colorspace=256
+    colorscheme base16-$BASE16_THEME
+  catch /^Vim\%((\a\+)\)\=:E185/
+    " Don't fail if base16-vim plugin is not installed
+  endtry
 endif
