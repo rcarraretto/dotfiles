@@ -180,6 +180,10 @@ set display+=lastline
 
 set linebreak
 set scrolloff=3
+" smoother horizontal scrolling:
+" make the cursor jump X columns when horizontal scrolling with 'h' and 'l'.
+" by default, the cursor is put in the middle of the screen.
+set sidescroll=5
 set hidden
 set laststatus=2 " always display status line
 set t_Co=256
