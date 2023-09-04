@@ -12,6 +12,10 @@ vnoremap k gk
 vnoremap <c-j> j
 vnoremap <c-k> k
 
+" Horizontal scroll
+nnoremap <s-right> 20zl
+nnoremap <s-left> 20zh
+
 " Easier command-line mode
 nnoremap <cr> :
 xnoremap <cr> :
