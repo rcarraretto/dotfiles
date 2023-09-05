@@ -43,12 +43,12 @@ function! s:SetHighlight() abort
   " in base16-ocean, change from red to green
   highlight! def link Character Special
 
-  if index(['github', 'ia-light'], $BASE16_THEME) != -1
-    " Apparently bold does white on white, so skip it
-    highlight Search cterm=underline
-    " Apparently on vim terminal fzf displays white on white
-    " :h terminal-size-color
-    highlight Terminal ctermfg=14
+  " e.g., bash if, then, fi
+  " color them as a statement (e.g., return)
+  highlight! link Conditional Statement
+
+  if index(['ia-light', 'one-light'], $BASE16_THEME) != -1
+    highlight Statement ctermfg=5
 
   elseif $BASE16_THEME == 'ocean'
     " e.g., vim 'highlight', 'endif', etc.
@@ -108,7 +108,7 @@ if !exists('g:colors_name') && exists('$BASE16_THEME')
     "
     " Set background first as the colorscheme script may do conditionals
     " based on background.
-    if index(['github', 'ia-light'], $BASE16_THEME) != -1
+    if index(['ia-light', 'one-light'], $BASE16_THEME) != -1
       set background=light
     else
       set background=dark
