@@ -30,7 +30,7 @@ Plug 'rcarraretto/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-Plug 'SirVer/ultisnips', { 'commit': '423f264e753cec260b4f14455126e6db7ba429af' }
+Plug 'SirVer/ultisnips', { 'commit': 'b393ba65386d47664421e1f8b246a87a6e8b218c' }
 if !has('nvim')
   Plug 'Valloric/YouCompleteMe', { 'commit': '9a5eb4443e8a990698daa99da512d0fd7aed0f32' }
 endif
