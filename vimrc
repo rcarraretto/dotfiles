@@ -343,6 +343,8 @@ if exists('$DISABLE_YCM_C_LANG')
   \ }
 endif
 let g:ycm_always_populate_location_list = 1
+" override mapping for :YcmShowDetailedDiagnostic (default: <leader>d)
+let g:ycm_key_detailed_diagnostics = '<bar>'
 " disable documentation popup
 " (used by Golang)
 let g:ycm_auto_hover = ''
