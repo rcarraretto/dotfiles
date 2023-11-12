@@ -139,6 +139,15 @@ function! proglang#DispatchAndCapture(cmd) abort
   silent execute printf("Dispatch! set -o pipefail; %s |& tee /var/tmp/test-results.txt /var/tmp/test-console.txt", cmd)
 endfunction
 
+function! proglang#Build() abort
+  if &ft == 'go'
+    GoBuild
+    return
+  else
+    return util#error_msg(printf('proglang#Build: unsupported filetype: %s', &ft))
+  endif
+endfunction
+
 function! proglang#EditSketchBuffer(ft) abort
   let clang_bin = $DOTFILES_PRIVATE . '/sketch/sketch-clang'
   let configs = {

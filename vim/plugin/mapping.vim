@@ -140,8 +140,10 @@ cnoremap <c-l> <c-n>
 cnoremap <expr> <c-x>y vimutil#CopyCmdline()
 
 " Dispatch external command
-nnoremap `<cr> :DispatchAndCapture<cr>
-nnoremap `<space> :DispatchAndCapture<space>
+" (mappings inspired by vim-dispatch; :h dispatch-maps)
+nnoremap `<cr> :call proglang#Build()<cr>
+nnoremap m<cr> :DispatchAndCapture<cr>
+nnoremap m<space> :DispatchAndCapture<space>
 nnoremap <leader>da :AbortDispatch<cr>
 
 " Browse files/folders & global search
