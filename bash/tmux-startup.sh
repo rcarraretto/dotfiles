@@ -25,7 +25,7 @@ __tmux_startup() {
   # But vim * register doesn't work. Vim has to be restarted.
   echo "$(date "+%Y-%m-%d %H:%M") tmux $previous_timestamp $session_timestamp" >> /var/tmp/tmux_startup_log.txt
   # To see the output of dot_pull when already inside tmux, detach tmux (prefix + d)
-  dot_pull
+  # dot_pull
   __tmux_default_session
   # After this line, we are already in tmux, so apparently commands don't get executed.
 }
