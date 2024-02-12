@@ -1,26 +1,3 @@
-function! cwd#AutoCd() abort
-  " Do not resolve symlinks because a .todo file is a symlink to a $NOTES dir
-  " and we do not want to cd to $NOTES but to $DOTFILES.
-  let git_root = util#GetGitRoot({
-        \'full_path': 1,
-        \'resolve_symlink': 0,
-        \})
-  if git_root == $HOME . '/work/dotfiles/vim/bundle/YouCompleteMe/third_party/ycmd'
-    " Do not :cd to ycm when jumping to NodeJS standard lib
-    return
-  endif
-  if empty(git_root)
-    return
-  endif
-  if stridx(getcwd(), git_root) != -1
-    " If cwd is already correct, no need to set it.
-    " If cwd is a subdirectory, do not reset it to git root.
-    return
-  endif
-  " Log printf("AutoCd: lcd to %s (from %s) / file: %s", git_root, getcwd(), expand('%:p'))
-  execute "lcd " . git_root
-endfunction
-
 function! s:Cd(cd_cmd, cd_dir) abort
   let cmd = a:cd_cmd . ' ' . a:cd_dir
   execute cmd

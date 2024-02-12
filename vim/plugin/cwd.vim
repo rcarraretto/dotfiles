@@ -1,8 +1,3 @@
-augroup AutoCd
-  autocmd!
-  autocmd BufRead,BufNewFile ~/work/dotfiles* call cwd#AutoCd()
-augroup END
-
 function! s:ProjectSpecificSetup() abort
   if !exists('g:project_configs')
     return
