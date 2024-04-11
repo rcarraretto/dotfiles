@@ -230,11 +230,12 @@ endfunction
 function! window#ListUnsavedBuffers()
   let bufs = filter(getbufinfo(), {idx, val -> val['changed']})
   let bufitems = map(bufs, '{"filename": v:val.name, "lnum": v:val.lnum}')
+  call setqflist(bufitems)
   if empty(bufitems)
+    cclose
     echo 'No unsaved buffers'
     return
   endif
-  call setqflist(bufitems)
   botright copen
 endfunction
 

@@ -113,6 +113,7 @@ nnoremap <space>. :20wincmd ><cr>
 nnoremap <leader>ww :call window#ToggleWindowSize()<cr>
 " close all windows except the current one
 nnoremap <leader>wo :call window#BufOnly()<cr>
+nnoremap <space>u :ListUnsavedBuffers<cr>
 
 " Quickfix
 nnoremap <silent> <space>i :call quickfix#ToggleQuickfixList()<cr>
