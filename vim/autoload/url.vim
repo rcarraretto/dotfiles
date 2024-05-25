@@ -20,5 +20,6 @@ function! url#ParseUrlQs() abort
   endif
   setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile wrap
   set ft=json
-  execute "%!parse-qs " . shellescape(fnameescape(url))
+  execute "read !parse-qs " . shellescape(fnameescape(url))
+  1delete
 endfunction
