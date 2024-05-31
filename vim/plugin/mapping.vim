@@ -28,8 +28,10 @@ nnoremap Y y$
 nnoremap <silent> gh :noh<cr>
 
 " Save
-nnoremap <c-l> <esc>:silent write<cr>
-inoremap <c-l> <esc>:silent write<cr>
+nnoremap <c-s> <esc>:silent write<cr>
+inoremap <c-s> <esc>:silent write<cr>
+nnoremap <c-l> <esc>:echo "INFO:\nuse CTRL-s"<cr>
+inoremap <c-l> <esc>:echo "INFO:\nuse CTRL-s"<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
