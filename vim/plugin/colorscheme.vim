@@ -15,6 +15,9 @@ function! s:SetHighlight() abort
   " Don't use different bg when Folded
   highlight Folded ctermbg=00
 
+  " Override vim default of ctermfg=0
+  highlight Visual ctermfg=NONE
+
   " Change error style.
   " :h attr-list
   " e.g., error gutter
