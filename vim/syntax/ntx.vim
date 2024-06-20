@@ -4,6 +4,9 @@ endif
 
 let b:current_syntax = "ntx"
 
+" reduce ambiguity with multiple ``` blocks
+syntax sync minlines=40
+
 syn match ntxDivider "^\s*---.*"
 syn match ntxLineComment "^#\(\s.\+\)\?$"
 syn match ntxHeader "^##.*"
