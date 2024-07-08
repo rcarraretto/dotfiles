@@ -130,7 +130,7 @@ map 7zf <Action>(ExpandAllToLevel2)
 map zF <Action>(ExpandAllRegions)
 
 " Text editing
-map <c-l> <Action>(SaveAll)
+map <c-s> <Action>(SaveAll)
 map <leader>gp <Action>(ReformatCode)
 map <leader>re <Action>(RenameElement)
 nnoremap =p o<esc>p
