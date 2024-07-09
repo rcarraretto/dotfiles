@@ -7,6 +7,9 @@ Plug 'nerdtree'
 " don't hide error if there is a bug in IdeaVim
 " https://github.com/JetBrains/ideavim/discussions/303#discussioncomment-655607
 set ideastrictmode
+" hide ideavim icon from status bar
+set ideastatusicon=disabled
+
 set number
 set relativenumber
 set hlsearch
