@@ -159,6 +159,14 @@ set backupdir=~/.tmp-vim
 " ls -i path/to/file
 " https://vi.stackexchange.com/a/138/24815
 set backupcopy=yes
+" turn off swap file
+" - attempt to avoid lag when pasting large text
+"   https://stackoverflow.com/a/27140329/2277505
+" - risks losing unsaved work if vim or computer crashes,
+"   but can be compensated by saving often
+set noswapfile
+" probably unnecessary when swap file is off,
+" but left here in case swap file is turned on
 set directory=~/.tmp-vim
 set hlsearch
 set smartcase
