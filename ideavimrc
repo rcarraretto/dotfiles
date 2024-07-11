@@ -158,6 +158,8 @@ map <space>T <Action>(Run)
 map <leader>st <Action>(DebugClass)
 map <leader>sT <Action>(RunClass)
 map <leader>da <Action>(Stop)
+" Run -> Debug...
+map m<cr> <Action>(ChooseDebugConfiguration)
 
 " File system
 map <leader>mv <Action>(RenameFile)
