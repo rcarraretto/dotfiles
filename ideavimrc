@@ -164,9 +164,6 @@ map m<cr> <Action>(ChooseDebugConfiguration)
 " File system
 map <leader>mv <Action>(RenameFile)
 map <leader>mV <Action>(Move)
-" edit common files
-nnoremap <leader>ew :edit ~/Google Drive/My Drive/notes-work/work-buffer.txt<cr>
-map <leader>eo <Action>(ActivateTODOToolWindow)
 
 " Git
 " git blame
