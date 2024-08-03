@@ -14,9 +14,8 @@ endfunction
 function! s:ExecPrettier(parser) abort
   let opts = '--write'
 
-  " Try to find .prettierrc.json upwards until the git root.
-  let root_dir = util#GetGitRoot()
-  let prettierrc_json = findfile('.prettierrc.json', '.;' . root_dir)
+  " Try to find .prettierrc.json upwards
+  let prettierrc_json = findfile('.prettierrc.json', '.;' . getcwd())
   if empty(prettierrc_json)
     " Use global prettier config
     " (applicable in sketch buffers or projects that don't have prettier
@@ -25,7 +24,9 @@ function! s:ExecPrettier(parser) abort
   endif
 
   " Check if prettier is installed in the project.
-  let prettier_cmd = expand(root_dir . '/node_modules/.bin/prettier')
+  " Use cwd instead of git root because a git root may have multiple node
+  " projects in different folders (e.g., backend and frontend).
+  let prettier_cmd = expand(getcwd() . '/node_modules/.bin/prettier')
   if !filereadable(prettier_cmd)
     " use global prettier
     let prettier_cmd = 'prettier'
