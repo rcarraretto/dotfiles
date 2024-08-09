@@ -153,10 +153,10 @@ nnoremap c# #NcgN
 
 " Run last test
 map <space>t <Action>(Debug)
-map <space>T <Action>(Run)
+map <space>r <Action>(Run)
 " Run test under cursor
 map <leader>st <Action>(DebugClass)
-map <leader>sT <Action>(RunClass)
+map <leader>sr <Action>(RunClass)
 map <leader>da <Action>(Stop)
 " Run -> Debug...
 map m<cr> <Action>(ChooseDebugConfiguration)
